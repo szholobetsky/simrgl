@@ -1,0 +1,35 @@
+# Windows-specific requirements
+# For Windows systems, some packages may need specific versions or alternatives
+
+# Base requirements
+-r requirements.txt
+
+# FastText for Windows - use precompiled wheel
+# Note: Regular fasttext may not compile properly on Windows
+# Use one of these alternatives:
+fasttext-wheel>=0.9.2
+# OR if fasttext-wheel doesn't work:
+# pip install https://github.com/facebookresearch/fastText/archive/main.zip
+
+# BERT and transformer models
+# Note: PyTorch must be installed separately due to version specifiers
+# Run one of these commands manually:
+# CPU only: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+# CUDA 11.8: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+# CUDA 12.1: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+
+# Transformers library (install after PyTorch)
+transformers>=4.15.0
+
+# Sentence transformers for LLM embeddings
+sentence-transformers>=2.1.0
+
+# OpenAI API (if using LLM with API)
+openai>=1.0.0
+
+# Anthropic API (if using Claude API for embeddings)
+anthropic>=0.8.0
+
+# Windows-specific: Visual C++ redistributable may be needed
+# Download from Microsoft if you get compilation errors:
+# https://aka.ms/vs/17/release/vc_redist.x64.exe

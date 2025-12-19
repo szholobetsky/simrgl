@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Project specific
+data/*.db
+data/*.sqlite
+*.db-journal
+glove_cache/
+*.log
+
+# Experiment results
+experiment_results/
+big_experiment_results/
+*.csv
+*.png
+!README.md
+
+# Model files
+*.bin
+*.vec
+*.model
+*.wv
+*.trainables
+*.vectors.npy
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+task.txt
+replace_claude.py
+safe_replace.py
+
+# OS
+.DS_Store
+Thumbs.db

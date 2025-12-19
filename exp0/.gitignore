@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+env/
+venv/
+ENV/
+
+# Generated CSV files
+*.csv
+!full_word_group.csv
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+
+# NLTK data downloads
+nltk_data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environment
+.env
+
+# Large model files
+*.model
+*.pkl
+*.pickle
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup

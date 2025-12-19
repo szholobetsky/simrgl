@@ -1,0 +1,18 @@
+# CodeXplorer Data Gathering Tool - Dependencies
+
+# Git repository interaction
+gitpython>=3.1.0
+
+# Web scraping and HTML parsing
+beautifulsoup4>=4.9.0
+requests>=2.25.0
+
+# Browser automation (for Selenium connector)
+selenium>=4.0.0
+webdriver-manager>=3.8.0
+
+# Progress bars
+tqdm>=4.62.0
+
+# Python type hints (for better code quality)
+typing-extensions>=4.0.0

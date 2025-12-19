@@ -1,0 +1,18 @@
+# TF-IDF Experiment Dependencies
+
+# Data processing
+pandas>=1.3.0
+numpy>=1.21.0
+
+# Natural language processing
+nltk>=3.6.0
+
+# Machine learning (for TF-IDF vectorization)
+scikit-learn>=0.24.0
+
+# Progress bars
+tqdm>=4.62.0
+
+# Note: This experiment also requires the database tables from:
+# - CodeXplorer refactor tool (RAWDATA, TASK tables)
+# - exp1 analysis scripts (MODULE, MODULE_TASK tables) for TFIDF_module_token.py

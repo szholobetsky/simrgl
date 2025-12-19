@@ -1,0 +1,35 @@
+# Linux-specific requirements
+# For Linux systems (Ubuntu, CentOS, etc.)
+
+# Base requirements
+-r requirements.txt
+
+# FastText for Linux - can usually compile from source
+fasttext>=0.9.2
+
+# BERT and transformer models
+# Note: PyTorch must be installed separately due to version specifiers
+# Run one of these commands manually:
+# CPU only: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+# CUDA 11.8: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+# CUDA 12.1: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+
+# Transformers library (install after PyTorch)
+transformers>=4.15.0
+
+# Sentence transformers for LLM embeddings
+sentence-transformers>=2.1.0
+
+# OpenAI API (if using LLM with API)
+openai>=1.0.0
+
+# Anthropic API (if using Claude API for embeddings)
+anthropic>=0.8.0
+
+# Linux may need these system packages (install with apt/yum):
+# sudo apt-get install python3-dev build-essential
+# sudo apt-get install libatlas-base-dev gfortran
+# 
+# For CentOS/RHEL:
+# sudo yum groupinstall "Development Tools"
+# sudo yum install python3-devel atlas-devel
