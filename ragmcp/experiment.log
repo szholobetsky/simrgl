@@ -1,0 +1,193 @@
+2025-12-22 01:59:13,866 - INFO - Connecting to Qdrant at localhost:6333...
+2025-12-22 01:59:14,111 - INFO - Connected to Qdrant
+2025-12-22 01:59:14,113 - INFO - Use pytorch device_name: cpu
+2025-12-22 01:59:14,115 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-22 02:00:56,570 - INFO - Connecting to Qdrant at localhost:6333...
+2025-12-22 02:00:56,793 - INFO - Connected to Qdrant
+2025-12-22 02:00:56,793 - INFO - Use pytorch device_name: cpu
+2025-12-22 02:00:56,793 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-22 02:00:59,661 - INFO - Connecting to Qdrant at localhost:6333...
+2025-12-22 02:00:59,898 - INFO - Connected to Qdrant
+2025-12-22 02:00:59,901 - INFO - Use pytorch device_name: cpu
+2025-12-22 02:00:59,902 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-22 02:01:03,475 - INFO - HTTP Request: GET http://127.0.0.1:7860/gradio_api/startup-events "HTTP/1.1 200 OK"
+2025-12-22 02:01:03,523 - INFO - HTTP Request: HEAD http://127.0.0.1:7860/ "HTTP/1.1 200 OK"
+2025-12-22 02:01:03,603 - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2025-12-22 02:08:51,903 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-22 02:08:54,004 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-22 02:08:54,004 - INFO - Use pytorch device_name: cpu
+2025-12-22 02:08:54,004 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-22 02:08:56,684 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-22 02:08:58,748 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-22 02:08:58,748 - INFO - Use pytorch device_name: cpu
+2025-12-22 02:08:58,748 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-22 02:09:02,047 - INFO - HTTP Request: GET http://127.0.0.1:7860/gradio_api/startup-events "HTTP/1.1 200 OK"
+2025-12-22 02:09:02,063 - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2025-12-22 02:09:02,081 - INFO - HTTP Request: HEAD http://127.0.0.1:7860/ "HTTP/1.1 200 OK"
+2025-12-22 02:12:45,911 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-22 02:12:47,958 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-22 02:12:47,962 - INFO - Use pytorch device_name: cpu
+2025-12-22 02:12:47,962 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-22 02:12:50,929 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-22 02:12:52,960 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-22 02:12:52,965 - INFO - Use pytorch device_name: cpu
+2025-12-22 02:12:52,965 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-22 02:12:57,610 - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2025-12-22 02:12:58,061 - INFO - HTTP Request: GET http://127.0.0.1:7860/gradio_api/startup-events "HTTP/1.1 200 OK"
+2025-12-22 02:12:58,096 - INFO - HTTP Request: HEAD http://127.0.0.1:7860/ "HTTP/1.1 200 OK"
+2025-12-22 02:19:43,869 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-22 02:19:45,956 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-22 02:19:45,960 - INFO - Use pytorch device_name: cpu
+2025-12-22 02:19:45,960 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-22 02:19:48,932 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-22 02:19:51,002 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-22 02:19:51,005 - INFO - Use pytorch device_name: cpu
+2025-12-22 02:19:51,005 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-22 02:19:55,204 - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2025-12-22 02:19:55,246 - INFO - HTTP Request: GET http://127.0.0.1:7860/gradio_api/startup-events "HTTP/1.1 200 OK"
+2025-12-22 02:19:55,285 - INFO - HTTP Request: HEAD http://127.0.0.1:7860/ "HTTP/1.1 200 OK"
+2025-12-22 02:20:04,973 - ERROR - Error searching collection rag_exp_desc_module_w1000_modn_bge-small: current transaction is aborted, commands ignored until end of transaction block
+
+2025-12-25 15:14:50,593 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 15:14:52,689 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 15:14:52,710 - INFO - Use pytorch device_name: cpu
+2025-12-25 15:14:52,710 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 15:14:56,256 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 15:14:58,309 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 15:14:58,325 - INFO - Use pytorch device_name: cpu
+2025-12-25 15:14:58,325 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 15:15:58,213 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 15:16:00,263 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 15:16:00,266 - INFO - Use pytorch device_name: cpu
+2025-12-25 15:16:00,266 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 15:16:03,288 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 15:16:05,348 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 15:16:05,352 - INFO - Use pytorch device_name: cpu
+2025-12-25 15:16:05,352 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 15:16:08,969 - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2025-12-25 15:17:49,231 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 15:17:51,291 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 15:17:51,298 - INFO - Use pytorch device_name: cpu
+2025-12-25 15:17:51,298 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 15:17:54,248 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 15:17:56,321 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 15:17:56,324 - INFO - Use pytorch device_name: cpu
+2025-12-25 15:17:56,325 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 15:18:00,362 - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2025-12-25 15:18:00,488 - INFO - HTTP Request: GET http://127.0.0.1:7860/gradio_api/startup-events "HTTP/1.1 200 OK"
+2025-12-25 15:18:00,565 - INFO - HTTP Request: HEAD http://127.0.0.1:7860/ "HTTP/1.1 200 OK"
+2025-12-25 15:20:28,210 - ERROR - Error searching collection rag_exp_desc_module_w1000_modn_bge-small: current transaction is aborted, commands ignored until end of transaction block
+
+2025-12-25 15:23:13,344 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 15:23:15,423 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 15:23:15,426 - INFO - Use pytorch device_name: cpu
+2025-12-25 15:23:15,426 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 15:23:18,295 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 15:23:20,334 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 15:23:20,338 - INFO - Use pytorch device_name: cpu
+2025-12-25 15:23:20,338 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 15:23:23,678 - INFO - HTTP Request: GET http://127.0.0.1:7860/gradio_api/startup-events "HTTP/1.1 200 OK"
+2025-12-25 15:23:23,708 - INFO - HTTP Request: HEAD http://127.0.0.1:7860/ "HTTP/1.1 200 OK"
+2025-12-25 15:23:23,751 - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2025-12-25 15:26:32,081 - ERROR - Error searching collection task_embeddings_all_bge-small: relation "vectors.task_embeddings_all_bge-small" does not exist
+LINE 3:                 FROM vectors."task_embeddings_all_bge-small"
+                             ^
+
+2025-12-25 15:30:04,296 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 15:30:06,379 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 15:30:06,382 - INFO - Use pytorch device_name: cpu
+2025-12-25 15:30:06,382 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 15:30:09,699 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 15:30:11,746 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 15:30:11,748 - INFO - Use pytorch device_name: cpu
+2025-12-25 15:30:11,749 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 15:30:15,183 - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2025-12-25 15:30:15,326 - INFO - HTTP Request: GET http://127.0.0.1:7860/gradio_api/startup-events "HTTP/1.1 200 OK"
+2025-12-25 15:30:15,363 - INFO - HTTP Request: HEAD http://127.0.0.1:7860/ "HTTP/1.1 200 OK"
+2025-12-25 15:50:48,799 - ERROR - Error searching collection task_embeddings_all_bge-small: relation "vectors.task_embeddings_all_bge-small" does not exist
+LINE 3:                 FROM vectors."task_embeddings_all_bge-small"
+                             ^
+
+2025-12-25 15:54:14,765 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 15:54:16,845 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 15:54:16,849 - INFO - Use pytorch device_name: cpu
+2025-12-25 15:54:16,849 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 15:54:19,752 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 15:54:21,799 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 15:54:21,801 - INFO - Use pytorch device_name: cpu
+2025-12-25 15:54:21,802 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 15:54:25,521 - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2025-12-25 15:54:25,728 - INFO - HTTP Request: GET http://127.0.0.1:7860/gradio_api/startup-events "HTTP/1.1 200 OK"
+2025-12-25 15:54:25,771 - INFO - HTTP Request: HEAD http://127.0.0.1:7860/ "HTTP/1.1 200 OK"
+2025-12-25 15:55:56,779 - ERROR - Error searching collection task_embeddings_all_bge-small: relation "vectors.task_embeddings_all_bge-small" does not exist
+LINE 3:                 FROM vectors."task_embeddings_all_bge-small"
+                             ^
+
+2025-12-25 15:56:30,248 - ERROR - Error searching collection task_embeddings_all_bge-small: relation "vectors.task_embeddings_all_bge-small" does not exist
+LINE 3:                 FROM vectors."task_embeddings_all_bge-small"
+                             ^
+
+2025-12-25 15:56:49,963 - ERROR - Error searching collection task_embeddings_all_bge-small: relation "vectors.task_embeddings_all_bge-small" does not exist
+LINE 3:                 FROM vectors."task_embeddings_all_bge-small"
+                             ^
+
+2025-12-25 16:14:41,088 - ERROR - Error searching collection task_embeddings_all_bge-small: relation "vectors.task_embeddings_all_bge-small" does not exist
+LINE 3:                 FROM vectors."task_embeddings_all_bge-small"
+                             ^
+
+2025-12-25 16:15:20,885 - ERROR - Error searching collection task_embeddings_all_bge-small: relation "vectors.task_embeddings_all_bge-small" does not exist
+LINE 3:                 FROM vectors."task_embeddings_all_bge-small"
+                             ^
+
+2025-12-25 16:27:32,835 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 16:27:34,991 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 16:27:34,999 - INFO - Use pytorch device_name: cpu
+2025-12-25 16:27:34,999 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 16:27:40,942 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 16:27:43,055 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 16:27:43,069 - INFO - Use pytorch device_name: cpu
+2025-12-25 16:27:43,069 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 16:27:49,347 - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2025-12-25 16:27:55,063 - INFO - HTTP Request: GET http://127.0.0.1:7860/gradio_api/startup-events "HTTP/1.1 200 OK"
+2025-12-25 16:27:55,442 - INFO - HTTP Request: HEAD http://127.0.0.1:7860/ "HTTP/1.1 200 OK"
+2025-12-25 16:33:35,405 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 16:33:37,617 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 16:33:37,625 - INFO - Use pytorch device_name: cpu
+2025-12-25 16:33:37,626 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 16:33:42,815 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 16:33:44,904 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 16:33:44,911 - INFO - Use pytorch device_name: cpu
+2025-12-25 16:33:44,912 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 16:33:49,666 - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2025-12-25 16:33:52,443 - INFO - HTTP Request: GET http://127.0.0.1:7860/gradio_api/startup-events "HTTP/1.1 200 OK"
+2025-12-25 16:33:52,501 - INFO - HTTP Request: HEAD http://127.0.0.1:7860/ "HTTP/1.1 200 OK"
+2025-12-25 16:34:22,963 - ERROR - Error searching collection task_embeddings_all_bge-small: relation "vectors.task_embeddings_all_bge-small" does not exist
+LINE 3:                 FROM vectors."task_embeddings_all_bge-small"
+                             ^
+
+2025-12-25 16:37:43,510 - ERROR - Error searching collection task_embeddings_all_bge-small: relation "vectors.task_embeddings_all_bge-small" does not exist
+LINE 3:                 FROM vectors."task_embeddings_all_bge-small"
+                             ^
+
+2025-12-25 17:11:12,457 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 17:11:14,539 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 17:11:14,547 - INFO - Use pytorch device_name: cpu
+2025-12-25 17:11:14,547 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 17:11:17,763 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 17:11:19,816 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 17:11:19,816 - INFO - Use pytorch device_name: cpu
+2025-12-25 17:11:19,816 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 17:11:23,917 - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2025-12-25 17:11:24,645 - INFO - HTTP Request: GET http://127.0.0.1:7860/gradio_api/startup-events "HTTP/1.1 200 OK"
+2025-12-25 17:11:24,699 - INFO - HTTP Request: HEAD http://127.0.0.1:7860/ "HTTP/1.1 200 OK"
+2025-12-25 17:21:51,796 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 17:21:53,908 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 17:21:53,912 - INFO - Use pytorch device_name: cpu
+2025-12-25 17:21:53,912 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 17:21:57,146 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2025-12-25 17:21:59,217 - INFO - Connected to PostgreSQL (schema: vectors)
+2025-12-25 17:21:59,220 - INFO - Use pytorch device_name: cpu
+2025-12-25 17:21:59,220 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2025-12-25 17:22:03,050 - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2025-12-25 17:22:03,354 - INFO - HTTP Request: GET http://127.0.0.1:7860/gradio_api/startup-events "HTTP/1.1 200 OK"
+2025-12-25 17:22:03,395 - INFO - HTTP Request: HEAD http://127.0.0.1:7860/ "HTTP/1.1 200 OK"

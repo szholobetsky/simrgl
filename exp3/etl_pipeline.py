@@ -10,8 +10,6 @@ import json
 import argparse
 from typing import Tuple, Dict, List
 from sentence_transformers import SentenceTransformer
-from qdrant_client import QdrantClient
-from qdrant_client.http import models
 from tqdm import tqdm
 
 import config
@@ -21,12 +19,13 @@ from utils import (
     extract_module_path,
     logger
 )
+from vector_backends import get_vector_backend
 
 
 class ETLPipeline:
     """ETL Pipeline for RAG Experiment"""
 
-    def __init__(self, split_strategy: str = 'recent', test_size: int = None, model_key: str = None):
+    def __init__(self, split_strategy: str = 'recent', test_size: int = None, model_key: str = None, backend_type: str = None):
         """
         Initialize ETL Pipeline
 
@@ -34,13 +33,15 @@ class ETLPipeline:
             split_strategy: 'recent' or 'modn'
             test_size: Number of test tasks (default from config)
             model_key: Key from EMBEDDING_MODELS (None = use default)
+            backend_type: Vector backend type - 'qdrant' or 'postgres' (None = use config)
         """
         self.split_strategy = split_strategy
         self.test_size = test_size or config.TEST_SIZE
         self.model_key = model_key
         self.model_config = config.get_model_config(model_key)
+        self.backend_type = backend_type or config.VECTOR_BACKEND
         self.model = None
-        self.client = None
+        self.backend = None
         self.vector_size = None
 
     def load_data(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
@@ -185,12 +186,13 @@ class ETLPipeline:
             self.vector_size = self.model.get_sentence_embedding_dimension()
             logger.info(f"Model loaded. Vector size: {self.vector_size}")
 
-    def initialize_client(self):
-        """Initialize Qdrant client"""
-        if self.client is None:
-            logger.info(f"Connecting to Qdrant at {config.QDRANT_HOST}:{config.QDRANT_PORT}...")
-            self.client = QdrantClient(host=config.QDRANT_HOST, port=config.QDRANT_PORT)
-            logger.info("Connected to Qdrant")
+    def initialize_backend(self):
+        """Initialize vector backend (Qdrant or PostgreSQL)"""
+        if self.backend is None:
+            logger.info(f"Initializing vector backend: {self.backend_type}")
+            self.backend = get_vector_backend(self.backend_type)
+            self.backend.connect()
+            logger.info(f"Vector backend ready: {self.backend_type}")
 
     def generate_embeddings(
         self,
@@ -281,69 +283,41 @@ class ETLPipeline:
         recreate: bool = True
     ):
         """
-        Create or recreate Qdrant collection
+        Create or recreate vector collection
 
         Args:
             collection_name: Name of the collection
             recreate: If True, delete existing collection
         """
-        self.initialize_client()
+        self.initialize_backend()
         self.initialize_model()
 
-        if recreate:
-            try:
-                self.client.delete_collection(collection_name)
-                logger.info(f"Deleted existing collection: {collection_name}")
-            except Exception:
-                pass
-
-        self.client.create_collection(
+        self.backend.create_collection(
             collection_name=collection_name,
-            vectors_config=models.VectorParams(
-                size=self.vector_size,
-                distance=models.Distance.COSINE
-            )
+            vector_size=self.vector_size,
+            recreate=recreate
         )
-        logger.info(f"Created collection: {collection_name}")
+        logger.info(f"Created collection: {collection_name} (backend: {self.backend_type})")
 
-    def upsert_to_qdrant(
+    def upsert_vectors(
         self,
         collection_name: str,
         target_vectors: Dict[str, np.ndarray],
         target_variant: str
     ):
         """
-        Upsert target vectors to Qdrant collection
+        Upsert target vectors to vector backend
 
         Args:
             collection_name: Name of the collection
             target_vectors: Dictionary mapping paths to vectors
             target_variant: Type of target (file or module)
         """
-        logger.info(f"Upserting {len(target_vectors)} vectors to {collection_name}...")
-
-        points = []
-        for idx, (path, vector) in enumerate(target_vectors.items()):
-            points.append(models.PointStruct(
-                id=idx,
-                vector=vector.tolist(),
-                payload={
-                    "path": path,
-                    "type": target_variant
-                }
-            ))
-
-        # Batch upsert
-        batch_size = config.UPSERT_BATCH_SIZE
-        for i in tqdm(range(0, len(points), batch_size), desc="Upserting batches"):
-            batch = points[i:i + batch_size]
-            self.client.upsert(
-                collection_name=collection_name,
-                points=batch,
-                wait=True
-            )
-
-        logger.info(f"Upserted {len(points)} points to {collection_name}")
+        self.backend.upsert_vectors(
+            collection_name=collection_name,
+            vectors_dict=target_vectors,
+            target_variant=target_variant
+        )
 
     def run(
         self,
@@ -366,6 +340,7 @@ class ETLPipeline:
 
         logger.info("=" * 80)
         logger.info("Starting ETL Pipeline")
+        logger.info(f"Vector Backend: {self.backend_type}")
         logger.info(f"Embedding Model: {self.model_config['name']}")
         logger.info(f"Model Key: {self.model_key or 'default'}")
         logger.info(f"Split Strategy: {self.split_strategy}")
@@ -453,7 +428,7 @@ class ETLPipeline:
 
                     # Create collection and upsert
                     self.create_collection(collection_name)
-                    self.upsert_to_qdrant(
+                    self.upsert_vectors(
                         collection_name,
                         target_vectors,
                         target_key
@@ -478,6 +453,13 @@ def main():
         type=int,
         default=config.TEST_SIZE,
         help='Number of test tasks'
+    )
+    parser.add_argument(
+        '--backend',
+        type=str,
+        default=None,
+        choices=['qdrant', 'postgres'],
+        help=f'Vector backend to use (default: {config.VECTOR_BACKEND})'
     )
     parser.add_argument(
         '--model',
@@ -514,7 +496,8 @@ def main():
     pipeline = ETLPipeline(
         split_strategy=args.split_strategy,
         test_size=args.test_size,
-        model_key=args.model
+        model_key=args.model,
+        backend_type=args.backend
     )
 
     pipeline.run(

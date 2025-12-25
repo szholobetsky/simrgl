@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "semantic-fingerprint": {
+      "command": "python",
+      "args": [
+        "/path/to/semantic_fingerprint_mcp_server.py"
+      ],
+      "env": {
+        "QDRANT_HOST": "localhost",
+        "QDRANT_PORT": "6333",
+        "EMBEDDING_MODEL": "BAAI/bge-large-en-v1.5"
+      }
+    }
+  }
+}

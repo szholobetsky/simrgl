@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "semantic-search-postgres": {
+      "command": "python",
+      "args": [
+        "C:\\Project\\codeXplorer\\capestone\\simrgl\\ragmcp\\mcp_server_postgres.py"
+      ],
+      "env": {
+        "PYTHONPATH": "C:\\Project\\codeXplorer\\capestone\\simrgl\\ragmcp"
+      }
+    }
+  }
+}

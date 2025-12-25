@@ -1,0 +1,35 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Встановлення системних залежностей
+RUN apt-get update && apt-get install -y \
+    git \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Копіювання requirements
+COPY requirements.txt .
+
+# Встановлення Python залежностей
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Копіювання коду
+COPY semantic_fingerprint_mcp_server.py .
+COPY mcp_config.json .
+
+# Створення директорій
+RUN mkdir -p /app/data /app/models /app/cache
+
+# Змінні оточення
+ENV PYTHONUNBUFFERED=1
+ENV QDRANT_HOST=localhost
+ENV QDRANT_PORT=6333
+
+# Попереднє завантаження моделей (опціонально)
+# RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('BAAI/bge-large-en-v1.5')"
+
+EXPOSE 5000
+
+# Запуск сервера
+CMD ["python", "semantic_fingerprint_mcp_server.py"]

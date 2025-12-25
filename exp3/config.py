@@ -4,12 +4,27 @@ Defines all experiment variants and parameters
 """
 
 # Database Configuration
-DB_PATH = 'sonar.db'
+DB_PATH = '../data/sonar.db'
+
+# Vector Backend Selection
+# Options: 'qdrant' or 'postgres'
+VECTOR_BACKEND = 'postgres'  # Options: 'postgres' (PostgreSQL+pgvector) or 'qdrant' (Qdrant vector DB)
 
 # Qdrant Configuration
 QDRANT_HOST = 'localhost'
 QDRANT_PORT = 6333
 COLLECTION_PREFIX = 'rag_exp'
+
+# Task Embeddings Collection Name
+TASK_COLLECTION = 'task_embeddings_all_bge-small'
+
+# PostgreSQL Configuration (for pgvector backend)
+POSTGRES_HOST = 'localhost'
+POSTGRES_PORT = 5432
+POSTGRES_DB = 'semantic_vectors'
+POSTGRES_USER = 'postgres'
+POSTGRES_PASSWORD = 'postgres'  # Change in production!
+POSTGRES_SCHEMA = 'vectors'  # Schema for vector tables
 
 # Embedding Configuration
 EMBEDDING_MODEL = 'BAAI/bge-small-en-v1.5'  # Default model (used when --model not specified)

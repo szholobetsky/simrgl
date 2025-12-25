@@ -1,0 +1,13 @@
+# PostgreSQL Backend Dependencies
+# Install with: pip install -r requirements_postgres.txt
+
+# PostgreSQL adapter for Python
+psycopg2-binary>=2.9.9
+
+# Already required for Qdrant backend:
+# pandas>=1.5.0
+# numpy>=1.24.0
+# sentence-transformers>=2.2.0
+# tqdm>=4.65.0
+
+# Note: Make sure the base requirements.txt is also installed
