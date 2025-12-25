@@ -11,6 +11,38 @@ This experiment systematically investigates:
 3. **RQ3: Noise Tolerance** - Impact of including comments
 4. **RQ4: Temporal Dynamics** - Recent history vs. full history
 
+## 🔄 Vector Database Backends
+
+This project supports **two vector database backends**:
+
+### Qdrant (Default for Research)
+- **Use for**: Research experiments, model comparisons
+- **Advantages**: Easy Docker setup, built-in backup/restore
+- **Setup**: See sections below
+
+### PostgreSQL + pgvector (Production Ready)
+- **Use for**: Production deployments, MCP server integration
+- **Advantages**: Single database, backup-friendly, MCP protocol support
+- **Setup**: See `../ragmcp/` folder for complete setup
+- **Features**:
+  - 27 module embeddings
+  - 12,532 file embeddings
+  - 9,799 task embeddings
+  - MCP server for Claude Desktop / VS Code integration
+  - Local offline AI agent (CLI + Web)
+
+**To use PostgreSQL backend:**
+```bash
+# Create task embeddings in PostgreSQL
+python create_task_collection.py --backend postgres
+
+# Use with MCP server or local agent
+cd ../ragmcp
+./start_local_agent.bat
+```
+
+See `../ragmcp/README.md` for complete PostgreSQL backend documentation.
+
 ## 📁 Project Structure
 
 ```

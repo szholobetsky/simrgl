@@ -17,6 +17,7 @@ This research explores different approaches to linking natural language task des
 | **exp0** | TF-IDF | 0.5-1.5% | 4-48 hours | ❌ Failed | Historical only |
 | **exp1** | Statistical Analysis | N/A (exploratory) | Fast | ✅ Complete | For insights |
 | **exp3** | Dense Embeddings (BERT) | 2.3-3.5% | 20-40 min | ✅ Best | **Use this** |
+| **ragmcp** | MCP Server + Local AI Agent | N/A (production tool) | Real-time | ✅ Production | **Deployable** |
 
 ### Evolution Timeline
 
@@ -26,7 +27,9 @@ exp0 (TF-IDF)
 exp1 (Statistical Analysis)
     ↓ [Insights: term distributions, module relationships]
 exp3 (Embeddings + RAG)
-    ✓ [Success: 2-3× better accuracy, 100× faster]
+    ↓ [Success: 2-3× better accuracy, 100× faster]
+ragmcp (MCP + Local Agent)
+    ✓ [Production: MCP server, offline AI agent, PostgreSQL backend]
 ```
 
 ---
@@ -154,11 +157,142 @@ exp3 (Embeddings + RAG)
 
 ---
 
+### Production Tool: MCP Server + Local AI Agent ✅ **PRODUCTION READY**
+
+**Location**: `ragmcp/`
+
+**Approach**: Production-ready deployment of exp3 results using Model Context Protocol (MCP) and local LLM integration.
+
+**Key Components**:
+- **MCP Server**: PostgreSQL-based semantic search server
+- **Local AI Agent**: 100% offline coding assistant (CLI + Web)
+- **Vector DB**: PostgreSQL + pgvector (27 modules, 12,532 files, 9,799 tasks)
+- **LLM**: Ollama with qwen2.5-coder for local reasoning
+- **Backup/Restore**: Full data backup and recovery
+
+**Key Scripts**:
+- `mcp_server_postgres.py` - MCP server for Claude Desktop / VS Code
+- `local_agent.py` - CLI offline agent
+- `local_agent_web.py` - Web interface (Gradio)
+- `backup_data_from_postgree.bat/sh` - PostgreSQL backup
+- `test_mcp_server.py` - Server testing
+
+**Features**:
+- ✅ **100% Offline**: No cloud services, no API keys needed
+- ✅ **Privacy-First**: All data stays on your machine
+- ✅ **Free Forever**: No subscriptions, no costs
+- ✅ **Multi-Interface**: CLI, Web, Claude Desktop, VS Code
+- ✅ **Historical Context**: 9,799 task embeddings for similarity search
+- ✅ **MCP Protocol**: Standard integration with AI tools
+
+**MCP Tools Available**:
+1. `search_modules` - Find relevant code modules (top-K)
+2. `search_files` - Find relevant files (top-K)
+3. `search_similar_tasks` - Find historical similar tasks
+4. `get_collections_info` - Collection statistics
+
+**Interfaces**:
+
+**CLI Mode:**
+```bash
+cd ragmcp/
+./start_local_agent.bat    # Windows
+./start_local_agent.sh     # Linux/Mac
+```
+
+**Web Interface:**
+```bash
+cd ragmcp/
+./start_local_agent_web.bat    # Windows
+# Open: http://127.0.0.1:7861
+```
+
+**Claude Desktop Integration:**
+- Configure MCP server in Claude Desktop settings
+- Use semantic search directly in Claude
+- See `ragmcp/MCP_SETUP_GUIDE.md` for setup
+
+**VS Code Integration:**
+- Use with Cline or Continue extensions
+- Terminal integration
+- Task configuration
+- See `ragmcp/LOCAL_AGENT_GUIDE.md` for details
+
+**Example Query:**
+```
+> Fix authentication bug in login module
+
+Agent provides:
+- Relevant modules: server, sonar-server
+- Relevant files: SimpleSessionsContainer.js, cookies.ts
+- Similar tasks: SONAR-8493, SONAR-11066, SONAR-16181
+- AI recommendations based on historical context
+```
+
+**Performance**:
+- ⚡ **Search**: <100ms per query
+- 🤖 **LLM**: 5-10 seconds (after first query)
+- 💾 **Storage**: 112 MB (PostgreSQL)
+- 🔄 **Backup**: Full backup in 30 seconds
+
+**Comparison with Cloud Solutions**:
+
+| Feature | Local Agent | Claude Desktop | GitHub Copilot |
+|---------|------------|----------------|----------------|
+| Offline | ✅ Yes | ❌ No | ❌ No |
+| Cost | ✅ Free | ❌ $20/month | ❌ $10/month |
+| Privacy | ✅ 100% local | ❌ Cloud | ❌ Cloud |
+| Codebase Search | ✅ Yes (MCP) | ✅ Yes (MCP) | ❌ Limited |
+| Historical Tasks | ✅ Yes (9,799) | ❌ No | ❌ No |
+
+**When to use**:
+- **Production deployment** of task-to-code recommendations
+- **Privacy-sensitive** projects (no data leaves your machine)
+- **Offline development** environments
+- **Integration** with Claude Desktop or VS Code
+- **Free alternative** to cloud AI assistants
+
+📖 **Full documentation**: `ragmcp/README.md`
+📖 **Setup guides**: `ragmcp/MCP_SETUP_GUIDE.md`, `ragmcp/LOCAL_AGENT_GUIDE.md`
+
+---
+
 ## 🚀 Quick Start Guide
 
-### For Practical Use (Recommended)
+### For Production Use (Recommended - Offline AI Agent)
 
-If you want to actually predict code modules for tasks:
+If you want a deployable, offline AI coding assistant:
+
+```bash
+cd ragmcp/
+
+# 1. Ensure PostgreSQL is running
+podman start semantic_vectors_db
+
+# 2. Ensure Ollama is running
+ollama serve
+
+# 3. Start the local agent (CLI)
+./start_local_agent.bat    # Windows
+./start_local_agent.sh     # Linux/Mac
+
+# Or start web interface
+./start_local_agent_web.bat    # Windows
+# Open: http://127.0.0.1:7861
+```
+
+**What you get:**
+- 100% offline AI coding assistant
+- Semantic search across 12,532 files and 9,799 historical tasks
+- LLM-powered recommendations
+- No cloud services, no costs
+- Privacy-first (all data stays local)
+
+See `ragmcp/README.md` for complete documentation.
+
+### For Research & Experiments
+
+If you want to run research experiments or compare embedding models:
 
 ```bash
 cd exp3/
@@ -349,16 +483,31 @@ simrgl/
 │   ├── module_task.py          # Module hierarchy
 │   ├── term_rank.py            # Term metrics
 │   └── interlink.py            # Co-occurrence analysis
-└── exp3/                        # Embedding-based RAG (recommended)
-    ├── README.md               # Comprehensive exp3 documentation
-    ├── config.py               # Configuration
-    ├── etl_pipeline.py         # Data processing
-    ├── run_experiments.py      # Evaluation
-    ├── experiment_ui.py        # Streamlit UI
-    ├── utils.py                # Helper functions
-    ├── docker-compose.yml      # Qdrant setup
-    ├── start.sh/bat            # Automated pipeline
-    └── quick_start.sh/bat      # UI launcher
+├── exp3/                        # Embedding-based RAG (research)
+│   ├── README.md               # Comprehensive exp3 documentation
+│   ├── config.py               # Configuration
+│   ├── etl_pipeline.py         # Data processing
+│   ├── run_experiments.py      # Evaluation
+│   ├── experiment_ui.py        # Streamlit UI
+│   ├── utils.py                # Helper functions
+│   ├── docker-compose.yml      # Qdrant setup
+│   ├── start.sh/bat            # Automated pipeline
+│   └── quick_start.sh/bat      # UI launcher
+└── ragmcp/                      # Production MCP server + Local AI agent
+    ├── README.md               # Comprehensive documentation
+    ├── README_UA.md            # Ukrainian version
+    ├── mcp_server_postgres.py  # PostgreSQL MCP server
+    ├── local_agent.py          # CLI offline agent
+    ├── local_agent_web.py      # Web interface (Gradio)
+    ├── gradio_ui.py            # Original Gradio UI
+    ├── llm_integration.py      # LLM integration
+    ├── backup_data_from_postgree.bat/sh  # Backup scripts
+    ├── restore_data_to_postgree.bat/sh   # Restore scripts
+    ├── start_local_agent.bat/sh          # CLI launchers
+    ├── start_local_agent_web.bat/sh      # Web launchers
+    ├── MCP_SETUP_GUIDE.md      # MCP integration guide
+    ├── LOCAL_AGENT_GUIDE.md    # Local agent guide
+    └── READY_TO_USE.md         # Quick start summary
 ```
 
 ---
@@ -406,6 +555,17 @@ start.bat     # Windows
 ---
 
 ## 🔗 Related Projects
+
+### Production Tool: MCP Server + Local AI Agent
+**Location**: `ragmcp/`
+
+Production deployment of semantic search:
+- MCP server for Claude Desktop / VS Code
+- Local offline AI agent (CLI + Web)
+- PostgreSQL + pgvector backend
+- 100% offline, free, privacy-first
+- Backup/restore capabilities
+- See `ragmcp/README.md` for details
 
 ### Data Gathering Tool
 **Location**: `../../data_gathering/refactor/`
@@ -472,10 +632,14 @@ This is academic research code. Use for educational and research purposes.
 
 ### Recommended Path
 
-For task-to-code prediction:
-1. ✅ **Use exp3** (embedding-based RAG)
-2. 📊 **Reference exp1** (for codebase insights)
-3. ❌ **Avoid exp0** (TF-IDF too slow and inaccurate)
+**For Production Use:**
+1. ✅ **Use ragmcp** (MCP server + local AI agent) - Deployable, offline, free
+2. 📖 **Read ragmcp/README.md** for setup instructions
+
+**For Research:**
+1. ✅ **Use exp3** (embedding-based RAG) - Best accuracy, experiments
+2. 📊 **Reference exp1** (for codebase insights) - Statistical analysis
+3. ❌ **Avoid exp0** (TF-IDF too slow and inaccurate) - Historical only
 
 ### Future Directions
 
@@ -490,9 +654,10 @@ For task-to-code prediction:
 ## 📧 Contact & Support
 
 For questions about:
-- **exp0**: See `exp0/README.md` for detailed documentation
-- **exp1**: See `exp1/README.md` for usage instructions
-- **exp3**: See `exp3/README.md` for comprehensive guide
+- **ragmcp (Production)**: See `ragmcp/README.md` for deployment guide
+- **exp3 (Research)**: See `exp3/README.md` for comprehensive guide
+- **exp1 (Analysis)**: See `exp1/README.md` for usage instructions
+- **exp0 (Historical)**: See `exp0/README.md` for detailed documentation
 - **Data gathering**: See `../../data_gathering/refactor/README.md`
 
 ---
