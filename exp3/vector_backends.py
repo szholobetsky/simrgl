@@ -72,6 +72,19 @@ class VectorBackend(ABC):
         pass
 
     @abstractmethod
+    def delete_collection(self, collection_name: str) -> bool:
+        """
+        Delete a collection/table
+
+        Args:
+            collection_name: Name of the collection/table to delete
+
+        Returns:
+            True if successful, False otherwise
+        """
+        pass
+
+    @abstractmethod
     def close(self):
         """Close connection"""
         pass
@@ -186,6 +199,17 @@ class QdrantBackend(VectorBackend):
             'count': info.points_count,
             'vector_size': info.config.params.vectors.size
         }
+
+    def delete_collection(self, collection_name: str):
+        """Delete Qdrant collection"""
+        self.connect()
+        try:
+            self.client.delete_collection(collection_name)
+            logger.info(f"Deleted Qdrant collection: {collection_name}")
+            return True
+        except Exception as e:
+            logger.warning(f"Failed to delete collection {collection_name}: {e}")
+            return False
 
     def close(self):
         """Close Qdrant connection (no-op for Qdrant client)"""
@@ -330,54 +354,31 @@ class PostgresBackend(VectorBackend):
         """Search PostgreSQL table using pgvector"""
         self.connect()
 
+        # Create a fresh cursor for this query to avoid state issues
+        cursor = self.conn.cursor()
         try:
             # Properly quote table name
             table_name = f'{self.schema}."{collection_name}"'
 
-            # Check if metadata column exists
-            self.cursor.execute(f"""
-            SELECT column_name FROM information_schema.columns
-            WHERE table_schema = %s AND table_name = %s AND column_name = 'metadata';
-            """, (self.schema, collection_name))
-            has_metadata = self.cursor.fetchone() is not None
-
             # Use cosine distance (1 - cosine similarity)
             # pgvector returns distance, we convert to similarity
-            if has_metadata:
-                search_sql = f"""
-                SELECT path, type, 1 - (vector <=> %s::vector) as score, metadata
-                FROM {table_name}
-                ORDER BY vector <=> %s::vector
-                LIMIT %s;
-                """
-            else:
-                search_sql = f"""
-                SELECT path, type, 1 - (vector <=> %s::vector) as score
-                FROM {table_name}
-                ORDER BY vector <=> %s::vector
-                LIMIT %s;
-                """
+            search_sql = f"""
+            SELECT path, type, 1 - (vector <=> %s::vector) as score
+            FROM {table_name}
+            ORDER BY vector <=> %s::vector
+            LIMIT %s;
+            """
 
             vector_str = f"[{','.join(map(str, query_vector.tolist()))}]"
-            self.cursor.execute(search_sql, (vector_str, vector_str, top_k))
+            cursor.execute(search_sql, (vector_str, vector_str, top_k))
 
             results = []
-            for row in self.cursor.fetchall():
+            for row in cursor.fetchall():
                 result = {
                     'path': row[0],
                     'type': row[1],
                     'score': float(row[2])
                 }
-
-                # If metadata exists, parse and merge it
-                if has_metadata and len(row) > 3 and row[3]:
-                    import json
-                    try:
-                        metadata = json.loads(row[3]) if isinstance(row[3], str) else row[3]
-                        result.update(metadata)
-                    except:
-                        pass
-
                 results.append(result)
 
             return results
@@ -385,32 +386,56 @@ class PostgresBackend(VectorBackend):
             self.conn.rollback()
             logger.error(f"Error searching collection {collection_name}: {e}")
             raise
+        finally:
+            cursor.close()
 
     def get_collection_info(self, collection_name: str) -> Dict:
         """Get PostgreSQL table info"""
         self.connect()
 
-        # Properly quote table name
-        table_name = f'{self.schema}."{collection_name}"'
+        # Create a fresh cursor for this query
+        cursor = self.conn.cursor()
+        try:
+            # Properly quote table name
+            table_name = f'{self.schema}."{collection_name}"'
 
-        # Get row count
-        self.cursor.execute(f"SELECT COUNT(*) FROM {table_name};")
-        count = self.cursor.fetchone()[0]
+            # Get row count
+            cursor.execute(f"SELECT COUNT(*) FROM {table_name};")
+            count = cursor.fetchone()[0]
 
-        # Get vector dimension
-        self.cursor.execute(f"""
-        SELECT vector_dims(vector)
-        FROM {table_name}
-        LIMIT 1;
-        """)
-        result = self.cursor.fetchone()
-        vector_size = result[0] if result else 0
+            # Get vector dimension
+            cursor.execute(f"""
+            SELECT vector_dims(vector)
+            FROM {table_name}
+            LIMIT 1;
+            """)
+            result = cursor.fetchone()
+            vector_size = result[0] if result else 0
 
-        return {
-            'name': collection_name,
-            'count': count,
-            'vector_size': vector_size
-        }
+            return {
+                'name': collection_name,
+                'count': count,
+                'vector_size': vector_size
+            }
+        finally:
+            cursor.close()
+
+    def delete_collection(self, collection_name: str):
+        """Delete PostgreSQL table (collection)"""
+        self.connect()
+        cursor = self.conn.cursor()
+        try:
+            table_name = f'{self.schema}."{collection_name}"'
+            cursor.execute(f"DROP TABLE IF EXISTS {table_name} CASCADE;")
+            self.conn.commit()
+            logger.info(f"Deleted PostgreSQL table: {table_name}")
+            return True
+        except Exception as e:
+            self.conn.rollback()
+            logger.warning(f"Failed to delete collection {collection_name}: {e}")
+            return False
+        finally:
+            cursor.close()
 
     def close(self):
         """Close PostgreSQL connection"""

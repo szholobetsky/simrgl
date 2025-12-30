@@ -3,3 +3,12 @@ __pycache__/
 nul
 */nul
 /data
+.claude/
+
+# Experiment results and logs
+experiment_results/
+*.log
+
+# Virtual environments
+venv*/
+env*/

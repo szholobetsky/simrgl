@@ -9,11 +9,11 @@ import pandas as pd
 import argparse
 from typing import List, Dict, Any
 from sentence_transformers import SentenceTransformer
-from qdrant_client import QdrantClient
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 
 import config
+from vector_backends import get_vector_backend
 from utils import (
     combine_text_fields,
     calculate_metrics_for_query,
@@ -30,30 +30,33 @@ from utils import (
 class ExperimentRunner:
     """Run and evaluate RAG experiments"""
 
-    def __init__(self, split_strategy: str = 'recent', model_key: str = None):
+    def __init__(self, split_strategy: str = 'recent', model_key: str = None, backend_type: str = None):
         """
         Initialize Experiment Runner
 
         Args:
             split_strategy: Split strategy used in ETL ('recent' or 'modn')
             model_key: Key from EMBEDDING_MODELS (None = use default)
+            backend_type: Vector backend type - 'qdrant' or 'postgres' (None = use config)
         """
         self.split_strategy = split_strategy
         self.model_key = model_key
         self.model_config = config.get_model_config(model_key)
+        self.backend_type = backend_type or config.VECTOR_BACKEND
         self.model = None
-        self.client = None
+        self.backend = None
         self.test_set = None
 
-    def load_test_set(self) -> List[Dict[str, Any]]:
+    def load_test_set(self, test_set_file: str = None) -> List[Dict[str, Any]]:
         """Load test set from JSON file"""
-        if not os.path.exists(config.TEST_SET_FILE):
+        test_set_file = test_set_file or config.TEST_SET_FILE
+        if not os.path.exists(test_set_file):
             raise FileNotFoundError(
-                f"Test set file not found: {config.TEST_SET_FILE}. "
+                f"Test set file not found: {test_set_file}. "
                 "Please run ETL pipeline first."
             )
 
-        with open(config.TEST_SET_FILE, 'r') as f:
+        with open(test_set_file, 'r') as f:
             test_set = json.load(f)
 
         if not validate_test_set(test_set):
@@ -71,18 +74,19 @@ class ExperimentRunner:
             self.model = SentenceTransformer(model_name, trust_remote_code=trust_remote)
             logger.info("Model loaded")
 
-    def initialize_client(self):
-        """Initialize Qdrant client"""
-        if self.client is None:
-            logger.info(f"Connecting to Qdrant at {config.QDRANT_HOST}:{config.QDRANT_PORT}...")
-            self.client = QdrantClient(host=config.QDRANT_HOST, port=config.QDRANT_PORT)
-            logger.info("Connected to Qdrant")
+    def initialize_backend(self):
+        """Initialize vector backend (Qdrant or PostgreSQL)"""
+        if self.backend is None:
+            logger.info(f"Initializing vector backend: {self.backend_type}")
+            self.backend = get_vector_backend(self.backend_type)
+            self.backend.connect()
+            logger.info(f"Vector backend ready: {self.backend_type}")
 
     def check_collection_exists(self, collection_name: str) -> bool:
-        """Check if a Qdrant collection exists"""
+        """Check if a collection/table exists in the vector backend"""
         try:
-            collections = self.client.get_collections().collections
-            return any(c.name == collection_name for c in collections)
+            info = self.backend.get_collection_info(collection_name)
+            return info is not None and info.get('count', 0) >= 0
         except Exception as e:
             logger.error(f"Error checking collection {collection_name}: {e}")
             return False
@@ -126,7 +130,7 @@ class ExperimentRunner:
         top_k: int
     ) -> List[str]:
         """
-        Query Qdrant for a single task
+        Query vector backend for a single task
 
         Args:
             collection_name: Name of the collection
@@ -137,14 +141,14 @@ class ExperimentRunner:
             List of retrieved file/module paths
         """
         try:
-            results = self.client.query_points(
+            import numpy as np
+            results = self.backend.search(
                 collection_name=collection_name,
-                query=query_vector,
-                limit=top_k,
-                with_payload=True
-            ).points
+                query_vector=np.array(query_vector),
+                top_k=top_k
+            )
 
-            retrieved_paths = [res.payload['path'] for res in results]
+            retrieved_paths = [res['path'] for res in results]
             return retrieved_paths
 
         except Exception as e:
@@ -262,6 +266,107 @@ class ExperimentRunner:
 
         return result
 
+    def run_single_experiment(
+        self,
+        collection_name: str,
+        source_variant: str,
+        target_variant: str,
+        window_variant: str,
+        experiment_id: str,
+        top_k: int = None
+    ) -> Dict[str, Any]:
+        """
+        Run a single experiment with a specific collection
+
+        Args:
+            collection_name: Full collection name
+            source_variant: Source variant key
+            target_variant: Target variant key
+            window_variant: Window variant key
+            experiment_id: Experiment identifier
+            top_k: Number of results to retrieve (default from config)
+
+        Returns:
+            Dictionary with experiment results
+        """
+        top_k = top_k or config.DEFAULT_TOP_K
+
+        log_experiment_start(experiment_id, {
+            'source': source_variant,
+            'target': target_variant,
+            'window': window_variant,
+            'split': self.split_strategy,
+            'collection': collection_name
+        })
+
+        # Encode queries
+        query_vectors = self.encode_queries(self.test_set, source_variant)
+
+        # Query in parallel
+        all_metrics = []
+
+        def query_and_evaluate(idx: int) -> Dict[str, float]:
+            query_vector = query_vectors[idx]
+            task = self.test_set[idx]
+
+            retrieved_paths = self.query_single_task(
+                collection_name,
+                query_vector,
+                top_k
+            )
+
+            relevant_files = set(task['relevant_files'])
+
+            # For module-level evaluation, convert file paths to module paths
+            if target_variant == 'module':
+                relevant_files = set(extract_module_path(f) for f in task['relevant_files'])
+
+            metrics = calculate_metrics_for_query(
+                retrieved_paths,
+                relevant_files,
+                config.TOP_K_VALUES
+            )
+
+            return metrics
+
+        logger.info(f"Querying {len(self.test_set)} tasks...")
+
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            futures = {
+                executor.submit(query_and_evaluate, i): i
+                for i in range(len(self.test_set))
+            }
+
+            for future in tqdm(
+                as_completed(futures),
+                total=len(futures),
+                desc=f"Evaluating {experiment_id}"
+            ):
+                try:
+                    metrics = future.result()
+                    all_metrics.append(metrics)
+                except Exception as e:
+                    logger.error(f"Error processing query: {e}")
+                    continue
+
+        # Aggregate metrics
+        aggregated = aggregate_metrics(all_metrics, config.TOP_K_VALUES)
+
+        log_experiment_complete(experiment_id, aggregated)
+
+        # Format result row
+        result = format_metrics_row(
+            experiment_id,
+            source_variant,
+            target_variant,
+            window_variant,
+            self.split_strategy,
+            aggregated,
+            config.TOP_K_VALUES
+        )
+
+        return result
+
     def run_all_experiments(
         self,
         source_variants: List[str] = None,
@@ -297,7 +402,7 @@ class ExperimentRunner:
         # Initialize resources
         self.load_test_set()
         self.initialize_model()
-        self.initialize_client()
+        self.initialize_backend()
 
         # Run all combinations
         results = []

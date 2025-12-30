@@ -158,7 +158,7 @@ class ETLPipeline:
 
         for _, task in test_tasks.iterrows():
             relevant_files = merged_df[
-                merged_df['NAME'] == task['NAME']
+                merged_df['TASK_NAME'] == task['NAME']
             ]['PATH'].unique().tolist()
 
             # Clean and normalize file paths
@@ -175,6 +175,32 @@ class ETLPipeline:
 
         logger.info(f"Prepared test set with {len(test_set)} tasks")
         return test_set
+
+    def save_test_set(
+        self,
+        test_tasks: pd.DataFrame,
+        rawdata_df: pd.DataFrame,
+        output_file: str
+    ):
+        """
+        Save test set to JSON file
+
+        Args:
+            test_tasks: Test task DataFrame
+            rawdata_df: Raw commit data
+            output_file: Path to output JSON file
+        """
+        import json
+
+        # Prepare test set
+        merged_df = rawdata_df[rawdata_df['TASK_NAME'].isin(test_tasks['NAME'])]
+        test_set = self.prepare_test_set(test_tasks, merged_df)
+
+        # Save to file
+        with open(output_file, 'w') as f:
+            json.dump(test_set, f, indent=2)
+
+        logger.info(f"Test set saved to {output_file}")
 
     def initialize_model(self):
         """Initialize embedding model"""
