@@ -191,18 +191,27 @@ class OllamaLLM(BaseLLM):
         try:
             import requests
 
-            url = f"{self.config.api_base}/api/generate"
+            # Use /api/chat endpoint (new Ollama API)
+            url = f"{self.config.api_base}/api/chat"
 
-            full_prompt = prompt
+            # Build messages array for chat API
+            messages = []
             if system_prompt:
-                full_prompt = f"{system_prompt}\n\n{prompt}"
+                messages.append({
+                    "role": "system",
+                    "content": system_prompt
+                })
+            messages.append({
+                "role": "user",
+                "content": prompt
+            })
 
             payload = {
                 "model": self.config.model_name,
-                "prompt": full_prompt,
-                "temperature": self.config.temperature,
+                "messages": messages,
                 "stream": False,
                 "options": {
+                    "temperature": self.config.temperature,
                     "num_predict": self.config.max_tokens,
                     "top_p": self.config.top_p
                 }
@@ -213,6 +222,9 @@ class OllamaLLM(BaseLLM):
             response.raise_for_status()
 
             result = response.json()
+            # Extract response from message content
+            if "message" in result and "content" in result["message"]:
+                return result["message"]["content"]
             return result.get("response", "")
         except Exception as e:
             return f"Error calling Ollama: {e}"
@@ -296,14 +308,14 @@ Provide specific, actionable recommendations."""
 # Predefined LLM configurations
 PREDEFINED_LLMS = {
     "qwen-2.5-coder-1.5b": LLMConfig(
-        provider="local",
-        model_name="Qwen/Qwen2.5-Coder-1.5B-Instruct",
+        provider="ollama",  # Changed from "local" to use Ollama
+        model_name="qwen2.5-coder:1.5b",  # Ollama model name
         temperature=0.7,
         max_tokens=2000
     ),
     "qwen-2.5-coder-7b": LLMConfig(
-        provider="local",
-        model_name="Qwen/Qwen2.5-Coder-7B-Instruct",
+        provider="ollama",  # Changed from "local" to use Ollama
+        model_name="qwen2.5-coder:7b",  # Ollama model name
         temperature=0.7,
         max_tokens=2000
     ),

@@ -10,6 +10,8 @@ import config
 from vector_backends import get_vector_backend
 from rag_pipeline import RAGPipeline
 from llm_integration import LLMFactory, LLMConfig, PREDEFINED_LLMS, RAGWithLLM
+import psycopg2
+import html
 
 # Initialize vector backend
 backend = get_vector_backend(config.VECTOR_BACKEND)
@@ -33,7 +35,7 @@ elif config.VECTOR_BACKEND == 'postgres':
 print(f"[OK] RAG Pipeline ready")
 
 
-def search_modules(task_description: str, top_k: int, target: str):
+def search_modules(task_description: str, top_k: int, target: str, collection_mode: str = "RECENT"):
     """
     Search for relevant modules based on task description
 
@@ -41,6 +43,7 @@ def search_modules(task_description: str, top_k: int, target: str):
         task_description: Task description text
         top_k: Number of results to return
         target: 'module' or 'file' level granularity
+        collection_mode: 'RECENT' (w100) or 'ALL' (complete history)
 
     Returns:
         HTML formatted results
@@ -48,8 +51,11 @@ def search_modules(task_description: str, top_k: int, target: str):
     if not task_description.strip():
         return "<p style='color: red;'>Please enter a task description</p>"
 
-    # Select collection
-    collection_name = config.COLLECTION_MODULE if target == "Module" else config.COLLECTION_FILE
+    # Select collection based on target and mode
+    if target == "Module":
+        collection_name = config.COLLECTION_MODULE_RECENT if collection_mode == "RECENT" else config.COLLECTION_MODULE_ALL
+    else:
+        collection_name = config.COLLECTION_FILE_RECENT if collection_mode == "RECENT" else config.COLLECTION_FILE_ALL
 
     try:
         # Generate embedding
@@ -353,21 +359,68 @@ def format_rag_results(rag_result) -> str:
     return ''.join(html_parts)
 
 
-def search_tasks(task_description: str, top_k: int):
+def get_task_files_and_diffs(task_name: str):
     """
-    Search for similar historical tasks
+    Fetch changed files and their diffs for a given task from RAWDATA table
+
+    Args:
+        task_name: Task identifier (e.g., "SONAR-12345")
+
+    Returns:
+        List of dicts with 'path', 'message', 'diff'
+    """
+    try:
+        conn = psycopg2.connect(
+            host=config.POSTGRES_HOST,
+            port=config.POSTGRES_PORT,
+            database='semantic_vectors',
+            user=config.POSTGRES_USER,
+            password=config.POSTGRES_PASSWORD
+        )
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT path, message, diff
+            FROM vectors.rawdata
+            WHERE task_name = %s
+            ORDER BY id
+            LIMIT 50
+        """, (task_name,))
+
+        files = []
+        for row in cursor.fetchall():
+            files.append({
+                'path': row[0],
+                'message': row[1],
+                'diff': row[2]
+            })
+
+        cursor.close()
+        conn.close()
+
+        return files
+    except Exception as e:
+        print(f"Error fetching task files: {e}")
+        return []
+
+
+def search_tasks(task_description: str, top_k: int, collection_mode: str = "ALL"):
+    """
+    Search for similar historical tasks with changed files and diffs
 
     Args:
         task_description: Task description text
         top_k: Number of results to return
+        collection_mode: 'RECENT' (w100) or 'ALL' (complete history)
 
     Returns:
-        HTML formatted results
+        HTML formatted results with expandable file diffs
     """
     if not task_description.strip():
         return "<p style='color: red;'>Please enter a task description</p>"
 
-    collection_name = config.COLLECTION_TASK
+    # Select collection based on mode
+    collection_name = config.COLLECTION_TASK_RECENT if collection_mode == "RECENT" else config.COLLECTION_TASK_ALL
 
     try:
         # Generate embedding
@@ -397,7 +450,7 @@ def search_tasks(task_description: str, top_k: int):
             similarity = hit.get('score', 0)
 
             # Try to get metadata from path (for Qdrant) or from result
-            task_name = hit.get('task_name', 'Unknown')
+            task_name = hit.get('task_name', task_id)
             title = hit.get('title', '')
             description = hit.get('description', '')
 
@@ -409,6 +462,9 @@ def search_tasks(task_description: str, top_k: int):
             else:
                 color = '#6c757d'  # Gray
 
+            # Fetch changed files and diffs
+            changed_files = get_task_files_and_diffs(task_name)
+
             html_results += f"""
             <div style='margin-bottom: 20px; padding: 15px; border-left: 4px solid {color}; background-color: #f8f9fa;'>
                 <h3 style='margin-top: 0;'>{i}. Task {task_id}: {task_name}</h3>
@@ -417,9 +473,47 @@ def search_tasks(task_description: str, top_k: int):
                     <span style='color: {color}; font-weight: bold;'>{similarity:.4f}</span>
                 </div>
                 {f"<div style='margin-bottom: 10px;'><strong>Title:</strong> {title}</div>" if title else ""}
-                {f"<div><strong>Description:</strong> {description}</div>" if description else ""}
-            </div>
+                {f"<div style='margin-bottom: 10px;'><strong>Description:</strong> {description}</div>" if description else ""}
             """
+
+            # Add changed files section
+            if changed_files:
+                html_results += f"""
+                <div style='margin-top: 15px; padding: 10px; background-color: #fff; border-radius: 4px;'>
+                    <strong>📁 Changed Files ({len(changed_files)}):</strong>
+                    <div style='margin-top: 10px;'>
+                """
+
+                for file_idx, file_info in enumerate(changed_files):
+                    file_path = html.escape(file_info['path'])
+                    diff_content = html.escape(file_info['diff'] or 'No diff available')
+                    file_message = html.escape(file_info['message'] or '')
+
+                    # Use native HTML <details> element (no JavaScript needed)
+                    html_results += f"""
+                    <details style='margin-bottom: 8px; padding: 8px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 3px;'>
+                        <summary style='cursor: pointer; font-weight: bold; padding: 4px; list-style: none;'>
+                            <span style='display: inline-block; background-color: #007bff; color: white; padding: 4px 8px; border-radius: 3px; font-size: 12px; margin-right: 8px;'>🔍 Diff</span>
+                            <code style='color: #333;'>{file_path}</code>
+                        </summary>
+                        <div style='margin-top: 10px; padding: 10px; background-color: #f5f5f5; border: 1px solid #ccc; border-radius: 4px; overflow-x: auto; max-height: 400px; overflow-y: auto;'>
+                            <pre style='margin: 0; font-family: "Courier New", monospace; font-size: 12px; white-space: pre-wrap; color: #000;'>{diff_content}</pre>
+                        </div>
+                    </details>
+                    """
+
+                html_results += """
+                    </div>
+                </div>
+                """
+            else:
+                html_results += """
+                <div style='margin-top: 10px; padding: 8px; background-color: #fff3cd; border-left: 3px solid #ffc107;'>
+                    <em>No file changes found for this task</em>
+                </div>
+                """
+
+            html_results += "</div>"
 
         html_results += "</div>"
         return html_results
@@ -518,6 +612,13 @@ with gr.Blocks(title="Semantic Module Search", theme=gr.themes.Soft()) as demo:
                         label="Granularity"
                     )
 
+                collection_mode_radio = gr.Radio(
+                    choices=["RECENT", "ALL"],
+                    value="RECENT",
+                    label="Collection Mode",
+                    info="RECENT: Last 100 tasks | ALL: Complete history"
+                )
+
                 search_btn = gr.Button("🔍 Search", variant="primary", size="lg")
 
                 gr.Markdown("""
@@ -533,7 +634,7 @@ with gr.Blocks(title="Semantic Module Search", theme=gr.themes.Soft()) as demo:
 
         search_btn.click(
             fn=search_modules,
-            inputs=[task_input, top_k_slider, target_radio],
+            inputs=[task_input, top_k_slider, target_radio, collection_mode_radio],
             outputs=results_output
         )
 
@@ -587,9 +688,9 @@ with gr.Blocks(title="Semantic Module Search", theme=gr.themes.Soft()) as demo:
                             "qwen-2.5-coder-7b",
                             "lmstudio",
                         ],
-                        value="ollama-qwen",
+                        value="qwen-2.5-coder-1.5b",
                         label="LLM Model",
-                        info="Select LLM provider and model"
+                        info="All models use Ollama (ensure model is pulled first)"
                     )
                     llm_temperature = gr.Slider(
                         minimum=0.0,
@@ -612,20 +713,21 @@ with gr.Blocks(title="Semantic Module Search", theme=gr.themes.Soft()) as demo:
 
                 gr.Markdown("""
                 ### 📌 LLM Setup:
-                **For Ollama (Recommended):**
+                **Ollama (Required for all models above):**
                 ```bash
                 # Install Ollama from https://ollama.ai
                 ollama serve
-                ollama pull qwen2.5-coder
+
+                # Pull models you want to use:
+                ollama pull qwen2.5-coder:1.5b   # Fast, 986 MB
+                ollama pull qwen2.5-coder:7b     # Better quality, 4.7 GB
+                ollama pull qwen2.5-coder:latest # Same as 7b
+                ollama pull codellama:latest     # Alternative
                 ```
 
-                **For Local Models:**
-                - Requires: PyTorch, transformers
-                - Needs: 8GB+ RAM (1.5B) or 16GB+ (7B)
-
-                **For LM Studio:**
+                **LM Studio (optional):**
                 - Download from https://lmstudio.ai
-                - Load any model and start server
+                - Load any model and start server at localhost:1234
                 """)
 
             with gr.Column(scale=2):
@@ -676,6 +778,13 @@ with gr.Blocks(title="Semantic Module Search", theme=gr.themes.Soft()) as demo:
                     label="Number of Results"
                 )
 
+                task_collection_mode_radio = gr.Radio(
+                    choices=["RECENT", "ALL"],
+                    value="ALL",
+                    label="Collection Mode",
+                    info="RECENT: Last 100 tasks | ALL: Complete history"
+                )
+
                 task_search_btn = gr.Button("🔍 Find Similar Tasks", variant="primary", size="lg")
 
                 gr.Markdown("""
@@ -691,7 +800,7 @@ with gr.Blocks(title="Semantic Module Search", theme=gr.themes.Soft()) as demo:
 
         task_search_btn.click(
             fn=search_tasks,
-            inputs=[task_search_input, task_top_k_slider],
+            inputs=[task_search_input, task_top_k_slider, task_collection_mode_radio],
             outputs=task_results_output
         )
 

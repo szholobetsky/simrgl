@@ -61,9 +61,21 @@ class LocalAgentWeb:
 
     def process_query_sync(self, query, show_modules, show_files, show_tasks):
         """Synchronous wrapper for Gradio"""
-        return asyncio.run(
-            self.process_query_async(query, show_modules, show_files, show_tasks)
-        )
+        try:
+            # Create new event loop for this call
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                result = loop.run_until_complete(
+                    self.process_query_async(query, show_modules, show_files, show_tasks)
+                )
+                return result
+            finally:
+                loop.close()
+        except Exception as e:
+            import traceback
+            error_msg = f"[ERROR] {str(e)}\n\n```\n{traceback.format_exc()}\n```"
+            return "", "", "", error_msg
 
 
 # Create web interface
@@ -171,23 +183,133 @@ def create_ui():
 
 
 if __name__ == "__main__":
+    import psycopg2
+    import config
+
     print()
     print("=" * 60)
     print("Starting Local Offline Coding Agent - Web Interface")
     print("=" * 60)
     print()
-    print("Features:")
-    print("  [OFFLINE] MCP Server for semantic search")
-    print("  [OFFLINE] Ollama for local LLM")
-    print("  [OFFLINE] No cloud services needed")
+
+    # Pre-flight checks
+    print("Running pre-flight checks...")
     print()
-    print("Make sure:")
-    print("  1. PostgreSQL is running (podman ps)")
-    print("  2. Ollama is running (ollama serve)")
+
+    # Check 1: PostgreSQL connection
+    print("  [1/2] Checking PostgreSQL connection...")
+    try:
+        conn = psycopg2.connect(
+            host=config.POSTGRES_HOST,
+            port=config.POSTGRES_PORT,
+            database=config.POSTGRES_DB,
+            user=config.POSTGRES_USER,
+            password=config.POSTGRES_PASSWORD,
+            connect_timeout=3
+        )
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = %s", (config.POSTGRES_SCHEMA,))
+        table_count = cursor.fetchone()[0]
+        print(f"        ✓ PostgreSQL connected ({table_count} tables in '{config.POSTGRES_SCHEMA}' schema)")
+        cursor.close()
+        conn.close()
+    except Exception as e:
+        print(f"        ✗ PostgreSQL connection failed: {e}")
+        print()
+        print("Make sure PostgreSQL is running:")
+        print("  podman ps  # Check if container is running")
+        print()
+        import sys
+        sys.exit(1)
+
+    # Check 2: Collections
+    print("  [2/2] Checking vector collections...")
+    try:
+        conn = psycopg2.connect(
+            host=config.POSTGRES_HOST,
+            port=config.POSTGRES_PORT,
+            database=config.POSTGRES_DB,
+            user=config.POSTGRES_USER,
+            password=config.POSTGRES_PASSWORD,
+            connect_timeout=3
+        )
+        cursor = conn.cursor()
+
+        # Collections required by simple agent
+        required_collections = [
+            config.COLLECTION_MODULE,  # w100 modules
+            config.COLLECTION_FILE,    # w100 files
+            config.COLLECTION_TASK,    # all tasks
+        ]
+
+        collection_names = {
+            config.COLLECTION_MODULE: "Modules (RECENT w100)",
+            config.COLLECTION_FILE: "Files (RECENT w100)",
+            config.COLLECTION_TASK: "Tasks (ALL)",
+        }
+
+        missing_collections = []
+        found_collections = []
+        for coll in required_collections:
+            cursor.execute("""
+                SELECT COUNT(*) FROM information_schema.tables
+                WHERE table_schema = %s AND table_name = %s
+            """, (config.POSTGRES_SCHEMA, coll))
+            if cursor.fetchone()[0] > 0:
+                found_collections.append(coll)
+            else:
+                missing_collections.append(coll)
+
+        print(f"        ✓ Found {len(found_collections)}/{len(required_collections)} required collections")
+
+        if missing_collections:
+            print()
+            print("        ⚠ Missing collections:")
+            for coll in missing_collections:
+                print(f"          ✗ {collection_names.get(coll, coll)}: {coll}")
+            print()
+            print("        To fix:")
+            if config.COLLECTION_TASK in missing_collections:
+                print("          cd exp3")
+                print("          create_missing_task_embeddings.bat  # Windows")
+                print("          ./create_missing_task_embeddings.sh  # Linux/Mac")
+            else:
+                print("          cd exp3")
+                print("          run_etl_dual_postgres.bat  # Windows")
+                print("          ./run_etl_dual_postgres.sh  # Linux/Mac")
+            print()
+            import sys
+            sys.exit(1)
+
+        cursor.close()
+        conn.close()
+    except Exception as e:
+        print(f"        ⚠ Could not check collections: {e}")
+
+    print()
+    print("=" * 60)
+    print("Initializing Gradio UI...")
+    print("=" * 60)
     print()
 
     # Create and launch UI
     demo = create_ui()
+
+    print()
+    print("=" * 60)
+    print("✓ Gradio UI ready")
+    print("=" * 60)
+    print()
+    print("Launching web server...")
+    print()
+    print("  Server will be available at: http://127.0.0.1:7861")
+    print()
+    print("  Note: Agent will initialize on first query")
+    print("        (MCP server starts when you submit first query)")
+    print()
+    print("=" * 60)
+    print()
+
     demo.launch(
         server_name="127.0.0.1",  # Localhost only
         server_port=7861,          # Different port from main Gradio UI

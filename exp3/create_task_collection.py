@@ -15,13 +15,14 @@ import config
 from vector_backends import get_vector_backend
 from utils import logger
 
-def create_task_collection(backend_type: str = None, model_key: str = None):
+def create_task_collection(backend_type: str = None, model_key: str = None, window: str = 'all'):
     """
     Create collection with individual task embeddings
 
     Args:
         backend_type: 'qdrant' or 'postgres' (None = use config.VECTOR_BACKEND)
         model_key: Key from EMBEDDING_MODELS (None = use default)
+        window: 'w100' for last 100 tasks, 'all' for complete history
     """
 
     backend_type = backend_type or config.VECTOR_BACKEND
@@ -33,17 +34,31 @@ def create_task_collection(backend_type: str = None, model_key: str = None):
     logger.info("Creating Task Embeddings Collection")
     logger.info(f"Backend: {backend_type}")
     logger.info(f"Model: {model_name}")
+    logger.info(f"Window: {window}")
     logger.info("="*60)
 
     # Connect to database
     logger.info(f"\n1. Loading tasks from {config.DB_PATH}...")
     conn = sqlite3.connect(config.DB_PATH)
 
-    query = """
-    SELECT ID, NAME, TITLE, DESCRIPTION, COMMENTS
-    FROM TASK
-    ORDER BY ID
-    """
+    # Filter tasks based on window
+    if window == 'w100':
+        # Get last 100 tasks
+        query = """
+        SELECT ID, NAME, TITLE, DESCRIPTION, COMMENTS
+        FROM TASK
+        ORDER BY ID DESC
+        LIMIT 100
+        """
+        logger.info(f"   Filtering: Last 100 tasks (window={window})")
+    else:
+        # Get all tasks
+        query = """
+        SELECT ID, NAME, TITLE, DESCRIPTION, COMMENTS
+        FROM TASK
+        ORDER BY ID
+        """
+        logger.info(f"   Filtering: All tasks (window={window})")
 
     tasks_df = pd.read_sql_query(query, conn)
     conn.close()
@@ -78,8 +93,11 @@ def create_task_collection(backend_type: str = None, model_key: str = None):
     backend = get_vector_backend(backend_type)
     backend.connect()
 
-    # Create collection
-    collection_name = f"task_embeddings_all{model_suffix}"
+    # Create collection with window suffix
+    if window == 'w100':
+        collection_name = f"task_embeddings_w100{model_suffix}"
+    else:
+        collection_name = f"task_embeddings_all{model_suffix}"
 
     logger.info(f"\n6. Creating collection: {collection_name}...")
     backend.create_collection(
@@ -224,12 +242,20 @@ def main():
         choices=list(config.EMBEDDING_MODELS.keys()),
         help='Embedding model to use (default: bge-small)'
     )
+    parser.add_argument(
+        '--window',
+        type=str,
+        default='all',
+        choices=['w100', 'all'],
+        help='Window size: w100 for last 100 tasks, all for complete history (default: all)'
+    )
 
     args = parser.parse_args()
 
     create_task_collection(
         backend_type=args.backend,
-        model_key=args.model
+        model_key=args.model,
+        window=args.window
     )
 
 

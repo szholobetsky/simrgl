@@ -12,6 +12,8 @@ from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 import requests
 import json
+import psycopg2
+import config
 
 class LocalCodingAgent:
     """Local offline coding agent using MCP + Ollama"""
@@ -19,12 +21,12 @@ class LocalCodingAgent:
     def __init__(
         self,
         mcp_server_path: str = "mcp_server_postgres.py",
-        ollama_url: str = "http://localhost:11434",
-        model: str = "qwen2.5-coder:latest"
+        ollama_url: str = None,
+        model: str = None
     ):
         self.mcp_server_path = mcp_server_path
-        self.ollama_url = ollama_url
-        self.model = model
+        self.ollama_url = ollama_url if ollama_url else config.OLLAMA_URL
+        self.model = model if model else config.OLLAMA_MODEL
         self.session = None
         self.tools = []
 
@@ -34,6 +36,13 @@ class LocalCodingAgent:
         print(f"[INIT] MCP Server: {self.mcp_server_path}")
         print(f"[INIT] LLM Model: {self.model}")
         print(f"[INIT] Ollama URL: {self.ollama_url}")
+        print()
+
+        # Check PostgreSQL collections
+        print("[INIT] Checking PostgreSQL collections...")
+        if not self._check_collections():
+            return False
+        print("[OK] All required collections exist")
         print()
 
         # Check Ollama is available
@@ -78,6 +87,70 @@ class LocalCodingAgent:
 
         except Exception as e:
             print(f"[ERROR] Failed to initialize MCP server: {e}")
+            return False
+
+    def _check_collections(self):
+        """Check that all required collections exist in PostgreSQL"""
+        try:
+            conn = psycopg2.connect(
+                host=config.POSTGRES_HOST,
+                port=config.POSTGRES_PORT,
+                database=config.POSTGRES_DB,
+                user=config.POSTGRES_USER,
+                password=config.POSTGRES_PASSWORD,
+                connect_timeout=3
+            )
+            cursor = conn.cursor()
+
+            # Collections required by simple agent
+            required_collections = [
+                config.COLLECTION_MODULE,  # w100 modules
+                config.COLLECTION_FILE,    # w100 files
+                config.COLLECTION_TASK,    # all tasks
+            ]
+
+            collection_names = {
+                config.COLLECTION_MODULE: "Modules (RECENT w100)",
+                config.COLLECTION_FILE: "Files (RECENT w100)",
+                config.COLLECTION_TASK: "Tasks (ALL)",
+            }
+
+            missing_collections = []
+            for coll in required_collections:
+                cursor.execute("""
+                    SELECT COUNT(*) FROM information_schema.tables
+                    WHERE table_schema = %s AND table_name = %s
+                """, (config.POSTGRES_SCHEMA, coll))
+                if cursor.fetchone()[0] == 0:
+                    missing_collections.append(coll)
+
+            cursor.close()
+            conn.close()
+
+            if missing_collections:
+                print("[ERROR] Missing required collections:")
+                for coll in missing_collections:
+                    print(f"  ✗ {collection_names.get(coll, coll)}: {coll}")
+                print()
+                print("To fix:")
+                if config.COLLECTION_TASK in missing_collections:
+                    print("  cd exp3")
+                    print("  create_missing_task_embeddings.bat  # Windows")
+                    print("  ./create_missing_task_embeddings.sh  # Linux/Mac")
+                else:
+                    print("  cd exp3")
+                    print("  run_etl_dual_postgres.bat  # Windows")
+                    print("  ./run_etl_dual_postgres.sh  # Linux/Mac")
+                return False
+
+            print(f"  ✓ Found {len(required_collections)}/{len(required_collections)} required collections")
+            return True
+
+        except Exception as e:
+            print(f"[ERROR] Cannot connect to PostgreSQL: {e}")
+            print()
+            print("Make sure PostgreSQL is running:")
+            print("  podman ps  # Check if container is running")
             return False
 
     async def cleanup(self):

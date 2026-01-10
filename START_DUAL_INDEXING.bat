@@ -1,0 +1,96 @@
+@echo off
+
+echo ============================================================
+echo DUAL INDEXING RAG AGENT - QUICK START
+echo ============================================================
+echo.
+echo This guide will help you set up and run the Dual Indexing
+echo Two-Phase RAG Agent system.
+echo.
+echo ============================================================
+echo STEP 1: Clear existing PostgreSQL data (optional)
+echo ============================================================
+echo.
+echo If you want to start fresh, run:
+echo   cd exp3
+echo   clear_postgres_vectors.bat
+echo   cd ..
+echo.
+pause
+echo.
+echo ============================================================
+echo STEP 2: Create DUAL collections (RECENT + ALL)
+echo ============================================================
+echo.
+echo This takes 35-45 minutes on CPU, 12-18 minutes on GPU
+echo.
+echo Run:
+echo   cd exp3
+echo   run_etl_dual_postgres.bat
+echo   cd ..
+echo.
+echo This creates 6 collections:
+echo   RECENT: rag_exp_desc_module_w100_modn_bge-small
+echo           rag_exp_desc_file_w100_modn_bge-small
+echo           task_embeddings_w100_bge-small
+echo.
+echo   ALL:    rag_exp_desc_module_all_modn_bge-small
+echo           rag_exp_desc_file_all_modn_bge-small
+echo           task_embeddings_all_bge-small
+echo.
+pause
+echo.
+echo ============================================================
+echo STEP 3: Migrate RAWDATA to PostgreSQL
+echo ============================================================
+echo.
+echo This enables file content and diff access.
+echo Takes about 2-5 minutes.
+echo.
+echo Run:
+echo   cd ragmcp
+echo   migrate_rawdata_to_postgres.bat
+echo   cd ..
+echo.
+pause
+echo.
+echo ============================================================
+echo STEP 4: Run the Two-Phase Agent
+echo ============================================================
+echo.
+echo Make sure Ollama is running first:
+echo   ollama serve
+echo.
+echo Then choose your interface:
+echo.
+echo OPTION A - WEB INTERFACE (Recommended):
+echo   cd ragmcp
+echo   launch_two_phase_web.bat
+echo.
+echo   Opens browser at: http://127.0.0.1:7860
+echo   Features: Beautiful UI, tabs, confidence colors, history
+echo.
+echo OPTION B - COMMAND LINE:
+echo   cd ragmcp
+echo   two_phase_agent.bat
+echo.
+echo   Interactive terminal interface
+echo.
+echo The agent will:
+echo   - Search RECENT collections (high precision)
+echo   - Search ALL collections (comprehensive coverage)
+echo   - Merge results intelligently
+echo   - Provide 3-phase analysis with confidence scores
+echo.
+echo ============================================================
+echo.
+echo For more information, see:
+echo   ragmcp\QUICKSTART_DUAL_INDEXING.md
+echo   ragmcp\WEB_INTERFACE_GUIDE.md
+echo   ragmcp\DUAL_INDEXING_GUIDE.md
+echo   ragmcp\TWO_PHASE_AGENT_README.md
+echo.
+echo ============================================================
+echo.
+
+pause
