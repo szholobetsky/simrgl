@@ -1,360 +1,410 @@
-# 🎯 SEMANTIC FINGERPRINT MCP SERVER - ОГЛЯД ПРОЕКТУ
+# SIMARGL Research Project Overview
 
-## 📦 Що ви отримали
+## Executive Summary
 
-Повна система для перетворення вашого дослідження Semantic Fingerprinting у модульний MCP сервер з підтримкою локальних LLM.
+**SIMARGL** (Structural Integrity Metrics for Adaptive Relation Graph Learning) is a comprehensive research project developing an intelligent code navigation and recommendation system. The project addresses a fundamental challenge in software engineering: how to help developers find the right code artifacts (modules, files, functions) to modify when implementing new features or fixing bugs.
 
-## 📁 Структура проекту
+The core innovation lies in combining:
+- **Advanced embedding techniques** for semantic code understanding
+- **Two-phase reflective agents** for intelligent reasoning
+- **Phenomenological grounding** to bridge human intention with code semantics
+- **Dual-server RAG architecture** balancing historical patterns with recent context
 
-```
-semantic-fingerprint-mcp/
-├── 📄 semantic_fingerprint_mcp_server.py  # Головний MCP сервер
-├── 📄 multiagent_rag_local_llm.py         # Мультиагентна RAG система
-├── 📄 simple_mcp_client.py                # Простий клієнт для тестування
-├── 📄 mcp_config.json                     # Конфігурація MCP
-├── 📄 docker-compose.yml                  # Docker Compose для всієї системи
-├── 📄 Dockerfile.mcp                      # Dockerfile для MCP сервера
-├── 📄 requirements.txt                    # Python залежності
-├── 📄 README.md                           # Повна документація
-├── 📄 QUICKSTART_UA.md                    # Швидкий старт українською
-├── 📄 MCP_ADVANTAGES.md                   # Порівняння та переваги
-└── 📁 data/                               # Ваші дані
-    ├── flink_modules.json
-    └── sonar_modules.json
-```
+---
 
-## 🔧 Компоненти системи
+## Problem Statement
 
-### 1. **MCP Сервер** (`semantic_fingerprint_mcp_server.py`)
+### The Navigation Challenge
 
-**Що робить:**
-- ✅ Надає 4 MCP інструменти для пошуку модулів
-- ✅ Використовує Qdrant для векторного пошуку
-- ✅ Підтримує BGE/MPNet embeddings з вашої статті
-- ✅ Працює з Claude Desktop та іншими MCP клієнтами
+Modern software systems contain millions of lines of code organized into hundreds or thousands of modules. When a developer receives a task like "Fix the authentication timeout issue," they face several challenges:
 
-**Доступні інструменти:**
-```python
-1. search_modules          # Пошук релевантних модулів
-2. get_module_fingerprint  # Отримання fingerprint модуля
-3. find_similar_tasks      # Пошук схожих історичних задач
-4. analyze_module_evolution # Аналіз еволюції модуля
-```
+1. **Where to start?** Which modules are relevant to authentication?
+2. **What's related?** Which files typically change together?
+3. **What's the context?** What patterns exist in similar past tasks?
+4. **What's recent?** What areas are currently under active development?
 
-**Використання:**
-```bash
-python semantic_fingerprint_mcp_server.py
-```
+Traditional approaches (keyword search, static analysis) fail because:
+- Code semantics are **compositional** (meaning emerges from combinations)
+- Developer intent is **phenomenological** (grounded in human experience)
+- Relevance is **contextual** (depends on task, history, and project state)
 
-### 2. **Мультиагентна RAG** (`multiagent_rag_local_llm.py`)
+### The Recommendation Quality Problem
 
-**Що робить:**
-- 🤖 Використовує CodeBERT для аналізу технічного контексту
-- 🤖 Використовує Qwen3 4B для генерації рекомендацій
-- 🔗 Підключається до MCP сервера для пошуку модулів
-- 🎯 Об'єднує результати в комплексну відповідь
+When recommending code changes, systems can fail in two ways:
 
-**Workflow:**
-```
-User Query
-    ↓
-CodeBERT аналізує контекст
-    ↓
-MCP Server шукає модулі (BGE embeddings)
-    ↓
-Qwen3 генерує рекомендації
-    ↓
-Final Response
-```
+| Failure Mode | Description | Consequence |
+|--------------|-------------|-------------|
+| **Too Conservative** | Only recommends well-known, frequently changed files | Misses novel but relevant connections |
+| **Too Disruptive** | Recommends many new cross-module connections | Creates spaghetti architecture |
 
-**Використання:**
-```bash
-python multiagent_rag_local_llm.py
-```
+SIMARGL addresses this through **antagonistic metrics** (Novelty vs Structurality) that balance innovation with architectural integrity.
 
-### 3. **Простий клієнт** (`simple_mcp_client.py`)
+---
 
-**Режими роботи:**
-- 📝 Демонстраційний (показує приклади)
-- 🎮 Інтерактивний (діалог з користувачем)
-- 📊 Пакетний (обробка списку задач)
+## Research Pillars
 
-**Використання:**
-```bash
-# Демо
-python simple_mcp_client.py
+### Pillar 1: Semantic Code Embeddings
 
-# Інтерактивний режим
-python simple_mcp_client.py --interactive
+Code understanding requires multiple embedding strategies for different granularities and purposes.
 
-# Пакетна обробка
-python simple_mcp_client.py --batch
-```
-
-## 🎯 Сценарії використання
-
-### Сценарій 1: Розробник шукає модулі в Claude Desktop
+#### 1.1 Compositional Code Embeddings
+**Concept**: Functions derive meaning from what they call and use.
 
 ```
-Користувач → Claude Desktop → MCP Server → Qdrant
-                                              ↓
-                                    BGE Embeddings
-                                              ↓
-                                         Результат
-```
-
-**Приклад діалогу:**
-```
-User: Знайди модулі для задачі "Fix memory leak in buffer pool"
-
-Claude: [використовує search_modules через MCP]
-
-Знайдено 5 релевантних модулів:
-
-1. flink-runtime (similarity: 0.85)
-   - 1247 історичних задач
-   - Основні теми: memory, network, buffers
-   
-2. flink-network (similarity: 0.78)
-   ...
-```
-
-### Сценарій 2: Мультиагентна система для глибокого аналізу
-
-```
-Task Description
-       ↓
-   CodeBERT (технічний аналіз)
-       ↓
-   MCP Server (пошук модулів)
-       ↓
-   Qwen3 (генерація рекомендацій)
-       ↓
-   Детальна відповідь
-```
-
-**Приклад:**
-```python
-result = await rag.process_query(
-    "Add support for custom SQL window functions",
-    "flink"
+embedding(calculateTotal) = f(
+    embedding(getPrice),
+    embedding(applyDiscount),
+    embedding(calculateTax)
 )
-
-# Повертає:
-{
-    "task": "...",
-    "modules": [...],
-    "code_analysis": "...",
-    "recommendations": "..."
-}
 ```
 
-### Сценарій 3: CI/CD інтеграція
+**Key Innovation**: Vector arithmetic on code semantics
+- `embedding(authenticateUser) - embedding(validateToken) + embedding(validateCookie) ≈ embedding(authenticateWithCookie)`
 
-```yaml
-# .github/workflows/suggest-modules.yml
-on: pull_request
+**Applications**:
+- Analogical code search ("find function like X but for Y")
+- Semantic diff (what changes in meaning, not just syntax)
+- Code completion with semantic awareness
 
-jobs:
-  suggest:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Suggest modules
-        run: |
-          python simple_mcp_client.py --batch \
-            --task "${{ github.event.pull_request.title }}"
-```
-
-## 📊 Результати з вашої статті
-
-Ваша система показала:
-
-| Метрика | Word2Vec | BGE (ваша) | Improvement |
-|---------|----------|-----------|-------------|
-| **MAP** | 0.1695 | **0.3662** | **+116%** |
-| **MRR** | 0.1877 | **0.4178** | **+122%** |
-| **Recall@10** | - | **0.68** | - |
-
-MCP дозволяє використати ці результати в production!
-
-## 🚀 Швидкий старт (3 команди)
-
-```bash
-# 1. Запустіть Qdrant
-docker-compose up -d qdrant
-
-# 2. Завантажте дані
-python prepare_data.py
-
-# 3. Запустіть MCP сервер
-python semantic_fingerprint_mcp_server.py
-```
-
-**Готово!** Тепер можна використовувати в Claude Desktop.
-
-## 🎓 Для вашої роботи / дисертації
-
-### Практичний вклад:
-
-**До:** Академічне дослідження з результатами на тестовій вибірці
-
-**Після:** Production-ready система з:
-- ✅ Стандартизованим API (MCP)
-- ✅ Інтеграцією з AI асистентами (Claude)
-- ✅ Мультиагентними можливостями (Local LLM)
-- ✅ Легкою розширюваністю (нові tools)
-
-### Для презентації / статті:
+#### 1.2 Cross-Layer Transformation Embeddings
+**Concept**: Track how data flows through architectural layers.
 
 ```
-Слайд 1: Проблема
-"Як знайти релевантні модулі для нової задачі?"
-
-Слайд 2: Рішення
-"Semantic Fingerprinting: MAP 0.3662 (+116%)"
-
-Слайд 3: MCP інтеграція
-"Практичне застосування через MCP протокол"
-
-Слайд 4: Live Demo
-[Показати в Claude Desktop]
-
-Слайд 5: Мультиагентний RAG
-"CodeBERT + MCP + Qwen3 = Комплексна система"
+UI Layer → Service Layer → Repository Layer → Database
+   ↓            ↓              ↓                ↓
+UserDTO → UserService → UserRepository → users_table
 ```
 
-## 🔬 Розширення дослідження
+**Key Innovation**: Embeddings capture transformation chains, not just individual elements.
 
-### Можливі напрямки:
+**Applications**:
+- "Find all code that handles user data from UI to database"
+- Impact analysis across architectural boundaries
+- Refactoring support for layer restructuring
 
-1. **Порівняння різних LLM:**
-   ```python
-   # Легко додати нові моделі
-   models = ["CodeBERT", "CodeLlama", "StarCoder"]
-   for model in models:
-       evaluate_with_mcp(model)
-   ```
+#### 1.3 Keyword Entity Mapping
+**Concept**: Keywords are coordinates in semantic space.
 
-2. **A/B тестування aggregation strategies:**
-   ```python
-   strategies = ["avg", "weighted_avg", "cluster"]
-   for strategy in strategies:
-       compare_through_mcp(strategy)
-   ```
+When we identify "RULE" as relevant, we simultaneously:
+- **Include**: RuleIndex, RuleUpdater, QualityProfileRules
+- **Exclude**: Server, Plugin, DatabaseMigration (negative space)
 
-3. **Fine-tuning на domain-specific даних:**
-   ```python
-   # Використати task descriptions для fine-tuning
-   fine_tune_model(task_corpus)
-   deploy_as_mcp_tool()
-   ```
-
-## 💡 Інновації
-
-### 1. **Перше використання MCP для software repositories mining**
-До вас ніхто не робив MCP сервер для аналізу кодових репозиторіїв.
-
-### 2. **Мультиагентний підхід з локальними LLM**
-Комбінація:
-- CodeBERT (розуміння коду)
-- BGE (semantic search)
-- Qwen3 (генерація відповідей)
-
-### 3. **Практичне застосування наукових результатів**
-З паперу → в production за 1 день.
-
-## 🔄 Від дослідження до продукту
-
-```
-Ваша стаття (v3)
-    ↓
-Semantic Fingerprinting алгоритм
-    ↓
-Експерименти (90 конфігурацій)
-    ↓
-BGE показав MAP 0.3662
-    ↓
-MCP Server (цей проект)
-    ↓
-Production-ready система
-    ↓
-Claude Desktop integration
-    ↓
-Користувачі отримують value
-```
-
-## 📈 Метрики успіху
-
-### Технічні:
-- ✅ MAP: 0.3662 (топ результат)
-- ✅ Recall@10: 0.68 (знаходить 68% модулів)
-- ✅ Response time: <100ms (векторний пошук)
-
-### Практичні:
-- ✅ 0 днів інтеграції (MCP стандарт)
-- ✅ ∞ клієнтів (будь-який MCP-сумісний)
-- ✅ 100% відтворюваність (Docker + код)
-
-## 🎁 Бонуси
-
-### 1. Docker Compose
-Один файл для всієї системи:
-```bash
-docker-compose up
-# Qdrant + MCP Server + Ollama
-```
-
-### 2. Інтерактивний клієнт
-```bash
-python simple_mcp_client.py --interactive
-# Діалоговий режим для тестування
-```
-
-### 3. Детальна документація
-- README.md (EN) - повна документація
-- QUICKSTART_UA.md - швидкий старт українською
-- MCP_ADVANTAGES.md - порівняння та переваги
-
-## 🚧 Що далі?
-
-### Короткострокові плани:
-- [ ] Тестування на реальних проектах
-- [ ] Fine-tuning на domain-specific даних
-- [ ] Web UI для демонстрації
-
-### Довгострокові плани:
-- [ ] VS Code extension
-- [ ] JetBrains plugin
-- [ ] GitHub App для автоматичних suggestions
-- [ ] Публікація в MCP Registry
-
-## 📞 Контакти та підтримка
-
-- **Автори:** Stanislav Zholobetskyi, Oleg Andriichuk
-- **Університет:** Taras Shevchenko National University of Kyiv
-- **Email:** email1@knu.ua, email2@knu.ua
-
-## 🎯 Головний висновок
-
-**Ви перетворили академічне дослідження в production-ready систему, яка:**
-
-1. ✅ Використовує ваші наукові результати (BGE, MAP 0.3662)
-2. ✅ Інтегрується з сучасними AI інструментами (MCP, Claude)
-3. ✅ Підтримує локальні LLM (Qwen3, CodeBERT)
-4. ✅ Легко розширюється (додавайте нові tools)
-5. ✅ Готова до використання (docker-compose up)
-
-**Це не просто код - це міст від наукового дослідження до реального світу!**
+**Key Innovation**: Contrastive learning for bounded semantic regions.
 
 ---
 
-## 📚 Додаткові ресурси
+### Pillar 2: Two-Phase Reflective Agent
 
-- **MCP Spec:** https://spec.modelcontextprotocol.io
-- **Qdrant Docs:** https://qdrant.tech/documentation/
-- **HuggingFace Transformers:** https://huggingface.co/docs/transformers
-- **Ваша стаття:** [посилання]
+Intelligent code navigation requires both exploration and critical evaluation.
+
+#### Phase 1: Reasoning
+- Analyze task description
+- Search for relevant modules, files, and similar tasks
+- Generate initial recommendations
+- Build context through multiple information sources
+
+#### Phase 2: Reflection
+- Critically evaluate Phase 1 results
+- Check for missing context
+- Verify logical consistency
+- Refine recommendations based on deeper analysis
+
+```
+Task → [Phase 1: Explore & Reason] → Initial Results
+                                          ↓
+      [Phase 2: Reflect & Refine] ← Critique
+                                          ↓
+                                   Final Recommendations
+```
+
+**Key Innovation**: Self-improvement loop inspired by human expert reasoning.
 
 ---
 
-**Готові почати? Дивіться QUICKSTART_UA.md для швидкого старту!** 🚀
+### Pillar 3: Phenomenological Grounding
+
+Code is not just syntax—it embodies human intentions, actions, and meanings.
+
+#### 3.1 The Symbol Grounding Problem
+LLMs manipulate symbols without grounding in lived experience:
+
+| Concept | LLM Understanding | Human Understanding |
+|---------|-------------------|---------------------|
+| `setTimeout` | "Function that delays execution" | "That frustrating thing that causes race conditions" |
+| `NullPointerException` | "Error when dereferencing null" | "The bug that crashed production at 3 AM" |
+
+#### 3.2 Husserlian Framework
+- **Intentionality**: Code is always "about" something (functionality, user need)
+- **Noema**: The code artifact as experienced (not just text)
+- **Noesis**: The act of understanding code (reading with purpose)
+
+#### 3.3 Heideggerian Concepts
+- **Zuhandenheit** (readiness-to-hand): Code that "just works"—invisible tools
+- **Vorhandenheit** (presence-at-hand): Code that becomes visible when broken
+
+#### 3.4 Code as Performative (Speech Act Theory)
+Code doesn't just describe—it **does**:
+- `deleteUser(id)` is a **perlocutionary act** with real-world effects
+- Understanding code requires understanding its **effects**, not just syntax
+
+**Key Innovation**: Embedding phenomenological concepts into AI-assisted code navigation.
+
+---
+
+### Pillar 4: Dual-Server RAG Architecture
+
+Balance between historical wisdom and current focus.
+
+#### Historical Context Server
+- **Coverage**: All historical tasks (9,799+)
+- **Strength**: Cross-project patterns, architectural decisions
+- **Use case**: "How has authentication been implemented before?"
+
+#### Recent Context Server
+- **Coverage**: Last 100 tasks
+- **Strength**: Current development focus, active areas
+- **Use case**: "What's being worked on now that might be affected?"
+
+#### Fusion Strategies
+1. **Weighted Fusion**: Configurable balance (α parameter)
+2. **Reciprocal Rank Fusion**: Combines rankings without score normalization
+3. **Adaptive Fusion**: Query-type-aware weighting
+
+```
+                    Query
+                      ↓
+        ┌─────────────┴─────────────┐
+        ↓                           ↓
+   Historical                    Recent
+    Server                       Server
+        ↓                           ↓
+        └─────────────┬─────────────┘
+                      ↓
+               Fusion Layer
+                      ↓
+              Final Results
+```
+
+---
+
+## SIMARGL Metrics Framework
+
+### Core Antagonistic Metrics
+
+#### Novelty@K
+**Definition**: Fraction of recommendations that are NEW (not in existing codebase).
+
+```
+Novelty@K = |{r ∈ top-K : r ∉ ExistingRelations}| / K
+```
+
+- High (→1.0): Recommending mostly new connections (innovative)
+- Low (→0.0): Recommending mostly existing connections (safe)
+
+#### Structurality@K
+**Definition**: Fraction of recommendations where BOTH source and target belong to the SAME module.
+
+```
+Structurality@K = |{r ∈ top-K : module(r.source) == module(r.target)}| / K
+```
+
+- High (→1.0): Recommendations stay within modules (preserves structure)
+- Low (→0.0): Recommendations cross module boundaries (may disrupt)
+
+### The 2×2 Trade-off Matrix
+
+```
+                     Novelty
+               LOW           HIGH
+           ┌─────────────┬─────────────┐
+      HIGH │ MAINTENANCE │  EVOLUTION  │
+Struct.    │ Safe, no    │  Ideal:     │
+           │ innovation  │  new + local│
+           ├─────────────┼─────────────┤
+      LOW  │ STAGNATION  │ DISRUPTION  │
+           │ No value    │  Risky:     │
+           │             │  new + cross│
+           └─────────────┴─────────────┘
+```
+
+**Goal**: Maximize EVOLUTION zone (high novelty + high structurality).
+
+---
+
+## Technical Architecture
+
+### System Components
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     SIMARGL System                          │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐     │
+│  │  Embedding  │    │  Two-Phase  │    │   SIMARGL   │     │
+│  │   Engine    │    │    Agent    │    │   Metrics   │     │
+│  └──────┬──────┘    └──────┬──────┘    └──────┬──────┘     │
+│         │                  │                  │             │
+│         └──────────────────┼──────────────────┘             │
+│                            │                                │
+│                   ┌────────┴────────┐                       │
+│                   │  Dual-Server    │                       │
+│                   │  RAG Layer      │                       │
+│                   └────────┬────────┘                       │
+│                            │                                │
+│         ┌──────────────────┼──────────────────┐             │
+│         │                  │                  │             │
+│  ┌──────┴──────┐    ┌──────┴──────┐    ┌──────┴──────┐     │
+│  │  Historical │    │   Recent    │    │   Keyword   │     │
+│  │   Server    │    │   Server    │    │    Index    │     │
+│  └─────────────┘    └─────────────┘    └─────────────┘     │
+│                                                             │
+├─────────────────────────────────────────────────────────────┤
+│                    PostgreSQL + pgvector                    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Data Flow
+
+1. **Task Input**: Developer describes task in natural language
+2. **Keyword Extraction**: Identify semantic coordinates (RULE, SEARCH, etc.)
+3. **Embedding Generation**: Create task vector from keywords
+4. **Dual-Server Search**: Query both historical and recent context
+5. **Fusion**: Combine results with appropriate strategy
+6. **Agent Reasoning**: Phase 1 exploration, Phase 2 reflection
+7. **Metric Evaluation**: Score recommendations on Novelty/Structurality
+8. **Final Output**: Ranked recommendations with explanations
+
+---
+
+## Research Contributions
+
+### Academic Contributions
+
+1. **SIMARGL Metrics**: Novel framework for evaluating code recommendations
+2. **Phenomenological Code Understanding**: Bridging philosophy and software engineering
+3. **Compositional Code Embeddings**: Vector arithmetic for semantic code operations
+4. **Cross-Layer Transformation Tracking**: Embeddings for data flow analysis
+5. **Dual-Server RAG**: Balancing historical and recent context
+
+### Practical Contributions
+
+1. **MCP Integration**: Production-ready system via Model Context Protocol
+2. **Two-Phase Agent**: Implementable reasoning/reflection architecture
+3. **Evaluation Framework**: Comprehensive metrics and testing protocols
+4. **Open Source Tools**: Reusable components for code navigation research
+
+---
+
+## Evaluation Strategy
+
+### Offline Evaluation
+
+| Metric | Target | Description |
+|--------|--------|-------------|
+| MAP@10 | >0.40 | Mean Average Precision |
+| MRR | >0.50 | Mean Reciprocal Rank |
+| Recall@10 | >0.60 | Coverage of relevant files |
+| Evolution@K | >0.35 | New + intra-module recommendations |
+| SES | >0.55 | Structural Evolution Score |
+
+### Online Evaluation
+
+| Metric | Target | Description |
+|--------|--------|-------------|
+| Task Completion | >75% | Developers complete tasks using recommendations |
+| Time to First Relevant | <60s | Efficiency of navigation |
+| Context Sufficiency | >80% | No additional searches needed |
+
+---
+
+## Concept Documents
+
+This project contains detailed documentation for each research pillar:
+
+| Document | Description |
+|----------|-------------|
+| `SIMARGL_concept.md` | Core metrics framework (Novelty, Structurality) |
+| `TWO_PHASE_REFLECTIVE_AGENT.md` | Agent architecture (Reasoning + Reflection) |
+| `COMPOSITIONAL_CODE_EMBEDDINGS.md` | Function-level semantic embeddings |
+| `CROSS_LAYER_TRANSFORMATION_EMBEDDINGS.md` | Data flow tracking across layers |
+| `KEYWORD_ENTITY_MAPPING.md` | Business terms to code mapping |
+| `KEYWORD_INDEXING.md` | Semantic coordinates via Word2Vec |
+| `DUAL_MCP_SERVER_ARCHITECTURE.md` | Task-based vs file-based search |
+| `DUAL_SERVER_RAG_EVALUATION.md` | Evaluation framework and metrics |
+| `PHENOMENOLOGICAL_CODE_UNDERSTANDING.md` | Philosophical foundations |
+| `SEMANTIC_FINGERPRINT_MCP_SERVER.md` | MCP server implementation guide |
+
+---
+
+## Future Directions
+
+### Short-term (3-6 months)
+- [ ] Implement and validate embedding strategies
+- [ ] Build two-phase agent prototype
+- [ ] Create evaluation benchmark dataset
+- [ ] Integrate with IDE plugins (VS Code, JetBrains)
+
+### Medium-term (6-12 months)
+- [ ] Fine-tune models on domain-specific codebases
+- [ ] Develop feedback learning from user interactions
+- [ ] Extend to multi-repository scenarios
+- [ ] Publish benchmark and evaluation framework
+
+### Long-term (1-2 years)
+- [ ] Explore multimodal embeddings (code + documentation + diagrams)
+- [ ] Develop explanation generation for recommendations
+- [ ] Build collaborative features (team-aware recommendations)
+- [ ] Create industry partnerships for real-world validation
+
+---
+
+## Project Metadata
+
+- **Project Name**: SIMARGL (Structural Integrity Metrics for Adaptive Relation Graph Learning)
+- **Institution**: Taras Shevchenko National University of Kyiv
+- **Authors**: Stanislav Zholobetskyi, Oleg Andriichuk
+- **Version**: 1.0
+- **Last Updated**: 2025-01-25
+- **Status**: Active Research
+
+---
+
+## References
+
+### Foundational Works
+
+1. Parnas, D.L. (1972). "On the Criteria To Be Used in Decomposing Systems into Modules"
+2. Lehman, M.M. (1980). "Programs, Life Cycles, and Laws of Software Evolution"
+3. Husserl, E. (1913). "Ideas Pertaining to a Pure Phenomenology"
+4. Heidegger, M. (1927). "Being and Time"
+5. Austin, J.L. (1962). "How to Do Things with Words"
+
+### Technical References
+
+6. Mikolov, T. et al. (2013). "Efficient Estimation of Word Representations in Vector Space"
+7. Devlin, J. et al. (2019). "BERT: Pre-training of Deep Bidirectional Transformers"
+8. Feng, Z. et al. (2020). "CodeBERT: A Pre-Trained Model for Programming and Natural Languages"
+9. Lewis, P. et al. (2020). "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"
+
+### Related Research
+
+10. Zimmermann, T. et al. (2005). "Mining Version Histories to Guide Software Changes"
+11. Castells, P. et al. (2011). "Rank and Relevance in Novelty and Diversity Metrics"
+12. Tufano, M. et al. (2019). "An Empirical Study on Learning Bug-Fixing Patches"
+
+---
+
+## Getting Started
+
+1. **Read the concept documents** in order of your interest
+2. **Review the SIMARGL metrics** to understand evaluation criteria
+3. **Explore the dual-server architecture** for implementation insights
+4. **Study the phenomenological foundations** for theoretical depth
+5. **Check the MCP server guide** for practical integration
+
+For questions or collaboration, contact the research team.
+
+---
+
+*"Understanding code is not just parsing syntax—it's grasping human intention crystallized in executable form."*
