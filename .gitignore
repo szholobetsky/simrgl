@@ -12,3 +12,4 @@ experiment_results/
 # Virtual environments
 venv*/
 env*/
+.aider*

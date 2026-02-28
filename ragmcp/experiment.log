@@ -235,3 +235,25 @@ LINE 3:                 FROM vectors."task_embeddings_all_bge-small"
 2026-01-08 00:43:38,245 - INFO - HTTP Request: GET http://127.0.0.1:7860/gradio_api/startup-events "HTTP/1.1 200 OK"
 2026-01-08 00:43:38,274 - INFO - HTTP Request: HEAD http://127.0.0.1:7860/ "HTTP/1.1 200 OK"
 2026-01-08 00:43:38,403 - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2026-02-17 02:40:44,276 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2026-02-17 02:40:46,425 - INFO - Connected to PostgreSQL (schema: vectors)
+2026-02-17 02:40:46,425 - INFO - Use pytorch device_name: cpu
+2026-02-17 02:40:46,425 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-17 02:40:49,618 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2026-02-17 02:40:51,669 - INFO - Connected to PostgreSQL (schema: vectors)
+2026-02-17 02:40:51,669 - INFO - Use pytorch device_name: cpu
+2026-02-17 02:40:51,669 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-17 02:40:55,662 - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"
+2026-02-17 02:40:56,029 - INFO - HTTP Request: GET http://127.0.0.1:7860/gradio_api/startup-events "HTTP/1.1 200 OK"
+2026-02-17 02:40:56,150 - INFO - HTTP Request: HEAD http://127.0.0.1:7860/ "HTTP/1.1 200 OK"
+2026-02-22 00:39:52,492 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2026-02-22 00:39:54,607 - INFO - Connected to PostgreSQL (schema: vectors)
+2026-02-22 00:39:54,623 - INFO - Use pytorch device_name: cpu
+2026-02-22 00:39:54,623 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-22 00:39:57,764 - INFO - Connecting to PostgreSQL at localhost:5432/semantic_vectors...
+2026-02-22 00:39:59,832 - INFO - Connected to PostgreSQL (schema: vectors)
+2026-02-22 00:39:59,836 - INFO - Use pytorch device_name: cpu
+2026-02-22 00:39:59,836 - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-en-v1.5
+2026-02-22 00:40:03,419 - INFO - HTTP Request: GET http://127.0.0.1:7860/gradio_api/startup-events "HTTP/1.1 200 OK"
+2026-02-22 00:40:03,483 - INFO - HTTP Request: HEAD http://127.0.0.1:7860/ "HTTP/1.1 200 OK"
+2026-02-22 00:40:03,551 - INFO - HTTP Request: GET https://api.gradio.app/pkg-version "HTTP/1.1 200 OK"

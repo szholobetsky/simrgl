@@ -1,0 +1,22 @@
+  {
+    "mcpServers": {
+      "semantic-search": {
+        "command": "python",
+        "args": [
+          "C:\\Project\\codeXplorer\\capestone\\simrgl\\ragmcp\\mcp_server_postgres.py"
+        ],
+        "env": {
+          "PYTHONPATH": "C:\\Project\\codeXplorer\\capestone\\simrgl\\ragmcp"
+        }
+      },
+      "dual-collection-rag": {
+        "command": "python",
+        "args": [
+          "C:\\Project\\codeXplorer\\capestone\\simrgl\\ragmcp\\mcp_server_dual.py"
+        ],
+        "env": {
+          "PYTHONPATH": "C:\\Project\\codeXplorer\\capestone\\simrgl\\ragmcp"
+        }
+      }
+    }
+  }
