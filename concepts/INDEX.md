@@ -151,6 +151,7 @@ LOW ◄────────────────────┼───�
 | [FILTERING_CONTEXT_CONCEPT.md](FILTERING_CONTEXT_CONCEPT.md) | Strategy | EN |
 | [FURTHER_RESEARCH_RECOMMENDATION.md](FURTHER_RESEARCH_RECOMMENDATION.md) | Research | EN |
 | [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) | Overview | EN |
+| [FINAL_PRODUCT.md](FINAL_PRODUCT.md) | Product Vision | EN |
 | [ua/](ua/) | Ukrainian translations | UA |
 
 ---
