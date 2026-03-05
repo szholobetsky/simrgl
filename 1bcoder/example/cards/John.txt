@@ -1,0 +1,4 @@
+name: John
+age: 22
+food: coconut
+pet: crocodile

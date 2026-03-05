@@ -1,0 +1,4 @@
+name: Jane
+age: 18
+food: milk
+pet: cow
