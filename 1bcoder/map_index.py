@@ -79,7 +79,14 @@ STOP_WORDS = {
     'string', 'number', 'object', 'array', 'type', 'with', 'async', 'await',
     'pass', 'break', 'continue', 'raise', 'yield', 'lambda', 'global',
     'args', 'kwargs', 'cls',
+    # keywords ≥3 chars that appear in assignment lines
+    'for', 'not', 'and', 'try', 'del', 'def', 'elif', 'else', 'none',
 }
+
+# ── assignment-line identifier scan ───────────────────────────────────────────
+
+_ASSIGN_RE = re.compile(r'(?<![=!<>])=(?!=)')   # bare = (not ==, !=, <=, >=)
+_WORD_RE   = re.compile(r'\b([A-Za-z_]\w*)\b')  # every identifier token
 
 # ── relationship classification ────────────────────────────────────────────────
 
@@ -155,6 +162,18 @@ def extract_definitions(text: str, depth: int) -> tuple:
                 if len(name) >= 3 and name.lower() not in STOP_WORDS \
                         and name not in defs and name not in vars_dict:
                     vars_dict[name] = lineno(m)
+        # scan every assignment line — extract all identifier tokens from both
+        # sides, treating dotted names (a.b.c) as separate identifiers
+        for lno, line in enumerate(text.splitlines(), 1):
+            if line.lstrip().startswith('#'):
+                continue
+            if not _ASSIGN_RE.search(line):
+                continue
+            for m in _WORD_RE.finditer(line):
+                name = m.group(1)
+                if len(name) >= 3 and name.lower() not in STOP_WORDS \
+                        and name not in defs and name not in vars_dict:
+                    vars_dict[name] = lno
 
     return defs, vars_dict
 
@@ -178,9 +197,14 @@ def build_map(root: str, depth: int = 2) -> str:
         file_content[rel] = text
 
     # global index: name → first file that defines it
+    # defs first (higher priority), then vars — so a def always wins over a var
     global_index = {}
     for rel, (defs, _) in file_defs.items():
         for name in defs:
+            if name not in global_index:
+                global_index[name] = rel
+    for rel, (_, vars_dict) in file_defs.items():
+        for name in vars_dict:
             if name not in global_index:
                 global_index[name] = rel
 

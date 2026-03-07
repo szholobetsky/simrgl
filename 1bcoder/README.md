@@ -110,6 +110,7 @@ Examples:
 
   model : gemma3:1b
   host  : http://localhost:11434
+  dir   : /home/user/myproject
 
   /help for all commands   /init to create .1bcoder/ folder
   Ctrl+C interrupts stream   /exit to quit
@@ -186,11 +187,11 @@ Runs any shell command and injects stdout + stderr into the AI context.
 The map command scans your project with language-agnostic regex, extracts definitions (classes, functions, endpoints, tables…) and cross-references between files. No external dependencies — pure regex, works for Python, Java, SQL, HTML, Terraform, YAML, and anything else.
 
 ```
-/map index [path] [depth]   — scan project, save to .1bcoder/map.txt
-/map find [query] [-y]      — search the map and inject results into context
-/map trace <id> [-y]        — follow call chain backwards from an identifier (BFS)
-/map idiff [path] [depth]   — re-index then show diff vs previous snapshot
-/map diff                   — show diff without re-indexing (safe to repeat)
+/map index [path] [depth]        — scan project, save to .1bcoder/map.txt
+/map find [query] [-d N] [-y]    — search the map and inject results into context
+/map trace <id> [-y]             — follow call chain backwards from an identifier (BFS)
+/map idiff [path] [depth]        — re-index then show diff vs previous snapshot
+/map diff                        — show diff without re-indexing (safe to repeat)
 ```
 
 **`/map find` search syntax:**
@@ -202,6 +203,9 @@ The map command scans your project with language-agnostic regex, extracts defini
 | `\term` | child lines | include only if a child line contains term |
 | `\!term` | child lines | include block but hide child lines containing term |
 | `\\!term` | child lines | exclude entire block if any child contains term |
+| `-d 1` | — | filenames only |
+| `-d 2` | — | filenames + defines/vars (no links) |
+| `-d 3` | — | full blocks (default) |
 | `-y` | — | skip "add to context?" confirmation |
 
 ```
@@ -210,6 +214,8 @@ The map command scans your project with language-agnostic regex, extracts defini
 /map find register \register             — both: in name AND in children
 /map find \register !mock                — has "register" in children, skip mock files
 /map find auth \UserService \\!deprecated -y
+/map find password -d 1                  — just filenames, no details
+/map find models -d 2                    — filenames + defines/vars only
 ```
 
 **`/map trace`** follows the call graph backwards from any defined identifier:
@@ -246,32 +252,38 @@ Standalone tools (usable without 1bcoder):
 `/agent` runs an autonomous loop: the model reads the task, decides which tools to use, executes them one at a time, and stops when it outputs plain text with no ACTION.
 
 ```
-/agent <task description>
+/agent [-t N] [-y] <task description>
 ```
+
+- **`-t N`** — override `max_turns` for this run only (e.g. `-t 1` for a quick read+explain)
+- **`-y`** — skip per-action confirmation (execute all actions automatically)
+- Without `-y`: each proposed action pauses and asks `[Y/n/q]` — `n` skips it, `q` stops the agent
 
 ```
 /agent find and fix the divide by zero bug in calc.py
-/agent add input validation to the register endpoint
+/agent -t 1 read models.py and explain the User class
+/agent -y -t 5 refactor utils.py
 ```
 
-The agent loop:
+The agent loop (default, with confirmation):
 ```
 [agent] turn 1/10
-AI: I need to read the file first.
+AI:
 ACTION: /read calc.py
+
+[agent] action: /read calc.py
+  execute? [Y/n/q]: Y
 
 [tool result]  1: def divide(a, b):
                2:     return a / b
 
 [agent] turn 2/10
-AI: Found it. Line 2 has no zero check.
-ACTION: /bkup save calc.py
+ACTION: /fix calc.py 2
 
-[agent] turn 3/10
-ACTION: /edit calc.py 2 code
+[agent] action: /fix calc.py 2
+  execute? [Y/n/q]: Y
 
-[agent] turn 4/10
-ACTION: /map idiff
+...
 
 [agent] turn 5/10
 AI: The bug is fixed. divide() now returns None when b is 0.

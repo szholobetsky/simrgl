@@ -43,6 +43,7 @@ AGENT_SYSTEM = """\
 You are an autonomous coding assistant. Complete the task using the available tools.
 
 To call a tool, output a line starting with ACTION: followed by the exact command.
+Output ONLY the ACTION line. No explanation before or after. No markdown. No confirmation text.
 Use ONE action per response, then stop and wait for [tool result].
 When the task is complete, write a plain text summary — no ACTION.
 
@@ -146,8 +147,8 @@ Commands
 /plan open              Select and load a plan (type number).
 /plan create [path]          Create a new empty plan.
 /plan create ctx [path]      Create plan from this session's command history.
-    Records all /read /edit /fix /patch /run /save /bkup /map commands typed so far.
-    Session management commands (/model /ctx /clear etc.) are excluded.
+    Records all /read /edit /fix /patch /run /save /bkup /map /model /host commands typed so far.
+    Session-only commands (/ctx /clear /plan /help /init /exit) are excluded.
     e.g.  /plan create
           /plan create fix-bug.txt
           /plan create ctx
@@ -197,22 +198,18 @@ Commands
 
 /mcp disconnect <name>
     Shut down a connected MCP server.
-
     See MCP.md for ready-to-use servers (filesystem, web, git, db, browser...).
 
 /parallel ["prompt1"] ["prompt2"] [profile <name>] [host|model|file ...]
     Send prompts to multiple models in parallel. Each response saved to its file.
     Current context (/read files etc.) is included automatically.
-
     Prompts must be quoted. Workers can be a saved profile or inline host|model|file specs.
     Prompt assignment:
       1 prompt  → same prompt sent to all workers
       N prompts = N workers → each prompt matched to its worker
       M prompts < N workers → matched 1:1, last prompt reused for remaining workers
-
     Profiles stored in .1bcoder/profiles.txt, one per line:
       small1: localhost:11434|gemma3:1b|ans/gem.txt localhost:11435|llama3:1b|ans/lam.txt
-
     e.g.  /parallel "review for bugs" profile small1
           /parallel "explain" "optimise" profile small1
           /parallel "what does this do" localhost:11434|llama3.2:1b|ans/a.txt
@@ -232,18 +229,17 @@ Commands
     e.g.  /map index .
           /map index src/ 3
 
-/map find [query] [-y]
+/map find [query] [-d N] [-y]
     Search map.txt and inject matching file blocks into context.
     No query → inject full map (asks confirmation).
+    -d 1  filenames only   -d 2  filenames + defines/vars   -d 3  full (default)
     -y skips the "add to context?" prompt (useful in plans).
-
     Token syntax:
       term       filename contains term
       !term      exclude if filename contains term
       \\term     include if any child line contains term
       \\!term    include but hide child lines containing term
       \\\\!term  exclude entire block if any child line contains term
-
     e.g.  /map find register
           /map find \\register !mock
           /map find auth \\UserService \\!deprecated -y
@@ -274,12 +270,17 @@ Commands
     Delete <file> and replace it with <file>.bkup.
     e.g.  /bkup restore calc.py
 
-/agent <task>
+/agent [-t N] [-y] <task>
     Run an autonomous agentic loop. The model uses tools to complete the task,
     one ACTION per turn, until it outputs plain text with no ACTION.
     Configure via .1bcoder/agent.txt (max_turns, auto_apply, tools list).
+    -t N  override max_turns for this run only.
+    -y    skip per-action confirmation (execute all actions automatically).
+    Without -y: each action shows [Y/n/q] — n skips it, q stops the agent.
     Ctrl+C interrupts at any turn.
     e.g.  /agent find and fix the divide by zero bug in calc.py
+          /agent -t 1 read models.py and explain the User class
+          /agent -y -t 5 refactor utils.py
 
 /init           Create .1bcoder/plans/ in current directory (safe to re-run).
 /help                   Show full help.
@@ -807,6 +808,7 @@ class CoderCLI:
         print()
         print(f"  model : {self.model}")
         print(f"  host  : {self.base_url}")
+        print(f"  dir   : {os.getcwd()}")
         print()
         print("  /help for all commands   /init to create .1bcoder/ folder")
         print("  Ctrl+C interrupts stream   /exit to quit")
@@ -1569,23 +1571,29 @@ tools =
                         params[key] = value
             suffix = "— auto-applying all" if auto_yes else "— Y/n/q per step"
             print(f"plan: {len(pending)} step(s) {suffix}")
-            for idx, cmd_str in pending:
-                cmd_str = _apply_params(cmd_str, params)
-                self._sep("Step")
-                print(cmd_str)
-                if not auto_yes:
-                    ans = self._prompt_input("  run? [Y/n/q]:")
-                    if ans.lower() == "q":
-                        print("[stopped]")
-                        return
-                    if ans.lower() not in ("", "y", "yes"):
-                        print("[skipped]")
-                        continue
-                # mark done
-                plan_lines = _load_plan(self._plan_file)
-                plan_lines[idx] = f"[v] {plan_lines[idx]}"
-                _save_plan(plan_lines, self._plan_file)
-                self._route(cmd_str)
+            original_confirm = self._confirm
+            if auto_yes:
+                self._confirm = lambda prompt: True
+            try:
+                for idx, cmd_str in pending:
+                    cmd_str = _apply_params(cmd_str, params)
+                    self._sep("Step")
+                    print(cmd_str)
+                    if not auto_yes:
+                        ans = self._prompt_input("  run? [Y/n/q]:")
+                        if ans.lower() == "q":
+                            print("[stopped]")
+                            return
+                        if ans.lower() not in ("", "y", "yes"):
+                            print("[skipped]")
+                            continue
+                    # mark done
+                    plan_lines = _load_plan(self._plan_file)
+                    plan_lines[idx] = f"[v] {plan_lines[idx]}"
+                    _save_plan(plan_lines, self._plan_file)
+                    self._route(cmd_str)
+            finally:
+                self._confirm = original_confirm
             print("plan complete")
 
         else:
@@ -1854,7 +1862,7 @@ tools =
             print("  /map find \\term               — include if any child line contains term")
             print("  /map find \\!term              — include but hide child lines with term")
             print("  /map find \\\\!term            — exclude block if any child contains term")
-            print("  combine freely: auth \\register !mock \\!deprecated -y")
+            print("  combine freely: auth \\register !mock \\!deprecated -y -d 2")
             print("  /map trace <identifier> [-y]   — follow call chain backwards from identifier")
             print("  /map diff                      — diff map.txt vs map.prev.txt (no re-index)")
             print("  /map idiff [path] [2|3]        — re-index then diff vs previous snapshot")
@@ -1887,9 +1895,37 @@ tools =
 
         tokens   = query.split()
         auto_yes = "-y" in tokens
-        clean_q  = " ".join(t for t in tokens if t != "-y")
+
+        # parse -d N depth flag
+        depth = 3
+        clean_tokens = []
+        i = 0
+        while i < len(tokens):
+            if tokens[i] == "-d" and i + 1 < len(tokens) and tokens[i+1].isdigit():
+                depth = int(tokens[i+1])
+                i += 2
+            elif tokens[i] != "-y":
+                clean_tokens.append(tokens[i])
+                i += 1
+            else:
+                i += 1
+        clean_q = " ".join(clean_tokens)
 
         hits, result = map_query.find_map(map_path, clean_q)
+
+        # apply depth filter
+        def _depth_filter(block: str) -> str:
+            lines = block.split('\n')
+            if depth == 1:
+                return lines[0]
+            if depth == 2:
+                kept = [l for l in lines[1:] if 'links' not in l]
+                return lines[0] + ('\n' + '\n'.join(kept) if kept else '')
+            return block  # depth 3 — full block
+
+        if depth < 3 and hits:
+            hits   = [_depth_filter(b) for b in hits]
+            result = '\n'.join(hits)
 
         if not clean_q:
             # full map
@@ -2072,13 +2108,27 @@ tools =
     def _cmd_agent(self, user_input: str):
         task = user_input[6:].strip()
         if not task:
-            print("usage: /agent <task description>")
+            print("usage: /agent [-t N] <task description>")
             print("  configure: .1bcoder/agent.txt  (max_turns, auto_apply, tools)")
             return
 
         config     = self._load_agent_config()
         max_turns  = config["max_turns"]
         auto_apply = config["auto_apply"]
+
+        # parse flags: -t N, -y
+        auto_exec = False
+        while True:
+            m = re.match(r'^-t\s+(\d+)\s+(.*)', task, re.DOTALL)
+            if m:
+                max_turns = int(m.group(1))
+                task      = m.group(2).strip()
+                continue
+            if task.startswith('-y'):
+                auto_exec = True
+                task      = task[2:].strip()
+                continue
+            break
         tools      = config["tools"]
 
         tool_list     = get_help_list(tools)
@@ -2086,7 +2136,7 @@ tools =
         system_msg    = {"role": "system", "content": system_prompt}
 
         print(f"[agent] tools: {', '.join(tools)}")
-        print(f"[agent] max_turns: {max_turns}  auto_apply: {auto_apply}")
+        print(f"[agent] max_turns: {max_turns}  auto_apply: {auto_apply}  auto_exec: {auto_exec}")
         print(f"[agent] task: {task}\n")
 
         # agent runs in its own message thread (copies current context)
@@ -2123,7 +2173,19 @@ tools =
                 break
 
             cmd = match.group(1).strip()
-            print(f"\n[agent] executing: {cmd}")
+            print(f"\n[agent] action: {cmd}")
+            if not auto_exec:
+                try:
+                    answer = input("  execute? [Y/n/q]: ").strip().lower()
+                except (EOFError, KeyboardInterrupt):
+                    print("\n[agent] interrupted")
+                    break
+                if answer == 'q':
+                    print("[agent] stopped by user")
+                    break
+                if answer == 'n':
+                    agent_msgs.append({"role": "user", "content": "[tool skipped by user]"})
+                    continue
             self._sep("tool")
             result = self._agent_exec(cmd, auto_apply)
             print()
