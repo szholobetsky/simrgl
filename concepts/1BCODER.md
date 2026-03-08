@@ -31,7 +31,9 @@ This is the empirical core of the Anthill hypothesis as stated in [ANTHILL_DISTR
 
 - **Language**: Python 3.10+
 - **UI framework**: Plain terminal REPL — no TUI framework; works in any shell, IDE terminal, or SSH session
-- **AI backend**: Ollama HTTP API (`POST /api/chat`, NDJSON streaming)
+- **AI backend**: Ollama HTTP API (`POST /api/chat`, NDJSON streaming) **and** OpenAI-compatible API (`POST /v1/chat/completions`, SSE streaming) — selected via URL scheme prefix
+- **Provider abstraction**: `parse_host(s)` returns `(http_url, provider)`. Scheme `ollama://` (default) or `openai://` selects protocol branch. Plain `http://` URLs default to Ollama. This enables transparent use of LMStudio, LiteLLM, vLLM, or any OpenAI-compatible server without code changes.
+- **Terminal output**: ANSI color helpers (`_ok`, `_err`, `_info`, `_warn`, `_cdiff`) applied only in `print()` calls — never injected into AI context. Colors are cosmetic; context remains plain text.
 - **Dependencies**: `requests>=2.28` only (standard library for everything else)
 - **Entry point**: `1bcoder` command (via `pyproject.toml` + `py-modules` build)
 
@@ -49,7 +51,8 @@ The deliberate absence of a TUI framework is a design choice: 1bcoder is optimiz
 | `requirements.txt` | Single line: `requests>=2.28` |
 | `run.bat` | Windows quick-launch |
 | `MCP.md` | Catalog of ready-to-use MCP servers (filesystem, git, web, database, browser…) |
-| `.1bcoder/plans/` | Per-project plan `.txt` files |
+| `<install_dir>/.1bcoder/plans/` | Global plan library — shipped with the tool; available in every project |
+| `.1bcoder/plans/` | Per-project plan `.txt` files; local file overrides global plan of same name |
 | `.1bcoder/map.txt` | Generated project map (definitions, cross-references) |
 | `.1bcoder/map.prev.txt` | Previous map snapshot — enables structural diff without re-indexing |
 | `.1bcoder/agent.txt` | Agent configuration: max_turns, auto_apply, tool whitelist |
@@ -63,11 +66,12 @@ The deliberate absence of a TUI framework is a design choice: 1bcoder is optimiz
 
 ```
 /read <file> [start-end]
+/read <file1> <file2> <file3> ...
 ```
 
-The user selects which lines to inject into the AI's context window. This is the manual implementation of what the Anthill's **Librarian agent** (GPU 1) would do automatically by querying Object Passports from the OKG. The human operator plays the Librarian role: knowing which lines are relevant and loading only those.
+The user selects which lines to inject into the AI's context window. Multiple files may be listed in a single command — each is read sequentially and appended to the context in order. This is the manual implementation of what the Anthill's **Librarian agent** (GPU 1) would do automatically by querying Object Passports from the OKG. The human operator plays the Librarian role: knowing which files and lines are relevant and loading only those.
 
-This command directly validates the Anthill's context efficiency claim. A 1B model given `/read file.py 10-25` performs measurably better than the same model given the full file, because it cannot be distracted by irrelevant surrounding code.
+This command directly validates the Anthill's context efficiency claim. A 1B model given `/read file.py 10-25` performs measurably better than the same model given the full file, because it cannot be distracted by irrelevant surrounding code. Multi-file reading enables loading a call chain (interface + implementation + test) in a single step — a direct approximation of the Librarian's `get_neighbors()` traversal.
 
 ### 2.2 Constrained AI Edits — `/fix` and `/patch`
 
@@ -99,7 +103,9 @@ replacement lines
 
 A fuzzy matching algorithm (`_find_in_lines`) handles three cases: exact match, indentation-tolerant match, and line-number-prefixed match (when a model echoes `/read` output). This makes the patch system robust to the common hallucination pattern of models copying visible context artifacts.
 
-Both commands display a **unified diff before writing**, implementing the Anthill's Crooked Wall Principle: the human is the spirit level.
+**`/edit <file> <line> code`** — INSERT mode: a single-line target inserts new lines *before* that line rather than overwriting. A range `start-end` replaces those lines. This distinction is critical for the agent loop: the Coder can add new functions at a given position without accidentally destroying existing code.
+
+Both `/fix` and `/patch` display a **unified diff before writing**, implementing the Anthill's Crooked Wall Principle: the human is the spirit level.
 
 ### 2.3 Shell Integration — `/run`
 
@@ -123,9 +129,11 @@ This is the manual implementation of the **Anthill orchestration pipeline**. The
 /save ans/fix_result.txt
 ```
 
-Plans support `{{key}}` parameter placeholders, substituted at apply time — enabling reusable templates analogous to the Anthill's parameterized task schemas.
+Plans support `{{key}}` parameter placeholders, substituted at apply time (immediate substitution — not deferred) — enabling reusable templates analogous to the Anthill's parameterized task schemas.
 
 **`/plan create ctx`** captures all work commands typed in the current session into a ready-to-run plan automatically. This closes the loop between ad-hoc exploration and reproducible procedure — the same transition the Anthill makes from interactive to pipeline mode.
+
+**Global plan library**: Plans shipped with 1bcoder (next to `chat.py`) are available in every project without copying. Current global plans include DevOps utilities (PipFreeze, CheckRequirements, GitIgnorePython, EnvTemplate, MySQLDump, SQLiteSchema, DockerMySQL, DockerNginx, DockerPython, DockerStack), research tools (WikiSearch, WikiPage, DuckDuckGoInstant, PyPI), and code workflow templates (AddFunction, RunAndFix, NewScript, Explain, Refactor). Local project plans override global plans of the same name. This implements a two-tier SKILL.md analog: global behavioral templates + per-project specializations.
 
 ### 2.5 Project Map — `/map`
 
@@ -192,6 +200,14 @@ The model receives a system prompt listing available tools (2-line summaries ext
 
 `auto_apply` bypasses confirmation prompts by replacing `self._confirm` with a lambda returning `True`. The agent loop runs in its own message thread (copies current context), so the main conversation is not polluted unless the user confirms at the end.
 
+**Multi-ACTION per turn**: the agent loop uses `ACTION_RE.findall(reply)` (not `.search()`) to extract and execute *all* ACTION lines from a single model reply. A model may emit several tool calls in one response; each is executed in sequence, results injected, then the loop continues. This materially increases throughput for models capable of emitting compound plans.
+
+**Code preview before execution**: before each ACTION is executed, the agent shows a preview of the command (and the last AI reply for `/edit code`, `/patch code` operations), followed by `execute? [Y/n/q]` — skip or abort without executing. The `-y` flag suppresses this confirmation. This is the Crooked Wall Principle applied to the agent execution layer.
+
+**`/agent continue`**: the agent saves its state (`self._agent_state`) at the end of each loop — including the thread's message history, remaining turns, and last task description. `/agent continue` restores this state and resumes from the stopping point. This implements primitive **session persistence** for the agent role specifically, analogous to checkpointing an Anthill pipeline mid-execution.
+
+**`/agent -t N`**: overrides `max_turns` from `agent.txt` for a single run.
+
 This is a stub implementation of the **Router + Architect + Coder pipeline** from Anthill Phase 1. It is single-model (no role separation), linear (no conditional branching), and relies on the same model to plan and execute. Its value is proving that the primitives are sufficient: the model can reason about which tool to use, call it correctly, and chain multiple steps to completion — given enough context and the right task scope.
 
 The `agent.txt` tool whitelist implements a primitive **SKILL.md**: it constrains which verbs the agent can invoke, preventing it from attempting operations outside its tested capability. Removing tools from the list restricts a weaker model to a smaller instruction set.
@@ -215,7 +231,40 @@ Sends prompts to multiple models simultaneously using `concurrent.futures`. Each
 
 This directly implements **Multi-Instance Debate** from [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) §4.3. The user reviews multiple outputs and plays the Critic role — identifying where all models agree (structural signal) versus where they diverge (implementation choice). The profile system mirrors the Anthill's GPU farm worker configuration.
 
-### 2.9 MCP Integration
+### 2.9 Structural Diff — `/diff`
+
+```
+/diff <file_a> <file_b> [-y]
+```
+
+Computes and displays a unified diff between any two files — not just before/after versions of the same file. Typical use: `file.py` vs `file.py.bkup`, two branches of the same module, or pre/post refactor snapshots. The diff output is injected into context, allowing the model to reason about what changed between two states.
+
+This is the Anthill's **Notary consistency check** applied manually and on-demand, extended to arbitrary file pairs rather than only OKG snapshots.
+
+### 2.10 Model Parameters — `/param`
+
+```
+/param <key> <value>
+```
+
+Injects arbitrary model parameters into every subsequent generation request — `temperature`, `top_p`, `top_k`, `repeat_penalty`, `seed`, or any provider-specific key. Values are auto-cast (bool → bool, integer → int, float → float, else str). LMStudio and vLLM pass these through their OpenAI-compatible endpoint.
+
+This implements the Anthill's **per-agent behavioral calibration**: a Coder agent running in `/fix` mode may be configured with `temperature 0.1` for determinism; a brainstorming run uses `temperature 0.9`. The human manually sets what the Router would select automatically per role.
+
+### 2.11 Think Block Management — `/think`
+
+```
+/think include
+/think exclude
+```
+
+Some reasoning models (QwQ, DeepSeek-R1, certain Qwen variants) emit `<think>...</think>` blocks containing chain-of-thought before the answer. By default (`exclude`), these blocks are shown during streaming (visible to the user) but stripped before storing in `self.messages` and `self.last_reply`. This prevents think-block content from consuming context tokens across turns or contaminating `/patch code` extractions.
+
+`/think include` retains think blocks in context — useful when the reasoning chain itself is the target of analysis or debugging.
+
+This is the Anthill's **context hygiene layer**: intermediate cognitive artifacts are shown but not persisted unless explicitly requested.
+
+### 2.12 MCP Integration
 
 A full `MCPClient` class implements JSON-RPC over stdio, compatible with any standard MCP server. The `/mcp` command suite provides:
 
@@ -228,7 +277,7 @@ A full `MCPClient` class implements JSON-RPC over stdio, compatible with any sta
 
 This is the **nervous system** described in [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) §8.1. The filesystem, git, web, database, and memory servers available in `MCP.md` are exactly the external knowledge sources the Anthill agents use to access structured context without reading raw files. When Phase 1's `get_passport()` MCP server is built, the existing `/mcp connect` command will connect to it without any code changes.
 
-### 2.10 Output Management — `/save`
+### 2.13 Output Management — `/save`
 
 ```
 /save <file> [mode]
@@ -238,16 +287,17 @@ Modes: `overwrite`, `append-above` / `-aa`, `append-below` / `-ab`, `add-suffix`
 
 The `code` mode implements the Anthill's principle of treating model outputs as structured artifacts rather than raw text: the markdown wrapper is discarded and only the code payload is persisted.
 
-### 2.11 Context and Session Controls
+### 2.14 Context and Session Controls
 
 | Command | Role |
 |---|---|
 | `/ctx <n>` | Set context window size in tokens (default 8192) |
 | `/ctx cut` | Remove oldest messages until context fits within limit |
+| `/ctx compact` | AI-assisted context compression: model summarizes the full conversation into a compact digest, which replaces the message history. Preserves semantic continuity while freeing tokens for next task. |
 | `/ctx save <file>` | Dump full conversation to a file — session persistence |
 | `/ctx load <file>` | Restore a saved conversation — cross-session memory |
 | `/model <name> [-sc]` | Switch model at runtime; `-sc` keeps context (switch Coder agent) |
-| `/host <url> [-sc]` | Switch Ollama host at runtime; `-sc` keeps context (route to different GPU) |
+| `/host <url> [-sc]` | Switch provider/host at runtime; `-sc` keeps context; accepts `ollama://`, `openai://`, or plain URLs |
 | `/clear` | Reset conversation context (new task isolation) |
 | `Ctrl+C` | Interrupt streaming response (agent interrupt in Anthill terms) |
 | `/help <cmd> [ctx]` | Show per-command help; `ctx` injects the help text into AI context |
@@ -283,6 +333,14 @@ The `code` mode implements the Anthill's principle of treating model outputs as 
 | `/parallel profile` | GPU farm worker configuration | **Implemented** — saved profiles in profiles.txt |
 | MCP client + servers | MCP nervous system (Section 8.1) | **Implemented** — full JSON-RPC client |
 | `/ctx save` / `/ctx load` | L2 memory tier (conversation history) | **Implemented** — file-serialized context |
+| `/ctx compact` | Context compression / session summarization | **Implemented** — AI-distills history into compact digest |
+| `parse_host` + `openai://` scheme | Multi-provider API abstraction | **Implemented** — LMStudio, LiteLLM, vLLM, OpenAI API |
+| `/diff <file_a> <file_b>` | Notary consistency check (on-demand, arbitrary files) | **Implemented** — unified diff injected into context |
+| `/param <key> <value>` | Per-agent behavioral calibration (temperature, top_p…) | **Implemented** — auto-cast, passed to provider |
+| `/think exclude/include` | Context hygiene — chain-of-thought artifact filtering | **Implemented** — shown but not persisted by default |
+| Agent multi-ACTION + code preview | Compound tool call per turn + Crooked Wall execution gate | **Implemented** — findall + Y/n/q per action |
+| `/agent continue` | Pipeline checkpoint / resume | **Implemented** — `_agent_state` saved, restored on demand |
+| Global plan library | Two-tier SKILL.md (global templates + local overrides) | **Implemented** — 20 built-in plans shipped with tool |
 | `.1bcoder/` directory | BCODER_DIR / project-scoped workspace | **Stub** — flat files, no graph |
 | Human operator | Router + Architect + Notary + Auditor | **Human-in-the-loop** |
 
@@ -292,15 +350,22 @@ The `code` mode implements the Anthill's principle of treating model outputs as 
 
 **Phase 0 (complete):**
 - Constrained generation format (`LINE N: content`, SEARCH/REPLACE)
-- Context injection via `/read` (selective line range)
+- Context injection via `/read` (selective line range; multiple files in one command)
+- `/edit <line>` INSERT mode (single line = insert before, range = replace)
 - Post-change verification via diff preview (Crooked Wall)
+- `/diff <file_a> <file_b>` — arbitrary file comparison injected into context
 - MCP substrate installed and operational
 - Plan execution engine (linear, manual-authored, `--planapply`)
+- Global plan library (20 built-in DevOps + workflow templates; local override)
 - Multi-instance parallel queries with profiles
-- Session persistence (`/ctx save` / `/ctx load`)
+- Session persistence (`/ctx save` / `/ctx load`; `/ctx compact` AI summarization)
 - Flat-file project map with identifier extraction and BFS trace (OKG seed)
 - Single-model agentic loop with tool whitelist (Router+Architect stub)
+  - Multi-ACTION per turn, code preview gate, `/agent continue` checkpoint
 - Pre-change backup/restore
+- Multi-provider API abstraction (`ollama://`, `openai://` schemes)
+- Model parameter injection (`/param`) — temperature, top_p, seed, etc.
+- Think block hygiene (`/think`) — shown, not persisted by default
 
 **Phase 1 (missing — next step):**
 - `ontology_extractor.py` — AST parser generating Object Passports from source files (map_index.py is the regex precursor)
@@ -417,9 +482,9 @@ The core thesis — that context quality substitutes for model scale — is vali
 
 ---
 
-**Document Version**: 1.1
+**Document Version**: 1.2
 **Created**: 2026-03-05
-**Updated**: 2026-03-07
+**Updated**: 2026-03-08
 **Project**: SIMARGL / Anthill Research Program
 **Relation to**:
 - [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) — parent architecture document
@@ -428,12 +493,26 @@ The core thesis — that context quality substitutes for model scale — is vali
 - [TWO_PHASE_REFLECTIVE_AGENT.md](TWO_PHASE_REFLECTIVE_AGENT.md) — agent architecture precursor
 - [PHENOMENOLOGICAL_CODE_UNDERSTANDING.md](PHENOMENOLOGICAL_CODE_UNDERSTANDING.md) — philosophical grounding (Observer Loop, symbol grounding)
 
-**Changelog v1.1**:
+**Changelog v1.2** (2026-03-08):
+- §1.3: Added multi-provider abstraction (`ollama://` / `openai://` schemes); ANSI color note
+- §1.4: Added global plan library directory to file table
+- §2.1: `/read` now accepts multiple files in one command
+- §2.2: Added note on `/edit <line>` INSERT mode vs range REPLACE
+- §2.4: Added global plan library (20 built-in plans, two-tier SKILL.md analog)
+- §2.6: Added multi-ACTION per turn, code preview gate, `/agent continue`, `/agent -t N`
+- §2.9 (new): `/diff <file_a> <file_b>` — structural diff as Notary on-demand check
+- §2.10 (new): `/param <key> <value>` — per-agent model parameter calibration
+- §2.11 (new): `/think include/exclude` — context hygiene for reasoning models
+- §2.14: Added `/ctx compact`; updated `/host` to note openai:// support
+- §3.1: Extended mapping table with all new Phase 0 components
+- §3.2: Updated Phase 0 completion list with all new features
+
+**Changelog v1.1** (2026-03-07):
 - Corrected technical stack: plain terminal REPL, no Textual TUI, `requests` only
 - Removed `headless.py` (does not exist); added `map_index.py`, `map_query.py`
 - Added Section 2.5 `/map` system — OKG seed, flat-file project knowledge
 - Added Section 2.6 `/agent` — Router+Architect stub, SKILL.md analog
-- Added Section 2.7 `/bkup`; expanded Section 2.11 with `/ctx save/load`, `/help ctx`, `/model -sc`
+- Added Section 2.7 `/bkup`; expanded §2.11 with `/ctx save/load`, `/help ctx`, `/model -sc`
 - Updated mapping table (Section 3.1) with all new commands
 - Updated Phase 0 completion list and Phase 1 gap definition (Section 3.2)
 - Updated concept correspondences (Section 4.2) with map/Entity Map/Observer Loop entries

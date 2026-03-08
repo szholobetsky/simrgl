@@ -186,6 +186,8 @@ LOW ◄────────────────────┼───�
 | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) | Distributed AI Architecture | EN |
 | [ANTHILL_CONVERGENCE_AND_EXPERIMENTS.md](ANTHILL_CONVERGENCE_AND_EXPERIMENTS.md) | Anthill Lineage + Experiments | EN |
 | [1BCODER.md](1BCODER.md) | Human-in-the-loop Anthill Prototype | EN |
+| [../exp5/README.md](../exp5/README.md) | Cross-Vocabulary Symbol Grounding experiment | EN |
+| [SYMBOL_GROUNDING_ESSAY.md](SYMBOL_GROUNDING_ESSAY.md) | Philosophical essay on symbol grounding in code navigation | EN |
 | [ua/](ua/) | Ukrainian translations | UA |
 
 ---

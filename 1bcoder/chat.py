@@ -13,6 +13,42 @@ import warnings
 warnings.filterwarnings("ignore", message="urllib3", category=Warning)
 import requests
 
+# ── terminal colors ────────────────────────────────────────────────────────────
+
+if sys.platform == "win32":
+    os.system("")  # enable ANSI in Windows console
+
+_R = "\033[0m"
+_BOLD  = "\033[1m"
+_DIM   = "\033[2m"
+_RED   = "\033[31m"
+_GREEN = "\033[32m"
+_YELL  = "\033[33m"
+_CYAN  = "\033[36m"
+_GRAY  = "\033[90m"
+
+
+def _ok(msg: str):   print(f"{_GREEN}{msg}{_R}")
+def _err(msg: str):  print(f"{_RED}error: {msg}{_R}")
+def _info(msg: str): print(f"{_CYAN}{msg}{_R}")
+def _warn(msg: str): print(f"{_YELL}{msg}{_R}")
+
+
+def _cdiff(line: str) -> str:
+    """Colorize a single unified-diff or map-diff line for terminal display."""
+    if line.startswith(("--- ", "+++ ")):
+        return f"{_DIM}{line}{_R}"
+    if line.startswith("@@"):
+        return f"{_CYAN}{line}{_R}"
+    if line.startswith("+"):
+        return f"{_GREEN}{line}{_R}"
+    if line.startswith("-"):
+        return f"{_RED}{line}{_R}"
+    if line.startswith("!"):
+        return f"{_YELL}{line}{_R}"
+    return line
+
+
 # ── constants ──────────────────────────────────────────────────────────────────
 
 BANNER = """\
@@ -27,6 +63,7 @@ BANNER = """\
 WORKDIR   = os.getcwd()
 BCODER_DIR = os.path.join(WORKDIR, ".1bcoder")
 PLANS_DIR  = os.path.join(BCODER_DIR, "plans")
+GLOBAL_PLANS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".1bcoder", "plans")
 NUM_CTX    = 8192        # default Ollama context window (tokens)
 
 # ── /agent settings ─────────────────────────────────────────────────────────────
@@ -34,7 +71,7 @@ NUM_CTX    = 8192        # default Ollama context window (tokens)
 AGENT_CONFIG_FILE = os.path.join(BCODER_DIR, "agent.txt")
 
 DEFAULT_AGENT_TOOLS = [
-    "read", "run", "edit", "save", "bkup",
+    "read", "run", "edit", "save", "bkup", "diff",
     "map index", "map find", "map idiff", "map diff", "map trace",
     "help",
 ]
@@ -42,18 +79,21 @@ DEFAULT_AGENT_TOOLS = [
 AGENT_SYSTEM = """\
 You are an autonomous coding assistant. Complete the task using the available tools.
 
-To call a tool, output a line starting with ACTION: followed by the exact command.
-Output ONLY the ACTION line. No explanation before or after. No markdown. No confirmation text.
-Use ONE action per response, then stop and wait for [tool result].
+To call a tool, output ACTION: lines followed by the exact command.
+For /edit <file> [line] code — write the code block in the reply body (any position), then the ACTION line using the `code` keyword. The tool reads the code block from this reply automatically.
+No explanation outside of code blocks. No confirmation text.
+Stop after your ACTION lines and wait for [tool result].
 When the task is complete, write a plain text summary — no ACTION.
 
 Rules:
+- Before using any command, run ACTION: /help <cmd> alone first to confirm the exact syntax, then use it correctly in the next turn.
 - /read a file before editing it
 - /bkup save <file> before modifying important files
+- To modify an existing file: write a SEARCH/REPLACE block in the reply, then ACTION: /patch <file> code
+- To create a new file or replace it entirely: write the code block in the reply, then ACTION: /edit <file> code
 - /map idiff after making changes to verify what changed (re-indexes then diffs)
 - /map diff to view the diff again without re-indexing
 - /run to test after applying a fix
-- /help <cmd> ctx if you need full details on a tool
 
 Available tools:
 {tool_list}
@@ -88,10 +128,12 @@ PATCH_SYSTEM = (
 HELP_TEXT = """\
 Commands
 
-/read <file> [start-end]
-    Inject file into AI context.
+/read <file> [file2 ...] [start-end]
+    Inject one or more files into AI context. Each file is appended separately.
+    Range (start-end) only applies when reading a single file.
     e.g.  /read main.py
           /read main.py 10-30
+          /read instruction.txt README.md main.py
 
 /edit <file> <line>
     Manually replace a line. Type new content when prompted.
@@ -99,12 +141,12 @@ Commands
 
 /edit <file> code
     Apply last AI reply (first code block) to the whole file.
-    Shows unified diff before asking to apply.
+    Creates the file if it does not exist. Shows unified diff before applying.
     e.g.  /edit main.py code
 
 /edit <file> <line> code
     Apply last AI reply code block starting at <line>.
-    Replaces as many lines as the new code has. Shows diff before applying.
+    Replaces as many lines as the new code has. Creates file if missing. Shows diff.
     e.g.  /edit main.py 312 code
 
 /edit <file> <start>-<end> code
@@ -124,6 +166,10 @@ Commands
     e.g.  /patch main.py
           /patch main.py 10-40
           /patch main.py 10-40 fix the loop logic
+/patch <file> code
+    Apply SEARCH/REPLACE block from the last AI reply directly (no new LLM call).
+    Use in agent mode: write the block in the reply, then ACTION: /patch <file> code
+    e.g.  /patch main.py code
 
 /run <command>
     Run shell command, inject output into context.
@@ -143,8 +189,8 @@ Commands
           /save main.py code -ab     -> appends extracted code below
           /save out.txt add-suffix   -> out_1.txt, out_2.txt ...
 
-/plan list              List all plans in plans/ folder (* = current).
-/plan open              Select and load a plan (type number).
+/plan list              List all plans (* = current). Shows global plans (g:) and project plans.
+/plan open              Select and load a plan (type number). Includes global and project plans.
 /plan create [path]          Create a new empty plan.
 /plan create ctx [path]      Create plan from this session's command history.
     Records all /read /edit /fix /patch /run /save /bkup /map /model /host commands typed so far.
@@ -169,20 +215,37 @@ Commands
 
 /ctx <n>            Set context window size in tokens (default 8192).
 /ctx cut            Remove oldest messages until context fits within the limit.
+/ctx compact        Ask AI to summarize the conversation, then replace context with the summary.
 /ctx save <file>    Save full conversation context to a text file.
 /ctx load <file>    Restore context from a saved file (appends to current context).
-    e.g.  /ctx 16384        — for large files
-          /ctx              — show current usage vs limit
-          /ctx save ctx.txt — dump all messages to file
-          /ctx load ctx.txt — restore messages with proper user/assistant roles
+    e.g.  /ctx 16384
+          /ctx
+          /ctx save ctx.txt
+          /ctx load ctx.txt
+
+/think include      Keep <think>...</think> blocks in context (pass reasoning to next model).
+/think exclude      Strip <think> from context — blocks shown in terminal only (default).
+
+/param <key> <value>    Set a model parameter sent with every request. Overwrites if already set.
+/param                  Show current params.
+/param clear            Remove all params.
+    Common params: temperature (0.0–2.0), top_p (0.0–1.0), top_k, num_predict, seed, stop, enable_thinking
+    e.g.  /param temperature 0.2
+          /param enable_thinking false
+          /param seed 42
+          /param clear
 /clear          Clear conversation context and screen.
 /model [-sc]            Switch AI model interactively (type number from list).
 /model <name> [-sc]     Switch directly by model name (e.g. /model gemma3:1b).
                         -sc / save-context: keep context when switching.
-/host <url> [-sc]   Switch Ollama host on the fly.
+/host <url> [-sc]   Switch host and provider on the fly.
                     -sc / save-context: keep context when switching.
-    e.g.  /host http://192.168.1.50:11434
-          /host http://192.168.1.50:11434 -sc
+                    Provider is set by URL scheme: ollama:// (default) or openai://.
+                    Plain host without scheme defaults to ollama.
+    e.g.  /host localhost:11434                   (Ollama, default)
+          /host openai://localhost:1234            (LMStudio)
+          /host openai://localhost:4000            (LiteLLM)
+          /host openai://localhost:1234 -sc
 
 /mcp connect <name> <command>
     Start an MCP server and connect to it.
@@ -270,6 +333,12 @@ Commands
     Delete <file> and replace it with <file>.bkup.
     e.g.  /bkup restore calc.py
 
+/diff <file_a> <file_b> [-y]
+    Show colored unified diff between two files.
+    -y: skip confirmation and inject diff into context automatically.
+    e.g.  /diff main.py main.py.bkup
+          /diff v1/calc.py v2/calc.py -y
+
 /agent [-t N] [-y] <task>
     Run an autonomous agentic loop. The model uses tools to complete the task,
     one ACTION per turn, until it outputs plain text with no ACTION.
@@ -277,10 +346,16 @@ Commands
     -t N  override max_turns for this run only.
     -y    skip per-action confirmation (execute all actions automatically).
     Without -y: each action shows [Y/n/q] — n skips it, q stops the agent.
-    Ctrl+C interrupts at any turn.
+    Ctrl+C interrupts at any turn. Session is saved for /agent continue.
     e.g.  /agent find and fix the divide by zero bug in calc.py
           /agent -t 1 read models.py and explain the User class
           /agent -y -t 5 refactor utils.py
+/agent continue [-t N] [-y] [follow-up instruction]
+    Resume the last agent session (saved automatically on stop/complete/max_turns).
+    Optionally pass a follow-up message to guide the next steps.
+    e.g.  /agent continue
+          /agent continue now also add error handling
+          /agent continue -t 5 -y
 
 /init           Create .1bcoder/plans/ in current directory (safe to re-run).
 /help                   Show full help.
@@ -347,7 +422,24 @@ def get_help_list(tools_list: list) -> str:
 
 # ── core helpers ───────────────────────────────────────────────────────────────
 
-def list_models(base_url):
+def parse_host(host_str):
+    """Parse 'ollama://host:port' or 'openai://host:port' or plain 'host:port'.
+    Returns (http_url, provider).  Default provider is 'ollama'."""
+    s = host_str.rstrip("/")
+    if s.startswith("ollama://"):
+        return "http://" + s[len("ollama://"):], "ollama"
+    if s.startswith("openai://"):
+        return "http://" + s[len("openai://"):], "openai"
+    if not s.startswith(("http://", "https://")):
+        s = "http://" + s
+    return s, "ollama"
+
+
+def list_models(base_url, provider="ollama"):
+    if provider == "openai":
+        resp = requests.get(f"{base_url}/v1/models", timeout=5)
+        resp.raise_for_status()
+        return [m["id"] for m in resp.json().get("data", [])]
     resp = requests.get(f"{base_url}/api/tags", timeout=5)
     resp.raise_for_status()
     return [m["name"] for m in resp.json().get("models", [])]
@@ -377,7 +469,28 @@ def edit_line(path, lineno, new_content):
         f.writelines(lines)
 
 
-def ai_fix(base_url, model, content, label, hint="", on_chunk=None):
+def _parse_openai_stream(resp, on_chunk, chunks):
+    """Parse SSE stream from OpenAI-compatible endpoint."""
+    for line in resp.iter_lines():
+        if not line:
+            continue
+        text = line.decode() if isinstance(line, bytes) else line
+        if text.startswith("data: "):
+            text = text[6:]
+        if text == "[DONE]":
+            break
+        try:
+            data = json.loads(text)
+        except json.JSONDecodeError:
+            continue
+        chunk = (data.get("choices") or [{}])[0].get("delta", {}).get("content") or ""
+        if chunk:
+            if on_chunk:
+                on_chunk(chunk)
+            chunks.append(chunk)
+
+
+def ai_fix(base_url, model, content, label, hint="", on_chunk=None, provider="ollama"):
     user_msg = f"Fix the bug in this code ({label}):\n```\n{content}```"
     if hint:
         user_msg = f"{hint}\n\n{user_msg}"
@@ -386,23 +499,32 @@ def ai_fix(base_url, model, content, label, hint="", on_chunk=None):
         {"role": "user", "content": user_msg},
     ]
     chunks = []
-    with requests.post(
-        f"{base_url}/api/chat",
-        json={"model": model, "messages": msgs, "stream": True},
-        stream=True, timeout=120,
-    ) as resp:
-        resp.raise_for_status()
-        for line in resp.iter_lines():
-            if not line:
-                continue
-            data = json.loads(line)
-            chunk = data.get("message", {}).get("content", "")
-            if chunk:
-                if on_chunk:
-                    on_chunk(chunk)
-                chunks.append(chunk)
-            if data.get("done"):
-                break
+    if provider == "openai":
+        with requests.post(
+            f"{base_url}/v1/chat/completions",
+            json={"model": model, "messages": msgs, "stream": True},
+            stream=True, timeout=120,
+        ) as resp:
+            resp.raise_for_status()
+            _parse_openai_stream(resp, on_chunk, chunks)
+    else:
+        with requests.post(
+            f"{base_url}/api/chat",
+            json={"model": model, "messages": msgs, "stream": True},
+            stream=True, timeout=120,
+        ) as resp:
+            resp.raise_for_status()
+            for line in resp.iter_lines():
+                if not line:
+                    continue
+                data = json.loads(line)
+                chunk = data.get("message", {}).get("content", "")
+                if chunk:
+                    if on_chunk:
+                        on_chunk(chunk)
+                    chunks.append(chunk)
+                if data.get("done"):
+                    break
     raw = "".join(chunks)
     m = re.search(r'LINE\s+(\d+)\s*: ?(.*)', raw, re.IGNORECASE)
     if m:
@@ -626,14 +748,24 @@ def _parse_plan_apply_args(rest: str):
 
 
 def _list_plan_files():
-    os.makedirs(PLANS_DIR, exist_ok=True)
-    result = []
-    for root, _, files in os.walk(PLANS_DIR):
-        for f in files:
-            if f.endswith(".txt"):
-                rel = os.path.relpath(os.path.join(root, f), PLANS_DIR)
-                result.append(rel)
-    return sorted(result)
+    """Return (global_plans, local_plans) — each a sorted list of (label, abs_path)."""
+    def _scan(directory):
+        if not os.path.isdir(directory):
+            return []
+        result = []
+        for root, _, files in os.walk(directory):
+            for f in sorted(files):
+                if f.endswith(".txt"):
+                    abs_path = os.path.join(root, f)
+                    label = os.path.relpath(abs_path, directory)
+                    result.append((label, abs_path))
+        return result
+    global_plans = _scan(GLOBAL_PLANS_DIR)
+    local_plans  = _scan(PLANS_DIR)
+    # hide global plans that are overridden locally
+    local_labels = {label for label, _ in local_plans}
+    global_plans = [(l, p) for l, p in global_plans if l not in local_labels]
+    return global_plans, local_plans
 
 
 # ── MCP client ─────────────────────────────────────────────────────────────────
@@ -725,13 +857,17 @@ class CoderCLI:
 
     SEP = "─" * 40
 
-    def __init__(self, base_url, model, models):
+    def __init__(self, base_url, model, models, provider="ollama"):
         self.base_url = base_url
+        self.provider = provider
         self.model = model
         self.models = models
         self.messages = []
         self.last_reply = ""
+        self.think_in_ctx = False  # False = strip <think> from context (default)
         self.num_ctx = NUM_CTX
+        self.params: dict = {}     # extra model params injected into every request
+        self._agent_state = None   # saved agent session for /agent continue
         self._plan_file = None
         self._mcp: dict = {}
         self._history: list[str] = []
@@ -750,9 +886,9 @@ class CoderCLI:
 
     def _sep(self, label: str = ""):
         if label:
-            print(f"─── {label} " + "─" * (36 - len(label)))
+            print(f"{_DIM}─── {_R}{_BOLD}{label}{_R}{_DIM} " + "─" * (36 - len(label)) + _R)
         else:
-            print(self.SEP)
+            print(f"{_DIM}{self.SEP}{_R}")
 
     def _confirm(self, prompt: str) -> bool:
         try:
@@ -770,34 +906,50 @@ class CoderCLI:
             return ""
 
     def _stream_chat(self, messages, hint: str = "") -> str:
-        """POST to Ollama, stream chunks to stdout. Returns full reply."""
+        """POST to active provider, stream chunks to stdout. Returns full reply."""
         chunks = []
+        def _print(c):
+            sys.stdout.write(c); sys.stdout.flush()
         try:
-            with requests.post(
-                f"{self.base_url}/api/chat",
-                json={"model": self.model, "messages": messages, "stream": True,
-                      "options": {"num_ctx": self.num_ctx}},
-                stream=True, timeout=120,
-            ) as resp:
-                resp.raise_for_status()
-                for line in resp.iter_lines():
-                    if not line:
-                        continue
-                    data = json.loads(line)
-                    chunk = data.get("message", {}).get("content", "")
-                    if chunk:
-                        sys.stdout.write(chunk)
-                        sys.stdout.flush()
-                        chunks.append(chunk)
-                    if data.get("done"):
-                        break
+            if self.provider == "openai":
+                body = {"model": self.model, "messages": messages, "stream": True}
+                body.update(self.params)
+                with requests.post(
+                    f"{self.base_url}/v1/chat/completions",
+                    json=body, stream=True, timeout=120,
+                ) as resp:
+                    resp.raise_for_status()
+                    _parse_openai_stream(resp, _print, chunks)
+            else:
+                opts = {"num_ctx": self.num_ctx}
+                opts.update(self.params)
+                with requests.post(
+                    f"{self.base_url}/api/chat",
+                    json={"model": self.model, "messages": messages, "stream": True,
+                          "options": opts},
+                    stream=True, timeout=120,
+                ) as resp:
+                    resp.raise_for_status()
+                    for line in resp.iter_lines():
+                        if not line:
+                            continue
+                        data = json.loads(line)
+                        chunk = data.get("message", {}).get("content", "")
+                        if chunk:
+                            _print(chunk)
+                            chunks.append(chunk)
+                        if data.get("done"):
+                            break
         except KeyboardInterrupt:
             print("\n[interrupted]")
         except requests.exceptions.RequestException as e:
             print(f"\nerror: {e}")
             return ""
         print()
-        return "".join(chunks)
+        reply = "".join(chunks)
+        if not self.think_in_ctx:
+            reply = re.sub(r'<think>.*?</think>', '', reply, flags=re.DOTALL).strip()
+        return reply
 
     # ── REPL ──────────────────────────────────────────────────────────────────
 
@@ -806,8 +958,9 @@ class CoderCLI:
         print()
         print(BANNER)
         print()
-        print(f"  model : {self.model}")
-        print(f"  host  : {self.base_url}")
+        print(f"  model    : {self.model}")
+        print(f"  host     : {self.base_url}")
+        print(f"  provider : {self.provider}")
         print(f"  dir   : {os.getcwd()}")
         print()
         print("  /help for all commands   /init to create .1bcoder/ folder")
@@ -847,6 +1000,20 @@ class CoderCLI:
             self._cmd_init()
         elif user_input.startswith("/ctx"):
             self._cmd_ctx(user_input)
+        elif user_input.startswith("/think"):
+            parts = user_input.split()
+            sub = parts[1] if len(parts) > 1 else ""
+            if sub == "include":
+                self.think_in_ctx = True
+                _ok("[think] <think> blocks will be kept in context")
+            elif sub == "exclude":
+                self.think_in_ctx = False
+                _ok("[think] <think> blocks will be stripped from context (shown in terminal only)")
+            else:
+                state = "include" if self.think_in_ctx else "exclude"
+                print(f"[think mode: {state}]  usage: /think include | exclude")
+        elif user_input.startswith("/param"):
+            self._cmd_param(user_input)
         elif user_input == "/clear":
             self.messages.clear()
             self.last_reply = ""
@@ -881,6 +1048,8 @@ class CoderCLI:
             self._cmd_fix(user_input)
         elif user_input.startswith("/bkup"):
             self._cmd_bkup(user_input)
+        elif user_input.startswith("/diff"):
+            self._cmd_diff(user_input)
         elif user_input.startswith("/agent"):
             self._cmd_agent(user_input)
         else:
@@ -918,6 +1087,7 @@ tools =
     edit
     save
     bkup
+    diff
     map index
     map find
     map idiff
@@ -944,6 +1114,39 @@ tools =
             print(f"[init] .1bcoder already existed — missing files created if any")
         else:
             print(f"[init] created .1bcoder/ in {WORKDIR}")
+
+    def _cmd_param(self, user_input: str):
+        tokens = user_input.split(None, 2)
+        if len(tokens) == 1:
+            if not self.params:
+                print("[params: none set]")
+            else:
+                for k, v in self.params.items():
+                    print(f"  {k} = {v}")
+            return
+        if tokens[1] == "clear":
+            self.params.clear()
+            _ok("[params cleared]")
+            return
+        if len(tokens) < 3:
+            print("usage: /param <key> <value>  |  /param  |  /param clear")
+            return
+        key, raw_val = tokens[1], tokens[2]
+        # auto-cast: bool → Python bool, number → float/int, else str
+        if raw_val.lower() == "true":
+            val = True
+        elif raw_val.lower() == "false":
+            val = False
+        else:
+            try:
+                val = int(raw_val)
+            except ValueError:
+                try:
+                    val = float(raw_val)
+                except ValueError:
+                    val = raw_val
+        self.params[key] = val
+        _ok(f"[param] {key} = {val}")
 
     def _cmd_ctx(self, user_input: str):
         parts = user_input.split()
@@ -975,7 +1178,7 @@ tools =
                         f.write(f"=== {msg['role']} ===\n{msg['content']}\n\n")
                 print(f"[context saved to {parts[2]} ({len(self.messages)} messages)]")
             except OSError as e:
-                print(f"error: {e}")
+                _err(e)
             return
         if parts[1] == "load":
             if len(parts) < 3:
@@ -1002,13 +1205,35 @@ tools =
             except FileNotFoundError:
                 print(f"file not found: {parts[2]}")
             except OSError as e:
-                print(f"error: {e}")
+                _err(e)
+            return
+        if parts[1] == "compact":
+            if not self.messages:
+                print("[context is empty]")
+                return
+            print("[ctx compact] summarizing conversation...")
+            summary_msgs = list(self.messages) + [{
+                "role": "user",
+                "content": (
+                    "Summarize this entire conversation into a concise but complete context block. "
+                    "Include: files read, changes made, decisions, key findings, current state of the code. "
+                    "Plain text only. No code fences. Be thorough — this summary replaces the full history."
+                )
+            }]
+            self._sep("AI")
+            summary = self._stream_chat(summary_msgs)
+            if not summary:
+                print("[ctx compact] failed — context unchanged")
+                return
+            self.messages.clear()
+            self.messages.append({"role": "user", "content": f"[session summary]\n{summary}"})
+            _ok(f"[ctx compact] context replaced with summary ({len(summary)} chars)")
             return
         try:
             self.num_ctx = int(parts[1])
             print(f"[ctx set to {self.num_ctx} tokens]")
         except ValueError:
-            print("usage: /ctx <number> | cut | save <file> | load <file>")
+            print("usage: /ctx <number> | cut | compact | save <file> | load <file>")
 
     def _cmd_model(self, user_input: str = ""):
         tokens = user_input.split()
@@ -1056,51 +1281,51 @@ tools =
         tokens = user_input.split()
         save_ctx = "-sc" in tokens or "save-context" in tokens
         args = [t for t in tokens[1:] if t not in ("-sc", "save-context")]
-        new_url = args[0].rstrip("/") if args else ""
-        if new_url and not new_url.startswith(("http://", "https://")):
-            new_url = "http://" + new_url
-        if not new_url:
-            print(f"[current host: {self.base_url}]  usage: /host <url> [-sc]")
+        raw = args[0] if args else ""
+        if not raw:
+            print(f"[current host: {self.base_url} ({self.provider})]  usage: /host <url> [-sc]")
             return
+        new_url, new_provider = parse_host(raw)
         try:
-            new_models = list_models(new_url)
+            new_models = list_models(new_url, new_provider)
             self.base_url = new_url
+            self.provider = new_provider
             self.models = new_models
             self.model = new_models[0]
             if not save_ctx:
                 self.messages.clear()
-                print(f"[connected to {new_url}, model: {self.model}, context cleared]")
+                print(f"[connected to {new_url} ({new_provider}), model: {self.model}, context cleared]")
             else:
-                print(f"[connected to {new_url}, model: {self.model}, context kept]")
-            self.cmd_history.append(f"/host {new_url}" + (" -sc" if save_ctx else ""))
+                print(f"[connected to {new_url} ({new_provider}), model: {self.model}, context kept]")
+            self.cmd_history.append(f"/host {raw}" + (" -sc" if save_ctx else ""))
         except requests.exceptions.ConnectionError:
             print(f"cannot connect to {new_url}")
         except requests.exceptions.HTTPError as e:
-            print(f"Ollama error: {e}")
+            _err(e)
 
     def _cmd_read(self, user_input: str):
-        parts = user_input.split(None, 2)
-        if len(parts) < 2:
-            print("usage: /read <file> [start-end]")
+        tokens = user_input.split()[1:]
+        if not tokens:
+            print("usage: /read <file> [file2 ...] [start-end]")
             return
-        path = parts[1]
+        # detect trailing range token (digits-digits), only for single-file use
         start = end = None
-        if len(parts) >= 3:
+        range_re = re.compile(r'^(\d+)-(\d+)$')
+        if len(tokens) >= 2:
+            m = range_re.match(tokens[-1])
+            if m and len(tokens) == 2:
+                start, end = int(m.group(1)), int(m.group(2))
+                tokens = tokens[:-1]
+        for path in tokens:
             try:
-                s, e = parts[2].split("-")
-                start, end = int(s), int(e)
-            except ValueError:
-                print("range format: start-end  e.g. 10-30")
-                return
-        try:
-            content, total = read_file(path, start, end)
-            label = path + (f" lines {start}-{end}" if start else f" ({total} lines)")
-            self.messages.append({"role": "user", "content": f"[file: {label}]\n```\n{content}```"})
-            print(f"context: injected {label}")
-        except FileNotFoundError:
-            print(f"file not found: {path}")
-        except OSError as e:
-            print(f"error: {e}")
+                content, total = read_file(path, start, end)
+                label = path + (f" lines {start}-{end}" if start else f" ({total} lines)")
+                self.messages.append({"role": "user", "content": f"[file: {label}]\n```\n{content}```"})
+                _ok(f"context: injected {label}")
+            except FileNotFoundError:
+                print(f"file not found: {path}")
+            except OSError as e:
+                _err(e)
 
     def _cmd_edit(self, user_input: str):
         tokens = user_input.split()
@@ -1130,18 +1355,28 @@ tools =
             try:
                 with open(path, "r", encoding="utf-8") as f:
                     file_lines = f.readlines()
-            except (FileNotFoundError, OSError) as e:
-                print(f"error: {e}")
+            except FileNotFoundError:
+                file_lines = []
+                line_start = line_end = None
+                _info(f"[new file: {path}]")
+            except OSError as e:
+                _err(e)
                 return
             new_lines = new_code.splitlines(keepends=True)
             if new_lines and not new_lines[-1].endswith("\n"):
                 new_lines[-1] += "\n"
             if line_start is not None:
                 offset = line_start - 1
-                end_idx = line_end if line_end is not None else offset + len(new_lines)
-                original_segment = file_lines[offset:end_idx]
-                new_file_lines = file_lines[:offset] + new_lines + file_lines[end_idx:]
-                label = f"{line_start}-{end_idx}" if line_end is not None else f"{line_start}+"
+                if line_end is not None:
+                    # range given: replace lines start–end
+                    original_segment = file_lines[offset:line_end]
+                    new_file_lines = file_lines[:offset] + new_lines + file_lines[line_end:]
+                    label = f"{line_start}-{line_end}"
+                else:
+                    # single line: insert before that line, nothing removed
+                    original_segment = []
+                    new_file_lines = file_lines[:offset] + new_lines + file_lines[offset:]
+                    label = f"{line_start} (insert)"
                 diff = list(difflib.unified_diff(
                     original_segment, new_lines,
                     fromfile=f"{path}:{label} (current)",
@@ -1160,14 +1395,17 @@ tools =
                 print("[no changes detected]")
                 return
             for dline in diff:
-                print(dline)
+                print(_cdiff(dline))
             if self._confirm("  apply? [Y/n]:"):
                 try:
+                    parent = os.path.dirname(path)
+                    if parent:
+                        os.makedirs(parent, exist_ok=True)
                     with open(path, "w", encoding="utf-8") as f:
                         f.writelines(new_file_lines)
-                    print(f"[saved {path}]")
+                    _ok(f"[saved {path}]")
                 except OSError as e:
-                    print(f"error: {e}")
+                    _err(e)
             else:
                 print("[skipped]")
         else:
@@ -1179,7 +1417,7 @@ tools =
                 current = content.split(":", 1)[1].strip() if ":" in content else content.strip()
                 print(f"  current [{line_start}]: {current}")
             except (FileNotFoundError, OSError) as e:
-                print(f"error: {e}")
+                _err(e)
                 return
             new_content = self._prompt_input("  new content (blank = keep):")
             if new_content:
@@ -1187,7 +1425,7 @@ tools =
                     edit_line(path, line_start, new_content)
                     print(f"[line {line_start} updated in {path}]")
                 except (ValueError, OSError) as e:
-                    print(f"error: {e}")
+                    _err(e)
             else:
                 print("[no change]")
 
@@ -1213,7 +1451,7 @@ tools =
             content, total = read_file(path, start, end)
             label = path + (f" lines {start}-{end}" if start else f" ({total} lines)")
         except (FileNotFoundError, OSError) as e:
-            print(f"error: {e}")
+            _err(e)
             return
         if hint:
             print(f"hint: {hint}")
@@ -1224,7 +1462,7 @@ tools =
             sys.stdout.flush()
             accumulated.append(c)
         try:
-            lineno, new_content = ai_fix(self.base_url, self.model, content, label, hint, on_chunk)
+            lineno, new_content = ai_fix(self.base_url, self.model, content, label, hint, on_chunk, self.provider)
         except KeyboardInterrupt:
             print("\n[interrupted]")
             return
@@ -1247,7 +1485,7 @@ tools =
                 edit_line(path, lineno, new_content)
                 print(f"[line {lineno} updated in {path}]")
             except (ValueError, OSError) as e:
-                print(f"error: {e}")
+                _err(e)
         else:
             print("[skipped]")
 
@@ -1261,7 +1499,7 @@ tools =
 
         if sub == "save":
             if not os.path.isfile(path):
-                print(f"error: file not found: {path}")
+                _err(f"file not found: {path}")
                 return
             import shutil
             shutil.copy2(path, bkup_path)
@@ -1269,7 +1507,7 @@ tools =
 
         elif sub == "restore":
             if not os.path.isfile(bkup_path):
-                print(f"error: backup not found: {bkup_path}")
+                _err(f"backup not found: {bkup_path}")
                 return
             import shutil
             os.remove(path) if os.path.isfile(path) else None
@@ -1277,7 +1515,7 @@ tools =
             print(f"[bkup] restored {bkup_path} → {path}")
 
         else:
-            print(f"error: unknown subcommand '{sub}' — use save or restore")
+            _err(f"unknown subcommand '{sub}' — use save or restore")
 
     def _cmd_patch(self, user_input: str):
         parts = user_input[6:].strip().split(None, 2)
@@ -1285,35 +1523,43 @@ tools =
         start = end = None
         hint = ""
         if not path:
-            print("usage: /patch <file> [start-end] [hint]")
+            print("usage: /patch <file> [start-end] [hint]  |  /patch <file> code")
             return
-        if len(parts) >= 2:
-            if re.match(r'^\d+-\d+$', parts[1]):
-                try:
-                    s, e = parts[1].split("-")
-                    start, end = int(s), int(e)
-                except ValueError:
-                    pass
-                hint = parts[2] if len(parts) >= 3 else ""
-            else:
-                hint = " ".join(parts[1:])
-        try:
-            content, total = read_file(path, start, end)
-            label = path + (f" lines {start}-{end}" if start else f" ({total} lines)")
-        except (FileNotFoundError, OSError) as e:
-            print(f"error: {e}")
-            return
-        user_msg = f"Fix the code in this file ({label}):\n```\n{content}```"
-        if hint:
-            user_msg = f"{hint}\n\n{user_msg}"
-        msgs = [
-            {"role": "system", "content": PATCH_SYSTEM},
-            {"role": "user", "content": user_msg},
-        ]
-        self._sep("AI")
-        raw = self._stream_chat(msgs)
-        if not raw:
-            return
+
+        # /patch <file> code — apply SEARCH/REPLACE block from last AI reply
+        if len(parts) >= 2 and parts[-1].lower() == "code":
+            if not self.last_reply:
+                print("no AI response yet")
+                return
+            raw = self.last_reply
+        else:
+            if len(parts) >= 2:
+                if re.match(r'^\d+-\d+$', parts[1]):
+                    try:
+                        s, e = parts[1].split("-")
+                        start, end = int(s), int(e)
+                    except ValueError:
+                        pass
+                    hint = parts[2] if len(parts) >= 3 else ""
+                else:
+                    hint = " ".join(parts[1:])
+            try:
+                content, total = read_file(path, start, end)
+                label = path + (f" lines {start}-{end}" if start else f" ({total} lines)")
+            except (FileNotFoundError, OSError) as e:
+                _err(e)
+                return
+            user_msg = f"Fix the code in this file ({label}):\n```\n{content}```"
+            if hint:
+                user_msg = f"{hint}\n\n{user_msg}"
+            msgs = [
+                {"role": "system", "content": PATCH_SYSTEM},
+                {"role": "user", "content": user_msg},
+            ]
+            self._sep("AI")
+            raw = self._stream_chat(msgs)
+            if not raw:
+                return
         search_text, replace_text = _parse_patch(raw)
         if search_text is None:
             print("could not parse SEARCH/REPLACE block — try a more capable model")
@@ -1347,7 +1593,7 @@ tools =
                     f.writelines(new_lines)
                 print(f"[patched {path}: lines {si+1}–{ei} replaced]")
             except OSError as e:
-                print(f"error: {e}")
+                _err(e)
         else:
             print("[skipped]")
 
@@ -1407,7 +1653,40 @@ tools =
                         f.write(content)
                     print(f"saved → {target}")
             except OSError as e:
-                print(f"error: {e}")
+                _err(e)
+
+    def _cmd_diff(self, user_input: str):
+        tokens = user_input.split()
+        if len(tokens) < 3:
+            print("usage: /diff <file_a> <file_b> [-y]")
+            return
+        file_a, file_b = tokens[1], tokens[2]
+        inject = "-y" in tokens
+        try:
+            with open(file_a, encoding="utf-8") as f:
+                lines_a = f.readlines()
+        except FileNotFoundError:
+            _err(f"file not found: {file_a}"); return
+        except OSError as e:
+            _err(e); return
+        try:
+            with open(file_b, encoding="utf-8") as f:
+                lines_b = f.readlines()
+        except FileNotFoundError:
+            _err(f"file not found: {file_b}"); return
+        except OSError as e:
+            _err(e); return
+
+        diff = list(difflib.unified_diff(lines_a, lines_b, fromfile=file_a, tofile=file_b, lineterm=""))
+        if not diff:
+            print("[diff] files are identical")
+            return
+        for dline in diff:
+            print(_cdiff(dline))
+        if inject or self._confirm("  add diff to context? [Y/n]:"):
+            plain = "\n".join(diff)
+            self.messages.append({"role": "user", "content": f"[diff: {file_a} vs {file_b}]\n{plain}"})
+            _ok(f"[diff] injected into context")
 
     def _cmd_run(self, shell_cmd: str):
         print(f"$ {shell_cmd}")
@@ -1425,7 +1704,7 @@ tools =
         except subprocess.TimeoutExpired:
             print("timeout after 30s")
         except OSError as e:
-            print(f"error: {e}")
+            _err(e)
 
     def _cmd_plan(self, user_input: str):
         parts = user_input.split(None, 2)
@@ -1439,30 +1718,42 @@ tools =
             return True
 
         if sub == "list":
-            files = _list_plan_files()
-            if not files:
-                print("[plans/ is empty — use /plan create]")
+            global_plans, local_plans = _list_plan_files()
+            if not global_plans and not local_plans:
+                print("[no plans found — use /plan create]")
             else:
-                current = os.path.relpath(self._plan_file, PLANS_DIR) if self._plan_file else None
-                for f in files:
-                    print(f"  {f}{' *' if f == current else ''}")
+                current = self._plan_file
+                if global_plans:
+                    print(f"  {_DIM}global plans:{_R}")
+                    for label, path in global_plans:
+                        marker = " *" if path == current else ""
+                        print(f"  {_DIM}g:{_R} {label}{marker}")
+                if local_plans:
+                    print(f"  {_DIM}project plans:{_R}")
+                    for label, path in local_plans:
+                        marker = " *" if path == current else ""
+                        print(f"      {label}{marker}")
 
         elif sub == "open":
-            files = _list_plan_files()
-            if not files:
-                print("[plans/ is empty — use /plan create]")
+            global_plans, local_plans = _list_plan_files()
+            all_plans = [("g", l, p) for l, p in global_plans] + [("l", l, p) for l, p in local_plans]
+            if not all_plans:
+                print("[no plans found — use /plan create]")
                 return
-            for i, f in enumerate(files, 1):
-                print(f"  {i}. {f}")
+            for i, (src, label, _) in enumerate(all_plans, 1):
+                prefix = f"{_DIM}g:{_R} " if src == "g" else "   "
+                print(f"  {i}. {prefix}{label}")
             raw = self._prompt_input("  type number (Enter to cancel):")
             if not raw:
                 print("[cancelled]")
                 return
             try:
                 idx = int(raw) - 1
-                if 0 <= idx < len(files):
-                    self._plan_file = os.path.join(PLANS_DIR, files[idx])
-                    print(f"[opened plan: {files[idx]}]")
+                if 0 <= idx < len(all_plans):
+                    src, label, path = all_plans[idx]
+                    self._plan_file = path
+                    tag = "global" if src == "g" else "project"
+                    print(f"[opened {tag} plan: {label}]")
                 else:
                     print("invalid choice")
             except ValueError:
@@ -1770,16 +2061,25 @@ tools =
         def call_one(idx, host, model, filename):
             prompt = get_prompt(idx)
             msgs = base_messages + ([{"role": "user", "content": prompt}] if prompt else [])
-            url = host if host.startswith("http") else f"http://{host}"
+            url, prov = parse_host(host)
             try:
-                resp = requests.post(
-                    f"{url}/api/chat",
-                    json={"model": model, "messages": msgs, "stream": False,
-                          "options": {"num_ctx": self.num_ctx}},
-                    timeout=300,
-                )
-                resp.raise_for_status()
-                reply = resp.json().get("message", {}).get("content", "")
+                if prov == "openai":
+                    resp = requests.post(
+                        f"{url}/v1/chat/completions",
+                        json={"model": model, "messages": msgs, "stream": False},
+                        timeout=300,
+                    )
+                    resp.raise_for_status()
+                    reply = (resp.json().get("choices") or [{}])[0].get("message", {}).get("content", "")
+                else:
+                    resp = requests.post(
+                        f"{url}/api/chat",
+                        json={"model": model, "messages": msgs, "stream": False,
+                              "options": {"num_ctx": self.num_ctx}},
+                        timeout=300,
+                    )
+                    resp.raise_for_status()
+                    reply = resp.json().get("message", {}).get("content", "")
             except Exception as e:
                 return host, model, filename, None, str(e)
             dirpart = os.path.dirname(filename)
@@ -2028,12 +2328,12 @@ tools =
             lines_out.append("\n  (no changes detected)")
 
         result = "\n".join(lines_out)
-        print(result)
+        print("\n".join(_cdiff(l) for l in lines_out))
         print()
 
         if changes > 0 and self._confirm("  add diff to context? [Y/n]:"):
             self.messages.append({"role": "user", "content": result})
-            print("[map] diff injected into context")
+            print(f"{_GREEN}[map] diff injected into context{_R}")
 
     # ── agent ───────────────────────────────────────────────────────────────────
 
@@ -2108,8 +2408,97 @@ tools =
     def _cmd_agent(self, user_input: str):
         task = user_input[6:].strip()
         if not task:
-            print("usage: /agent [-t N] <task description>")
+            print("usage: /agent [-t N] [-y] <task>  |  /agent continue [-t N] [-y] [follow-up]")
             print("  configure: .1bcoder/agent.txt  (max_turns, auto_apply, tools)")
+            return
+
+        # /agent continue — resume saved session
+        if task.startswith("continue"):
+            rest = task[8:].strip()
+            if not self._agent_state:
+                print("[agent] no saved session to continue")
+                return
+            state = self._agent_state
+            agent_msgs = state["msgs"]
+            auto_apply = state["auto_apply"]
+            auto_exec  = state["auto_exec"]
+            config    = self._load_agent_config()
+            max_turns = config["max_turns"]
+            # parse flags from rest
+            while rest:
+                m = re.match(r'^-t\s+(\d+)\s*(.*)', rest, re.DOTALL)
+                if m:
+                    max_turns = int(m.group(1)); rest = m.group(2).strip(); continue
+                if rest.startswith('-y'):
+                    auto_exec = True; rest = rest[2:].strip(); continue
+                break
+            if rest:
+                agent_msgs.append({"role": "user", "content": rest})
+            else:
+                agent_msgs.append({"role": "user", "content": "Please continue."})
+            ACTION_RE = re.compile(r'ACTION:\s*(/\S+(?:\s+.+)?)', re.MULTILINE)
+            print(f"[agent] resuming  max_turns: {max_turns}  auto_exec: {auto_exec}")
+            for turn in range(1, max_turns + 1):
+                print(f"\n{_CYAN}{_BOLD}[agent] ── turn {turn}/{max_turns}{_R}{_DIM} " + "─" * 20 + _R)
+                self._sep("AI")
+                try:
+                    reply = self._stream_chat(agent_msgs)
+                except KeyboardInterrupt:
+                    print("\n[agent] interrupted")
+                    self._agent_state = {"msgs": agent_msgs, "auto_apply": auto_apply, "auto_exec": auto_exec}
+                    break
+                print()
+                if not reply:
+                    print("[agent] empty reply, stopping")
+                    break
+                self.last_reply = reply
+                agent_msgs.append({"role": "assistant", "content": reply})
+                actions = ACTION_RE.findall(reply)
+                if not actions:
+                    print(f"\n{_GREEN}[agent] task complete{_R}{_DIM} (no more ACTIONs){_R}")
+                    self._agent_state = {"msgs": agent_msgs, "auto_apply": auto_apply, "auto_exec": auto_exec}
+                    print(f"{_DIM}  use /agent continue to give a follow-up task{_R}")
+                    if self._confirm("  add agent conversation to main context? [Y/n]:"):
+                        new_start = 1 + len(self.messages)
+                        self.messages.extend(agent_msgs[new_start:])
+                        print("[agent] conversation added to context")
+                    break
+                tool_results = []
+                stop_agent = False
+                for cmd in actions:
+                    cmd = cmd.strip()
+                    print(f"\n{_YELL}[agent] action:{_R} {cmd}")
+                    if cmd.rstrip().endswith("code") and self.last_reply:
+                        preview = _extract_code_block(self.last_reply)
+                        if preview:
+                            print(f"{_DIM}  ┌─ code to apply ──────────────────────{_R}")
+                            for ln in preview.splitlines():
+                                print(f"{_DIM}  │{_R} {ln}")
+                            print(f"{_DIM}  └───────────────────────────────────────{_R}")
+                    if not auto_exec:
+                        try:
+                            answer = input("  execute? [Y/n/q]: ").strip().lower()
+                        except (EOFError, KeyboardInterrupt):
+                            print("\n[agent] interrupted")
+                            stop_agent = True; break
+                        if answer == 'q':
+                            print("[agent] stopped by user")
+                            stop_agent = True; break
+                        if answer == 'n':
+                            tool_results.append(f"[tool skipped: {cmd}]"); continue
+                    self._sep("tool")
+                    result = self._agent_exec(cmd, auto_apply)
+                    print()
+                    tool_results.append(f"[tool result: {cmd}]\n{result}")
+                if stop_agent:
+                    self._agent_state = {"msgs": agent_msgs, "auto_apply": auto_apply, "auto_exec": auto_exec}
+                    break
+                combined = "\n\n".join(tool_results) if tool_results else "[all tools skipped]"
+                agent_msgs.append({"role": "user", "content": combined})
+            else:
+                print(f"\n[agent] reached max_turns ({max_turns}), stopping")
+                self._agent_state = {"msgs": agent_msgs, "auto_apply": auto_apply, "auto_exec": auto_exec}
+                print(f"{_DIM}  use /agent continue to resume{_R}")
             return
 
         config     = self._load_agent_config()
@@ -2146,7 +2535,7 @@ tools =
         ACTION_RE = re.compile(r'ACTION:\s*(/\S+(?:\s+.+)?)', re.MULTILINE)
 
         for turn in range(1, max_turns + 1):
-            print(f"\n[agent] ── turn {turn}/{max_turns} " + "─" * 20)
+            print(f"\n{_CYAN}{_BOLD}[agent] ── turn {turn}/{max_turns}{_R}{_DIM} " + "─" * 20 + _R)
             self._sep("AI")
 
             try:
@@ -2160,39 +2549,61 @@ tools =
                 print("[agent] empty reply, stopping")
                 break
 
+            self.last_reply = reply
             agent_msgs.append({"role": "assistant", "content": reply})
 
-            match = ACTION_RE.search(reply)
-            if not match:
-                print("\n[agent] task complete (no more ACTIONs)")
+            actions = ACTION_RE.findall(reply)
+            if not actions:
+                print(f"\n{_GREEN}[agent] task complete{_R}{_DIM} (no more ACTIONs){_R}")
+                self._agent_state = {"msgs": agent_msgs, "auto_apply": auto_apply, "auto_exec": auto_exec}
+                print(f"{_DIM}  use /agent continue to give a follow-up task{_R}")
                 if self._confirm("  add agent conversation to main context? [Y/n]:"):
-                    # append only the new messages (skip system + original context)
                     new_start = 1 + len(self.messages)
                     self.messages.extend(agent_msgs[new_start:])
                     print("[agent] conversation added to context")
                 break
 
-            cmd = match.group(1).strip()
-            print(f"\n[agent] action: {cmd}")
-            if not auto_exec:
-                try:
-                    answer = input("  execute? [Y/n/q]: ").strip().lower()
-                except (EOFError, KeyboardInterrupt):
-                    print("\n[agent] interrupted")
-                    break
-                if answer == 'q':
-                    print("[agent] stopped by user")
-                    break
-                if answer == 'n':
-                    agent_msgs.append({"role": "user", "content": "[tool skipped by user]"})
-                    continue
-            self._sep("tool")
-            result = self._agent_exec(cmd, auto_apply)
-            print()
-            agent_msgs.append({"role": "user", "content": f"[tool result]\n{result}"})
+            tool_results = []
+            stop_agent = False
+            for cmd in actions:
+                cmd = cmd.strip()
+                print(f"\n{_YELL}[agent] action:{_R} {cmd}")
+                if cmd.rstrip().endswith("code") and self.last_reply:
+                    preview = _extract_code_block(self.last_reply)
+                    if preview:
+                        print(f"{_DIM}  ┌─ code to apply ──────────────────────{_R}")
+                        for ln in preview.splitlines():
+                            print(f"{_DIM}  │{_R} {ln}")
+                        print(f"{_DIM}  └───────────────────────────────────────{_R}")
+                if not auto_exec:
+                    try:
+                        answer = input("  execute? [Y/n/q]: ").strip().lower()
+                    except (EOFError, KeyboardInterrupt):
+                        print("\n[agent] interrupted")
+                        stop_agent = True
+                        break
+                    if answer == 'q':
+                        print("[agent] stopped by user")
+                        stop_agent = True
+                        break
+                    if answer == 'n':
+                        tool_results.append(f"[tool skipped: {cmd}]")
+                        continue
+                self._sep("tool")
+                result = self._agent_exec(cmd, auto_apply)
+                print()
+                tool_results.append(f"[tool result: {cmd}]\n{result}")
+
+            if stop_agent:
+                self._agent_state = {"msgs": agent_msgs, "auto_apply": auto_apply, "auto_exec": auto_exec}
+                break
+            combined = "\n\n".join(tool_results) if tool_results else "[all tools skipped]"
+            agent_msgs.append({"role": "user", "content": combined})
 
         else:
             print(f"\n[agent] reached max_turns ({max_turns}), stopping")
+            self._agent_state = {"msgs": agent_msgs, "auto_apply": auto_apply, "auto_exec": auto_exec}
+            print(f"{_DIM}  use /agent continue to resume{_R}")
 
 
 # ── entry point ────────────────────────────────────────────────────────────────
@@ -2228,38 +2639,34 @@ def main():
         if not os.path.exists(plan):
             print(f"Plan not found: {plan}")
             sys.exit(1)
-        base_url = args.host.rstrip("/")
-        if not base_url.startswith(("http://", "https://")):
-            base_url = "http://" + base_url
+        base_url, provider = parse_host(args.host)
         model = args.model or ""
         if not model:
             try:
-                models = list_models(base_url)
+                models = list_models(base_url, provider)
                 model = models[0]
                 print(f"[model: {model}]")
             except Exception as e:
-                print(f"Cannot connect to Ollama at {base_url}: {e}")
+                print(f"Cannot connect to {base_url}: {e}")
                 sys.exit(1)
         params = {}
         for p in args.param:
             key, _, value = p.partition("=")
             if key:
                 params[key.strip()] = value.strip()
-        cli = CoderCLI(base_url, model, models)
+        cli = CoderCLI(base_url, model, models, provider)
         param_tokens = " ".join(f"{k}={v}" for k, v in params.items())
         cli._cmd_plan(f"/plan apply -y {plan} {param_tokens}".strip())
         sys.exit(0)
 
-    base_url = args.host.rstrip("/")
-    if not base_url.startswith(("http://", "https://")):
-        base_url = "http://" + base_url
+    base_url, provider = parse_host(args.host)
     try:
-        models = list_models(base_url)
+        models = list_models(base_url, provider)
     except requests.exceptions.ConnectionError:
-        print(f"Cannot connect to Ollama at {base_url}")
+        print(f"Cannot connect to {base_url}")
         sys.exit(1)
     except requests.exceptions.HTTPError as e:
-        print(f"Ollama error: {e}")
+        _err(e)
         sys.exit(1)
 
     if not models:
@@ -2286,7 +2693,7 @@ def main():
                 print()
                 sys.exit(0)
 
-    CoderCLI(base_url, model, models).run()
+    CoderCLI(base_url, model, models, provider).run()
 
 
 if __name__ == "__main__":

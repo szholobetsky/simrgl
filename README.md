@@ -17,6 +17,8 @@ This research explores different approaches to linking natural language task des
 | **exp0** | TF-IDF | 0.5-1.5% | 4-48 hours | ❌ Failed | Historical only |
 | **exp1** | Statistical Analysis | N/A (exploratory) | Fast | ✅ Complete | For insights |
 | **exp3** | Dense Embeddings (BERT) | 2.3-3.5% | 20-40 min | ✅ Best | **Use this** |
+| **exp4** | LLM-scale Embeddings (Qwen3, ModernBERT, ColBERT) | TBD | TBD | 🔬 Planned | Research |
+| **exp5** | Cross-Vocabulary Symbol Grounding (TF-IDF on identifiers + co-occurrence bridge) | N/A (file+line coords) | TBD | 🔬 Planned | **Next step** |
 | **ragmcp** | MCP Server + Local AI Agent | N/A (production tool) | Real-time | ✅ Production | **Deployable** |
 
 ### Evolution Timeline
