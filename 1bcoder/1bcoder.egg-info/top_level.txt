@@ -1,0 +1,3 @@
+chat
+map_index
+map_query

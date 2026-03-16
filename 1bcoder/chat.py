@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""1bcoder — AI coder for 1B models"""
+"""1bcoder — AI coder for 1B models
+
+(c) 2026 Stanislav Zholobetskyi
+Institute for Information Recording, National Academy of Sciences of Ukraine, Kyiv
+Створено в рамках аспірантського дослідження на тему:
+"Інтелектуальна технологія підтримки розробки та супроводу програмних продуктів"
+"""
 
 import re
 import os
@@ -64,35 +70,82 @@ WORKDIR   = os.getcwd()
 BCODER_DIR = os.path.join(WORKDIR, ".1bcoder")
 PLANS_DIR  = os.path.join(BCODER_DIR, "plans")
 GLOBAL_PLANS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".1bcoder", "plans")
+PROMPTS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".1bcoder", "prompts.txt")
+PROC_DIR    = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".1bcoder", "proc")
+TEAMS_DIR        = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".1bcoder", "teams")
+LOCAL_TEAMS_DIR  = os.path.join(BCODER_DIR, "teams")
 NUM_CTX    = 8192        # default Ollama context window (tokens)
+TIMEOUT    = 120         # default HTTP read timeout in seconds
 
 # ── /agent settings ─────────────────────────────────────────────────────────────
 
 AGENT_CONFIG_FILE = os.path.join(BCODER_DIR, "agent.txt")
 
 DEFAULT_AGENT_TOOLS = [
-    "read", "run", "edit", "save", "bkup", "diff",
-    "map index", "map find", "map idiff", "map diff", "map trace",
+    "read", "insert", "save", "patch",
+]
+
+DEFAULT_AGENT_TOOLS_ADVANCED = [
+    "read", "run", "insert", "save", "bkup", "diff", "patch",
+    "tree", "find",
+    "map index", "map find", "map idiff", "map diff", "map trace", "map keyword",
     "help",
 ]
 
-AGENT_SYSTEM = """\
-You are an autonomous coding assistant. Complete the task using the available tools.
+AGENT_SYSTEM_BASIC = """\
+You are a coding assistant. Complete the task using the available tools.
 
-To call a tool, output ACTION: lines followed by the exact command.
-For /edit <file> [line] code — write the code block in the reply body (any position), then the ACTION line using the `code` keyword. The tool reads the code block from this reply automatically.
-No explanation outside of code blocks. No confirmation text.
-Stop after your ACTION lines and wait for [tool result].
-When the task is complete, write a plain text summary — no ACTION.
+To call a tool, write ACTION: on its own line. Wait for [tool result].
+Run actions in a loop until the task is complete.
+When all actions are done, write a plain text summary with no ACTION.
+
+Available actions:
+  ACTION: /read <file>            ← read whole file
+  ACTION: /read <file> 35-55     ← read lines 35–55
+
+To modify a file:
+1. Write the code block (```...```)
+2. Then call:
+   ACTION: /insert <file> <line> code        ← insert code block before line N
+  ACTION: /insert <file> <line> <text>     ← insert literal text before line N
+   ACTION: /patch <file> code          ← apply SEARCH/REPLACE block
+   ACTION: /save <file> code           ← save or overwrite whole file
+
+SEARCH/REPLACE format for /patch:
+<<<<<<< SEARCH
+exact lines to replace
+=======
+new lines
+>>>>>>> REPLACE
 
 Rules:
-- Before using any command, run ACTION: /help <cmd> alone first to confirm the exact syntax, then use it correctly in the next turn.
+- Always /read a file before inserting or patching it.
+
+Available tools:
+{tool_list}
+"""
+
+AGENT_SYSTEM_ADVANCED = """\
+You are an autonomous coding assistant. Complete the task using the available tools.
+
+To call a tool, write ACTION: followed by the command. Stop and wait for [tool result].
+When the task is complete, write a plain text summary with no ACTION.
+
+How to write files:
+- To MODIFY an existing file: write a SEARCH/REPLACE block, then ACTION: /patch <file> code
+- To INSERT new code at a line: write the code block, then ACTION: /insert <file> <line> code
+- To CREATE or fully REPLACE a file: write the full code block, then ACTION: /save <file> code
+
+SEARCH/REPLACE format:
+<<<<<<< SEARCH
+exact lines to replace
+=======
+new lines
+>>>>>>> REPLACE
+
+Rules:
 - /read a file before editing it
 - /bkup save <file> before modifying important files
-- To modify an existing file: write a SEARCH/REPLACE block in the reply, then ACTION: /patch <file> code
-- To create a new file or replace it entirely: write the code block in the reply, then ACTION: /edit <file> code
-- /map idiff after making changes to verify what changed (re-indexes then diffs)
-- /map diff to view the diff again without re-indexing
 - /run to test after applying a fix
 
 Available tools:
@@ -122,18 +175,45 @@ PATCH_SYSTEM = (
     "=======\n"
     "replacement lines\n"
     ">>>>>>> REPLACE\n"
+    "Follow the SEARCH/REPLACE format. Do not forget the SEARCH and REPLACE keywords. "
+    "Place the word SEARCH after <<<<<<< and ======= separates the two blocks. "
+    "Place REPLACE after >>>>>>>.\n"
     "No explanation. No other text. One block only."
 )
 
 HELP_TEXT = """\
 Commands
 
+/tree [path] [-d <depth>] [ctx]
+    Show directory tree rooted at path (default: current directory).
+    Depth defaults to 4. Pass ctx to inject into AI context (or answer Y/n prompt).
+    e.g.  /tree
+          /tree src
+          /tree src/java/com -d 6
+          /tree static ctx
+
+/find <pattern> [-f] [-c] [-i] [--ext <ext>] [ctx]
+    Search filenames and file content for <pattern> (regex supported).
+    After showing results, asks "Add results to context?" (Y/n).
+    Pass ctx to skip the prompt and inject automatically.
+    Flags: -f filenames only · -c content only · -i case-insensitive
+           --ext py  filter by file extension (no dot needed)
+    e.g.  /find MyClass
+          /find user_id -c -i
+          /find config --ext py ctx
+          /find \.connect\( -c
+
 /read <file> [file2 ...] [start-end]
-    Inject one or more files into AI context. Each file is appended separately.
+    Inject file(s) into AI context without line numbers (clean text).
     Range (start-end) only applies when reading a single file.
     e.g.  /read main.py
           /read main.py 10-30
           /read instruction.txt README.md main.py
+
+/readln <file> [file2 ...] [start-end]
+    Same as /read but includes line numbers (useful for /patch and /fix).
+    e.g.  /readln main.py
+          /readln models.py 40-60
 
 /edit <file> <line>
     Manually replace a line. Type new content when prompted.
@@ -153,6 +233,19 @@ Commands
     Apply last AI reply code block replacing exactly lines start–end.
     Most precise form — use when you know the exact line range.
     e.g.  /edit main.py 1-4 code
+
+/insert <file> <line>
+    Insert last AI reply before line N (full text, no code extraction).
+    e.g.  /insert notes.txt 5
+
+/insert <file> <line> code
+    Insert extracted code block from last AI reply before line N.
+    e.g.  /insert main.py 14 code
+
+/insert <file> <line> <inline text>
+    Insert literal text directly (anything that is not the keyword "code").
+    e.g.  /insert main.py 14 SET_SLEEP_DELAY = 10
+          /insert config.py 1 import os
 
 /fix <file> [start-end] [hint]
     AI proposes one-line fix. Shows diff before applying.
@@ -191,6 +284,8 @@ Commands
 
 /plan list              List all plans (* = current). Shows global plans (g:) and project plans.
 /plan open              Select and load a plan (type number). Includes global and project plans.
+    Plan format: one command per line. Lines starting with [v] are done (skipped).
+                 Lines starting with # are comments (skipped).
 /plan create [path]          Create a new empty plan.
 /plan create ctx [path]      Create plan from this session's command history.
     Records all /read /edit /fix /patch /run /save /bkup /map /model /host commands typed so far.
@@ -204,6 +299,7 @@ Commands
     e.g.  /plan add /fix main.py 2-2 fix indentation
 /plan clear             Wipe current plan completely.
 /plan reset             Unmark all done steps.
+/plan reapply [key=value ...]   Reset all done steps then apply the plan automatically.
 /plan refresh           Reload plan from disk and show contents.
 /plan apply [file] [key=value ...]   Run steps one by one (Y/n/q per step).
 /plan apply -y [file] [key=value ...]   Run all pending steps automatically.
@@ -212,6 +308,44 @@ Commands
     e.g.  /plan apply -y collect.txt
           /plan apply fix-fn.txt file=calc.py range=1-4
           /plan apply fix-fn.txt file=calc.py range=1-4 hint="wrong operator"
+
+/prompt save <name>   Save the last user message as a reusable prompt template.
+                      Name becomes the filename (no spaces, .txt added automatically).
+/prompt load          Show numbered list of saved prompts, select by number.
+                      {{param}} placeholders are prompted interactively before injecting.
+    e.g.  /prompt save ConvertJavaToPy
+          /prompt load
+
+/proc list              List available post-processors (.py files in proc dir).
+/proc run <name>        Run processor against last LLM reply (stdin=reply, stdout=result).
+/proc on <name>         Persistent mode: run processor after every LLM reply automatically.
+/proc off               Stop persistent processor.
+/proc new <name>        Create a new processor from template.
+    Processor protocol: stdin = last LLM reply. stdout = result (injected to context).
+    Output lines "key=value" are extracted as params.
+    Output line "ACTION: /command" is confirmed with user then executed (run mode only).
+    Exit code non-zero = show stderr as warning, skip ACTION.
+    e.g.  /proc run extract-files
+          /proc on grounding-check
+          /proc off
+
+/team list                        List all team definitions (.yaml files in teams dir).
+/team show <name>                 Show workers defined in a team.
+/team run <name> [--param k=v]    Spawn one 1bcoder process per worker, each runs its plan.
+                                  Waits until all finish, then notifies.
+/team new <name>                  Create a new team yaml from template.
+    Team yaml format (.1bcoder/teams/<name>.yaml):
+      workers:
+        - host: localhost:11434
+          model: qwen2.5-coder:1.5b
+          plan: my-plan.txt
+        - host: openai://localhost:1234
+          model: qwen2.5-coder:1.5b
+          plan: other-plan.txt
+    Parameters passed via --param are forwarded to every worker plan.
+    e.g.  /team run auth-analysis --param task="fix login" --param filename=auth.py
+          /team show auth-analysis
+          /team new my-team
 
 /ctx <n>            Set context window size in tokens (default 8192).
 /ctx cut            Remove oldest messages until context fits within the limit.
@@ -227,17 +361,32 @@ Commands
 /think exclude      Strip <think> from context — blocks shown in terminal only (default).
 
 /param <key> <value>    Set a model parameter sent with every request. Overwrites if already set.
-/param                  Show current params.
-/param clear            Remove all params.
-    Common params: temperature (0.0–2.0), top_p (0.0–1.0), top_k, num_predict, seed, stop, enable_thinking
+/param                  Show current params (includes timeout).
+/param clear            Remove all params and reset timeout to default (120s).
+    Model params: temperature (0.0–2.0), top_p (0.0–1.0), top_k, num_predict, seed, stop, enable_thinking
+    Connection:   timeout <seconds>  — HTTP read timeout (increase for slow/large-context models)
     e.g.  /param temperature 0.2
           /param enable_thinking false
           /param seed 42
+          /param timeout 300
           /param clear
-/clear          Clear conversation context and screen.
+
+/format <description>
+    Inject a strict output format constraint into context.
+    Affects all following replies until /format clear.
+    e.g.  /format JSON array of strings
+          /format one word answer
+          /format comma separated list
+/format clear
+    Remove the format constraint from context.
+
+/clear          Clear conversation context, reset params, and reload model metadata.
+                Use this to fully reset session state when the model starts behaving oddly.
+
 /model [-sc]            Switch AI model interactively (type number from list).
 /model <name> [-sc]     Switch directly by model name (e.g. /model gemma3:1b).
                         -sc / save-context: keep context when switching.
+
 /host <url> [-sc]   Switch host and provider on the fly.
                     -sc / save-context: keep context when switching.
                     Provider is set by URL scheme: ollama:// (default) or openai://.
@@ -250,15 +399,12 @@ Commands
 /mcp connect <name> <command>
     Start an MCP server and connect to it.
     e.g.  /mcp connect fs npx -y @modelcontextprotocol/server-filesystem .
-
 /mcp tools [name]
     List tools from all connected servers (or one named server).
-
 /mcp call <server/tool> [json_args]
     Call a tool and inject the result into context.
     e.g.  /mcp call fs/read_file {"path": "main.py"}
           /mcp call read_file        (if only one server connected)
-
 /mcp disconnect <name>
     Shut down a connected MCP server.
     See MCP.md for ready-to-use servers (filesystem, web, git, db, browser...).
@@ -280,7 +426,6 @@ Commands
 /parallel profile create ["name"]
     Interactive wizard: add workers (host → model → output file) one by one.
     Creates/updates entry in .1bcoder/profiles.txt.
-
 /parallel profile list
     Show all saved profiles and their workers.
 
@@ -289,46 +434,91 @@ Commands
     Does NOT inject into context. Run once per session (or after big changes).
     depth 2 (default) — classes, functions, endpoints, tables
     depth 3           — also variables, function parameters, module assignments
+    Partial indexing: if path is a subfolder, saves a segment file
+    (.1bcoder/map_<slug>.txt) and patches map.txt in-place — only that
+    subtree is replaced. Use for large codebases where full scan is slow.
     e.g.  /map index .
           /map index src/ 3
-
+          /map index sonar_core/src/main/java/org/sonar/core/util
 /map find [query] [-d N] [-y]
     Search map.txt and inject matching file blocks into context.
     No query → inject full map (asks confirmation).
     -d 1  filenames only   -d 2  filenames + defines/vars   -d 3  full (default)
     -y skips the "add to context?" prompt (useful in plans).
     Token syntax:
-      term       filename contains term
-      !term      exclude if filename contains term
-      \\term     include if any child line contains term
-      \\!term    include but hide child lines containing term
-      \\\\!term  exclude entire block if any child line contains term
+      term    filename contains term
+      !term   exclude if filename contains term
+      \\term  include block if any child line contains term
+      \\!term exclude entire block if any child contains term
+      -term   show ONLY child lines containing term
+      -!term  hide child lines containing term
     e.g.  /map find register
           /map find \\register !mock
-          /map find auth \\UserService \\!deprecated -y
+          /map find auth \\UserService -!deprecated -y
           /map find register|email     (OR: either term)
-
-/map trace <identifier> [-y]
+/map trace <identifier> [-d N] [-y]
     Follow the call chain backwards from a defined identifier.
-    Shows which files reference it, then which files reference those, etc. (BFS, max 8 levels).
-    -y skips the "add to context?" prompt.
+    Shows which files reference it, then which files reference those, etc. (BFS).
+    -d N  max depth (default 8)
+    -y    skips the "add to context?" prompt.
     e.g.  /map trace insertEmail
-          /map trace register -y
-
+          /map trace register -d 2
+          /map trace UserService -d 3 -y
+/map trace deps <identifier> [-d N] [-leaf] [-y]
+    Forward dependency tree: what does this identifier's file depend on?
+    -d N    max depth (default 8)
+    -leaf   show only leaf files (deepest dependencies, no further outgoing links)
+    e.g.  /map trace deps UserService
+          /map trace deps UserService -d 3
+          /map trace deps UserService -leaf
+/map trace <start> <end> [-y]
+    Find the shortest dependency path between two identifiers or file substrings.
+    Each argument can be an identifier name (resolved to its defining file) or
+    a substring of a file path.  Tries both directions (forward and reverse graph).
+    After each path: [Y] add + next  [s] skip + next  [l] loop N (auto-collect N paths)  [n] stop.
+    -y adds the first path and stops (non-interactive).
+    e.g.  /map trace AccountNumber UserController
+          /map trace firstName /users
+          /map trace UserEntity.java UserController.java
 /map diff
     Compare map.txt vs map.prev.txt without re-indexing.
     Safe to run multiple times — does not overwrite the snapshot.
-
 /map idiff [path] [depth]
     Re-index the project, then diff vs the previous snapshot. One step.
     Use this after making code changes. Tell the agent to use idiff.
     e.g.  /map idiff
           /map idiff src/ 3
+/map keyword index
+    Scan .1bcoder/map.txt and build a keyword vocabulary → .1bcoder/keyword.txt
+    CSV format: word, count, semicolon-separated list of line numbers in map.txt.
+    Sorted alphabetically. Run once after /map index (or whenever map changes).
+    e.g.  /map keyword index
+/map keyword extract <text or file> [-a] [-f] [-n] [-c]
+    Extract real identifiers from keyword.txt matching words in the given text or file.
+    Output is always real identifiers from keyword.txt — never synthetic splits.
+    Default (exact): query word must exactly match a keyword.txt entry.
+        "rule" matches "rule" only — does NOT match "RuleIndex".
+    -f  fuzzy subword match: splits both query and keyword into subwords,
+        matches if ALL query subwords (≥5 chars) are present in the keyword's subwords.
+        Short words (<5 chars: is, in, for, main, pull...) are skipped as stopwords.
+        "rule"      → skipped (4 chars) — use exact match instead
+        "RuleIndex" → matches RuleIndex only (needs both 'rule' AND 'index')
+        "coverage"  → matches CoverageMetric, LineCoverage, BranchCoverage
+        "RuleIndex" → does NOT match Rule (missing 'index') or Index (missing 'rule')
+    -a  alphabetical order
+    -s  sort by codebase count descending (most frequent first)
+    -n  show codebase count next to each word: RuleIndex(25) RuleName(12)
+        (-n implies -s)
+    -c  comma-separated output instead of one per line
+    e.g.  /map keyword extract notes.txt
+          /map keyword extract notes.txt -f
+          /map keyword extract notes.txt -f -n -c
+          /map keyword extract "add isbn field to the Book class" -f -a
+          /map keyword extract "fix rule search" -f -c
 
 /bkup save <file>
     Save a backup copy as <file>.bkup (overwrites existing).
     e.g.  /bkup save calc.py
-
 /bkup restore <file>
     Delete <file> and replace it with <file>.bkup.
     e.g.  /bkup restore calc.py
@@ -339,17 +529,32 @@ Commands
     e.g.  /diff main.py main.py.bkup
           /diff v1/calc.py v2/calc.py -y
 
-/agent [-t N] [-y] <task>
-    Run an autonomous agentic loop. The model uses tools to complete the task,
-    one ACTION per turn, until it outputs plain text with no ACTION.
-    Configure via .1bcoder/agent.txt (max_turns, auto_apply, tools list).
+/agent [-t N] [-y] <task> [plan step1, step2, ...]
+    Run an autonomous agentic loop. The model uses tools to complete the task.
+    The agent prompt instructs the model to emit one ACTION per turn.
+    If the model emits multiple ACTION lines, all are executed in order.
+    Stops when the model outputs plain text with no ACTION.
+    Configure via .1bcoder/agent.txt (max_turns, auto_apply, tools, advanced_tools).
     -t N  override max_turns for this run only.
     -y    skip per-action confirmation (execute all actions automatically).
-    Without -y: each action shows [Y/n/q] — n skips it, q stops the agent.
+    Without -y: each action shows [Y/n/e/f/q]:
+      Y / Enter  execute the action
+      n          skip this action
+      e          edit the command before executing (copies to clipboard on Windows)
+      f          send feedback to the AI and skip the action (redirect the model)
+      q          stop the agent
     Ctrl+C interrupts at any turn. Session is saved for /agent continue.
+    plan  optional comma-separated list of items injected one per turn as hints.
+          If a turn returns empty or no ACTION, the agent continues to the next step.
     e.g.  /agent find and fix the divide by zero bug in calc.py
           /agent -t 1 read models.py and explain the User class
           /agent -y -t 5 refactor utils.py
+          /agent read file plan models.py, views.py, urls.py
+/agent advance [-t N] [-y] <task> [plan ...]
+    Same as /agent but uses the full advanced toolset and system prompt.
+    Better for larger models — includes run, diff, map, bkup, and all edit tools.
+    e.g.  /agent advance refactor the auth module
+          /agent advance read and summarise plan models.py, views.py
 /agent continue [-t N] [-y] [follow-up instruction]
     Resume the last agent session (saved automatically on stop/complete/max_turns).
     Optionally pass a follow-up message to guide the next steps.
@@ -357,7 +562,8 @@ Commands
           /agent continue now also add error handling
           /agent continue -t 5 -y
 
-/init           Create .1bcoder/plans/ in current directory (safe to re-run).
+/init           Create .1bcoder/ scaffold in current directory (safe to re-run).
+
 /help                   Show full help.
 /help <command>         Show help for one command (e.g. /help map, /help fix).
 /help <command> ctx     Same but also inject the text into AI context.
@@ -445,7 +651,36 @@ def list_models(base_url, provider="ollama"):
     return [m["name"] for m in resp.json().get("models", [])]
 
 
-def read_file(path, start=None, end=None):
+# ── model metadata helpers ──────────────────────────────────────────────────
+
+# Known context limits for OpenAI models (tokens).  Matched by prefix.
+_OPENAI_CTX = {
+    "gpt-4.1":       1_047_576,
+    "gpt-4o":          128_000,
+    "gpt-4-turbo":     128_000,
+    "gpt-4":             8_192,
+    "gpt-3.5-turbo":    16_385,
+    "o1":              200_000,
+    "o3":              200_000,
+    "o4-mini":         200_000,
+}
+
+
+def _fmt_size(n_bytes: int) -> str:
+    """Convert bytes → compact string: 815000000 → '815M', 3800000000 → '3.8G'."""
+    if n_bytes >= 1_000_000_000:
+        return f"{n_bytes / 1e9:.1f}G"
+    return f"{n_bytes // 1_000_000}M"
+
+
+def _fmt_ctx(n: int) -> str:
+    """Convert token count → compact string: 32768 → '32K', 512 → '512'."""
+    if n >= 1000:
+        return f"{n // 1024}K"
+    return str(n)
+
+
+def read_file(path, start=None, end=None, line_numbers=True):
     with open(path, "r", encoding="utf-8") as f:
         lines = f.readlines()
     total = len(lines)
@@ -456,7 +691,10 @@ def read_file(path, start=None, end=None):
         offset = start
     else:
         offset = 1
-    return "".join(f"{offset + i:4}: {line}" for i, line in enumerate(lines)), total
+    if line_numbers:
+        return "".join(f"{offset + i:4}: {line}" for i, line in enumerate(lines)), total
+    else:
+        return "".join(lines), total
 
 
 def edit_line(path, lineno, new_content):
@@ -849,6 +1087,271 @@ class MCPClient:
             pass
 
 
+# ── map partial-index helpers ──────────────────────────────────────────────────
+
+def _split_identifier(name: str) -> list:
+    """Split any identifier form into lowercase subwords.
+
+    Handles: camelCase, PascalCase, snake_case, UPPER_SNAKE_CASE, kebab-case,
+    and mixed forms like RuleINDEX or HTTP2Request.
+
+    Examples:
+        RuleIndex     → ['rule', 'index']
+        rule_index    → ['rule', 'index']
+        RULE_INDEX    → ['rule', 'index']
+        HTTPRequest   → ['http', 'request']
+        rule-index    → ['rule', 'index']
+    Returns deduplicated list preserving order.
+    """
+    # split on _ and -
+    parts = re.split(r'[_\-]+', name)
+    result = []
+    for part in parts:
+        if not part:
+            continue
+        # insert boundary before a run of uppercase followed by uppercase+lowercase
+        # e.g. HTTPRequest → HTTP_Request
+        s = re.sub(r'([A-Z]+)([A-Z][a-z])', r'\1_\2', part)
+        # insert boundary between lowercase/digit and uppercase
+        # e.g. ruleIndex → rule_Index
+        s = re.sub(r'([a-z\d])([A-Z])', r'\1_\2', s)
+        result.extend(w.lower() for w in s.split('_') if len(w) >= 2)
+    # deduplicate preserving order
+    seen: dict = {}
+    for w in result:
+        seen.setdefault(w, None)
+    return list(seen)
+
+
+def _path_to_seg_name(rel_path: str) -> str:
+    """Convert a relative path to a segment map filename.
+    'sonar_core/src/it/java/org/sonar/core/util' → 'map_sonar_core_src_it_java_org_sonar_core_util.txt'
+    """
+    safe = rel_path.replace("\\", "/").strip("/")
+    safe = re.sub(r"[/\\]+", "_", safe)
+    safe = re.sub(r"[^a-zA-Z0-9_]", "_", safe)
+    return f"map_{safe}.txt"
+
+
+def _adjust_map_paths(map_text: str, rel_prefix: str) -> str:
+    """Prepend rel_prefix to all file paths in a partial map.
+
+    Adjusts:
+    - non-indented block header lines (the file paths)
+    - 'links  → target' paths inside indented lines
+    Leaves the comment header line unchanged.
+    """
+    prefix = rel_prefix.replace("\\", "/").rstrip("/")
+    links_re = re.compile(r"^(  links\s+→\s+)(\S+)(.*)", re.DOTALL)
+    result = []
+    for line in map_text.splitlines(keepends=True):
+        s = line.rstrip("\r\n")
+        if not s or s.startswith("#"):
+            result.append(line)
+        elif not s[0].isspace():
+            result.append(f"{prefix}/{s}\n")
+        else:
+            m = links_re.match(s)
+            if m:
+                result.append(f"{m.group(1)}{prefix}/{m.group(2)}{m.group(3)}\n")
+            else:
+                result.append(line)
+    return "".join(result)
+
+
+def _map_patch_remove(map_path: str, rel_prefix: str) -> int:
+    """Remove all file blocks from map.txt whose path starts with rel_prefix.
+    Returns the number of file blocks removed.
+    """
+    prefix = rel_prefix.replace("\\", "/").rstrip("/")
+    with open(map_path, "r", encoding="utf-8") as f:
+        content = f.read()
+    # Split on the double-newline that separates file blocks.
+    # Format: "# header\n\nfile1.py\n  defines...\n\nfile2.py\n..."
+    sep = "\n\n"
+    first_sep = content.find(sep)
+    if first_sep == -1:
+        return 0
+    header = content[: first_sep + len(sep)]
+    body   = content[first_sep + len(sep):]
+    blocks = body.split(sep)
+    kept, removed = [], 0
+    for block in blocks:
+        if not block.strip():
+            continue
+        first_line = block.split("\n")[0].replace("\\", "/").strip()
+        if first_line == prefix or first_line.startswith(prefix + "/"):
+            removed += 1
+        else:
+            kept.append(block)
+    new_content = header + sep.join(kept)
+    if kept and not new_content.endswith("\n"):
+        new_content += "\n"
+    with open(map_path, "w", encoding="utf-8") as f:
+        f.write(new_content)
+    return removed
+
+
+# ── command fixer ──────────────────────────────────────────────────────────────
+
+_KNOWN_CMDS = [
+    "/read", "/readln", "/insert", "/edit", "/save", "/run", "/plan", "/mcp",
+    "/parallel", "/patch", "/fix", "/bkup", "/diff", "/agent", "/tree",
+    "/find", "/map", "/ctx", "/think", "/format", "/param", "/model",
+    "/host", "/help", "/init", "/clear", "/exit",
+    "/prompt", "/proc", "/team",
+]
+
+# file_idx : position of the file-path argument (None = no file arg)
+# kw_idx   : position of the subcommand / keyword token (None = no keyword check)
+# keywords : valid values for that token
+_CMD_SPEC = {
+    "/read":     dict(file_idx=1, kw_idx=None, keywords=[]),
+    "/readln":   dict(file_idx=1, kw_idx=None, keywords=[]),
+    "/insert":   dict(file_idx=1, kw_idx=3,    keywords=["code"]),
+    "/edit":     dict(file_idx=1, kw_idx=None, keywords=[]),
+    "/save":     dict(file_idx=1, kw_idx=None, keywords=["code", "overwrite",
+                      "append-above", "append-below", "add-suffix"]),
+    "/patch":    dict(file_idx=1, kw_idx=None, keywords=["code"]),
+    "/fix":      dict(file_idx=1, kw_idx=None, keywords=[]),
+    "/bkup":     dict(file_idx=2, kw_idx=1,    keywords=["save", "restore"]),
+    "/diff":     dict(file_idx=1, kw_idx=None, keywords=[]),
+    "/agent":    dict(file_idx=None, kw_idx=1, keywords=["advance", "continue"]),
+    "/ctx":      dict(file_idx=None, kw_idx=1, keywords=["cut", "compact", "save", "load"]),
+    "/think":    dict(file_idx=None, kw_idx=1, keywords=["include", "exclude"]),
+    "/plan":     dict(file_idx=None, kw_idx=1, keywords=[
+                      "list", "open", "create", "show", "add",
+                      "clear", "reset", "reapply", "refresh", "apply"]),
+    "/map":      dict(file_idx=None, kw_idx=1, keywords=["index", "find", "trace", "deps", "diff", "idiff", "keyword"]),
+    "/prompt":   dict(file_idx=None, kw_idx=1, keywords=["save", "load"]),
+    "/proc":     dict(file_idx=None, kw_idx=1, keywords=["list", "run", "on", "off", "new"]),
+    "/team":     dict(file_idx=None, kw_idx=1, keywords=["list", "show", "new", "run"]),
+}
+
+
+def _fuzzy_fix(token: str, candidates: list, cutoff: float = 0.65) -> str | None:
+    """Return best match from candidates, or None if nothing close enough."""
+    # 1. exact
+    if token in candidates:
+        return None
+    # 2. prefix (unambiguous)
+    prefix = [c for c in candidates if c.startswith(token)]
+    if len(prefix) == 1:
+        return prefix[0]
+    # 3. edit distance
+    matches = difflib.get_close_matches(token, candidates, n=1, cutoff=cutoff)
+    return matches[0] if matches else None
+
+
+def _fix_path(path: str) -> str | None:
+    """Fuzzy-match a missing file path against files in cwd (one level deep)."""
+    if os.path.exists(path):
+        return None
+    candidates = []
+    try:
+        for entry in os.scandir("."):
+            candidates.append(entry.name)
+            if entry.is_dir() and not entry.name.startswith("."):
+                try:
+                    for sub in os.scandir(entry.path):
+                        candidates.append(os.path.join(entry.name, sub.name).replace("\\", "/"))
+                except OSError:
+                    pass
+    except OSError:
+        return None
+    return _fuzzy_fix(path, candidates, cutoff=0.65)
+
+
+def fix_command(cmd: str, auto: bool = False) -> str:
+    """Check a 1bcoder command for common typos and fix them.
+
+    Checks: command name, file path, subcommand/keyword.
+    auto=True  — fix silently with a yellow warning (agent mode).
+    auto=False — show the fix and ask Y/n (human mode).
+    Returns the (possibly corrected) command string.
+    """
+    if not cmd.startswith("/"):
+        return cmd
+
+    tokens = cmd.split()
+    fixes  = {}   # token_index → (original, corrected)
+
+    # 1. command name
+    cmd_name = tokens[0]
+    fixed_name = _fuzzy_fix(cmd_name, _KNOWN_CMDS, cutoff=0.65)
+    if fixed_name:
+        fixes[0] = (tokens[0], fixed_name)
+        tokens[0] = fixed_name
+    cmd_root = tokens[0]
+
+    spec = _CMD_SPEC.get(cmd_root)
+    if spec:
+        # 2. file path
+        fi = spec["file_idx"]
+        if fi is not None and len(tokens) > fi:
+            fixed_path = _fix_path(tokens[fi])
+            if fixed_path:
+                fixes[fi] = (tokens[fi], fixed_path)
+                tokens[fi] = fixed_path
+
+        # 3. keyword / subcommand
+        ki = spec["kw_idx"]
+        kws = spec["keywords"]
+        if ki is not None and kws and len(tokens) > ki:
+            tok = tokens[ki].lower()
+            # For /insert kw_idx=3: only fix if it looks like "code" (short word),
+            # not if it's inline content like "SET_SLEEP_DELAY = 10"
+            if cmd_root == "/insert" and ki == 3 and len(tokens[ki]) > 6:
+                pass  # long token → treat as inline text, not a keyword
+            else:
+                fixed_kw = _fuzzy_fix(tok, kws, cutoff=0.6)
+                if fixed_kw and fixed_kw != tok:
+                    fixes[ki] = (tokens[ki], fixed_kw)
+                    tokens[ki] = fixed_kw
+
+        # 4. for /save and /patch: also check LAST token for "code" keyword
+        # Use prefix-only matching (no difflib) to avoid false positives on hint words
+        # e.g. "model" would fuzzy-match "code" — prefix won't trigger on it
+        if cmd_root in ("/save", "/patch") and len(tokens) > 2:
+            last_i = len(tokens) - 1
+            if last_i not in fixes and last_i != spec.get("file_idx"):
+                tok = tokens[last_i].lower()
+                prefix_matches = [k for k in kws if k.startswith(tok)]
+                if len(prefix_matches) == 1 and prefix_matches[0] != tok:
+                    fixes[last_i] = (tokens[last_i], prefix_matches[0])
+                    tokens[last_i] = prefix_matches[0]
+
+    if not fixes:
+        return cmd
+
+    # Rebuild command, preserving inline text after token[2] for /insert
+    if cmd_root == "/insert":
+        m = re.match(r"(\S+\s+\S+\s+\S+)(.*)", cmd, re.DOTALL)
+        if m:
+            prefix = " ".join(tokens[:3])
+            fixed_cmd = prefix + m.group(2)
+        else:
+            fixed_cmd = " ".join(tokens)
+    else:
+        fixed_cmd = " ".join(tokens)
+
+    # Report
+    label = "[fix]" if auto else "[fix?]"
+    summary = "  |  ".join(f"{o} → {n}" for _, (o, n) in sorted(fixes.items()))
+    _warn(f"{label} {summary}")
+    _info(f"       {fixed_cmd}")
+
+    if not auto:
+        try:
+            ans = input("  apply? [Y/n]: ").strip().lower()
+            if ans in ("n", "no"):
+                return cmd
+        except (EOFError, KeyboardInterrupt):
+            return cmd
+
+    return fixed_cmd
+
+
 # ── CLI (--cli mode) ───────────────────────────────────────────────────────────
 
 
@@ -856,6 +1359,106 @@ class CoderCLI:
     """Plain terminal REPL — no Textual, no widgets. Works in any shell or IDE terminal."""
 
     SEP = "─" * 40
+
+    def _load_model_meta(self) -> None:
+        """Fetch and cache model disk size, quantization, and native context window.
+
+        Ollama  → /api/tags (size + quant) + /api/show (native num_ctx)
+        OpenAI  → static lookup table for context; size stays None
+        """
+        self._meta_size: str | None = None
+        self._meta_quant: str | None = None
+        self._meta_ctx: int | None = None
+
+        if self.provider == "ollama":
+            try:
+                resp = requests.get(f"{self.base_url}/api/tags", timeout=5)
+                resp.raise_for_status()
+                for m in resp.json().get("models", []):
+                    if m.get("name") == self.model:
+                        if m.get("size"):
+                            self._meta_size = _fmt_size(m["size"])
+                        det = m.get("details", {})
+                        q = det.get("quantization_level", "")
+                        self._meta_quant = q[:6] or None
+                        break
+            except Exception:
+                pass
+            try:
+                resp = requests.post(
+                    f"{self.base_url}/api/show",
+                    json={"model": self.model}, timeout=5,
+                )
+                resp.raise_for_status()
+                data = resp.json()
+                # model_info key varies by architecture; find any *context_length key
+                ctx = None
+                for key, val in data.get("model_info", {}).items():
+                    if "context_length" in key:
+                        ctx = int(val)
+                        break
+                # fallback: parse modelfile for PARAMETER num_ctx
+                if ctx is None:
+                    for line in data.get("modelfile", "").splitlines():
+                        parts = line.split()
+                        if len(parts) >= 3 and parts[0] == "PARAMETER" and parts[1] == "num_ctx":
+                            ctx = int(parts[2])
+                            break
+                self._meta_ctx = ctx
+            except Exception:
+                pass
+
+        elif self.provider == "openai":
+            # static lookup for known OpenAI models (matched by prefix)
+            for prefix, ctx in _OPENAI_CTX.items():
+                if self.model.startswith(prefix):
+                    self._meta_ctx = ctx
+                    break
+            # OpenAI-compatible local servers (LMStudio etc.) may expose extra fields
+            if self._meta_ctx is None:
+                try:
+                    resp = requests.get(f"{self.base_url}/v1/models", timeout=5)
+                    resp.raise_for_status()
+                    for m in resp.json().get("data", []):
+                        if m.get("id") == self.model:
+                            ctx = m.get("context_length") or m.get("max_context_length")
+                            if ctx:
+                                self._meta_ctx = int(ctx)
+                            break
+                except Exception:
+                    pass
+
+        if self._meta_ctx:
+            self.num_ctx = self._meta_ctx
+
+    def _short_model(self) -> str:
+        """Truncate model name to fit a narrow terminal.
+
+        lucasmg/deepseek-r1-8b:latest  → deepseek-r1:lates
+        deepseek-coder:6.7b-instruct   → deepseek-c:6.7b-
+        gemma3:1b                       → gemma3:1b
+        """
+        name = self.model
+        if "/" in name:
+            name = name.rsplit("/", 1)[1]
+        if ":" in name:
+            left, right = name.split(":", 1)
+        else:
+            left, right = name, ""
+        left  = left[:10]
+        right = right[:5]
+        return f"{left}:{right}" if right else left
+
+    def _print_status(self) -> None:
+        """Print a single status line showing model, size, quant, native ctx, and usage."""
+        est_tokens = sum(len(m["content"]) for m in self.messages) // 4
+        pct = min(100, est_tokens * 100 // self.num_ctx)
+        model_str = self._short_model()
+        parts = [p for p in (self._meta_size, self._meta_quant) if p]
+        if self._meta_ctx:
+            parts.append(_fmt_ctx(self._meta_ctx))
+        meta = f" [{' '.join(parts)}]" if parts else ""
+        print(f"\033[2m {model_str}{meta}  │  ctx {est_tokens} / {self.num_ctx} ({pct}%)\033[0m")
 
     def __init__(self, base_url, model, models, provider="ollama"):
         self.base_url = base_url
@@ -866,9 +1469,16 @@ class CoderCLI:
         self.last_reply = ""
         self.think_in_ctx = False  # False = strip <think> from context (default)
         self.num_ctx = NUM_CTX
+        self.timeout = TIMEOUT     # HTTP read timeout in seconds (/param timeout N)
         self.params: dict = {}     # extra model params injected into every request
+        self._meta_size: str | None = None
+        self._meta_quant: str | None = None
+        self._meta_ctx: int | None = None
+        self._load_model_meta()
+        self._auto_apply = False   # True while agent is running with auto_apply
         self._agent_state = None   # saved agent session for /agent continue
         self._plan_file = None
+        self._proc_active: str | None = None  # persistent proc (runs after every reply)
         self._mcp: dict = {}
         self._history: list[str] = []
         self.cmd_history: list[str] = []   # all /commands typed this session
@@ -890,7 +1500,13 @@ class CoderCLI:
         else:
             print(f"{_DIM}{self.SEP}{_R}")
 
-    def _confirm(self, prompt: str) -> bool:
+    def _confirm(self, prompt: str, ctx_add: str = "") -> bool:
+        if ctx_add:
+            new_toks  = len(ctx_add) // 4
+            cur_toks  = sum(len(m["content"]) for m in self.messages) // 4
+            after_tok = cur_toks + new_toks
+            pct       = min(100, after_tok * 100 // self.num_ctx)
+            print(f"  {_DIM}+{_fmt_ctx(new_toks)} tok → {_fmt_ctx(after_tok)}/{_fmt_ctx(self.num_ctx)} ({pct}%){_R}")
         try:
             ans = input(prompt + " ").strip().lower()
             return ans in ("", "y", "yes")
@@ -916,7 +1532,7 @@ class CoderCLI:
                 body.update(self.params)
                 with requests.post(
                     f"{self.base_url}/v1/chat/completions",
-                    json=body, stream=True, timeout=120,
+                    json=body, stream=True, timeout=self.timeout,
                 ) as resp:
                     resp.raise_for_status()
                     _parse_openai_stream(resp, _print, chunks)
@@ -927,7 +1543,7 @@ class CoderCLI:
                     f"{self.base_url}/api/chat",
                     json={"model": self.model, "messages": messages, "stream": True,
                           "options": opts},
-                    stream=True, timeout=120,
+                    stream=True, timeout=self.timeout,
                 ) as resp:
                     resp.raise_for_status()
                     for line in resp.iter_lines():
@@ -968,6 +1584,7 @@ class CoderCLI:
         print()
         while True:
             try:
+                self._print_status()
                 user_input = input("> ").strip()
             except (EOFError, KeyboardInterrupt):
                 print()
@@ -986,14 +1603,17 @@ class CoderCLI:
         "/model", "/host", "/ctx", "/plan",
     })
 
-    def _route(self, user_input: str):
+    def _route(self, user_input: str, auto: bool = False):
         if user_input.startswith("/"):
+            user_input = fix_command(user_input, auto=auto)
             cmd_root = user_input.split()[0]
             if cmd_root not in self._HISTORY_SKIP:
                 self.cmd_history.append(user_input)
 
         if user_input == "/exit":
             sys.exit(0)
+        elif user_input == "/about":
+            self._cmd_about()
         elif user_input.startswith("/help"):
             self._cmd_help(user_input)
         elif user_input == "/init":
@@ -1012,11 +1632,15 @@ class CoderCLI:
             else:
                 state = "include" if self.think_in_ctx else "exclude"
                 print(f"[think mode: {state}]  usage: /think include | exclude")
+        elif user_input.startswith("/format"):
+            self._cmd_format(user_input)
         elif user_input.startswith("/param"):
             self._cmd_param(user_input)
         elif user_input == "/clear":
             self.messages.clear()
             self.last_reply = ""
+            self.params.clear()
+            self._load_model_meta()   # re-detect num_ctx, forces Ollama model reload
             print("[context cleared]")
         elif user_input.startswith("/model"):
             self._cmd_model(user_input)
@@ -1024,8 +1648,10 @@ class CoderCLI:
             self._cmd_host(user_input)
         elif user_input.startswith("/map"):
             self._cmd_map(user_input)
-        elif user_input.startswith("/read"):
+        elif user_input.startswith("/readln") or user_input.startswith("/read"):
             self._cmd_read(user_input)
+        elif user_input.startswith("/insert"):
+            self._cmd_insert(user_input)
         elif user_input.startswith("/edit"):
             self._cmd_edit(user_input)
         elif user_input.startswith("/save"):
@@ -1038,6 +1664,10 @@ class CoderCLI:
                 self._cmd_run(parts[1])
         elif user_input.startswith("/plan"):
             self._cmd_plan(user_input)
+        elif user_input.startswith("/prompt"):
+            self._cmd_prompt(user_input)
+        elif user_input.startswith("/proc"):
+            self._cmd_proc(user_input)
         elif user_input.startswith("/mcp"):
             self._cmd_mcp(user_input)
         elif user_input.startswith("/parallel"):
@@ -1052,6 +1682,12 @@ class CoderCLI:
             self._cmd_diff(user_input)
         elif user_input.startswith("/agent"):
             self._cmd_agent(user_input)
+        elif user_input.startswith("/tree"):
+            self._cmd_tree(user_input)
+        elif user_input.startswith("/find"):
+            self._cmd_find(user_input)
+        elif user_input.startswith("/team"):
+            self._cmd_team(user_input)
         else:
             self.messages.append({"role": "user", "content": user_input})
             self._sep("AI")
@@ -1059,6 +1695,8 @@ class CoderCLI:
             if reply:
                 self.last_reply = reply
                 self.messages.append({"role": "assistant", "content": reply})
+                if self._proc_active:
+                    self._run_proc(self._proc_active, auto=True)
             elif self.messages:
                 self.messages.pop()
 
@@ -1073,26 +1711,36 @@ class CoderCLI:
             with open(agent_path, "w", encoding="utf-8") as f:
                 f.write("""\
 # 1bcoder agent configuration
-# max_turns : max tool calls per /agent session
-# auto_apply: apply edits without confirmation prompts
-# tools     : tools available to the agent (one per line, indented)
-#             remove lines to restrict a weaker model
+# max_turns     : max tool calls per /agent session
+# auto_apply    : apply edits without confirmation prompts
+# tools         : tools for /agent (one per line, indented) — minimal set for small models
+# advanced_tools: tools for /agent advance — full set for larger models
 
 max_turns = 10
 auto_apply = true
 
 tools =
     read
+    insert
+    save
+    patch
+
+advanced_tools =
+    read
     run
-    edit
+    insert
     save
     bkup
     diff
+    patch
+    tree
+    find
     map index
     map find
     map idiff
     map diff
     map trace
+    map keyword
     help
 """)
             print(f"  created  agent.txt")
@@ -1115,18 +1763,44 @@ tools =
         else:
             print(f"[init] created .1bcoder/ in {WORKDIR}")
 
+    _FORMAT_MARKER = "Return ONLY text in the requested format."
+
+    def _cmd_format(self, user_input: str):
+        fmt = user_input[7:].strip()
+        if not fmt:
+            print("usage: /format <description>  |  /format clear")
+            return
+        if fmt == "clear":
+            before = len(self.messages)
+            self.messages = [m for m in self.messages
+                             if not m.get("content", "").startswith(self._FORMAT_MARKER)]
+            removed = before - len(self.messages)
+            _ok(f"[format] cleared ({removed} message(s) removed)")
+            return
+        constraint = (
+            f"{self._FORMAT_MARKER}\n"
+            f"Format: {fmt}\n"
+            f"No explanation. No preamble. No repetition of the task. "
+            f"No markdown (no headers, no bold, no bullet points, no numbered lists). "
+            f"No code fences. No emojis. No <think> blocks. Answer only."
+        )
+        self.messages.append({"role": "user", "content": constraint})
+        _ok(f"[format] applied: {fmt}")
+
     def _cmd_param(self, user_input: str):
         tokens = user_input.split(None, 2)
         if len(tokens) == 1:
+            print(f"  timeout = {self.timeout}s")
             if not self.params:
-                print("[params: none set]")
+                print("  (no model params set)")
             else:
                 for k, v in self.params.items():
                     print(f"  {k} = {v}")
             return
         if tokens[1] == "clear":
             self.params.clear()
-            _ok("[params cleared]")
+            self.timeout = TIMEOUT
+            _ok(f"[params cleared — timeout reset to {TIMEOUT}s]")
             return
         if len(tokens) < 3:
             print("usage: /param <key> <value>  |  /param  |  /param clear")
@@ -1145,6 +1819,13 @@ tools =
                     val = float(raw_val)
                 except ValueError:
                     val = raw_val
+        if key == "timeout":
+            try:
+                self.timeout = int(val)
+                _ok(f"[param] timeout = {self.timeout}s")
+            except (ValueError, TypeError):
+                _err("timeout must be an integer number of seconds")
+            return
         self.params[key] = val
         _ok(f"[param] {key} = {val}")
 
@@ -1246,6 +1927,7 @@ tools =
             if name not in self.models:
                 print(f"[model] '{name}' not in available models — connecting anyway")
             self.model = name
+            self._load_model_meta()
             if not save_ctx:
                 self.messages.clear()
                 print(f"[switched to {self.model}, context cleared]")
@@ -1266,6 +1948,7 @@ tools =
             idx = int(raw) - 1
             if 0 <= idx < len(self.models):
                 self.model = self.models[idx]
+                self._load_model_meta()
                 if not save_ctx:
                     self.messages.clear()
                     print(f"[switched to {self.model}, context cleared]")
@@ -1292,6 +1975,7 @@ tools =
             self.provider = new_provider
             self.models = new_models
             self.model = new_models[0]
+            self._load_model_meta()
             if not save_ctx:
                 self.messages.clear()
                 print(f"[connected to {new_url} ({new_provider}), model: {self.model}, context cleared]")
@@ -1303,10 +1987,254 @@ tools =
         except requests.exceptions.HTTPError as e:
             _err(e)
 
+    # ── /tree ──────────────────────────────────────────────────────────────────
+
+    def _cmd_tree(self, user_input: str):
+        tokens = user_input.split()[1:]  # drop "/tree"
+
+        # parse flags
+        depth      = 4
+        inject_ctx = False
+        path_arg   = None
+
+        i = 0
+        while i < len(tokens):
+            t = tokens[i]
+            if t == "-d" and i + 1 < len(tokens):
+                try:
+                    depth = int(tokens[i + 1])
+                except ValueError:
+                    _err(f"invalid depth: {tokens[i+1]}")
+                    return
+                i += 2
+            elif t == "ctx":
+                inject_ctx = True
+                i += 1
+            elif not t.startswith("-"):
+                path_arg = t
+                i += 1
+            else:
+                i += 1
+
+        root = os.path.join(WORKDIR, path_arg) if path_arg else WORKDIR
+        root = os.path.normpath(root)
+
+        if not os.path.isdir(root):
+            _err(f"not a directory: {root}")
+            return
+
+        display_root = path_arg if path_arg else os.path.basename(root)
+
+        # ── build tree ────────────────────────────────────────────────────
+        term_lines  = [f"{_CYAN}{display_root}/{_R}"]   # colored for terminal
+        plain_lines = [f"{display_root}/"]              # plain for context
+        n_dirs = 0
+        n_files = 0
+
+        def _walk(dirpath: str, prefix: str, current_depth: int):
+            nonlocal n_dirs, n_files
+            if current_depth > depth:
+                return
+            try:
+                entries = sorted(os.listdir(dirpath))
+            except PermissionError:
+                return
+
+            # split into dirs and files, skip noisy dirs
+            dirs  = [e for e in entries
+                     if os.path.isdir(os.path.join(dirpath, e))
+                     and e not in self._FIND_SKIP_DIRS]
+            files = [e for e in entries
+                     if os.path.isfile(os.path.join(dirpath, e))]
+
+            children = [(e, True) for e in dirs] + [(e, False) for e in files]
+
+            for idx, (name, is_dir) in enumerate(children):
+                is_last    = idx == len(children) - 1
+                connector  = "└── " if is_last else "├── "
+                child_pref = prefix + ("    " if is_last else "│   ")
+
+                if is_dir:
+                    n_dirs += 1
+                    term_lines.append(f"{prefix}{_DIM}{connector}{_R}{_CYAN}{name}/{_R}")
+                    plain_lines.append(f"{prefix}{connector}{name}/")
+                    if current_depth < depth:
+                        _walk(os.path.join(dirpath, name), child_pref, current_depth + 1)
+                    else:
+                        # depth limit reached — hint there's more inside
+                        try:
+                            inner = os.listdir(os.path.join(dirpath, name))
+                            inner_count = len(inner)
+                        except PermissionError:
+                            inner_count = 0
+                        if inner_count:
+                            term_lines.append(f"{child_pref}{_DIM}… ({inner_count} entries){_R}")
+                            plain_lines.append(f"{child_pref}… ({inner_count} entries)")
+                else:
+                    n_files += 1
+                    term_lines.append(f"{prefix}{_DIM}{connector}{name}{_R}")
+                    plain_lines.append(f"{prefix}{connector}{name}")
+
+        _walk(root, "", 1)
+
+        summary_t = f"\n{_DIM}{n_dirs} director{'ies' if n_dirs != 1 else 'y'}, {n_files} file{'s' if n_files != 1 else ''}{_R}"
+        summary_p = f"\n{n_dirs} director{'ies' if n_dirs != 1 else 'y'}, {n_files} file{'s' if n_files != 1 else ''}"
+
+        for line in term_lines:
+            print(line)
+        print(summary_t)
+
+        # ── inject into context ───────────────────────────────────────────
+        if n_dirs + n_files > 0:
+            ctx_text = "\n".join(plain_lines) + summary_p
+            if not inject_ctx:
+                inject_ctx = self._confirm("Add tree to context? [Y/n]", ctx_add=ctx_text)
+            if inject_ctx:
+                self.messages.append({"role": "user", "content": ctx_text})
+                _ok(f"[tree] injected into context ({len(plain_lines)} lines)")
+
+    # ── /find ──────────────────────────────────────────────────────────────────
+
+    _FIND_SKIP_DIRS = frozenset({
+        ".git", ".hg", ".svn",
+        "node_modules", "__pycache__", ".venv", "venv", "env",
+        ".1bcoder", "dist", "build", ".mypy_cache", ".pytest_cache",
+    })
+
+    def _cmd_find(self, user_input: str):
+        tokens = user_input.split()
+        if len(tokens) < 2 or tokens[1] in ("-f", "-c", "-i", "--ext", "ctx"):
+            print("usage: /find <pattern> [-f] [-c] [-i] [--ext <ext>] [ctx]")
+            print("  -f   filenames only   -c   content only   -i  case-insensitive")
+            print("  --ext py  restrict to .py files")
+            print("  ctx  inject results into AI context")
+            return
+
+        pattern_raw = tokens[1]
+        flags_raw   = tokens[2:]
+
+        only_files   = "-f"  in flags_raw
+        only_content = "-c"  in flags_raw
+        case_insens  = "-i"  in flags_raw
+        inject_ctx   = "ctx" in flags_raw
+        ext_filter   = None
+        if "--ext" in flags_raw:
+            ei = flags_raw.index("--ext")
+            if ei + 1 < len(flags_raw):
+                ext_filter = "." + flags_raw[ei + 1].lstrip(".")
+
+        try:
+            rx_flags = re.IGNORECASE if case_insens else 0
+            rx = re.compile(pattern_raw, rx_flags)
+        except re.error as e:
+            _err(f"invalid regex: {e}")
+            return
+
+        root = WORKDIR
+        MAX_MATCHES = 60
+
+        # ── walk once, collect filename hits and content hits ──────────────
+        name_hits: list[str] = []
+        content_hits: list[tuple[str, int, str]] = []  # (rel_path, lineno, line)
+        total_content_matches = 0
+        total_content_files   = 0
+        _seen_files: set[str] = set()
+
+        for dirpath, dirnames, filenames in os.walk(root):
+            dirnames[:] = [d for d in dirnames if d not in self._FIND_SKIP_DIRS]
+            rel_dir = os.path.relpath(dirpath, root)
+            if rel_dir in (".", ""):
+                rel_dir = ""
+
+            for fname in filenames:
+                if ext_filter and not fname.endswith(ext_filter):
+                    continue
+                rel_path = (rel_dir + "/" + fname) if rel_dir else fname
+
+                if not only_content and rx.search(fname):
+                    name_hits.append(rel_path)
+
+                if not only_files:
+                    full = os.path.join(dirpath, fname)
+                    try:
+                        with open(full, "rb") as fh:
+                            if b"\x00" in fh.read(8192):
+                                continue
+                        with open(full, encoding="utf-8", errors="replace") as fh:
+                            for lineno, line in enumerate(fh, 1):
+                                if rx.search(line):
+                                    total_content_matches += 1
+                                    if rel_path not in _seen_files:
+                                        _seen_files.add(rel_path)
+                                        total_content_files += 1
+                                    if len(content_hits) < MAX_MATCHES:
+                                        content_hits.append((rel_path, lineno, line.rstrip()))
+                    except OSError:
+                        continue
+
+        # ── render (terminal + optional plain-text for ctx) ───────────────
+        mode      = "filenames only" if only_files else ("content only" if only_content else "filenames + content")
+        flag_note = " (case-insensitive)" if case_insens else ""
+        ext_note  = f" [.{ext_filter.lstrip('.')}]" if ext_filter else ""
+
+        print(f"{_DIM}[find] {_R}{_BOLD}{pattern_raw}{_R}{_DIM}  {mode}{flag_note}{ext_note}{_R}")
+        ctx_lines = [f"[find] pattern: {pattern_raw!r}  {mode}{flag_note}{ext_note}"]
+
+        if not only_content:
+            if name_hits:
+                print(f"{_DIM}─── filenames ({len(name_hits)}) {'─'*20}{_R}")
+                ctx_lines.append(f"\nfilenames ({len(name_hits)}):")
+                for p in name_hits[:MAX_MATCHES]:
+                    hi = rx.sub(lambda m: f"{_YELL}{m.group()}{_R}{_DIM}", p)
+                    print(f"  {_DIM}{hi}{_R}")
+                    ctx_lines.append(f"  {p}")
+                if len(name_hits) > MAX_MATCHES:
+                    note = f"  ... {len(name_hits) - MAX_MATCHES} more"
+                    print(f"  {_DIM}{note.strip()}{_R}")
+                    ctx_lines.append(note)
+            elif only_files:
+                print(f"  {_DIM}no filename matches{_R}")
+
+        if not only_files:
+            if content_hits:
+                trunc = total_content_matches - len(content_hits)
+                print(f"{_DIM}─── content ({total_content_matches} matches in {total_content_files} files) {'─'*10}{_R}")
+                ctx_lines.append(f"\ncontent ({total_content_matches} matches in {total_content_files} files):")
+                from itertools import groupby
+                for rel_path, file_hits in groupby(content_hits, key=lambda t: t[0]):
+                    label = rel_path if rel_path else "(project root)"
+                    sys.stdout.write(f"{_R}\n  {label}\n")
+                    sys.stdout.flush()
+                    ctx_lines.append(f"  {label}")
+                    for _, lineno, line in file_hits:
+                        hi_line = rx.sub(lambda m: f"{_YELL}{m.group()}{_R}", line)
+                        print(f"    {_DIM}{lineno:>4}:{_R}  {hi_line}")
+                        ctx_lines.append(f"    {lineno:>4}:  {line}")
+                if trunc > 0:
+                    note = f"  ... {trunc} more matches"
+                    print(f"  {_DIM}{note.strip()}{_R}")
+                    ctx_lines.append(note)
+            elif not name_hits:
+                print(f"  {_DIM}no matches{_R}")
+
+        # ── inject into context ───────────────────────────────────────────
+        has_results = bool(name_hits or content_hits)
+        if has_results:
+            ctx_text = "\n".join(ctx_lines)
+            if not inject_ctx:
+                inject_ctx = self._confirm("Add results to context? [Y/n]", ctx_add=ctx_text)
+            if inject_ctx:
+                self.messages.append({"role": "user", "content": ctx_text})
+                _ok(f"[find] injected into context ({len(ctx_lines)} lines)")
+
+    # ── /read ──────────────────────────────────────────────────────────────────
+
     def _cmd_read(self, user_input: str):
+        ln = user_input.split()[0] == "/readln"
         tokens = user_input.split()[1:]
         if not tokens:
-            print("usage: /read <file> [file2 ...] [start-end]")
+            cmd = "/readln" if ln else "/read"
+            print(f"usage: {cmd} <file> [file2 ...] [start-end]")
             return
         # detect trailing range token (digits-digits), only for single-file use
         start = end = None
@@ -1318,7 +2246,7 @@ tools =
                 tokens = tokens[:-1]
         for path in tokens:
             try:
-                content, total = read_file(path, start, end)
+                content, total = read_file(path, start, end, line_numbers=ln)
                 label = path + (f" lines {start}-{end}" if start else f" ({total} lines)")
                 self.messages.append({"role": "user", "content": f"[file: {label}]\n```\n{content}```"})
                 _ok(f"context: injected {label}")
@@ -1334,14 +2262,14 @@ tools =
             return
         path = tokens[1]
         rest = tokens[2:]
-        has_code = rest[-1].lower() == "code"
+        has_code = rest[-1].lower()[:4] == "code"
         if has_code:
             rest = rest[:-1]
         line_start = line_end = None
         if rest:
             m = re.match(r'^(\d+)(?:-(\d+))?$', rest[0])
             if not m:
-                print("usage: /edit <file> <line>  |  /edit <file> [start-end] code")
+                print("hint: to save whole file use /edit <file> code  |  to patch use /patch <file> code")
                 return
             line_start = int(m.group(1))
             line_end = int(m.group(2)) if m.group(2) else None
@@ -1410,7 +2338,7 @@ tools =
                 print("[skipped]")
         else:
             if line_start is None:
-                print("usage: /edit <file> <line>  |  /edit <file> [start-end] code")
+                print("hint: to save whole file use /edit <file> code  |  to patch use /patch <file> code")
                 return
             try:
                 content, _ = read_file(path, line_start, line_start)
@@ -1428,6 +2356,77 @@ tools =
                     _err(e)
             else:
                 print("[no change]")
+
+    def _cmd_insert(self, user_input: str):
+        """Insert last AI reply (or its code block) before line N in file."""
+        tokens = user_input.split()
+        # /insert <file> <line> [code]
+        if len(tokens) < 3:
+            print("usage: /insert <file> <line> [code]")
+            return
+        path = tokens[1]
+        try:
+            line_n = int(tokens[2])
+        except ValueError:
+            print("usage: /insert <file> <line> [code]  — line must be a number")
+            return
+        has_code   = len(tokens) > 3 and tokens[3].lower() == "code"
+        inline_text = None
+        if len(tokens) > 3 and tokens[3].lower() != "code":
+            # Preserve indentation: skip past cmd, file, line_n in original string,
+            # then take everything verbatim (including leading spaces).
+            m = re.match(r'\S+\s+\S+\s+\S+(.*)', user_input, re.DOTALL)
+            inline_text = m.group(1) if m else user_input.split(None, 3)[3]
+
+        if inline_text is not None:
+            text = inline_text
+        else:
+            if not self.last_reply:
+                print("no AI response yet")
+                return
+            if has_code:
+                raw = _extract_code_block(self.last_reply)
+                if not raw:
+                    print("[insert] no code block found in last reply")
+                    return
+                text = "\n".join(_strip_line_numbers(raw.splitlines()))
+            else:
+                text = self.last_reply.strip()
+
+        new_lines = text.splitlines(keepends=False)
+        new_lines = [ln + "\n" for ln in new_lines]
+
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                file_lines = f.readlines()
+        except FileNotFoundError:
+            file_lines = []
+        except OSError as e:
+            _err(e); return
+
+        offset = max(0, line_n - 1)
+        new_file_lines = file_lines[:offset] + new_lines + file_lines[offset:]
+
+        diff = list(difflib.unified_diff(
+            file_lines, new_file_lines,
+            fromfile=f"{path} (current)",
+            tofile=f"{path} (after insert at {line_n})",
+            lineterm="",
+        ))
+        for dline in diff:
+            print(_cdiff(dline))
+        if self._confirm("  apply? [Y/n]:"):
+            try:
+                parent = os.path.dirname(path)
+                if parent:
+                    os.makedirs(parent, exist_ok=True)
+                with open(path, "w", encoding="utf-8") as f:
+                    f.writelines(new_file_lines)
+                _ok(f"[inserted {len(new_lines)} line(s) at {line_n} in {path}]")
+            except OSError as e:
+                _err(e)
+        else:
+            print("[skipped]")
 
     def _cmd_fix(self, user_input: str):
         parts = user_input[4:].strip().split(None, 2)
@@ -1502,6 +2501,11 @@ tools =
                 _err(f"file not found: {path}")
                 return
             import shutil
+            if os.path.isfile(bkup_path):
+                n = 1
+                while os.path.isfile(f"{bkup_path}({n})"):
+                    n += 1
+                os.rename(bkup_path, f"{bkup_path}({n})")
             shutil.copy2(path, bkup_path)
             print(f"[bkup] saved {path} → {bkup_path}")
 
@@ -1544,7 +2548,7 @@ tools =
                 else:
                     hint = " ".join(parts[1:])
             try:
-                content, total = read_file(path, start, end)
+                content, total = read_file(path, start, end, line_numbers=False)
                 label = path + (f" lines {start}-{end}" if start else f" ({total} lines)")
             except (FileNotFoundError, OSError) as e:
                 _err(e)
@@ -1564,6 +2568,9 @@ tools =
         if search_text is None:
             print("could not parse SEARCH/REPLACE block — try a more capable model")
             return
+        if search_text.strip() == replace_text.strip():
+            _warn("[patch] SEARCH and REPLACE are identical — model included the new code in both blocks (no-op)")
+            return
         try:
             with open(path, "r", encoding="utf-8") as f:
                 lines = f.readlines()
@@ -1572,8 +2579,23 @@ tools =
             return
         si, ei = _find_in_lines(lines, search_text)
         if si is None:
-            print("SEARCH text not found in file — model may have hallucinated the code")
-            print(f"  searched for:\n{search_text[:200]}")
+            _err("SEARCH text not found in file — model may have hallucinated the code")
+            slines = [l.rstrip('\n') for l in search_text.splitlines() if l.strip()]
+            flines = [l.rstrip('\n') for l in lines]
+            # find best matching window in file by counting matching stripped lines
+            best_i, best_score = 0, -1
+            n = max(1, len(slines))
+            sset = {l.lstrip() for l in slines}
+            for i in range(max(1, len(flines) - n + 1)):
+                score = sum(1 for l in flines[i:i + n] if l.lstrip() in sset)
+                if score > best_score:
+                    best_score, best_i = score, i
+            print(f"\n  {_YELL}SEARCH ({len(slines)} lines):{_R}")
+            for l in slines[:8]:
+                print(f"    {_RED}-{_R} {l}")
+            print(f"\n  {_YELL}nearest match in file (lines {best_i+1}-{best_i+n}):{_R}")
+            for l in flines[best_i:best_i + n][:8]:
+                print(f"    {_GREEN}+{_R} {l}")
             return
         replace_lines = replace_text.splitlines(keepends=True)
         if replace_lines and not replace_lines[-1].endswith("\n"):
@@ -1631,6 +2653,9 @@ tools =
             contents = [self.last_reply] * len(files)
         for path, content in zip(files, contents):
             try:
+                dirpart = os.path.dirname(path)
+                if dirpart:
+                    os.makedirs(dirpart, exist_ok=True)
                 if action == "overwrite":
                     with open(path, "w", encoding="utf-8") as f:
                         f.write(content)
@@ -1683,8 +2708,8 @@ tools =
             return
         for dline in diff:
             print(_cdiff(dline))
-        if inject or self._confirm("  add diff to context? [Y/n]:"):
-            plain = "\n".join(diff)
+        plain = "\n".join(diff)
+        if inject or self._confirm("  add diff to context? [Y/n]:", ctx_add=plain):
             self.messages.append({"role": "user", "content": f"[diff: {file_a} vs {file_b}]\n{plain}"})
             _ok(f"[diff] injected into context")
 
@@ -1803,8 +2828,11 @@ tools =
                 return
             for i, line in enumerate(lines, 1):
                 line = line.rstrip("\n")
-                tick = "v " if line.startswith("[v]") else ". "
-                print(f"  {i:2}. {tick}{line.replace('[v] ', '', 1)}")
+                if line.strip().startswith("#"):
+                    print(f"       {_DIM}{line}{_R}")
+                else:
+                    tick = "v " if line.startswith("[v]") else ". "
+                    print(f"  {i:2}. {tick}{line.replace('[v] ', '', 1)}")
 
         elif sub == "add":
             if not _need_plan():
@@ -1828,17 +2856,32 @@ tools =
             lines = _load_plan(self._plan_file)
             new_lines = [l[4:] if l.startswith("[v] ") else l for l in lines]
             _save_plan(new_lines, self._plan_file)
-            print(f"plan reset — {len(new_lines)} step(s) unmarked")
+            n_steps = sum(1 for l in new_lines if not l.strip().startswith("#"))
+            print(f"plan reset — {n_steps} step(s) unmarked")
+
+        elif sub == "reapply":
+            if not _need_plan():
+                return
+            lines = _load_plan(self._plan_file)
+            new_lines = [l[4:] if l.startswith("[v] ") else l for l in lines]
+            _save_plan(new_lines, self._plan_file)
+            n_steps = sum(1 for l in new_lines if not l.strip().startswith("#"))
+            print(f"plan reset — {n_steps} step(s) unmarked, applying...")
+            self._cmd_plan(f"/plan apply -y {rest}")
 
         elif sub == "refresh":
             if not _need_plan():
                 return
             lines = _load_plan(self._plan_file)
-            print(f"plan: {len(lines)} step(s)")
+            n_steps = sum(1 for l in lines if not l.strip().startswith("#"))
+            print(f"plan: {n_steps} step(s)")
             for i, line in enumerate(lines, 1):
                 line = line.rstrip("\n")
-                tick = "v " if line.startswith("[v]") else ". "
-                print(f"  {i:2}. {tick}{line.replace('[v] ', '', 1)}")
+                if line.strip().startswith("#"):
+                    print(f"       {_DIM}{line}{_R}")
+                else:
+                    tick = "v " if line.startswith("[v]") else ". "
+                    print(f"  {i:2}. {tick}{line.replace('[v] ', '', 1)}")
 
         elif sub == "apply":
             auto_yes, filename, params = _parse_plan_apply_args(rest)
@@ -1851,7 +2894,8 @@ tools =
             elif not _need_plan():
                 return
             lines = _load_plan(self._plan_file)
-            pending = [(i, l.rstrip("\n")) for i, l in enumerate(lines) if not l.startswith("[v]")]
+            pending = [(i, l.rstrip("\n")) for i, l in enumerate(lines)
+                       if not l.startswith("[v]") and not l.strip().startswith("#")]
             if not pending:
                 print("nothing to apply")
                 return
@@ -1864,11 +2908,12 @@ tools =
             print(f"plan: {len(pending)} step(s) {suffix}")
             original_confirm = self._confirm
             if auto_yes:
-                self._confirm = lambda prompt: True
+                self._confirm = lambda prompt, **kw: True
+                self._auto_apply = True
             try:
-                for idx, cmd_str in pending:
+                for step_num, (idx, cmd_str) in enumerate(pending, 1):
                     cmd_str = _apply_params(cmd_str, params)
-                    self._sep("Step")
+                    self._sep(f"Step {step_num}/{len(pending)}")
                     print(cmd_str)
                     if not auto_yes:
                         ans = self._prompt_input("  run? [Y/n/q]:")
@@ -1882,13 +2927,497 @@ tools =
                     plan_lines = _load_plan(self._plan_file)
                     plan_lines[idx] = f"[v] {plan_lines[idx]}"
                     _save_plan(plan_lines, self._plan_file)
-                    self._route(cmd_str)
+                    self._route(cmd_str, auto=True)
             finally:
                 self._confirm = original_confirm
+                self._auto_apply = False
             print("plan complete")
 
         else:
-            print("usage: /plan list | open | create | show | add <cmd> | clear | reset | refresh | apply [-y]")
+            print("usage: /plan list | open | create | show | add <cmd> | clear | reset | reapply | refresh | apply [-y]")
+
+    def _cmd_prompt(self, user_input: str):
+        """Manage one-line prompt templates stored in prompts.txt.
+
+        Format:  name: prompt text with optional {{param}} placeholders
+        """
+        parts = user_input.split(None, 2)
+        sub   = parts[1] if len(parts) > 1 else ""
+        rest  = parts[2].strip() if len(parts) > 2 else ""
+
+        def _load_prompts() -> list:
+            """Return list of (name, text) from prompts.txt."""
+            if not os.path.isfile(PROMPTS_FILE):
+                return []
+            entries = []
+            with open(PROMPTS_FILE, encoding="utf-8") as f:
+                for line in f:
+                    line = line.rstrip("\n")
+                    if not line or line.startswith("#"):
+                        continue
+                    name, _, text = line.partition(":")
+                    if text:
+                        entries.append((name.strip(), text.strip()))
+            return entries
+
+        if sub == "save":
+            last_user = ""
+            for msg in reversed(self.messages):
+                if msg["role"] == "user":
+                    last_user = msg["content"]
+                    break
+            if not last_user:
+                print("[prompt] no user message in context yet")
+                return
+            # one-line only — take first line if multiline
+            text = last_user.splitlines()[0].strip()
+            name = rest or self._prompt_input("  prompt name:")
+            if not name:
+                print("[cancelled]")
+                return
+            name = name.strip().replace(" ", "-")
+            # check for duplicate
+            entries = _load_prompts()
+            if any(n == name for n, _ in entries):
+                ow = self._prompt_input(f"  '{name}' already exists — overwrite? [y/N]:")
+                if ow.lower() not in ("y", "yes"):
+                    print("[cancelled]")
+                    return
+                entries = [(n, t) for n, t in entries if n != name]
+            entries.append((name, text))
+            os.makedirs(os.path.dirname(PROMPTS_FILE), exist_ok=True)
+            with open(PROMPTS_FILE, "w", encoding="utf-8") as f:
+                for n, t in entries:
+                    f.write(f"{n}: {t}\n")
+            print(f"[prompt] saved → {name}: {text}")
+
+        elif sub == "load":
+            entries = _load_prompts()
+            if not entries:
+                print("[prompt] no prompts saved yet — use /prompt save <name> first")
+                return
+            for i, (name, text) in enumerate(entries, 1):
+                print(f"  {i}. {name}: {_DIM}{text[:80]}{_R}")
+            raw = self._prompt_input("  type number (Enter to cancel):")
+            if not raw:
+                print("[cancelled]")
+                return
+            try:
+                idx = int(raw) - 1
+                if not (0 <= idx < len(entries)):
+                    print("invalid choice")
+                    return
+            except ValueError:
+                print("invalid choice")
+                return
+            name, text = entries[idx]
+            # fill {{param}} placeholders
+            keys = sorted(set(re.findall(r'\{\{(\w+)\}\}', text)))
+            for key in keys:
+                value = self._prompt_input(f"  {key}:")
+                if value:
+                    text = text.replace(f"{{{{{key}}}}}", value)
+            # always show the filled prompt
+            print(f"\n{_DIM}[prompt]{_R} {text}\n")
+            self.messages.append({"role": "user", "content": text})
+            self._sep("AI")
+            reply = self._stream_chat(self.messages)
+            if reply:
+                self.last_reply = reply
+                self.messages.append({"role": "assistant", "content": reply})
+            elif self.messages:
+                self.messages.pop()
+
+        elif sub == "list":
+            entries = _load_prompts()
+            if not entries:
+                print("[prompt] no prompts saved yet")
+                return
+            for i, (name, text) in enumerate(entries, 1):
+                print(f"  {i}. {name}: {_DIM}{text[:80]}{_R}")
+
+        elif sub == "delete":
+            name = rest
+            if not name:
+                print("usage: /prompt delete <name>")
+                return
+            entries = _load_prompts()
+            new = [(n, t) for n, t in entries if n != name]
+            if len(new) == len(entries):
+                print(f"[prompt] not found: {name}")
+                return
+            with open(PROMPTS_FILE, "w", encoding="utf-8") as f:
+                for n, t in new:
+                    f.write(f"{n}: {t}\n")
+            print(f"[prompt] deleted: {name}")
+
+        else:
+            print("usage: /prompt save <name> | /prompt load | /prompt list | /prompt delete <name>")
+
+    # ── /proc helpers ──────────────────────────────────────────────────────────
+
+    def _run_proc(self, name: str, auto: bool = False) -> str:
+        """Run a proc script against self.last_reply.
+
+        auto=True  — persistent mode: suppress ACTION execution, no injection prompt.
+        auto=False — manual /proc run: confirm ACTION, ask to inject result.
+        Returns captured stdout or "" on failure.
+        """
+        if not self.last_reply:
+            print("[proc] no LLM reply yet")
+            return ""
+        parts = name.split()
+        name_only = parts[0]
+        extra_args = parts[1:]
+        path = os.path.join(PROC_DIR, name_only if name_only.endswith(".py") else name_only + ".py")
+        if not os.path.isfile(path):
+            print(f"[proc] not found: {path}")
+            return ""
+        try:
+            result = subprocess.run(
+                [sys.executable, path] + extra_args,
+                input=self.last_reply,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                timeout=30,
+            )
+        except subprocess.TimeoutExpired:
+            print(f"[proc] timeout: {name}")
+            return ""
+        except Exception as e:
+            print(f"[proc] error running {name}: {e}")
+            return ""
+
+        stdout = result.stdout.strip()
+        stderr = result.stderr.strip()
+
+        if result.returncode != 0:
+            print(f"{_YELL}[proc] {name} exited {result.returncode}{_R}")
+            if stderr:
+                print(f"  {_DIM}{stderr}{_R}")
+            return ""
+
+        if not stdout:
+            if not auto:
+                print(f"[proc] {name}: (no output)")
+            return ""
+
+        # ── display result ──────────────────────────────────────────────────────
+        print(f"\n{_DIM}[proc:{name}]{_R}")
+        for line in stdout.splitlines():
+            print(f"  {line}")
+        if stderr:
+            print(f"  {_DIM}{stderr}{_R}")
+
+        # ── parse key=value params ──────────────────────────────────────────────
+        params = {}
+        for line in stdout.splitlines():
+            if re.match(r'^\w+=\S', line) and ':' not in line.split('=')[0]:
+                k, _, v = line.partition('=')
+                params[k.strip()] = v.strip()
+        if params and not auto:
+            print(f"  {_DIM}params: {params}{_R}")
+
+        # ── ACTION line — one-shot mode only ────────────────────────────────────
+        if not auto:
+            action_line = None
+            for line in reversed(stdout.splitlines()):
+                if line.startswith("ACTION:"):
+                    action_line = line[len("ACTION:"):].strip()
+                    break
+            if action_line:
+                # substitute extracted params
+                for k, v in params.items():
+                    action_line = action_line.replace(f"{{{{{k}}}}}", v)
+                print(f"\n{_YELL}[proc] action:{_R} {action_line}")
+                if self._confirm("  execute? [Y/n]:"):
+                    self._sep("tool")
+                    self._route(action_line)
+            elif self._confirm("  inject proc result into context? [Y/n]:"):
+                self.messages.append({"role": "user", "content": f"[proc:{name}]\n{stdout}"})
+                print("[proc] injected")
+
+        return stdout
+
+    def _cmd_proc(self, user_input: str):
+        parts = user_input.split(None, 2)
+        sub   = parts[1] if len(parts) > 1 else ""
+        rest  = parts[2].strip() if len(parts) > 2 else ""
+
+        if sub == "list":
+            if not os.path.isdir(PROC_DIR):
+                print("[proc] no processors found — use /proc new <name> to create one")
+                return
+            files = sorted(f for f in os.listdir(PROC_DIR) if f.endswith(".py"))
+            if not files:
+                print("[proc] no processors found")
+                return
+            active_name = self._proc_active.split()[0] if self._proc_active else None
+            for f in files:
+                marker = " *" if f[:-3] == active_name or f == active_name else ""
+                print(f"  {f[:-3]}{marker}")
+
+        elif sub == "run":
+            if not rest:
+                print("usage: /proc run <name>")
+                return
+            self._run_proc(rest, auto=False)
+
+        elif sub == "on":
+            if not rest:
+                print("usage: /proc on <name> [args...]")
+                return
+            name_part = rest.split()[0]
+            extra_args = rest.split()[1:]
+            path = os.path.join(PROC_DIR, name_part if name_part.endswith(".py") else name_part + ".py")
+            if not os.path.isfile(path):
+                print(f"[proc] not found: {path}")
+                return
+            self._proc_active = rest   # store name + args together
+            suffix = f" {' '.join(extra_args)}" if extra_args else ""
+            print(f"[proc] persistent: {name_part}{suffix} (runs after every reply)")
+
+        elif sub == "off":
+            if self._proc_active:
+                print(f"[proc] stopped: {self._proc_active}")
+                self._proc_active = None
+            else:
+                print("[proc] no persistent processor active")
+
+        elif sub == "new":
+            name = rest or self._prompt_input("  processor name:")
+            if not name:
+                print("[cancelled]")
+                return
+            name = name.strip()
+            if not name.endswith(".py"):
+                name += ".py"
+            os.makedirs(PROC_DIR, exist_ok=True)
+            path = os.path.join(PROC_DIR, name)
+            if os.path.exists(path):
+                print(f"[proc] already exists: {path}")
+                return
+            template = (
+                "import sys, re\n\n"
+                "reply = sys.stdin.read()\n\n"
+                "# --- your logic here ---\n"
+                "# print key=value lines to expose params\n"
+                "# print ACTION: /command  to trigger a follow-up command\n"
+                "# exit with sys.exit(1) to signal failure\n\n"
+                "print(reply[:200])  # replace with real logic\n"
+            )
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(template)
+            print(f"[proc] created: {path}")
+
+        elif sub == "" or sub == "proc":
+            if self._proc_active:
+                print(f"[proc] active: {self._proc_active}")
+            else:
+                print("[proc] no persistent processor active")
+
+        else:
+            print("usage: /proc list | run <name> | on <name> | off | new <name>")
+
+    # ── /team helpers ───────────────────────────────────────────────────────────
+
+    @staticmethod
+    def _find_team_path(name: str) -> str | None:
+        """Return absolute path for team yaml, checking local then global dir."""
+        fname = name if name.endswith(".yaml") else name + ".yaml"
+        local  = os.path.join(LOCAL_TEAMS_DIR, fname)
+        global_ = os.path.join(TEAMS_DIR, fname)
+        if os.path.isfile(local):
+            return local
+        if os.path.isfile(global_):
+            return global_
+        return None
+
+    @staticmethod
+    def _parse_team_file(path: str) -> list:
+        """Parse a team yaml → list of {host, model, plan} dicts.
+        No external dependencies — handles only the fixed team yaml format.
+        """
+        workers = []
+        current = None
+        try:
+            with open(path, encoding="utf-8") as f:
+                for line in f:
+                    line = line.rstrip()
+                    if not line or line.strip().startswith('#'):
+                        continue
+                    stripped = line.strip()
+                    if stripped in ('workers:', 'workers:'):
+                        continue
+                    if stripped.startswith('- '):
+                        if current is not None:
+                            workers.append(current)
+                        current = {}
+                        rest = stripped[2:].strip()
+                        if ':' in rest:
+                            k, _, v = rest.partition(':')
+                            current[k.strip()] = v.strip()
+                    elif ':' in stripped and current is not None:
+                        k, _, v = stripped.partition(':')
+                        current[k.strip()] = v.strip()
+            if current is not None:
+                workers.append(current)
+        except OSError as e:
+            print(f"[team] cannot read {path}: {e}")
+        return workers
+
+    def _cmd_team(self, user_input: str):
+        import shlex, concurrent.futures
+
+        parts = user_input.split(None, 1)
+        rest  = parts[1].strip() if len(parts) > 1 else ""
+
+        # parse subcommand and flags from rest
+        tokens = shlex.split(rest) if rest else []
+        sub    = tokens[0] if tokens else ""
+        args   = tokens[1:] if len(tokens) > 1 else []
+
+        # ── list ────────────────────────────────────────────────────────────────
+        if sub == "list":
+            all_files = {}
+            for d, tag in [(LOCAL_TEAMS_DIR, ""), (TEAMS_DIR, "g:")]:
+                if os.path.isdir(d):
+                    for f in sorted(os.listdir(d)):
+                        if f.endswith(".yaml") and f not in all_files:
+                            all_files[f] = (os.path.join(d, f), tag)
+            if not all_files:
+                print("[team] no teams found — use /team new <name> to create one")
+                return
+            for f, (fpath, tag) in sorted(all_files.items()):
+                workers = self._parse_team_file(fpath)
+                print(f"  {tag}{f[:-5]}  ({len(workers)} worker(s))")
+
+        # ── show ────────────────────────────────────────────────────────────────
+        elif sub == "show":
+            name = args[0] if args else ""
+            if not name:
+                print("usage: /team show <name>")
+                return
+            path = self._find_team_path(name)
+            if not path:
+                print(f"[team] not found: {name}")
+                return
+            workers = self._parse_team_file(path)
+            if not workers:
+                print("[team] no workers defined")
+                return
+            for i, w in enumerate(workers, 1):
+                print(f"  {i}. host={w.get('host','')}  model={w.get('model','')}  plan={w.get('plan','')}")
+
+        # ── new ─────────────────────────────────────────────────────────────────
+        elif sub == "new":
+            name = args[0] if args else self._prompt_input("  team name:")
+            if not name:
+                print("[cancelled]")
+                return
+            if not name.endswith(".yaml"):
+                name += ".yaml"
+            os.makedirs(LOCAL_TEAMS_DIR, exist_ok=True)
+            path = os.path.join(LOCAL_TEAMS_DIR, name)
+            if os.path.exists(path):
+                print(f"[team] already exists: {path}")
+                return
+            template = (
+                "workers:\n"
+                "  - host: localhost:11434\n"
+                "    model: qwen2.5-coder:1.5b\n"
+                "    plan: worker1.txt\n"
+                "  - host: openai://localhost:1234\n"
+                "    model: qwen2.5-coder:1.5b\n"
+                "    plan: worker2.txt\n"
+            )
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(template)
+            print(f"[team] created: {path}")
+
+        # ── run ─────────────────────────────────────────────────────────────────
+        elif sub == "run":
+            name = args[0] if args else ""
+            if not name:
+                print("usage: /team run <name> [--param k=v ...]")
+                return
+            path = self._find_team_path(name)
+            if not path:
+                print(f"[team] not found: {name}")
+                return
+            workers = self._parse_team_file(path)
+            if not workers:
+                print("[team] no workers defined in team file")
+                return
+
+            # collect --param flags from remaining args
+            param_args = []
+            i = 1
+            while i < len(args):
+                if args[i] == "--param" and i + 1 < len(args):
+                    param_args += ["--param", args[i + 1]]
+                    i += 2
+                else:
+                    i += 1
+
+            chat_py = os.path.abspath(__file__)
+            missing = []
+            for w in workers:
+                for field in ("host", "model", "plan"):
+                    if not w.get(field):
+                        missing.append(f"worker missing '{field}': {w}")
+            if missing:
+                for m in missing:
+                    print(f"[team] {m}")
+                return
+
+            print(f"[team] starting {len(workers)} worker(s)...")
+            procs = []
+            for i, w in enumerate(workers, 1):
+                plan_path = w["plan"]
+                if not os.path.isabs(plan_path):
+                    local_path  = os.path.join(PLANS_DIR, plan_path)
+                    global_path = os.path.join(GLOBAL_PLANS_DIR, plan_path)
+                    if os.path.isfile(local_path):
+                        plan_path = local_path
+                    elif os.path.isfile(global_path):
+                        plan_path = global_path
+                    else:
+                        plan_path = local_path  # will fail with clear message
+                cmd = [
+                    sys.executable, chat_py,
+                    "--host",      w["host"],
+                    "--model",     w["model"],
+                    "--planapply", plan_path,
+                ] + param_args
+                log_dir = os.path.join(BCODER_DIR, "team-logs")
+                os.makedirs(log_dir, exist_ok=True)
+                log_path = os.path.join(log_dir, f"{name}-worker{i}.log")
+                log_f = open(log_path, "w", encoding="utf-8")
+                env = os.environ.copy()
+                env["PYTHONIOENCODING"] = "utf-8"
+                p = subprocess.Popen(cmd, stdout=log_f, stderr=log_f, env=env)
+                procs.append((i, w, p, log_path, log_f))
+                print(f"  [worker {i}] {w['model']}@{w['host']} → plan:{w['plan']}  log:{log_path}")
+
+            print(f"[team] waiting for all workers to finish...")
+            failed = []
+            for i, w, p, log_path, log_f in procs:
+                p.wait()
+                log_f.close()
+                status = "done" if p.returncode == 0 else f"FAILED (exit {p.returncode})"
+                print(f"  [worker {i}] {w['model']}@{w['host']} — {status}  log:{log_path}")
+                if p.returncode != 0:
+                    failed.append(i)
+
+            if failed:
+                print(f"[team] finished — {len(failed)} worker(s) failed: {failed}")
+            else:
+                print(f"[team] all {len(workers)} worker(s) finished successfully")
+
+        else:
+            print("usage: /team list | show <name> | new <name> | run <name> [--param k=v ...]")
 
     def _cmd_mcp(self, user_input: str):
         parts = user_input.split(None, 3)
@@ -2099,6 +3628,20 @@ tools =
                     print(f"[parallel] {model}@{host} → {filename} ({len(reply)} chars)")
         print("[parallel] done — use /read <file> to load answers into context")
 
+    def _cmd_about(self):
+        print(f"""
+{_BOLD}1bcoder{_R} — AI coding assistant for resource-constrained environments
+{_DIM}Offline-first tool for 1B–7B local language models{_R}
+
+{_CYAN}(c) 2026 Stanislav Zholobetskyi{_R}
+Institute for Information Recording,
+National Academy of Sciences of Ukraine, Kyiv
+
+{_DIM}Створено в рамках аспірантського дослідження на тему:{_R}
+{_DIM}«Інтелектуальна технологія підтримки розробки{_R}
+{_DIM} та супроводу програмних продуктів»{_R}
+""")
+
     def _cmd_help(self, user_input: str):
         parts = user_input.split(None, 2)
 
@@ -2153,19 +3696,37 @@ tools =
             depth = int(toks[1]) if len(toks) > 1 and toks[1].isdigit() else 2
             self._map_index(root, depth)
             self._map_diff()
+            self._map_delta_asymmetry()
+        elif sub == "keyword":
+            rest  = parts[2].strip() if len(parts) > 2 else ""
+            rtoks = rest.split()
+            sub2  = rtoks[0] if rtoks else ""
+            if sub2 == "index":
+                self._map_keyword_index()
+            elif sub2 == "extract":
+                self._map_keyword_extract(rtoks[1:])
+            else:
+                print("usage:")
+                print("  /map keyword index                  — build .1bcoder/keyword.txt from map.txt")
+                print("  /map keyword extract <text> [-a|-f] — extract known keywords from text")
+                print("  /map keyword extract <file> [-a|-f] — extract known keywords from file")
+                print("  -a  alphabetical order   -f  frequency order (most common first)")
         else:
             print("usage:")
             print("  /map index [path] [2|3]        — scan project, build .1bcoder/map.txt")
             print("  /map find                      — inject full map into context")
             print("  /map find term                 — filename contains term")
             print("  /map find !term                — exclude if filename contains term")
-            print("  /map find \\term               — include if any child line contains term")
-            print("  /map find \\!term              — include but hide child lines with term")
-            print("  /map find \\\\!term            — exclude block if any child contains term")
-            print("  combine freely: auth \\register !mock \\!deprecated -y -d 2")
-            print("  /map trace <identifier> [-y]   — follow call chain backwards from identifier")
+            print("  /map find \\term               — include block if any child line contains term")
+            print("  /map find \\!term              — exclude block if any child contains term")
+            print("  /map find -term                — show ONLY child lines containing term")
+            print("  /map find -!term               — hide child lines containing term")
+            print("  combine freely: auth \\register !mock -!deprecated -y -d 2")
+            print("  /map trace <identifier> [-d N] [-y]   — follow call chain backwards from identifier")
             print("  /map diff                      — diff map.txt vs map.prev.txt (no re-index)")
-            print("  /map idiff [path] [2|3]        — re-index then diff vs previous snapshot")
+            print("  /map idiff [path] [2|3]        — re-index then diff + ORPHAN_DRIFT + GHOST alert")
+            print("  /map keyword index             — build keyword vocabulary from map.txt")
+            print("  /map keyword extract <text>    — extract known keywords from text or file")
 
     def _map_index(self, root: str, depth: int = 2):
         if not os.path.isdir(root):
@@ -2174,18 +3735,154 @@ tools =
         depth = max(2, min(depth, 3))
         print(f"[map] scanning {root} (depth {depth}) ...")
 
-        map_text  = map_index.build_map(root, depth)
-        n_files   = map_text.count('\n  defines') + map_text.count('\n  links')
-
         os.makedirs(BCODER_DIR, exist_ok=True)
         map_path  = os.path.join(BCODER_DIR, "map.txt")
+        map_text = map_index.build_map(root, depth, map_path=map_path)
         prev_path = os.path.join(BCODER_DIR, "map.prev.txt")
-        if os.path.exists(map_path):
-            import shutil
-            shutil.copy2(map_path, prev_path)
-        with open(map_path, "w", encoding="utf-8") as f:
-            f.write(map_text)
-        print(f"[map] indexed → {map_path}")
+
+        # partial scan: root is a subfolder of WORKDIR
+        rel_root = os.path.relpath(root, WORKDIR).replace("\\", "/")
+        is_partial = rel_root != "." and not rel_root.startswith("..")
+
+        if is_partial:
+            # adjust paths so they are relative to WORKDIR, not subfolder
+            map_text = _adjust_map_paths(map_text, rel_root)
+            # save segment file in .1bcoder/
+            seg_name = _path_to_seg_name(rel_root)
+            seg_path = os.path.join(BCODER_DIR, seg_name)
+            with open(seg_path, "w", encoding="utf-8") as f:
+                f.write(map_text)
+            print(f"[map] partial index → {seg_path}")
+            # patch map.txt: remove stale blocks, append new content
+            if os.path.exists(map_path):
+                import shutil
+                shutil.copy2(map_path, prev_path)
+                removed = _map_patch_remove(map_path, rel_root)
+                # strip comment header from partial map before appending
+                sep = "\n\n"
+                first_sep = map_text.find(sep)
+                body = map_text[first_sep + len(sep):] if first_sep != -1 else map_text
+                with open(map_path, "a", encoding="utf-8") as f:
+                    f.write(sep + body)
+                print(f"[map] patched map.txt (removed {removed}, appended {body.count(chr(10)+chr(10))+1} blocks)")
+            else:
+                with open(map_path, "w", encoding="utf-8") as f:
+                    f.write(map_text)
+                print(f"[map] created map.txt from partial index")
+        else:
+            # full scan — overwrite map.txt
+            if os.path.exists(map_path):
+                import shutil
+                shutil.copy2(map_path, prev_path)
+            with open(map_path, "w", encoding="utf-8") as f:
+                f.write(map_text)
+            print(f"[map] indexed → {map_path}")
+
+    def _map_keyword_index(self):
+        """Scan map.txt, extract all identifiers/words → .1bcoder/keyword.txt (CSV)."""
+        import csv as _csv
+        from collections import defaultdict
+        map_path = os.path.join(BCODER_DIR, "map.txt")
+        kw_path  = os.path.join(BCODER_DIR, "keyword.txt")
+        if not os.path.exists(map_path):
+            _err("map.txt not found — run /map index first")
+            return
+        with open(map_path, encoding="utf-8", errors="replace") as f:
+            lines = f.readlines()
+        token_re = re.compile(r'[a-zA-Z_][a-zA-Z0-9_]{1,}')  # identifiers ≥ 2 chars
+        word_lines: dict = defaultdict(set)
+        for lineno, line in enumerate(lines, 1):
+            for m in token_re.finditer(line):
+                word_lines[m.group()].add(lineno)
+        sorted_words = sorted(word_lines, key=str.lower)
+        with open(kw_path, "w", encoding="utf-8", newline="") as f:
+            w = _csv.writer(f)
+            w.writerow(["word", "count", "lines"])
+            for word in sorted_words:
+                lns = sorted(word_lines[word])
+                w.writerow([word, len(lns), ";".join(str(l) for l in lns)])
+        _ok(f"[keyword] {len(sorted_words)} keywords → {kw_path}")
+
+    def _map_keyword_extract(self, args: list):
+        """Extract words from text/file that are present in keyword.txt."""
+        import csv as _csv
+        kw_path = os.path.join(BCODER_DIR, "keyword.txt")
+        if not os.path.exists(kw_path):
+            _err("keyword.txt not found — run /map keyword index first")
+            return
+        sort_alpha  = "-a" in args
+        sort_count  = "-s" in args
+        fuzzy       = "-f" in args
+        show_counts = "-n" in args
+        csv_out     = "-c" in args
+        src_tokens  = [a for a in args if a not in ("-a", "-s", "-f", "-n", "-c")]
+        if not src_tokens:
+            print("usage: /map keyword extract <text or file> [-a] [-s] [-f] [-n] [-c]")
+            return
+        # load keyword vocab: word → count
+        _csv.field_size_limit(10_000_000)  # lines field can be large for common words
+        kw_freq: dict = {}
+        with open(kw_path, encoding="utf-8", newline="") as f:
+            reader = _csv.reader(f)
+            next(reader, None)  # skip header
+            for row in reader:
+                if len(row) >= 2:
+                    try:
+                        kw_freq[row[0]] = int(row[1])
+                    except ValueError:
+                        pass
+        # resolve source: single existing file, or inline text
+        source = " ".join(src_tokens)
+        if len(src_tokens) == 1 and os.path.exists(src_tokens[0]):
+            try:
+                with open(src_tokens[0], encoding="utf-8", errors="replace") as f:
+                    text = f.read()
+                _info(f"[keyword extract] reading {src_tokens[0]}")
+            except OSError as e:
+                _err(e); return
+        else:
+            text = source
+        token_re = re.compile(r'[a-zA-Z_][a-zA-Z0-9_]{1,}')
+        seen: dict = {}  # real keyword → order of first query-token match
+        if fuzzy:
+            # precompute subword sets for all keywords (real identifiers only stored)
+            kw_parts = {kw: frozenset(_split_identifier(kw)) for kw in kw_freq}
+            for i, m in enumerate(token_re.finditer(text)):
+                # require subwords >= 5 chars to skip common English stopwords
+                # (is, in, as, it, of, by, we, to, for, all, and, any, the, main, pull, code ...)
+                query_parts = frozenset(
+                    w for w in _split_identifier(m.group()) if len(w) >= 5
+                )
+                if not query_parts:
+                    continue
+                for kw, kp in kw_parts.items():
+                    # keyword matches if ALL query subwords are present in keyword's subwords
+                    if query_parts <= kp and kw not in seen:
+                        seen[kw] = i
+        else:
+            # default: exact identifier match
+            kw_set = set(kw_freq)
+            for i, m in enumerate(token_re.finditer(text)):
+                w = m.group()
+                if w in kw_set and w not in seen:
+                    seen[w] = i
+        if not seen:
+            print("(no matching keywords found)")
+            return
+        if sort_alpha:
+            result = sorted(seen, key=lambda w: w.lower())
+        elif sort_count or show_counts:
+            result = sorted(seen, key=lambda w: (-kw_freq[w], w.lower()))
+        else:
+            result = sorted(seen, key=lambda w: (seen[w], w.lower()))
+        if show_counts:
+            items = [f"{w}({kw_freq[w]})" for w in result]
+        else:
+            items = list(result)
+        if csv_out:
+            print(", ".join(items))
+        else:
+            print("\n".join(items))
 
     def _map_find(self, query: str):
         map_path = os.path.join(BCODER_DIR, "map.txt")
@@ -2229,7 +3926,8 @@ tools =
 
         if not clean_q:
             # full map
-            if auto_yes or self._confirm("  add full map to context? [Y/n]:"):
+            print(result)
+            if auto_yes or self._confirm("  add full map to context? [Y/n]:", ctx_add=result):
                 self.messages.append({"role": "user", "content": f"[project map]\n{result}"})
                 print("[map] full map injected into context")
             return
@@ -2240,7 +3938,7 @@ tools =
 
         print(result)
         print(f"\n[map] {len(hits)} match(es)")
-        if auto_yes or self._confirm("  add to context? [Y/n]:"):
+        if auto_yes or self._confirm("  add to context? [Y/n]:", ctx_add=result):
             self.messages.append({"role": "user",
                                    "content": f"[map find: {clean_q}]\n{result}"})
             print("[map] injected into context")
@@ -2250,27 +3948,109 @@ tools =
         auto_yes = "-y" in tokens
         tokens   = [t for t in tokens if t != "-y"]
 
+        # extract -d N
+        max_depth = 8
+        di = next((i for i, t in enumerate(tokens) if t == "-d"), None)
+        if di is not None and di + 1 < len(tokens) and tokens[di + 1].isdigit():
+            max_depth = int(tokens[di + 1])
+            tokens = tokens[:di] + tokens[di + 2:]
+
         if not tokens:
-            print("usage: /map trace <identifier> [-y]")
+            print("usage: /map trace <identifier> [-d N] [-y]")
+            print("       /map trace <start> <end> [-y]   — find path between two points")
             return
 
-        identifier = tokens[0]
-        map_path   = os.path.join(BCODER_DIR, "map.txt")
+        map_path = os.path.join(BCODER_DIR, "map.txt")
         if not os.path.exists(map_path):
             print("[map] no map.txt found — run /map index first")
             return
 
-        result = map_query.trace_map(map_path, identifier)
-        if result is None:
-            print(f"[map] '{identifier}' not found in any defines — try /map find \\{identifier}")
-            return
+        if tokens[0] == "deps" and len(tokens) >= 2:
+            # forward dependency tree: what does this identifier depend on?
+            identifier  = tokens[1]
+            leaves_only = "-leaf" in tokens
+            result = map_query.trace_deps(map_path, identifier, max_depth, leaves_only)
+            label  = f"deps:{identifier}"
+            if result is None:
+                print(f"[map] '{identifier}' not found in any defines — try /map find \\{identifier}")
+                return
+            print(result)
+            print()
+            if auto_yes or self._confirm("  add to context? [Y/n]:", ctx_add=result):
+                self.messages.append({"role": "user",
+                                       "content": f"[map trace: {label}]\n{result}"})
+                print("[map] trace injected into context")
 
-        print(result)
-        print()
-        if auto_yes or self._confirm("  add to context? [Y/n]:"):
-            self.messages.append({"role": "user",
-                                   "content": f"[map trace: {identifier}]\n{result}"})
-            print("[map] trace injected into context")
+        elif len(tokens) >= 2:
+            # pathfinding mode with [Y/c/n] loop for alternative paths
+            start_id, end_id = tokens[0], tokens[1]
+            label    = f"{start_id} → {end_id}"
+            blocked   = set()
+            path_idx  = 1
+            collected = []   # paths added to context so far
+            auto_loop = 0    # remaining auto-Y iterations from /l
+
+            while True:
+                result, intermediates = map_query.find_path(
+                    map_path, start_id, end_id, blocked, path_idx)
+                print(result)
+                print()
+                if intermediates is None:
+                    break
+                if auto_yes or auto_loop > 0 or self._auto_apply:
+                    collected.append(result)
+                    blocked |= intermediates
+                    path_idx += 1
+                    if auto_loop > 0:
+                        auto_loop -= 1
+                    if auto_yes or self._auto_apply:
+                        break
+                    continue
+                ans = input("  [Y]es add + next / [s]kip next / [l]oop N / [n]o stop: ").strip().lower()
+                if ans in ("y", "yes", ""):
+                    collected.append(result)
+                    blocked |= intermediates
+                    path_idx += 1
+                elif ans in ("s", "skip"):
+                    blocked |= intermediates
+                    path_idx += 1
+                elif ans.startswith("l"):
+                    # "l" → ask, "l 10" or "l10" → parse inline
+                    parts = ans.split()
+                    n_str = parts[1] if len(parts) > 1 else re.sub(r'\D', '', ans)
+                    if n_str.isdigit() and int(n_str) > 0:
+                        auto_loop = int(n_str)
+                    else:
+                        n_str = input("  how many paths? ").strip()
+                        auto_loop = int(n_str) if n_str.isdigit() else 1
+                    # collect current path and start looping
+                    collected.append(result)
+                    blocked |= intermediates
+                    path_idx += 1
+                    auto_loop -= 1   # one already consumed above
+                else:
+                    break
+
+            if collected:
+                content = "\n\n".join(collected)
+                self.messages.append({"role": "user",
+                                       "content": f"[map trace: {label}]\n{content}"})
+                print(f"[map] {len(collected)} path(s) injected into context")
+
+        else:
+            # single-identifier BFS tree (existing behaviour)
+            identifier = tokens[0]
+            result = map_query.trace_map(map_path, identifier, max_depth)
+            label  = identifier
+            if result is None:
+                print(f"[map] '{identifier}' not found in any defines — try /map find \\{identifier}")
+                return
+            print(result)
+            print()
+            if auto_yes or self._confirm("  add to context? [Y/n]:", ctx_add=result):
+                self.messages.append({"role": "user",
+                                       "content": f"[map trace: {label}]\n{result}"})
+                print("[map] trace injected into context")
 
     def _map_diff(self):
         map_path  = os.path.join(BCODER_DIR, "map.txt")
@@ -2331,19 +4111,41 @@ tools =
         print("\n".join(_cdiff(l) for l in lines_out))
         print()
 
-        if changes > 0 and self._confirm("  add diff to context? [Y/n]:"):
+        if changes > 0 and self._confirm("  add diff to context? [Y/n]:", ctx_add=result):
             self.messages.append({"role": "user", "content": result})
             print(f"{_GREEN}[map] diff injected into context{_R}")
 
-    # ── agent ───────────────────────────────────────────────────────────────────
+    def _map_delta_asymmetry(self):
+        """Print ORPHAN_DRIFT + GHOST alerts after a re-index. Called automatically by /map idiff."""
+        map_path  = os.path.join(BCODER_DIR, "map.txt")
+        prev_path = os.path.join(BCODER_DIR, "map.prev.txt")
+        if not os.path.exists(prev_path):
+            return  # first run, no baseline
+        result = map_query.idiff_report(prev_path, map_path)
+        for line in result.splitlines():
+            if 'DEGRADATION' in line or 'GHOST ALERT' in line or line.startswith('  !'):
+                print(f"{_RED}{line}{_R}")
+            elif 'HEALING' in line:
+                print(f"{_GREEN}{line}{_R}")
+            elif line.startswith('new orphans') or line.startswith('  +') or line.startswith('    called'):
+                print(line)
+
+# ── agent ───────────────────────────────────────────────────────────────────
 
     def _load_agent_config(self) -> dict:
-        """Read .1bcoder/agent.txt → dict with keys: max_turns, auto_apply, tools."""
-        config = {"max_turns": 10, "auto_apply": True, "tools": list(DEFAULT_AGENT_TOOLS)}
+        """Read .1bcoder/agent.txt → dict with keys: max_turns, auto_apply, tools, advanced_tools."""
+        config = {
+            "max_turns": 10,
+            "auto_apply": True,
+            "tools": list(DEFAULT_AGENT_TOOLS),
+            "advanced_tools": list(DEFAULT_AGENT_TOOLS_ADVANCED),
+        }
         if not os.path.exists(AGENT_CONFIG_FILE):
             return config
         tools = []
+        advanced_tools = []
         in_tools = False
+        in_advanced = False
         with open(AGENT_CONFIG_FILE, encoding="utf-8") as f:
             for line in f:
                 line = line.rstrip()
@@ -2355,18 +4157,83 @@ tools =
                         config["max_turns"] = int(stripped.split("=", 1)[1].strip())
                     except (ValueError, IndexError):
                         pass
-                    in_tools = False
+                    in_tools = in_advanced = False
                 elif stripped.startswith("auto_apply"):
                     val = stripped.split("=", 1)[1].strip().lower()
                     config["auto_apply"] = val in ("true", "1", "yes")
+                    in_tools = in_advanced = False
+                elif stripped.startswith("advanced_tools"):
                     in_tools = False
+                    in_advanced = True
                 elif stripped.startswith("tools"):
                     in_tools = True
-                elif in_tools and line.startswith("    ") or line.startswith("\t"):
-                    tools.append(stripped)
+                    in_advanced = False
+                elif (in_tools or in_advanced) and (line.startswith("    ") or line.startswith("\t")):
+                    if in_tools:
+                        tools.append(stripped)
+                    else:
+                        advanced_tools.append(stripped)
         if tools:
             config["tools"] = tools
+        if advanced_tools:
+            config["advanced_tools"] = advanced_tools
         return config
+
+    def _agent_confirm(self, cmd: str):
+        """Interactive prompt for an agent action.
+        Returns (action, value):
+          ('run',      cmd_str)   — execute (possibly edited) command
+          ('skip',     None)      — skip this action
+          ('quit',     None)      — stop the agent
+          ('feedback', text)      — inject user note, skip action
+        """
+        while True:
+            try:
+                answer = input("  execute? [Y/n/e/f/q]: ").strip()
+            except (EOFError, KeyboardInterrupt):
+                return ('quit', None)
+            al = answer.lower()
+            if al in ('', 'y'):
+                return ('run', cmd)
+            if al == 'q':
+                return ('quit', None)
+            if al == 'n':
+                return ('skip', None)
+            if al == 'e':
+                print(f"  {_DIM}current:{_R} {_YELL}{cmd}{_R}")
+                # try to copy to clipboard so user can Ctrl+V and edit
+                _clipped = False
+                try:
+                    import ctypes
+                    ctypes.windll.user32.OpenClipboard(0)
+                    ctypes.windll.user32.EmptyClipboard()
+                    encoded = cmd.encode('utf-16-le') + b'\x00\x00'
+                    hMem = ctypes.windll.kernel32.GlobalAlloc(0x0002, len(encoded))
+                    pMem = ctypes.windll.kernel32.GlobalLock(hMem)
+                    ctypes.memmove(pMem, encoded, len(encoded))
+                    ctypes.windll.kernel32.GlobalUnlock(hMem)
+                    ctypes.windll.user32.SetClipboardData(13, hMem)  # CF_UNICODETEXT
+                    ctypes.windll.user32.CloseClipboard()
+                    _clipped = True
+                except Exception:
+                    pass
+                if _clipped:
+                    print(f"  {_DIM}[copied to clipboard — paste with Ctrl+V]{_R}")
+                try:
+                    new_cmd = input("  edit> ").strip()
+                except (EOFError, KeyboardInterrupt):
+                    return ('quit', None)
+                return ('run', new_cmd if new_cmd else cmd)
+            if al == 'f':
+                print(f"  {_DIM}feedback to AI (blank = cancel):{_R}")
+                try:
+                    fb = input("  > ").strip()
+                except (EOFError, KeyboardInterrupt):
+                    return ('quit', None)
+                if fb:
+                    return ('feedback', fb)
+                continue  # blank → re-prompt
+            # unknown key → re-prompt
 
     def _agent_exec(self, cmd: str, auto_apply: bool) -> str:
         """Run a /command, capture and return its output as a string.
@@ -2390,18 +4257,20 @@ tools =
         tee = _Tee(sys.stdout)
         original_confirm = self._confirm
         if auto_apply:
-            self._confirm = lambda _prompt: True
+            self._confirm = lambda _prompt, **kw: True
+            self._auto_apply = True
 
         original_stdout = sys.stdout
         sys.stdout = tee
         try:
-            self._route(cmd)
+            self._route(cmd, auto=True)
         except SystemExit:
             pass
         finally:
             sys.stdout = original_stdout
             if auto_apply:
                 self._confirm = original_confirm
+                self._auto_apply = False
 
         return tee.getvalue().strip() or "(no output)"
 
@@ -2409,7 +4278,7 @@ tools =
         task = user_input[6:].strip()
         if not task:
             print("usage: /agent [-t N] [-y] <task>  |  /agent continue [-t N] [-y] [follow-up]")
-            print("  configure: .1bcoder/agent.txt  (max_turns, auto_apply, tools)")
+            print("  configure: .1bcoder/agent.txt  (max_turns, auto_apply, tools, advanced_tools)")
             return
 
         # /agent continue — resume saved session
@@ -2424,13 +4293,14 @@ tools =
             auto_exec  = state["auto_exec"]
             config    = self._load_agent_config()
             max_turns = config["max_turns"]
-            # parse flags from rest
+            # parse flags from rest (-y may appear anywhere)
+            if re.search(r'(?:^|\s)-y(?:\s|$)', rest):
+                auto_exec = True
+                rest = re.sub(r'(?:^|\s)-y(?=\s|$)', ' ', rest).strip()
             while rest:
                 m = re.match(r'^-t\s+(\d+)\s*(.*)', rest, re.DOTALL)
                 if m:
                     max_turns = int(m.group(1)); rest = m.group(2).strip(); continue
-                if rest.startswith('-y'):
-                    auto_exec = True; rest = rest[2:].strip(); continue
                 break
             if rest:
                 agent_msgs.append({"role": "user", "content": rest})
@@ -2476,16 +4346,16 @@ tools =
                                 print(f"{_DIM}  │{_R} {ln}")
                             print(f"{_DIM}  └───────────────────────────────────────{_R}")
                     if not auto_exec:
-                        try:
-                            answer = input("  execute? [Y/n/q]: ").strip().lower()
-                        except (EOFError, KeyboardInterrupt):
-                            print("\n[agent] interrupted")
-                            stop_agent = True; break
-                        if answer == 'q':
+                        action, val = self._agent_confirm(cmd)
+                        if action == 'quit':
                             print("[agent] stopped by user")
                             stop_agent = True; break
-                        if answer == 'n':
+                        if action == 'skip':
                             tool_results.append(f"[tool skipped: {cmd}]"); continue
+                        if action == 'feedback':
+                            print(f"{_DIM}[agent] feedback noted{_R}")
+                            tool_results.append(f"[tool skipped: {cmd}]\n[user note: {val}]"); continue
+                        cmd = val  # possibly edited
                     self._sep("tool")
                     result = self._agent_exec(cmd, auto_apply)
                     print()
@@ -2505,27 +4375,60 @@ tools =
         max_turns  = config["max_turns"]
         auto_apply = config["auto_apply"]
 
-        # parse flags: -t N, -y
+        # /agent advance → full toolset + advanced system prompt (strip before flag parsing)
+        advanced = task.startswith("advance")
+        if advanced:
+            task = task[7:].strip()
+
+        # parse flags: -t N, -y  (flags may appear anywhere in the string)
         auto_exec = False
+        if re.search(r'(?:^|\s)-y(?:\s|$)', task):
+            auto_exec = True
+            task = re.sub(r'(?:^|\s)-y(?=\s|$)', ' ', task).strip()
         while True:
-            m = re.match(r'^-t\s+(\d+)\s+(.*)', task, re.DOTALL)
+            m = re.match(r'^-t\s+(\d+)\s*(.*)', task, re.DOTALL)
             if m:
                 max_turns = int(m.group(1))
                 task      = m.group(2).strip()
                 continue
-            if task.startswith('-y'):
-                auto_exec = True
-                task      = task[2:].strip()
-                continue
             break
-        tools      = config["tools"]
+
+        # parse: /agent task description plan step1, step2, step3
+        # also accepts: /agent "task description" plan step1, step2, step3
+        plan_steps = []
+        if task.startswith('"'):
+            end_q = task.find('"', 1)
+            if end_q != -1:
+                rest = task[end_q + 1:].strip()
+                task = task[1:end_q]
+                pm = re.match(r'^plan\s+(.*)', rest, re.IGNORECASE | re.DOTALL)
+                if pm:
+                    plan_steps = [s.strip() for s in pm.group(1).split(',') if s.strip()]
+        else:
+            pm = re.search(r'\bplan\s+(.*)', task, re.IGNORECASE | re.DOTALL)
+            if pm:
+                plan_steps = [s.strip() for s in pm.group(1).split(',') if s.strip()]
+                task = task[:pm.start()].strip()
+        total_plan = len(plan_steps)
+
+        if advanced:
+            tools = config.get("advanced_tools", DEFAULT_AGENT_TOOLS_ADVANCED)
+            system_tpl = AGENT_SYSTEM_ADVANCED
+            print(f"[agent] mode: advanced")
+        else:
+            tools = config.get("tools", DEFAULT_AGENT_TOOLS)
+            system_tpl = AGENT_SYSTEM_BASIC
 
         tool_list     = get_help_list(tools)
-        system_prompt = AGENT_SYSTEM.format(tool_list=tool_list)
+        system_prompt = system_tpl.format(tool_list=tool_list)
         system_msg    = {"role": "system", "content": system_prompt}
 
         print(f"[agent] tools: {', '.join(tools)}")
         print(f"[agent] max_turns: {max_turns}  auto_apply: {auto_apply}  auto_exec: {auto_exec}")
+        if plan_steps:
+            print(f"[agent] plan ({total_plan} steps):")
+            for _i, _s in enumerate(plan_steps, 1):
+                print(f"  {_DIM}{_i}. {_s}{_R}")
         print(f"[agent] task: {task}\n")
 
         # agent runs in its own message thread (copies current context)
@@ -2536,6 +4439,12 @@ tools =
 
         for turn in range(1, max_turns + 1):
             print(f"\n{_CYAN}{_BOLD}[agent] ── turn {turn}/{max_turns}{_R}{_DIM} " + "─" * 20 + _R)
+            if plan_steps:
+                step = plan_steps.pop(0)
+                step_num = total_plan - len(plan_steps)
+                hint = f"[plan step {step_num}/{total_plan}: {step}]"
+                print(f"{_DIM}  {hint}{_R}")
+                agent_msgs.append({"role": "user", "content": hint})
             self._sep("AI")
 
             try:
@@ -2546,14 +4455,29 @@ tools =
 
             print()
             if not reply:
+                if plan_steps:
+                    print(f"[agent] empty reply — {len(plan_steps)} plan step(s) remaining, continuing")
+                    agent_msgs.append({"role": "user", "content": "[no response — continuing to next plan step]"})
+                    continue
                 print("[agent] empty reply, stopping")
                 break
 
             self.last_reply = reply
             agent_msgs.append({"role": "assistant", "content": reply})
 
-            actions = ACTION_RE.findall(reply)
+            # run persistent proc between reply and ACTION detection
+            # proc stdout may inject additional ACTION: lines
+            proc_actions: list[str] = []
+            if self._proc_active:
+                proc_out = self._run_proc(self._proc_active, auto=True)
+                if proc_out:
+                    proc_actions = ACTION_RE.findall(proc_out)
+
+            actions = ACTION_RE.findall(reply) + proc_actions
             if not actions:
+                if plan_steps:
+                    print(f"{_DIM}[agent] no ACTION — {len(plan_steps)} plan step(s) remaining, continuing{_R}")
+                    continue
                 print(f"\n{_GREEN}[agent] task complete{_R}{_DIM} (no more ACTIONs){_R}")
                 self._agent_state = {"msgs": agent_msgs, "auto_apply": auto_apply, "auto_exec": auto_exec}
                 print(f"{_DIM}  use /agent continue to give a follow-up task{_R}")
@@ -2576,19 +4500,19 @@ tools =
                             print(f"{_DIM}  │{_R} {ln}")
                         print(f"{_DIM}  └───────────────────────────────────────{_R}")
                 if not auto_exec:
-                    try:
-                        answer = input("  execute? [Y/n/q]: ").strip().lower()
-                    except (EOFError, KeyboardInterrupt):
-                        print("\n[agent] interrupted")
-                        stop_agent = True
-                        break
-                    if answer == 'q':
+                    action, val = self._agent_confirm(cmd)
+                    if action == 'quit':
                         print("[agent] stopped by user")
                         stop_agent = True
                         break
-                    if answer == 'n':
+                    if action == 'skip':
                         tool_results.append(f"[tool skipped: {cmd}]")
                         continue
+                    if action == 'feedback':
+                        print(f"{_DIM}[agent] feedback noted{_R}")
+                        tool_results.append(f"[tool skipped: {cmd}]\n[user note: {val}]")
+                        continue
+                    cmd = val  # possibly edited
                 self._sep("tool")
                 result = self._agent_exec(cmd, auto_apply)
                 print()
@@ -2635,12 +4559,20 @@ def main():
     if args.planapply:
         plan = args.planapply
         if not os.path.isabs(plan):
-            plan = os.path.join(PLANS_DIR, plan)
+            local_path  = os.path.join(PLANS_DIR, plan)
+            global_path = os.path.join(GLOBAL_PLANS_DIR, plan)
+            if os.path.isfile(local_path):
+                plan = local_path
+            elif os.path.isfile(global_path):
+                plan = global_path
+            else:
+                plan = local_path  # will produce clear error below
         if not os.path.exists(plan):
             print(f"Plan not found: {plan}")
             sys.exit(1)
         base_url, provider = parse_host(args.host)
-        model = args.model or ""
+        model  = args.model or ""
+        models = []
         if not model:
             try:
                 models = list_models(base_url, provider)
@@ -2655,8 +4587,14 @@ def main():
             if key:
                 params[key.strip()] = value.strip()
         cli = CoderCLI(base_url, model, models, provider)
+        # reset plan — remove [v] markers so every headless run starts fresh
+        lines = _load_plan(plan)
+        reset = [re.sub(r'^\[v\]\s*', '', l) for l in lines]
+        if reset != lines:
+            _save_plan(reset, plan)
         param_tokens = " ".join(f"{k}={v}" for k, v in params.items())
-        cli._cmd_plan(f"/plan apply -y {plan} {param_tokens}".strip())
+        plan_fwd = plan.replace("\\", "/")   # shlex.split strips backslashes on Windows
+        cli._cmd_plan(f"/plan apply -y {plan_fwd} {param_tokens}".strip())
         sys.exit(0)
 
     base_url, provider = parse_host(args.host)

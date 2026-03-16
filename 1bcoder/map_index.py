@@ -28,6 +28,12 @@ import os
 import sys
 import argparse
 
+try:
+    from tqdm import tqdm
+except ImportError:
+    def tqdm(it, **_):  # silent fallback
+        return it
+
 # ── file filtering ─────────────────────────────────────────────────────────────
 
 MAX_FILE_KB = 200
@@ -178,16 +184,90 @@ def extract_definitions(text: str, depth: int) -> tuple:
     return defs, vars_dict
 
 
-def build_map(root: str, depth: int = 2) -> str:
-    """Scan root directory and return map as a string."""
+def _parse_existing_map(text: str) -> tuple:
+    """Parse map.txt → (cached_blocks, cached_defs).
+
+    cached_blocks : rel → [content lines]  (defines/links/vars, not the filename)
+    cached_defs   : rel → (defs_dict, vars_dict)  name → line_number
+    """
+    cached_blocks = {}
+    cached_defs   = {}
+
+    current_rel   = None
+    current_lines = []
+    current_defs  = {}
+    current_vars  = {}
+
+    def _flush():
+        if current_rel:
+            cached_blocks[current_rel] = current_lines[:]
+            cached_defs[current_rel]   = (dict(current_defs), dict(current_vars))
+
+    for line in text.splitlines():
+        if line.startswith('#'):
+            continue
+        if not line.strip():
+            continue
+        if not line.startswith(' ') and not line.startswith('\t'):
+            _flush()
+            current_rel   = line.strip()
+            current_lines = []
+            current_defs  = {}
+            current_vars  = {}
+        else:
+            current_lines.append(line)
+            s = line.strip()
+            if s.startswith('defines :'):
+                for item in s[len('defines :'):].strip().split(','):
+                    m = re.match(r'(\w+)\(ln:(\d+)\)', item.strip())
+                    if m:
+                        current_defs[m.group(1)] = int(m.group(2))
+            elif re.match(r'vars\s+:', s):
+                for item in re.sub(r'^vars\s+:\s*', '', s).split(','):
+                    m = re.match(r'(\w+)\(ln:(\d+)\)', item.strip())
+                    if m:
+                        current_vars[m.group(1)] = int(m.group(2))
+    _flush()
+    return cached_blocks, cached_defs
+
+
+def build_map(root: str, depth: int = 2, map_path: str = None) -> str:
+    """Scan root directory and return map as a string.
+
+    If map_path points to an existing map.txt, files whose mtime is older than
+    the map are skipped — their cached definitions and link lines are reused.
+    Only changed files are re-scanned and re-linked.
+    """
     root = os.path.abspath(root)
     files = collect_files(root)
 
-    file_defs    = {}   # rel → (defs_dict, vars_dict)
-    file_content = {}   # rel → text
+    # ── load cache ──────────────────────────────────────────────────────────────
+    map_mtime      = 0.0
+    cached_blocks  = {}   # rel → [content lines]
+    cached_defs    = {}   # rel → (defs_dict, vars_dict)
+    if map_path and os.path.exists(map_path):
+        map_mtime = os.path.getmtime(map_path)
+        try:
+            existing = open(map_path, encoding='utf-8', errors='ignore').read()
+            cached_blocks, cached_defs = _parse_existing_map(existing)
+        except OSError:
+            pass
 
-    for fpath in files:
+    # ── scan phase ───────────────────────────────────────────────────────────────
+    file_defs    = {}   # rel → (defs_dict, vars_dict)
+    file_content = {}   # rel → text   (only for changed files)
+    skipped      = 0
+
+    for fpath in tqdm(files, desc="scanning", unit="file", file=sys.stderr):
         rel = os.path.relpath(fpath, root)
+        try:
+            fmtime = os.path.getmtime(fpath)
+        except OSError:
+            continue
+        if map_mtime and fmtime <= map_mtime and rel in cached_defs:
+            file_defs[rel] = cached_defs[rel]
+            skipped += 1
+            continue
         try:
             text = open(fpath, encoding='utf-8', errors='ignore').read()
         except OSError:
@@ -196,8 +276,11 @@ def build_map(root: str, depth: int = 2) -> str:
         file_defs[rel]    = (defs, vars_dict)
         file_content[rel] = text
 
-    # global index: name → first file that defines it
-    # defs first (higher priority), then vars — so a def always wins over a var
+    changed = len(file_content)
+    if skipped:
+        print(f"[map] {skipped} unchanged (reused), {changed} changed (re-scanned)", file=sys.stderr)
+
+    # ── global index ─────────────────────────────────────────────────────────────
     global_index = {}
     for rel, (defs, _) in file_defs.items():
         for name in defs:
@@ -208,9 +291,9 @@ def build_map(root: str, depth: int = 2) -> str:
             if name not in global_index:
                 global_index[name] = rel
 
-    # cross-reference with type classification
+    # ── link phase (changed files only) ──────────────────────────────────────────
     file_links = {}   # rel → { target_rel → { name → kind } }
-    for rel, text in file_content.items():
+    for rel, text in tqdm(file_content.items(), desc="linking", unit="file", file=sys.stderr):
         by_target = {}
         for name, target_rel in global_index.items():
             if target_rel == rel:
@@ -220,25 +303,30 @@ def build_map(root: str, depth: int = 2) -> str:
                 by_target.setdefault(target_rel, {})[name] = kind
         file_links[rel] = by_target
 
-    # format output
+    # ── format output ────────────────────────────────────────────────────────────
     out = [f"# project map — {root}  depth:{depth}"]
     for rel in sorted(file_defs):
-        defs, vars_dict = file_defs[rel]
         out.append(f"\n{rel}")
-        if defs:
-            items = ', '.join(
-                f"{n}(ln:{ln})" for n, ln in sorted(defs.items(), key=lambda x: x[1])
-            )
-            out.append(f"  defines : {items}")
-        for target in sorted(file_links.get(rel, {})):
-            refs  = file_links[rel][target]
-            items = ', '.join(f"{kind}:{n}" for n, kind in sorted(refs.items()))
-            out.append(f"  links  → {target} ({items})")
-        if vars_dict:
-            items = ', '.join(
-                f"{n}(ln:{ln})" for n, ln in sorted(vars_dict.items(), key=lambda x: x[1])
-            )
-            out.append(f"  vars    : {items}")
+        if rel in file_content:
+            # freshly scanned — generate lines
+            defs, vars_dict = file_defs[rel]
+            if defs:
+                items = ', '.join(
+                    f"{n}(ln:{ln})" for n, ln in sorted(defs.items(), key=lambda x: x[1])
+                )
+                out.append(f"  defines : {items}")
+            for target in sorted(file_links.get(rel, {})):
+                refs  = file_links[rel][target]
+                items = ', '.join(f"{kind}:{n}" for n, kind in sorted(refs.items()))
+                out.append(f"  links  → {target} ({items})")
+            if vars_dict:
+                items = ', '.join(
+                    f"{n}(ln:{ln})" for n, ln in sorted(vars_dict.items(), key=lambda x: x[1])
+                )
+                out.append(f"  vars    : {items}")
+        elif rel in cached_blocks:
+            # unchanged — reuse cached content lines verbatim
+            out.extend(cached_blocks[rel])
 
     return '\n'.join(out)
 
@@ -267,7 +355,7 @@ def main():
         sys.exit(1)
 
     print(f"[map] scanning {root} (depth {depth}) ...", file=sys.stderr)
-    map_text = build_map(root, depth)
+    map_text = build_map(root, depth, map_path=out_path)
 
     if args.out:
         out_path = args.out

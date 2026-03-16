@@ -165,7 +165,12 @@ auth/routes.py
 - **`find`**: filter file blocks by filename terms (`term`, `!term`) and child-line content (`\term`, `\!term`, `\\!term`) — equivalent to semantic coordinate lookup in the Anthill's OKG
 - **`trace`**: BFS backwards through the reference graph from any defined identifier — equivalent to a Librarian agent traversing the OKG's dependency edges
 
-**`/map diff` / `/map idiff`**: After any code change, re-indexing and diffing the map reveals which identifiers were added, removed, or moved — the manual equivalent of the Notary agent's post-commit OKG consistency check (M2: OCS). A warning is printed when identifiers disappear, mirroring the Auditor's structural drift alert.
+**`/map diff` / `/map idiff`**: After any code change, re-indexing and diffing the map reveals which identifiers were added, removed, or moved. Two additional structural integrity signals are now computed and shown after the diff:
+
+- **`ORPHAN_DRIFT`**: delta in orphan count (defined but never called) between snapshots. `+N [DEGRADATION]` → new dead code or deleted caller file. `−N [HEALING]` → dead code removed.
+- **`GHOST ALERT`**: cross-snapshot detection of files that were link targets in the previous map but no longer exist in the current map. Catches the case where an agent deletes a callee file whose names vanish from `global_index` — making the deletion invisible to structural diff alone.
+
+These are the manual equivalent of the Notary agent's post-commit OKG consistency check (M2: OCS). `detect_ghosts()` in `map_query.py` implements the cross-snapshot comparison logic.
 
 The `/map` system is not an OKG — it has no graph database, no RDF triplets, no runtime persistence of semantic relationships. But it is the **OKG seed**: it externalizes exactly the knowledge the OKG would contain, in a queryable form, without requiring any graph infrastructure.
 
@@ -208,6 +213,10 @@ The model receives a system prompt listing available tools (2-line summaries ext
 
 **`/agent -t N`**: overrides `max_turns` from `agent.txt` for a single run.
 
+The agent system prompt (`AGENT_SYSTEM`) is intentionally minimal — two explicit file operations with inline SEARCH/REPLACE format example, no instruction noise. This was redesigned after observing that small models reliably fail when given too many command variants to choose from. Orphan code detection: if the model writes a code block without an ACTION line, the agent detects this, warns the user, and offers to save the code to a named file.
+
+`/edit` command parsing now tolerates `code:`, `code,`, `code.` suffixes — small models frequently append punctuation to the keyword when writing ACTION lines.
+
 This is a stub implementation of the **Router + Architect + Coder pipeline** from Anthill Phase 1. It is single-model (no role separation), linear (no conditional branching), and relies on the same model to plan and execute. Its value is proving that the primitives are sufficient: the model can reason about which tool to use, call it correctly, and chain multiple steps to completion — given enough context and the right task scope.
 
 The `agent.txt` tool whitelist implements a primitive **SKILL.md**: it constrains which verbs the agent can invoke, preventing it from attempting operations outside its tested capability. Removing tools from the list restricts a weaker model to a smaller instruction set.
@@ -215,11 +224,11 @@ The `agent.txt` tool whitelist implements a primitive **SKILL.md**: it constrain
 ### 2.7 Backup/Restore — `/bkup`
 
 ```
-/bkup save <file>      — copy file to <file>.bkup (overwrites)
-/bkup restore <file>   — replace file with <file>.bkup
+/bkup save <file>      — copy file to <file>.bkup; rotates existing backup to <file>.bkup(N)
+/bkup restore <file>   — replace file with <file>.bkup (always the latest)
 ```
 
-Lightweight file snapshot before any risky edit. The agent is instructed to call `/bkup save` before modifying important files — making the human's recovery path explicit in the plan/agent workflow. This is the Anthill's pre-change state preservation, implemented without a version control abstraction layer.
+Lightweight file snapshot before any risky edit. If `file.bkup` already exists, it is renamed to `file.bkup(1)` (incrementing N if needed) before writing the new backup — no snapshot is ever silently overwritten. The agent is instructed to call `/bkup save` before modifying important files. This is the Anthill's pre-change state preservation, implemented without a version control abstraction layer.
 
 ### 2.8 Parallel Queries — `/parallel`
 
@@ -323,12 +332,12 @@ The `code` mode implements the Anthill's principle of treating model outputs as 
 | `/map index` / `map_index.py` | Notary agent (passive) — structure extraction | **Primitive** — regex flat-file, no runtime update |
 | `/map find` / `map_query.py find` | Librarian agent — semantic coordinate lookup | **Primitive** — text filter, no embedding |
 | `/map trace` / `map_query.py trace` | Librarian agent — OKG graph traversal | **Primitive** — BFS on cross-ref index |
-| `/map diff` / `/map idiff` | Observer Loop + Notary consistency check | **Primitive** — file diff, no OCS enforcement |
+| `/map diff` / `/map idiff` | Observer Loop + Notary consistency check | **Primitive+** — structural diff + ORPHAN_DRIFT + GHOST ALERT |
 | `.1bcoder/map.txt` | OKG (flat-file seed) | **Primitive** — text, no RDF, no graph DB |
 | `/agent` | Router + Architect + Coder loop (single model) | **Stub** — no role separation, linear only |
 | `agent.txt` tool whitelist | SKILL.md (behavioral constraint) | **Primitive** — static config, no Researcher update |
 | `FIX_SYSTEM` / `PATCH_SYSTEM` | SKILL.md (output format constraint) | **Primitive** — hardcoded, not dynamic |
-| `/bkup save/restore` | Pre-change state preservation | **Implemented** — file-level snapshot |
+| `/bkup save/restore` | Pre-change state preservation | **Implemented** — rotating snapshots, no silent overwrite |
 | `/parallel` | Multi-Instance Debate (Section 4.3) | **Implemented** — concurrent model queries |
 | `/parallel profile` | GPU farm worker configuration | **Implemented** — saved profiles in profiles.txt |
 | MCP client + servers | MCP nervous system (Section 8.1) | **Implemented** — full JSON-RPC client |
@@ -342,6 +351,7 @@ The `code` mode implements the Anthill's principle of treating model outputs as 
 | `/agent continue` | Pipeline checkpoint / resume | **Implemented** — `_agent_state` saved, restored on demand |
 | Global plan library | Two-tier SKILL.md (global templates + local overrides) | **Implemented** — 20 built-in plans shipped with tool |
 | `.1bcoder/` directory | BCODER_DIR / project-scoped workspace | **Stub** — flat files, no graph |
+| Status line (model + ctx%) | Operator situational awareness | **Implemented** — printed before each prompt |
 | Human operator | Router + Architect + Notary + Auditor | **Human-in-the-loop** |
 
 ### 3.2 Position in the Anthill Roadmap
@@ -362,7 +372,11 @@ The `code` mode implements the Anthill's principle of treating model outputs as 
 - Flat-file project map with identifier extraction and BFS trace (OKG seed)
 - Single-model agentic loop with tool whitelist (Router+Architect stub)
   - Multi-ACTION per turn, code preview gate, `/agent continue` checkpoint
-- Pre-change backup/restore
+- Pre-change backup/restore with rotation (no silent overwrite)
+- Status line: active model (truncated) + context fill % before each prompt
+- Structural integrity signals in `/map idiff`: ORPHAN_DRIFT + GHOST ALERT
+- Agent system prompt simplified for small model compatibility
+- `/edit` keyword parsing tolerates trailing punctuation (`code:`, `code,`)
 - Multi-provider API abstraction (`ollama://`, `openai://` schemes)
 - Model parameter injection (`/param`) — temperature, top_p, seed, etc.
 - Think block hygiene (`/think`) — shown, not persisted by default
@@ -482,9 +496,9 @@ The core thesis — that context quality substitutes for model scale — is vali
 
 ---
 
-**Document Version**: 1.2
+**Document Version**: 1.3
 **Created**: 2026-03-05
-**Updated**: 2026-03-08
+**Updated**: 2026-03-09
 **Project**: SIMARGL / Anthill Research Program
 **Relation to**:
 - [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) — parent architecture document
@@ -492,6 +506,13 @@ The core thesis — that context quality substitutes for model scale — is vali
 - [FINAL_PRODUCT.md](FINAL_PRODUCT.md) — SIMARGL product architecture (codeXpert = 1bcoder's planned MCP evolution)
 - [TWO_PHASE_REFLECTIVE_AGENT.md](TWO_PHASE_REFLECTIVE_AGENT.md) — agent architecture precursor
 - [PHENOMENOLOGICAL_CODE_UNDERSTANDING.md](PHENOMENOLOGICAL_CODE_UNDERSTANDING.md) — philosophical grounding (Observer Loop, symbol grounding)
+
+**Changelog v1.3** (2026-03-09):
+- §2.5: `/map idiff` now computes ORPHAN_DRIFT + GHOST ALERT; `detect_ghosts()` in `map_query.py`
+- §2.6: Agent system prompt simplified; orphan code detection (code block without ACTION); `/edit` tolerates `code:` suffix
+- §2.7: `/bkup save` now rotates existing backups — no silent overwrite
+- §3.1: Updated mapping table entries for `/map idiff`, `/bkup`, added status line row
+- §3.2: Phase 0 list updated with all new features
 
 **Changelog v1.2** (2026-03-08):
 - §1.3: Added multi-provider abstraction (`ollama://` / `openai://` schemes); ANSI color note

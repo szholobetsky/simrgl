@@ -1100,3 +1100,54 @@ By treating keywords as **semantic coordinates**, we give the LLM a **map of the
 - [Domain generalization by negative sampling (ScienceDirect, 2022)](https://www.sciencedirect.com/science/article/pii/S2666651022000195)
 - [Contrastive Learning with Hard Negative Samples (ArXiv, 2020)](https://arxiv.org/abs/2010.04592)
 - [Uncertainty-Aware Contrastive Learning for NER (ScienceDirect, 2024)](https://www.sciencedirect.com/science/article/abs/pii/S0950705124003976)
+
+
+---
+
+## Domain Vocabulary vs Technical Vocabulary
+
+**Finding (2026-03-08)**: Two distinct vocabularies exist for code navigation.
+
+### Technical Vocabulary
+
+Extractable automatically from code syntax.
+
+| Keyword | Source | Method |
+|---|---|---|
+| ops:div | arithmetic / operator | YES/NO classifier (gemma3:1b, 4s/file) |
+| ops:db | SQL execution, DB connection | YES/NO classifier |
+| flags:deprecated | @Deprecated annotation | YES/NO classifier |
+| layer:svc | class role | YES/NO classifier |
+
+Stored in map.txt passport lines. Searchable via /map find. Detail: symmetry/PASSPORT.md.
+
+### Domain Vocabulary
+
+Accumulated through project experience. Not extractable automatically.
+
+Example (real system):
+- PPCon  = PaymentConfirmation → 23 files across java, c#, oracle, python, js
+- EBU    = ExternalBankingUnit → 15 files
+- PnP    = PlugAndPlay module  → 8 files
+
+Properties:
+- Accumulation time: 6+ months of active work.
+- Storage: manual (task database keyword field linked to changed files).
+- Retrieval: select keyword → distinct files from all linked tasks.
+- Growth: stabilizes after ~1 year (file count via DISTINCT converges).
+
+Why 1B model cannot extract domain vocabulary:
+- Domain abbreviations (PPCon) appear in meetings and tickets, not in code.
+- Without codebase co-occurrence, Word2Vec cannot cluster them.
+- Without labeled examples, classifiers cannot recognize them.
+
+Partial automation: Word2Vec on commit messages clusters domain terms if commits mention them.
+Prerequisite: commit messages must contain domain terms (variable quality).
+
+### Two Navigation Paths to Same Files
+
+Path A (experienced user): PPCon keyword lookup -> [file_A, file_B, file_C]
+Path B (1B model/newcomer): embed(task) -> search -> [file_A, file_B] + passport filter
+
+Path A: faster, more precise, requires 6 months.
+Path B: works without domain knowledge, improved by Object Passport.

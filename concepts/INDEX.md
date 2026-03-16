@@ -187,6 +187,11 @@ LOW ◄────────────────────┼───�
 | [ANTHILL_CONVERGENCE_AND_EXPERIMENTS.md](ANTHILL_CONVERGENCE_AND_EXPERIMENTS.md) | Anthill Lineage + Experiments | EN |
 | [1BCODER.md](1BCODER.md) | Human-in-the-loop Anthill Prototype | EN |
 | [../exp5/README.md](../exp5/README.md) | Cross-Vocabulary Symbol Grounding experiment | EN |
+| [SYMMETRY_INDEX.md](SYMMETRY_INDEX.md) | Symmetry framework index: metrics, tools, cascade architecture | EN |
+| [symmetry/METRICS.md](symmetry/METRICS.md) | ASYMMETRY_SCORE, ΔASYMMETRY, HARMONY@K, SYMMETRY@K, IRR — formal definitions | EN |
+| [symmetry/RETRIEVAL.md](symmetry/RETRIEVAL.md) | SYMMETRY@K for retrieval, hypothesis generation, tautology criterion | EN |
+| [symmetry/EMBEDDING.md](symmetry/EMBEDDING.md) | Calibration invariance, rotation matrices, IRR, aggregation | EN |
+| [symmetry/PASSPORT.md](symmetry/PASSPORT.md) | Object Passport, YES/NO classification, map.txt integration | EN |
 | [SYMBOL_GROUNDING_ESSAY.md](SYMBOL_GROUNDING_ESSAY.md) | Philosophical essay on symbol grounding in code navigation | EN |
 | [ua/](ua/) | Ukrainian translations | UA |
 
