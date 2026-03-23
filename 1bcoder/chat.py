@@ -79,7 +79,11 @@ TIMEOUT    = 120         # default HTTP read timeout in seconds
 
 # ── /agent settings ─────────────────────────────────────────────────────────────
 
-AGENT_CONFIG_FILE = os.path.join(BCODER_DIR, "agent.txt")
+AGENT_CONFIG_FILE   = os.path.join(BCODER_DIR, "agent.txt")
+ALIASES_FILE        = os.path.join(BCODER_DIR, "aliases.txt")
+GLOBAL_ALIASES_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".1bcoder", "aliases.txt")
+AGENTS_DIR          = os.path.join(BCODER_DIR, "agents")
+GLOBAL_AGENTS_DIR   = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".1bcoder", "agents")
 
 DEFAULT_AGENT_TOOLS = [
     "read", "insert", "save", "patch",
@@ -91,6 +95,14 @@ DEFAULT_AGENT_TOOLS_ADVANCED = [
     "map index", "map find", "map idiff", "map diff", "map trace", "map keyword",
     "help",
 ]
+
+DEFAULT_AGENT_TOOLS_ASK = [
+    "read", "readln", "tree", "find",
+    "map index", "map find", "map trace", "map keyword",
+]
+
+ASK_RESULT_LIMIT_CHARS = 4000   # ~1K tokens — truncate if result exceeds this
+ASK_RESULT_SHOW_CHARS  = 2000   # ~500 tokens shown when truncated
 
 AGENT_SYSTEM_BASIC = """\
 You are a coding assistant. Complete the task using the available tools.
@@ -151,6 +163,29 @@ Rules:
 Available tools:
 {tool_list}
 """
+
+AGENT_SYSTEM_ASK = """\
+You are a code research assistant. Explore the project to answer the question.
+
+To call a tool, write ACTION: on its own line followed by the command.
+Wait for [tool result] before calling the next tool.
+Build understanding from broad to narrow. One ACTION per turn.
+When done, write a plain text answer or plan. Do not write any ACTION when done.
+
+Strategy:
+1. If project structure is not yet in context use ACTION: /tree
+2. To locate relevant identifiers use ACTION: /map find \keyword  (single word, no quotes)
+3. To find real code identifiers from a phrase use ACTION: /map keyword extract phrase -f -c  (no quotes)
+4. To search file content use a single keyword e.g. ACTION: /find keyword -c
+5. To read specific sections use ACTION: /read file start-end
+6. Stop when you have enough to answer
+
+Never edit files. Output a clear report or plan when done.
+
+Available tools:
+{tool_list}
+"""
+
 
 # ── /map settings ───────────────────────────────────────────────────────────────
 
@@ -328,6 +363,15 @@ Commands
     e.g.  /proc run extract-files
           /proc on grounding-check
           /proc off
+    regexp-extract <pattern> [-i] [-u] [-g N]  extract regex matches from last reply
+          # find all 3-digit numbers
+          /proc run regexp-extract \b[0-9]{3}\b
+          # extract function names (unique, capture group 1)
+          /proc run regexp-extract "def (\w+)\(" -g 1 -u
+          # find class names case-insensitive, no duplicates
+          /proc run regexp-extract \b[A-Z]\w+Service\b -u -i
+          # collect all .py file paths mentioned
+          /proc run regexp-extract [\w./\\-]+\.py -u
 
 /team list                        List all team definitions (.yaml files in teams dir).
 /team show <name>                 Show workers defined in a team.
@@ -347,15 +391,24 @@ Commands
           /team show auth-analysis
           /team new my-team
 
-/ctx <n>            Set context window size in tokens (default 8192).
-/ctx cut            Remove oldest messages until context fits within the limit.
-/ctx compact        Ask AI to summarize the conversation, then replace context with the summary.
-/ctx save <file>    Save full conversation context to a text file.
-/ctx load <file>    Restore context from a saved file (appends to current context).
+/ctx <n>                  Set context window size in tokens (default 8192).
+/ctx clear               Clear all conversation messages (keeps /param and num_ctx).
+/ctx clear <n>           Remove last N messages from context.
+/ctx cut                 Remove oldest messages until context fits within the limit.
+/ctx compact             Ask AI to summarize the conversation, then replace context with the summary.
+/ctx save <file>         Save full conversation context to a text file.
+/ctx load <file>         Restore context from a saved file (appends to current context).
+/ctx savepoint set       Mark current context position as a savepoint.
+/ctx savepoint rollback  Remove all messages added since the savepoint.
+/ctx savepoint compact   Summarize messages since savepoint, replace them with the summary.
+/ctx savepoint show      Show savepoint position and how many messages have been added since.
     e.g.  /ctx 16384
-          /ctx
+          /ctx clear
+          /ctx clear 3
           /ctx save ctx.txt
           /ctx load ctx.txt
+          /ctx savepoint set
+          /ctx savepoint rollback
 
 /think include      Keep <think>...</think> blocks in context (pass reasoning to next model).
 /think exclude      Strip <think> from context — blocks shown in terminal only (default).
@@ -430,8 +483,8 @@ Commands
     Show all saved profiles and their workers.
 
 /map index [path] [depth]
-    Scan project, extract definitions and cross-references → .1bcoder/map.txt
-    Does NOT inject into context. Run once per session (or after big changes).
+    Scan project and extract definitions, cross-references into a searchable map.
+    Saves to .1bcoder/map.txt. Does NOT inject into context. Run once per session (or after big changes).
     depth 2 (default) — classes, functions, endpoints, tables
     depth 3           — also variables, function parameters, module assignments
     Partial indexing: if path is a subfolder, saves a segment file
@@ -489,7 +542,8 @@ Commands
     e.g.  /map idiff
           /map idiff src/ 3
 /map keyword index
-    Scan .1bcoder/map.txt and build a keyword vocabulary → .1bcoder/keyword.txt
+    Build a keyword vocabulary index from the project map.
+    Reads .1bcoder/map.txt, saves result to .1bcoder/keyword.txt (CSV format).
     CSV format: word, count, semicolon-separated list of line numbers in map.txt.
     Sorted alphabetically. Run once after /map index (or whenever map changes).
     e.g.  /map keyword index
@@ -529,8 +583,25 @@ Commands
     e.g.  /diff main.py main.py.bkup
           /diff v1/calc.py v2/calc.py -y
 
+/alias                        List all active aliases.
+/alias /name = expansion      Define an alias. {{args}} in expansion is replaced by everything after the name.
+/alias clear /name            Remove an alias (session only).
+/alias save /name             Persist an alias to .1bcoder/aliases.txt.
+    Aliases are loaded from global then local aliases.txt at startup and survive /clear.
+    Agents can also define aliases in their .txt file (agent-scoped, applied during that run).
+    e.g.  /alias /sql = /run python db.py "{{args}}"
+          /alias /ask = /agent ask
+          /alias save /sql
+
+/agent <name> [-t N] [-y] <task> [plan step1, step2, ...]
+    Run a named agent defined in .1bcoder/agents/<name>.txt (local overrides global).
+    Agent file defines: system prompt, tools, max_turns, auto_exec, aliases.
+    e.g.  /agent ask what does this project do
+          /agent advance refactor the auth module
+          /agent dbsearcher find all users created this week
+    Direct command syntax also works: /dbsearcher find all users created this week
 /agent [-t N] [-y] <task> [plan step1, step2, ...]
-    Run an autonomous agentic loop. The model uses tools to complete the task.
+    Run the default agent. The model uses tools to complete the task.
     The agent prompt instructs the model to emit one ACTION per turn.
     If the model emits multiple ACTION lines, all are executed in order.
     Stops when the model outputs plain text with no ACTION.
@@ -543,25 +614,13 @@ Commands
       e          edit the command before executing (copies to clipboard on Windows)
       f          send feedback to the AI and skip the action (redirect the model)
       q          stop the agent
-    Ctrl+C interrupts at any turn. Session is saved for /agent continue.
+    Ctrl+C interrupts at any turn.
     plan  optional comma-separated list of items injected one per turn as hints.
           If a turn returns empty or no ACTION, the agent continues to the next step.
     e.g.  /agent find and fix the divide by zero bug in calc.py
           /agent -t 1 read models.py and explain the User class
           /agent -y -t 5 refactor utils.py
           /agent read file plan models.py, views.py, urls.py
-/agent advance [-t N] [-y] <task> [plan ...]
-    Same as /agent but uses the full advanced toolset and system prompt.
-    Better for larger models — includes run, diff, map, bkup, and all edit tools.
-    e.g.  /agent advance refactor the auth module
-          /agent advance read and summarise plan models.py, views.py
-/agent continue [-t N] [-y] [follow-up instruction]
-    Resume the last agent session (saved automatically on stop/complete/max_turns).
-    Optionally pass a follow-up message to guide the next steps.
-    e.g.  /agent continue
-          /agent continue now also add error handling
-          /agent continue -t 5 -y
-
 /init           Create .1bcoder/ scaffold in current directory (safe to re-run).
 
 /help                   Show full help.
@@ -624,6 +683,20 @@ def get_help_list(tools_list: list) -> str:
             result.append("")
 
     return '\n'.join(result).strip()
+
+
+def get_cmd_list(tools_list: list) -> str:
+    """Like get_help_list but returns only the command signature line — no descriptions."""
+    all_lines = HELP_TEXT.splitlines()
+    result    = []
+    seen      = set()
+    for tool in tools_list:
+        pat = re.compile(r'^/' + re.escape(tool.lstrip('/')) + r'(\s|$)')
+        for line in all_lines:
+            if pat.match(line) and line not in seen:
+                seen.add(line)
+                result.append(line)
+    return '\n'.join(result)
 
 
 # ── core helpers ───────────────────────────────────────────────────────────────
@@ -1200,6 +1273,7 @@ _KNOWN_CMDS = [
     "/find", "/map", "/ctx", "/think", "/format", "/param", "/model",
     "/host", "/help", "/init", "/clear", "/exit",
     "/prompt", "/proc", "/team",
+    "/compact",
 ]
 
 # file_idx : position of the file-path argument (None = no file arg)
@@ -1216,8 +1290,8 @@ _CMD_SPEC = {
     "/fix":      dict(file_idx=1, kw_idx=None, keywords=[]),
     "/bkup":     dict(file_idx=2, kw_idx=1,    keywords=["save", "restore"]),
     "/diff":     dict(file_idx=1, kw_idx=None, keywords=[]),
-    "/agent":    dict(file_idx=None, kw_idx=1, keywords=["advance", "continue"]),
-    "/ctx":      dict(file_idx=None, kw_idx=1, keywords=["cut", "compact", "save", "load"]),
+    "/agent":    dict(file_idx=None, kw_idx=1, keywords=["advance"]),
+    "/ctx":      dict(file_idx=None, kw_idx=1, keywords=["clear", "cut", "compact", "save", "load", "savepoint"]),
     "/think":    dict(file_idx=None, kw_idx=1, keywords=["include", "exclude"]),
     "/plan":     dict(file_idx=None, kw_idx=1, keywords=[
                       "list", "open", "create", "show", "add",
@@ -1286,9 +1360,9 @@ def fix_command(cmd: str, auto: bool = False) -> str:
 
     spec = _CMD_SPEC.get(cmd_root)
     if spec:
-        # 2. file path
+        # 2. file path — skip for output commands where file need not exist yet
         fi = spec["file_idx"]
-        if fi is not None and len(tokens) > fi:
+        if fi is not None and len(tokens) > fi and cmd_root not in ("/save",):
             fixed_path = _fix_path(tokens[fi])
             if fixed_path:
                 fixes[fi] = (tokens[fi], fixed_path)
@@ -1476,9 +1550,11 @@ class CoderCLI:
         self._meta_ctx: int | None = None
         self._load_model_meta()
         self._auto_apply = False   # True while agent is running with auto_apply
-        self._agent_state = None   # saved agent session for /agent continue
+        self._in_agent   = False   # True while inside any agent loop (/agent, /ask)
+        self._savepoint  = None    # index into self.messages set by /ctx savepoint
+        self._aliases    = self._load_aliases()  # global + local aliases.txt
         self._plan_file = None
-        self._proc_active: str | None = None  # persistent proc (runs after every reply)
+        self._proc_active: list[str] = []  # persistent procs (run after every reply)
         self._mcp: dict = {}
         self._history: list[str] = []
         self.cmd_history: list[str] = []   # all /commands typed this session
@@ -1603,8 +1679,15 @@ class CoderCLI:
         "/model", "/host", "/ctx", "/plan",
     })
 
+    # shorthand aliases expanded before fix_command and routing
+    _ALIASES = {
+        "/compact": "/ctx compact",
+    }
+
     def _route(self, user_input: str, auto: bool = False):
         if user_input.startswith("/"):
+            user_input = self._ALIASES.get(user_input.split()[0], user_input)  # hardcoded shorthands
+            user_input = self._expand_alias(user_input)                         # user-defined aliases
             user_input = fix_command(user_input, auto=auto)
             cmd_root = user_input.split()[0]
             if cmd_root not in self._HISTORY_SKIP:
@@ -1680,6 +1763,10 @@ class CoderCLI:
             self._cmd_bkup(user_input)
         elif user_input.startswith("/diff"):
             self._cmd_diff(user_input)
+        elif user_input.startswith("/alias"):
+            self._cmd_alias(user_input)
+        elif user_input.startswith("/ask"):
+            self._cmd_ask(user_input)
         elif user_input.startswith("/agent"):
             self._cmd_agent(user_input)
         elif user_input.startswith("/tree"):
@@ -1688,6 +1775,15 @@ class CoderCLI:
             self._cmd_find(user_input)
         elif user_input.startswith("/team"):
             self._cmd_team(user_input)
+        elif user_input.startswith("/"):
+            # check if it's a named agent (e.g. /dbsearcher task)
+            name = user_input.split()[0][1:]   # strip leading /
+            task = user_input[len(name) + 1:].strip()
+            agent_path = self._find_agent_def(name)
+            if agent_path:
+                self._run_named_agent(name, task, agent_path)
+            else:
+                _err(f"unknown command: /{name}  (type /help for commands)")
         else:
             self.messages.append({"role": "user", "content": user_input})
             self._sep("AI")
@@ -1695,8 +1791,8 @@ class CoderCLI:
             if reply:
                 self.last_reply = reply
                 self.messages.append({"role": "assistant", "content": reply})
-                if self._proc_active:
-                    self._run_proc(self._proc_active, auto=True)
+                for _proc in self._proc_active:
+                    self._run_proc(_proc, auto=True)
             elif self.messages:
                 self.messages.pop()
 
@@ -1705,6 +1801,7 @@ class CoderCLI:
     def _cmd_init(self):
         existed = os.path.isdir(BCODER_DIR)
         os.makedirs(PLANS_DIR, exist_ok=True)
+        os.makedirs(AGENTS_DIR, exist_ok=True)
 
         agent_path = os.path.join(BCODER_DIR, "agent.txt")
         if not os.path.exists(agent_path):
@@ -1790,11 +1887,14 @@ advanced_tools =
     def _cmd_param(self, user_input: str):
         tokens = user_input.split(None, 2)
         if len(tokens) == 1:
-            print(f"  timeout = {self.timeout}s")
-            if not self.params:
-                print("  (no model params set)")
-            else:
-                for k, v in self.params.items():
+            print(f"  timeout   = {self.timeout}s")
+            print(f"  num_ctx   = {self.num_ctx}")
+            print(f"  ask_limit = {self.params.get('ask_limit', ASK_RESULT_LIMIT_CHARS)}  (chars, /ask truncation limit)")
+            print(f"  ask_show  = {self.params.get('ask_show',  ASK_RESULT_SHOW_CHARS)}  (chars shown when truncated)")
+            model_params = {k: v for k, v in self.params.items() if k not in ("ask_limit", "ask_show")}
+            if model_params:
+                print("  ── model params ──")
+                for k, v in model_params.items():
                     print(f"  {k} = {v}")
             return
         if tokens[1] == "clear":
@@ -1833,7 +1933,12 @@ advanced_tools =
         parts = user_input.split()
         if len(parts) < 2:
             est = sum(len(m["content"]) for m in self.messages) // 4
-            print(f"[ctx limit: {self.num_ctx}  current: ~{est:,}]  usage: /ctx <n> | cut | save <f> | load <f>")
+            print(f"[ctx limit: {self.num_ctx}  current: ~{est:,}]  usage: /ctx <n> | clear [N] | cut | compact | save <f> | load <f> | savepoint [set|rollback|compact|show]")
+            return
+        if parts[1] == "clear":
+            self.messages.clear()
+            self.last_reply = ""
+            print(f"[context cleared — params and num_ctx ({self.num_ctx}) preserved]")
             return
         if parts[1] == "cut":
             est = sum(len(m["content"]) for m in self.messages) // 4
@@ -1887,6 +1992,71 @@ advanced_tools =
                 print(f"file not found: {parts[2]}")
             except OSError as e:
                 _err(e)
+            return
+        if parts[1] == "savepoint":
+            sub = parts[2] if len(parts) > 2 else "set"
+            if sub == "set":
+                self._savepoint = len(self.messages)
+                est = sum(len(m["content"]) for m in self.messages) // 4
+                _ok(f"[ctx savepoint] set at message {self._savepoint} (~{est:,} tokens)")
+            elif sub == "rollback":
+                if self._savepoint is None:
+                    print("[ctx savepoint] no savepoint set — use /ctx savepoint set first")
+                    return
+                removed = len(self.messages) - self._savepoint
+                del self.messages[self._savepoint:]
+                self._savepoint = None
+                _ok(f"[ctx savepoint] rolled back {removed} message(s)")
+            elif sub == "compact":
+                if self._savepoint is None:
+                    print("[ctx savepoint] no savepoint set — use /ctx savepoint set first")
+                    return
+                since = self.messages[self._savepoint:]
+                if not since:
+                    print("[ctx savepoint] nothing to compact since savepoint")
+                    return
+                print("[ctx savepoint] compacting messages since savepoint...")
+                summary_msgs = since + [{
+                    "role": "user",
+                    "content": (
+                        "Summarize the above into a concise context block. "
+                        "Include: files read, searches done, key findings. "
+                        "Plain text only. No code fences."
+                    )
+                }]
+                self._sep("AI")
+                summary = self._stream_chat(summary_msgs)
+                if not summary:
+                    print("[ctx savepoint] compact failed — context unchanged")
+                    return
+                del self.messages[self._savepoint:]
+                self.messages.append({"role": "user", "content": f"[summary since savepoint]\n{summary}"})
+                self._savepoint = None
+                _ok(f"[ctx savepoint] compacted {len(since)} message(s) into summary")
+            elif sub == "show":
+                if self._savepoint is None:
+                    print("[ctx savepoint] not set")
+                else:
+                    since = len(self.messages) - self._savepoint
+                    est   = sum(len(m["content"]) for m in self.messages[self._savepoint:]) // 4
+                    print(f"[ctx savepoint] at message {self._savepoint}, {since} message(s) since (~{est:,} tokens)")
+            else:
+                print("usage: /ctx savepoint [set|rollback|compact|show]")
+            return
+        if parts[1] == "clear":
+            if len(parts) > 2 and parts[2].isdigit():
+                n = int(parts[2])
+                if n >= len(self.messages):
+                    self.messages.clear()
+                    self.last_reply = ""
+                    print(f"[ctx cleared all messages]")
+                else:
+                    del self.messages[-n:]
+                    print(f"[ctx clear] removed last {n} message(s), {len(self.messages)} remaining]")
+                return
+            self.messages.clear()
+            self.last_reply = ""
+            print(f"[context cleared — params and num_ctx ({self.num_ctx}) preserved]")
             return
         if parts[1] == "compact":
             if not self.messages:
@@ -2089,7 +2259,7 @@ advanced_tools =
             ctx_text = "\n".join(plain_lines) + summary_p
             if not inject_ctx:
                 inject_ctx = self._confirm("Add tree to context? [Y/n]", ctx_add=ctx_text)
-            if inject_ctx:
+            if inject_ctx and not self._auto_apply:
                 self.messages.append({"role": "user", "content": ctx_text})
                 _ok(f"[tree] injected into context ({len(plain_lines)} lines)")
 
@@ -2223,7 +2393,7 @@ advanced_tools =
             ctx_text = "\n".join(ctx_lines)
             if not inject_ctx:
                 inject_ctx = self._confirm("Add results to context? [Y/n]", ctx_add=ctx_text)
-            if inject_ctx:
+            if inject_ctx and not self._auto_apply:
                 self.messages.append({"role": "user", "content": ctx_text})
                 _ok(f"[find] injected into context ({len(ctx_lines)} lines)")
 
@@ -2248,8 +2418,12 @@ advanced_tools =
             try:
                 content, total = read_file(path, start, end, line_numbers=ln)
                 label = path + (f" lines {start}-{end}" if start else f" ({total} lines)")
-                self.messages.append({"role": "user", "content": f"[file: {label}]\n```\n{content}```"})
-                _ok(f"context: injected {label}")
+                if self._auto_apply:
+                    # inside agent: print to stdout so Tee captures it for agent_msgs
+                    print(f"[file: {label}]\n```\n{content}```")
+                else:
+                    self.messages.append({"role": "user", "content": f"[file: {label}]\n```\n{content}```"})
+                    _ok(f"context: injected {label}")
             except FileNotFoundError:
                 print(f"file not found: {path}")
             except OSError as e:
@@ -2263,6 +2437,8 @@ advanced_tools =
         path = tokens[1]
         rest = tokens[2:]
         has_code = rest[-1].lower()[:4] == "code"
+        if self._in_agent and not has_code:
+            _warn(f"[agent] /edit {path} — missing 'code' keyword, agent reply won't be used")
         if has_code:
             rest = rest[:-1]
         line_start = line_end = None
@@ -2371,6 +2547,8 @@ advanced_tools =
             print("usage: /insert <file> <line> [code]  — line must be a number")
             return
         has_code   = len(tokens) > 3 and tokens[3].lower() == "code"
+        if self._in_agent and not has_code:
+            _warn(f"[agent] /insert {tokens[1] if len(tokens)>1 else ''} — missing 'code' keyword, agent reply won't be used")
         inline_text = None
         if len(tokens) > 3 and tokens[3].lower() != "code":
             # Preserve indentation: skip past cmd, file, line_n in original string,
@@ -2531,6 +2709,8 @@ advanced_tools =
             return
 
         # /patch <file> code — apply SEARCH/REPLACE block from last AI reply
+        if self._in_agent and (len(parts) < 2 or parts[-1].lower() != "code"):
+            _warn(f"[agent] /patch {path} — missing 'code' keyword, will run interactive mode instead of using agent reply")
         if len(parts) >= 2 and parts[-1].lower() == "code":
             if not self.last_reply:
                 print("no AI response yet")
@@ -2646,6 +2826,8 @@ advanced_tools =
             action = "add_suffix"
         else:
             action = "overwrite"
+        if self._in_agent and "code" not in flags:
+            _warn(f"[agent] /save {files[0] if files else ''} — missing 'code' keyword, raw reply will be saved instead of code block")
         if "code" in flags:
             blocks = _extract_all_code_blocks(self.last_reply) or [self.last_reply]
             contents = [blocks[i] if i < len(blocks) else blocks[-1] for i in range(len(files))]
@@ -2710,21 +2892,24 @@ advanced_tools =
             print(_cdiff(dline))
         plain = "\n".join(diff)
         if inject or self._confirm("  add diff to context? [Y/n]:", ctx_add=plain):
-            self.messages.append({"role": "user", "content": f"[diff: {file_a} vs {file_b}]\n{plain}"})
-            _ok(f"[diff] injected into context")
+            if not self._auto_apply:
+                self.messages.append({"role": "user", "content": f"[diff: {file_a} vs {file_b}]\n{plain}"})
+                _ok(f"[diff] injected into context")
 
     def _cmd_run(self, shell_cmd: str):
         print(f"$ {shell_cmd}")
         try:
             proc = subprocess.run(
-                shell_cmd, shell=True, text=True, capture_output=True, timeout=30
+                shell_cmd, shell=True, capture_output=True, timeout=30,
+                encoding="utf-8", errors="replace",
             )
             output = proc.stdout + proc.stderr
             print(output if output else "(no output)")
             status = f"exit code {proc.returncode}"
-            self.messages.append(
-                {"role": "user", "content": f"[run: {shell_cmd}  ({status})]\n```\n{output or '(no output)'}```"}
-            )
+            if not self._auto_apply:
+                self.messages.append(
+                    {"role": "user", "content": f"[run: {shell_cmd}  ({status})]\n```\n{output or '(no output)'}```"}
+                )
             print(f"{status} — injected into context")
         except subprocess.TimeoutExpired:
             print("timeout after 30s")
@@ -3080,6 +3265,7 @@ advanced_tools =
                 capture_output=True,
                 text=True,
                 encoding="utf-8",
+                errors="replace",
                 timeout=30,
             )
         except subprocess.TimeoutExpired:
@@ -3089,8 +3275,8 @@ advanced_tools =
             print(f"[proc] error running {name}: {e}")
             return ""
 
-        stdout = result.stdout.strip()
-        stderr = result.stderr.strip()
+        stdout = (result.stdout or "").strip()
+        stderr = (result.stderr or "").strip()
 
         if result.returncode != 0:
             print(f"{_YELL}[proc] {name} exited {result.returncode}{_R}")
@@ -3135,7 +3321,8 @@ advanced_tools =
                     self._sep("tool")
                     self._route(action_line)
             elif self._confirm("  inject proc result into context? [Y/n]:"):
-                self.messages.append({"role": "user", "content": f"[proc:{name}]\n{stdout}"})
+                if not self._auto_apply:
+                    self.messages.append({"role": "user", "content": f"[proc:{name}]\n{stdout}"})
                 print("[proc] injected")
 
         return stdout
@@ -3153,9 +3340,9 @@ advanced_tools =
             if not files:
                 print("[proc] no processors found")
                 return
-            active_name = self._proc_active.split()[0] if self._proc_active else None
+            active_names = {p.split()[0] for p in self._proc_active}
             for f in files:
-                marker = " *" if f[:-3] == active_name or f == active_name else ""
+                marker = " *" if f[:-3] in active_names or f in active_names else ""
                 print(f"  {f[:-3]}{marker}")
 
         elif sub == "run":
@@ -3174,16 +3361,27 @@ advanced_tools =
             if not os.path.isfile(path):
                 print(f"[proc] not found: {path}")
                 return
-            self._proc_active = rest   # store name + args together
+            if rest not in self._proc_active:
+                self._proc_active.append(rest)
             suffix = f" {' '.join(extra_args)}" if extra_args else ""
             print(f"[proc] persistent: {name_part}{suffix} (runs after every reply)")
 
         elif sub == "off":
-            if self._proc_active:
-                print(f"[proc] stopped: {self._proc_active}")
-                self._proc_active = None
-            else:
+            if not self._proc_active:
                 print("[proc] no persistent processor active")
+            elif rest:
+                # /proc off <name> — remove specific proc
+                to_remove = [p for p in self._proc_active if p.split()[0] == rest]
+                if to_remove:
+                    for p in to_remove:
+                        self._proc_active.remove(p)
+                    print(f"[proc] stopped: {rest}")
+                else:
+                    print(f"[proc] not active: {rest}")
+            else:
+                # /proc off — stop all
+                print(f"[proc] stopped: {', '.join(p.split()[0] for p in self._proc_active)}")
+                self._proc_active = []
 
         elif sub == "new":
             name = rest or self._prompt_input("  processor name:")
@@ -3213,7 +3411,8 @@ advanced_tools =
 
         elif sub == "" or sub == "proc":
             if self._proc_active:
-                print(f"[proc] active: {self._proc_active}")
+                for p in self._proc_active:
+                    print(f"[proc] active: {p}")
             else:
                 print("[proc] no persistent processor active")
 
@@ -3481,7 +3680,8 @@ advanced_tools =
                 result = client.call_tool(tool_name, arguments)
                 print(f"[mcp] {tool_name}:")
                 print(result)
-                self.messages.append({"role": "user", "content": f"[mcp: {tool_name}]\n{result}"})
+                if not self._auto_apply:
+                    self.messages.append({"role": "user", "content": f"[mcp: {tool_name}]\n{result}"})
                 print("[mcp] injected into context")
             except Exception as e:
                 print(f"[mcp] call failed: {e}")
@@ -3659,14 +3859,45 @@ National Academy of Sciences of Ukraine, Kyiv
         matches    = [p.strip() for p in paragraphs if pattern.search(p)]
 
         if not matches:
-            print(f"[help] no section found for '{cmd}'")
-            print(f"  try: /help read | /help map | /help fix | /help plan | /help mcp | /help parallel | /help bkup | /help ctx")
+            # check if it's a user-defined alias
+            alias_key = f"/{cmd}"
+            expansion = self._aliases.get(alias_key)
+            if expansion:
+                print(f"/{cmd}  →  {expansion}  (alias)")
+                # if it expands to /agent <name>, show the agent file info
+                m = re.match(r'^/agent\s+(\S+)', expansion)
+                if m:
+                    agent_name = m.group(1)
+                    agent_path = self._find_agent_def(agent_name)
+                    if agent_path:
+                        cfg = self._load_agent_def(agent_path)
+                        print(f"  agent file : {agent_path}")
+                        if cfg["description"]:
+                            print(f"  description: {cfg['description']}")
+                        print(f"  max_turns  : {cfg['max_turns']}  auto_exec: {cfg['auto_exec']}  auto_apply: {cfg['auto_apply']}")
+                        print(f"  tools      : {', '.join(cfg['tools']) if cfg['tools'] else '(default)'}")
+                        if cfg["aliases"]:
+                            print(f"  aliases    :")
+                            for k, v in cfg["aliases"].items():
+                                print(f"    {k} = {v}")
+                else:
+                    # show help for the top-level target command
+                    target = expansion.lstrip('/').split()[0]
+                    if target != cmd:
+                        target_pattern = re.compile(r'^/' + re.escape(target) + r'(\s|$)', re.MULTILINE)
+                        target_matches = [p.strip() for p in paragraphs if target_pattern.search(p)]
+                        if target_matches:
+                            print()
+                            print('\n\n'.join(target_matches))
+            else:
+                print(f"[help] no section found for '{cmd}'")
+                print(f"  try: /help read | /help map | /help fix | /help plan | /help mcp | /help parallel | /help bkup | /help ctx")
             return
 
         result = '\n\n'.join(matches)
         print(result)
 
-        if ctx:
+        if ctx and not self._auto_apply:
             self.messages.append({"role": "user",
                                    "content": f"[help: /{cmd}]\n{result}"})
             print(f"\n[help] /{cmd} injected into context")
@@ -3683,9 +3914,19 @@ National Academy of Sciences of Ukraine, Kyiv
             self._map_index(root, depth)
         elif sub == "find":
             query = parts[2].strip() if len(parts) > 2 else ""
+            if not os.path.exists(os.path.join(BCODER_DIR, "map.txt")):
+                _warn("[map] map.txt not found. /map index can take a long time on large projects.")
+                if not self._confirm("[map] run /map index now? [Y/n]:"):
+                    return
+                self._map_index(os.path.abspath("."), 2)
             self._map_find(query)
         elif sub == "trace":
             query = parts[2].strip() if len(parts) > 2 else ""
+            if not os.path.exists(os.path.join(BCODER_DIR, "map.txt")):
+                _warn("[map] map.txt not found. /map index can take a long time on large projects.")
+                if not self._confirm("[map] run /map index now? [Y/n]:"):
+                    return
+                self._map_index(os.path.abspath("."), 2)
             self._map_trace(query)
         elif sub == "diff":
             self._map_diff()
@@ -3702,8 +3943,21 @@ National Academy of Sciences of Ukraine, Kyiv
             rtoks = rest.split()
             sub2  = rtoks[0] if rtoks else ""
             if sub2 == "index":
+                if not os.path.exists(os.path.join(BCODER_DIR, "map.txt")):
+                    _warn("[map] map.txt not found. /map index can take a long time on large projects.")
+                    if not self._confirm("[map] run /map index now? [Y/n]:"):
+                        return
+                    self._map_index(os.path.abspath("."), 2)
                 self._map_keyword_index()
             elif sub2 == "extract":
+                if not os.path.exists(os.path.join(BCODER_DIR, "keyword.txt")):
+                    _info("[map] keyword.txt not found — running /map keyword index first...")
+                    if not os.path.exists(os.path.join(BCODER_DIR, "map.txt")):
+                        _warn("[map] map.txt not found. /map index can take a long time on large projects.")
+                        if not self._confirm("[map] run /map index now? [Y/n]:"):
+                            return
+                        self._map_index(os.path.abspath("."), 2)
+                    self._map_keyword_index()
                 self._map_keyword_extract(rtoks[1:])
             else:
                 print("usage:")
@@ -3928,7 +4182,8 @@ National Academy of Sciences of Ukraine, Kyiv
             # full map
             print(result)
             if auto_yes or self._confirm("  add full map to context? [Y/n]:", ctx_add=result):
-                self.messages.append({"role": "user", "content": f"[project map]\n{result}"})
+                if not self._auto_apply:
+                    self.messages.append({"role": "user", "content": f"[project map]\n{result}"})
                 print("[map] full map injected into context")
             return
 
@@ -3939,8 +4194,9 @@ National Academy of Sciences of Ukraine, Kyiv
         print(result)
         print(f"\n[map] {len(hits)} match(es)")
         if auto_yes or self._confirm("  add to context? [Y/n]:", ctx_add=result):
-            self.messages.append({"role": "user",
-                                   "content": f"[map find: {clean_q}]\n{result}"})
+            if not self._auto_apply:
+                self.messages.append({"role": "user",
+                                       "content": f"[map find: {clean_q}]\n{result}"})
             print("[map] injected into context")
 
     def _map_trace(self, query: str):
@@ -3977,8 +4233,9 @@ National Academy of Sciences of Ukraine, Kyiv
             print(result)
             print()
             if auto_yes or self._confirm("  add to context? [Y/n]:", ctx_add=result):
-                self.messages.append({"role": "user",
-                                       "content": f"[map trace: {label}]\n{result}"})
+                if not self._auto_apply:
+                    self.messages.append({"role": "user",
+                                           "content": f"[map trace: {label}]\n{result}"})
                 print("[map] trace injected into context")
 
         elif len(tokens) >= 2:
@@ -4033,8 +4290,9 @@ National Academy of Sciences of Ukraine, Kyiv
 
             if collected:
                 content = "\n\n".join(collected)
-                self.messages.append({"role": "user",
-                                       "content": f"[map trace: {label}]\n{content}"})
+                if not self._auto_apply:
+                    self.messages.append({"role": "user",
+                                           "content": f"[map trace: {label}]\n{content}"})
                 print(f"[map] {len(collected)} path(s) injected into context")
 
         else:
@@ -4048,8 +4306,9 @@ National Academy of Sciences of Ukraine, Kyiv
             print(result)
             print()
             if auto_yes or self._confirm("  add to context? [Y/n]:", ctx_add=result):
-                self.messages.append({"role": "user",
-                                       "content": f"[map trace: {label}]\n{result}"})
+                if not self._auto_apply:
+                    self.messages.append({"role": "user",
+                                           "content": f"[map trace: {label}]\n{result}"})
                 print("[map] trace injected into context")
 
     def _map_diff(self):
@@ -4112,7 +4371,8 @@ National Academy of Sciences of Ukraine, Kyiv
         print()
 
         if changes > 0 and self._confirm("  add diff to context? [Y/n]:", ctx_add=result):
-            self.messages.append({"role": "user", "content": result})
+            if not self._auto_apply:
+                self.messages.append({"role": "user", "content": result})
             print(f"{_GREEN}[map] diff injected into context{_R}")
 
     def _map_delta_asymmetry(self):
@@ -4274,70 +4534,205 @@ National Academy of Sciences of Ukraine, Kyiv
 
         return tee.getvalue().strip() or "(no output)"
 
-    def _cmd_agent(self, user_input: str):
-        task = user_input[6:].strip()
-        if not task:
-            print("usage: /agent [-t N] [-y] <task>  |  /agent continue [-t N] [-y] [follow-up]")
-            print("  configure: .1bcoder/agent.txt  (max_turns, auto_apply, tools, advanced_tools)")
-            return
+    # ── aliases ────────────────────────────────────────────────────────────────
 
-        # /agent continue — resume saved session
-        if task.startswith("continue"):
-            rest = task[8:].strip()
-            if not self._agent_state:
-                print("[agent] no saved session to continue")
-                return
-            state = self._agent_state
-            agent_msgs = state["msgs"]
-            auto_apply = state["auto_apply"]
-            auto_exec  = state["auto_exec"]
-            config    = self._load_agent_config()
-            max_turns = config["max_turns"]
-            # parse flags from rest (-y may appear anywhere)
-            if re.search(r'(?:^|\s)-y(?:\s|$)', rest):
-                auto_exec = True
-                rest = re.sub(r'(?:^|\s)-y(?=\s|$)', ' ', rest).strip()
-            while rest:
-                m = re.match(r'^-t\s+(\d+)\s*(.*)', rest, re.DOTALL)
-                if m:
-                    max_turns = int(m.group(1)); rest = m.group(2).strip(); continue
-                break
-            if rest:
-                agent_msgs.append({"role": "user", "content": rest})
+    def _load_aliases(self) -> dict:
+        """Load aliases from global then local aliases.txt (local overrides global)."""
+        aliases = {}
+        for path in (GLOBAL_ALIASES_FILE, ALIASES_FILE):
+            if not os.path.exists(path):
+                continue
+            for line in open(path, encoding="utf-8"):
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                if "=" in line:
+                    name, _, value = line.partition("=")
+                    name  = name.strip()
+                    value = value.strip()
+                    if name:
+                        if not name.startswith("/"):
+                            name = "/" + name
+                        aliases[name] = value
+        return aliases
+
+    def _expand_alias(self, user_input: str, depth: int = 0) -> str:
+        """Expand a single alias level. {{args}} is replaced by everything after the command name."""
+        if depth > 10:
+            return user_input
+        parts      = user_input.split(None, 1)
+        name       = parts[0]
+        args       = parts[1] if len(parts) > 1 else ""
+        template   = self._aliases.get(name)
+        if template is None:
+            return user_input
+        if "{{args}}" in template:
+            expanded = template.replace("{{args}}", args)
+        else:
+            expanded = (template + (" " + args if args else "")).strip()
+        return self._expand_alias(expanded, depth + 1)
+
+    def _cmd_alias(self, user_input: str):
+        rest = user_input[6:].strip()   # strip "/alias"
+        if not rest or rest == "list":
+            if not self._aliases:
+                print("[aliases] none defined")
             else:
-                agent_msgs.append({"role": "user", "content": "Please continue."})
-            ACTION_RE = re.compile(r'ACTION:\s*(/\S+(?:\s+.+)?)', re.MULTILINE)
-            print(f"[agent] resuming  max_turns: {max_turns}  auto_exec: {auto_exec}")
+                for name, value in sorted(self._aliases.items()):
+                    print(f"  {name} = {value}")
+            return
+        if rest.startswith("clear"):
+            name = rest[5:].strip()
+            if not name.startswith("/"):
+                name = "/" + name
+            if name in self._aliases:
+                del self._aliases[name]
+                _ok(f"[alias] removed {name}")
+            else:
+                print(f"[alias] {name} not found")
+            return
+        if rest.startswith("save"):
+            name = rest[4:].strip()
+            if not name.startswith("/"):
+                name = "/" + name
+            if name not in self._aliases:
+                print(f"[alias] {name} not defined")
+                return
+            os.makedirs(BCODER_DIR, exist_ok=True)
+            lines = []
+            if os.path.exists(ALIASES_FILE):
+                lines = open(ALIASES_FILE, encoding="utf-8").readlines()
+            # replace existing entry or append
+            key = name + " ="
+            new_line = f"{name} = {self._aliases[name]}\n"
+            replaced = False
+            for i, l in enumerate(lines):
+                if l.strip().startswith(name + " =") or l.strip().startswith(name + "="):
+                    lines[i] = new_line
+                    replaced = True
+                    break
+            if not replaced:
+                lines.append(new_line)
+            with open(ALIASES_FILE, "w", encoding="utf-8") as f:
+                f.writelines(lines)
+            _ok(f"[alias] saved {name} to {ALIASES_FILE}")
+            return
+        if "=" in rest:
+            name, _, value = rest.partition("=")
+            name  = name.strip()
+            value = value.strip()
+            if not name.startswith("/"):
+                name = "/" + name
+            self._aliases[name] = value
+            _ok(f"[alias] {name} = {value}")
+            return
+        print("usage: /alias [list] | /alias /name = expansion | /alias clear /name | /alias save /name")
+
+    # ── /ask ───────────────────────────────────────────────────────────────────
+
+    def _truncate_ask_result(self, cmd: str, result: str) -> str:
+        """Truncate a tool result that is too large for a small model's context.
+        Override limits with: /param ask_limit 4000  /param ask_show 2000"""
+        limit = int(self.params.get("ask_limit", ASK_RESULT_LIMIT_CHARS))
+        show  = int(self.params.get("ask_show",  ASK_RESULT_SHOW_CHARS))
+        if len(result) <= limit:
+            return result
+        truncated = result[:show]
+        c = cmd.lstrip().lower()
+        if c.startswith("/map find"):
+            hint = "add more keywords, use -d 1 or -d 2, or add !exclude terms"
+        elif c.startswith("/map trace"):
+            hint = "use -d 2 to limit depth"
+        elif c.startswith("/map keyword"):
+            hint = "use -c flag for comma output or add a more specific phrase"
+        elif c.startswith("/tree"):
+            hint = "use /tree <subfolder> or /tree -d 2 to narrow down"
+        elif c.startswith("/find"):
+            hint = "add -f or -c flag, use --ext, or make the pattern more specific"
+        elif c.startswith("/read"):
+            # extract filename from cmd for a specific hint
+            parts = cmd.split()
+            fname = parts[1] if len(parts) > 1 else "file"
+            hint = f"use a line range, e.g. /read {fname} 1-50"
+        else:
+            hint = "refine your query to get fewer results"
+        return f"{truncated}\n[TRUNCATED — result too large for context. {hint}]"
+
+    # ── shared agent loop ──────────────────────────────────────────────────────
+
+    def _run_agent_loop(self, label, agent_msgs, max_turns, auto_exec, auto_apply,
+                        plan_steps=None, use_procs=False):
+        """Shared loop for /ask, /agent, and future custom agents."""
+        ACTION_RE   = re.compile(r'ACTION:\s*(/\S+(?:[ \t]+[^\n]+)?)', re.MULTILINE)
+        plan_steps  = list(plan_steps) if plan_steps else []
+        total_plan  = len(plan_steps)
+        msgs_offset = 1 + len(self.messages)   # stable: self.messages not modified during loop
+        self._in_agent = True
+        try:
             for turn in range(1, max_turns + 1):
-                print(f"\n{_CYAN}{_BOLD}[agent] ── turn {turn}/{max_turns}{_R}{_DIM} " + "─" * 20 + _R)
+                est_tokens = sum(len(m["content"]) for m in agent_msgs) // 4
+                ctx_pct    = est_tokens * 100 // self.num_ctx
+                print(f"\n{_CYAN}{_BOLD}[{label}] ── turn {turn}/{max_turns}{_R}{_DIM} " +
+                      "─" * 20 + f"  ctx {est_tokens}/{self.num_ctx} ({ctx_pct}%)" + _R)
+                if est_tokens >= int(self.num_ctx * 0.85):
+                    _warn(f"[{label}] context {ctx_pct}% full — stopping to avoid overflow")
+                    break
+
+                if plan_steps:
+                    step     = plan_steps.pop(0)
+                    step_num = total_plan - len(plan_steps)
+                    hint     = f"[plan step {step_num}/{total_plan}: {step}]"
+                    agent_msgs.append({"role": "user", "content": hint})
+                    print(f"{_DIM}  {hint}{_R}")
+
                 self._sep("AI")
                 try:
                     reply = self._stream_chat(agent_msgs)
                 except KeyboardInterrupt:
-                    print("\n[agent] interrupted")
-                    self._agent_state = {"msgs": agent_msgs, "auto_apply": auto_apply, "auto_exec": auto_exec}
+                    print(f"\n[{label}] interrupted")
                     break
                 print()
                 if not reply:
-                    print("[agent] empty reply, stopping")
+                    if plan_steps:
+                        agent_msgs.append({"role": "user", "content": "[no response — continuing to next plan step]"})
+                        continue
+                    print(f"[{label}] empty reply, stopping")
                     break
+
                 self.last_reply = reply
                 agent_msgs.append({"role": "assistant", "content": reply})
-                actions = ACTION_RE.findall(reply)
+
+                proc_actions: list[str] = []
+                if use_procs:
+                    for _proc in self._proc_active:
+                        proc_out = self._run_proc(_proc, auto=True)
+                        if proc_out:
+                            proc_actions += ACTION_RE.findall(proc_out)
+
+                actions = ACTION_RE.findall(reply) + proc_actions
                 if not actions:
-                    print(f"\n{_GREEN}[agent] task complete{_R}{_DIM} (no more ACTIONs){_R}")
-                    self._agent_state = {"msgs": agent_msgs, "auto_apply": auto_apply, "auto_exec": auto_exec}
-                    print(f"{_DIM}  use /agent continue to give a follow-up task{_R}")
-                    if self._confirm("  add agent conversation to main context? [Y/n]:"):
-                        new_start = 1 + len(self.messages)
-                        self.messages.extend(agent_msgs[new_start:])
-                        print("[agent] conversation added to context")
+                    if plan_steps:
+                        print(f"{_DIM}[{label}] no ACTION — {len(plan_steps)} plan step(s) remaining, continuing{_R}")
+                        continue
+                    print(f"\n{_GREEN}[{label}] done{_R}{_DIM} (no more ACTIONs){_R}")
+                    ans = input("  Add to main context? [s]ummary / [a]ll / [n]one: ").strip().lower()
+                    if ans == "a":
+                        self.messages.extend(agent_msgs[msgs_offset:])
+                        _ok(f"[{label}] {len(agent_msgs) - msgs_offset} message(s) added to context")
+                    elif ans == "s":
+                        last = next((m for m in reversed(agent_msgs) if m["role"] == "assistant"), None)
+                        if last:
+                            self.messages.append({"role": "user", "content": f"[{label} result]\n{last['content']}"})
+                            _ok(f"[{label}] last reply added to context")
+                    else:
+                        print(f"[{label}] nothing added to context")
                     break
+
                 tool_results = []
-                stop_agent = False
+                stop_agent   = False
                 for cmd in actions:
                     cmd = cmd.strip()
-                    print(f"\n{_YELL}[agent] action:{_R} {cmd}")
+                    print(f"\n{_YELL}[{label}] action:{_R} {cmd}")
                     if cmd.rstrip().endswith("code") and self.last_reply:
                         preview = _extract_code_block(self.last_reply)
                         if preview:
@@ -4348,27 +4743,232 @@ National Academy of Sciences of Ukraine, Kyiv
                     if not auto_exec:
                         action, val = self._agent_confirm(cmd)
                         if action == 'quit':
-                            print("[agent] stopped by user")
-                            stop_agent = True; break
+                            print(f"[{label}] stopped by user")
+                            stop_agent = True
+                            break
                         if action == 'skip':
-                            tool_results.append(f"[tool skipped: {cmd}]"); continue
+                            tool_results.append(f"[tool skipped: {cmd}]")
+                            continue
                         if action == 'feedback':
-                            print(f"{_DIM}[agent] feedback noted{_R}")
-                            tool_results.append(f"[tool skipped: {cmd}]\n[user note: {val}]"); continue
-                        cmd = val  # possibly edited
+                            print(f"{_DIM}[{label}] feedback noted{_R}")
+                            tool_results.append(f"[tool skipped: {cmd}]\n[user note: {val}]")
+                            continue
+                        cmd = val
                     self._sep("tool")
+                    cmd = self._expand_alias(cmd)
                     result = self._agent_exec(cmd, auto_apply)
+                    result = self._truncate_ask_result(cmd, result)
                     print()
                     tool_results.append(f"[tool result: {cmd}]\n{result}")
+
                 if stop_agent:
-                    self._agent_state = {"msgs": agent_msgs, "auto_apply": auto_apply, "auto_exec": auto_exec}
                     break
                 combined = "\n\n".join(tool_results) if tool_results else "[all tools skipped]"
                 agent_msgs.append({"role": "user", "content": combined})
+
+                est_tokens = sum(len(m["content"]) for m in agent_msgs) // 4
+                ctx_pct    = est_tokens * 100 // self.num_ctx
+                if est_tokens >= int(self.num_ctx * 0.85):
+                    _warn(f"[{label}] context {ctx_pct}% full after tool results — stopping")
+                    break
+
             else:
-                print(f"\n[agent] reached max_turns ({max_turns}), stopping")
-                self._agent_state = {"msgs": agent_msgs, "auto_apply": auto_apply, "auto_exec": auto_exec}
-                print(f"{_DIM}  use /agent continue to resume{_R}")
+                print(f"\n[{label}] reached max_turns ({max_turns}), stopping")
+        finally:
+            self._in_agent = False
+
+    # ── named agents ───────────────────────────────────────────────────────────
+
+    def _find_agent_def(self, name: str) -> str | None:
+        """Return path to <name>.txt in local agents dir then global, or None."""
+        for d in (AGENTS_DIR, GLOBAL_AGENTS_DIR):
+            p = os.path.join(d, name + ".txt")
+            if os.path.exists(p):
+                return p
+        return None
+
+    def _load_agent_def(self, path: str) -> dict:
+        """Parse an agent definition file. Returns dict with all agent settings."""
+        cfg = {
+            "description": "",
+            "system":      AGENT_SYSTEM_BASIC,   # default: inline basic prompt
+            "max_turns":   10,
+            "auto_apply":  True,
+            "auto_exec":   False,
+            "tools":       None,   # None = use default from agent.txt
+            "aliases":     {},
+        }
+        tools, aliases, system_lines = [], {}, []
+        in_tools = in_aliases = in_system = False
+        for raw in open(path, encoding="utf-8"):
+            line = raw.rstrip("\n")
+            stripped = line.strip()
+            if not stripped:
+                # blank line: preserve inside system block, reset other block flags
+                if in_system:
+                    system_lines.append("")
+                else:
+                    in_tools = in_aliases = False
+                continue
+            if stripped.startswith("#"):
+                continue   # comments don't break blocks
+            if line.startswith(" ") or line.startswith("\t"):
+                if in_system:
+                    system_lines.append(stripped)
+                elif in_tools:
+                    tools.append(stripped)
+                elif in_aliases and "=" in stripped:
+                    k, _, v = stripped.partition("=")
+                    k = k.strip()
+                    if not k.startswith("/"):
+                        k = "/" + k
+                    aliases[k] = v.strip()
+                continue
+            # top-level key = value line — ends any open block
+            in_tools = in_aliases = in_system = False
+            if "=" not in stripped:
+                continue
+            key, _, val = stripped.partition("=")
+            key = key.strip().lower()
+            val = val.strip()
+            if key == "description":
+                cfg["description"] = val
+            elif key == "system":
+                system_lines = [val] if val else []
+                in_system = True
+            elif key == "max_turns":
+                cfg["max_turns"] = int(val)
+            elif key == "auto_apply":
+                cfg["auto_apply"] = val.lower() in ("true", "1", "yes")
+            elif key == "auto_exec":
+                cfg["auto_exec"] = val.lower() in ("true", "1", "yes")
+            elif key == "tools":
+                in_tools = True
+            elif key == "aliases":
+                in_aliases = True
+        if system_lines:
+            cfg["system"] = "\n".join(system_lines)
+        if tools:
+            cfg["tools"] = tools
+        if aliases:
+            cfg["aliases"] = aliases
+        return cfg
+
+    def _parse_agent_flags(self, task: str, cfg: dict):
+        """Strip -t N / -y flags from task string. Returns (task, max_turns, auto_exec, auto_apply)."""
+        max_turns  = cfg["max_turns"]
+        auto_exec  = cfg["auto_exec"]
+        auto_apply = cfg["auto_apply"]
+        if re.search(r'(?:^|\s)-y(?:\s|$)', task):
+            auto_exec = auto_apply = True
+            task = re.sub(r'(?:^|\s)-y(?=\s|$)', ' ', task).strip()
+        while True:
+            m = re.match(r'^-t\s+(\d+)\s*(.*)', task, re.DOTALL)
+            if m:
+                max_turns = int(m.group(1))
+                task = m.group(2).strip()
+                continue
+            break
+        return task, max_turns, auto_exec, auto_apply
+
+    def _run_named_agent(self, name: str, task: str, path: str):
+        """Load agent def from path and run it."""
+        cfg  = self._load_agent_def(path)
+        task, max_turns, auto_exec, auto_apply = self._parse_agent_flags(task, cfg)
+
+        # also parse plan steps
+        plan_steps = []
+        if task.startswith('"'):
+            end_q = task.find('"', 1)
+            if end_q != -1:
+                rest = task[end_q + 1:].strip()
+                task = task[1:end_q]
+                pm = re.match(r'^plan\s+(.*)', rest, re.IGNORECASE | re.DOTALL)
+                if pm:
+                    plan_steps = [s.strip() for s in pm.group(1).split(',') if s.strip()]
+        else:
+            pm = re.search(r'\bplan\s+(.*)', task, re.IGNORECASE | re.DOTALL)
+            if pm:
+                plan_steps = [s.strip() for s in pm.group(1).split(',') if s.strip()]
+                task = task[:pm.start()].strip()
+
+        tools = cfg["tools"] or self._load_agent_config().get("tools", DEFAULT_AGENT_TOOLS)
+        tpl   = cfg["system"]
+        tool_list     = get_help_list(tools)
+        system_prompt = tpl.format(tool_list=tool_list) if "{tool_list}" in tpl else tpl
+        system_msg    = {"role": "system", "content": system_prompt}
+
+        desc = f"  {cfg['description']}" if cfg["description"] else ""
+        print(f"[{name}]{desc}")
+        print(f"[{name}] tools: {', '.join(tools)}")
+        print(f"[{name}] max_turns: {max_turns}  auto_exec: {auto_exec}")
+        if plan_steps:
+            print(f"[{name}] plan ({len(plan_steps)} steps): {', '.join(plan_steps)}")
+        print(f"[{name}] task: {task}\n")
+
+        agent_msgs = [system_msg] + list(self.messages) + [{"role": "user", "content": task}]
+
+        # apply agent-scoped aliases for the duration of this run
+        saved_aliases = dict(self._aliases)
+        self._aliases.update(cfg["aliases"])
+        try:
+            self._run_agent_loop(name, agent_msgs, max_turns, auto_exec, auto_apply,
+                                 plan_steps=plan_steps)
+        finally:
+            self._aliases = saved_aliases
+
+    # ── /ask ───────────────────────────────────────────────────────────────────
+
+    def _cmd_ask(self, user_input: str):
+        """Read-only research agent for 4B models. Explores with tree/find/map, no file edits."""
+        task = user_input[4:].strip()
+        if not task:
+            print("usage: /ask <question>")
+            print("  Explores the project using read-only navigation tools.")
+            print("  Best with 4B models: nemotron, qwen3:4b, ministral3:3b")
+            return
+
+        max_turns = 15
+        while True:
+            m = re.match(r'^-t\s+(\d+)\s*(.*)', task, re.DOTALL)
+            if m:
+                max_turns = int(m.group(1))
+                task = m.group(2).strip()
+                continue
+            break
+
+        tools      = DEFAULT_AGENT_TOOLS_ASK
+        system_msg = {"role": "system", "content": AGENT_SYSTEM_ASK.format(tool_list=get_help_list(tools))}
+        print(f"[ask] tools: {', '.join(tools)}")
+        print(f"[ask] max_turns: {max_turns}  (read-only, auto-exec)")
+        print(f"[ask] question: {task}\n")
+        agent_msgs = [system_msg] + list(self.messages) + [{"role": "user", "content": task}]
+        self._run_agent_loop("ask", agent_msgs, max_turns,
+                             auto_exec=True, auto_apply=True)
+
+    def _cmd_agent(self, user_input: str):
+        task = user_input[6:].strip()
+        if not task:
+            print("usage: /agent [-t N] [-y] <task> | /agent <name> [-t N] [-y] <task>")
+            print("  configure: .1bcoder/agent.txt  |  .1bcoder/agents/<name>.txt")
+            return
+
+        # check if first non-flag word is a named agent
+        probe = task
+        for _ in range(5):   # skip leading flags
+            m = re.match(r'^(-y|-t\s+\d+)\s*(.*)', probe, re.DOTALL)
+            if m:
+                probe = m.group(2)
+            else:
+                break
+        first_word = probe.split()[0] if probe.split() else ""
+        agent_path = self._find_agent_def(first_word)
+        if agent_path:
+            task_rest = probe[len(first_word):].strip()
+            # reattach any leading flags
+            leading = task[:task.index(first_word)].strip()
+            full_task = (leading + " " + task_rest).strip()
+            self._run_named_agent(first_word, full_task, agent_path)
             return
 
         config     = self._load_agent_config()
@@ -4431,103 +5031,10 @@ National Academy of Sciences of Ukraine, Kyiv
                 print(f"  {_DIM}{_i}. {_s}{_R}")
         print(f"[agent] task: {task}\n")
 
-        # agent runs in its own message thread (copies current context)
-        agent_msgs = [system_msg] + list(self.messages)
-        agent_msgs.append({"role": "user", "content": task})
+        agent_msgs = [system_msg] + list(self.messages) + [{"role": "user", "content": task}]
+        self._run_agent_loop("agent", agent_msgs, max_turns, auto_exec, auto_apply,
+                             plan_steps=plan_steps, use_procs=True)
 
-        ACTION_RE = re.compile(r'ACTION:\s*(/\S+(?:\s+.+)?)', re.MULTILINE)
-
-        for turn in range(1, max_turns + 1):
-            print(f"\n{_CYAN}{_BOLD}[agent] ── turn {turn}/{max_turns}{_R}{_DIM} " + "─" * 20 + _R)
-            if plan_steps:
-                step = plan_steps.pop(0)
-                step_num = total_plan - len(plan_steps)
-                hint = f"[plan step {step_num}/{total_plan}: {step}]"
-                print(f"{_DIM}  {hint}{_R}")
-                agent_msgs.append({"role": "user", "content": hint})
-            self._sep("AI")
-
-            try:
-                reply = self._stream_chat(agent_msgs)
-            except KeyboardInterrupt:
-                print("\n[agent] interrupted")
-                break
-
-            print()
-            if not reply:
-                if plan_steps:
-                    print(f"[agent] empty reply — {len(plan_steps)} plan step(s) remaining, continuing")
-                    agent_msgs.append({"role": "user", "content": "[no response — continuing to next plan step]"})
-                    continue
-                print("[agent] empty reply, stopping")
-                break
-
-            self.last_reply = reply
-            agent_msgs.append({"role": "assistant", "content": reply})
-
-            # run persistent proc between reply and ACTION detection
-            # proc stdout may inject additional ACTION: lines
-            proc_actions: list[str] = []
-            if self._proc_active:
-                proc_out = self._run_proc(self._proc_active, auto=True)
-                if proc_out:
-                    proc_actions = ACTION_RE.findall(proc_out)
-
-            actions = ACTION_RE.findall(reply) + proc_actions
-            if not actions:
-                if plan_steps:
-                    print(f"{_DIM}[agent] no ACTION — {len(plan_steps)} plan step(s) remaining, continuing{_R}")
-                    continue
-                print(f"\n{_GREEN}[agent] task complete{_R}{_DIM} (no more ACTIONs){_R}")
-                self._agent_state = {"msgs": agent_msgs, "auto_apply": auto_apply, "auto_exec": auto_exec}
-                print(f"{_DIM}  use /agent continue to give a follow-up task{_R}")
-                if self._confirm("  add agent conversation to main context? [Y/n]:"):
-                    new_start = 1 + len(self.messages)
-                    self.messages.extend(agent_msgs[new_start:])
-                    print("[agent] conversation added to context")
-                break
-
-            tool_results = []
-            stop_agent = False
-            for cmd in actions:
-                cmd = cmd.strip()
-                print(f"\n{_YELL}[agent] action:{_R} {cmd}")
-                if cmd.rstrip().endswith("code") and self.last_reply:
-                    preview = _extract_code_block(self.last_reply)
-                    if preview:
-                        print(f"{_DIM}  ┌─ code to apply ──────────────────────{_R}")
-                        for ln in preview.splitlines():
-                            print(f"{_DIM}  │{_R} {ln}")
-                        print(f"{_DIM}  └───────────────────────────────────────{_R}")
-                if not auto_exec:
-                    action, val = self._agent_confirm(cmd)
-                    if action == 'quit':
-                        print("[agent] stopped by user")
-                        stop_agent = True
-                        break
-                    if action == 'skip':
-                        tool_results.append(f"[tool skipped: {cmd}]")
-                        continue
-                    if action == 'feedback':
-                        print(f"{_DIM}[agent] feedback noted{_R}")
-                        tool_results.append(f"[tool skipped: {cmd}]\n[user note: {val}]")
-                        continue
-                    cmd = val  # possibly edited
-                self._sep("tool")
-                result = self._agent_exec(cmd, auto_apply)
-                print()
-                tool_results.append(f"[tool result: {cmd}]\n{result}")
-
-            if stop_agent:
-                self._agent_state = {"msgs": agent_msgs, "auto_apply": auto_apply, "auto_exec": auto_exec}
-                break
-            combined = "\n\n".join(tool_results) if tool_results else "[all tools skipped]"
-            agent_msgs.append({"role": "user", "content": combined})
-
-        else:
-            print(f"\n[agent] reached max_turns ({max_turns}), stopping")
-            self._agent_state = {"msgs": agent_msgs, "auto_apply": auto_apply, "auto_exec": auto_exec}
-            print(f"{_DIM}  use /agent continue to resume{_R}")
 
 
 # ── entry point ────────────────────────────────────────────────────────────────
@@ -4551,6 +5058,7 @@ def main():
     if args.init:
         existed = os.path.isdir(BCODER_DIR)
         os.makedirs(PLANS_DIR, exist_ok=True)
+        os.makedirs(AGENTS_DIR, exist_ok=True)
         if existed:
             print(f".1bcoder already exists in {WORKDIR}")
         else:

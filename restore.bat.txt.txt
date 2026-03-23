@@ -5,3 +5,8 @@ claude --resume 3b502a9f-3bda-4e22-bb3a-3f1349a49512
 
 claude --resume 3a316dc6-e0ae-48ba-91f6-06c6e45ee725
 claude --resume 3a316dc6-e0ae-48ba-91f6-06c6e45ee725
+
+
+claude --resume 4371e901-f3d8-4e49-ae91-c6870ec2923a - публікація
+
+claude --resume 22feb8e6-2108-4754-b317-27f6e49729b2 - новий концепт про мурашок і накопичення памяті

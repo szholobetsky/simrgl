@@ -5,6 +5,8 @@ Includes metrics calculation, text preprocessing, and path extraction
 
 import numpy as np
 import logging
+import os
+
 from typing import List, Set, Dict, Any
 
 # Setup logging
@@ -52,8 +54,8 @@ def extract_module_path(path: str) -> str:
     if not path:
         return "root"
 
-    normalized_path = str(path).replace('\\', '/').strip()
-    parts = normalized_path.split('/')
+    normalized_path = os.path.normpath(path)
+    parts = normalized_path.split(os.sep)
 
     if len(parts) > 1:
         return parts[0]

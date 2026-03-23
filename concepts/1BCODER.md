@@ -43,7 +43,7 @@ The deliberate absence of a TUI framework is a design choice: 1bcoder is optimiz
 
 | File | Role |
 |---|---|
-| `chat.py` | Entire application — REPL, all command handlers, MCP client, streaming logic (~2200 lines) |
+| `chat.py` | Entire application — REPL, all command handlers, MCP client, streaming logic (~4500+ lines) |
 | `map_index.py` | Standalone project scanner: AST-free regex-based identifier extractor → `map.txt` |
 | `map_query.py` | Standalone map query tool: `find` (filter blocks) and `trace` (BFS call chain) modes |
 | `map_query_help.txt` | Full CLI reference for `map_query.py` |
@@ -62,14 +62,15 @@ The deliberate absence of a TUI framework is a design choice: 1bcoder is optimiz
 
 ## 2. Feature Architecture
 
-### 2.1 Context Injection — `/read`
+### 2.1 Context Injection — `/read` and `/readln`
 
 ```
 /read <file> [start-end]
 /read <file1> <file2> <file3> ...
+/readln <file> [start-end]
 ```
 
-The user selects which lines to inject into the AI's context window. Multiple files may be listed in a single command — each is read sequentially and appended to the context in order. This is the manual implementation of what the Anthill's **Librarian agent** (GPU 1) would do automatically by querying Object Passports from the OKG. The human operator plays the Librarian role: knowing which files and lines are relevant and loading only those.
+The user selects which lines to inject into the AI's context window. Multiple files may be listed in a single command — each is read sequentially and appended to the context in order. `/readln` injects with line numbers — use before `/fix` or `/patch` when the model needs to reference exact line positions. `/read` (without numbers) produces cleaner output for prose files, notes, and structured data. This is the manual implementation of what the Anthill's **Librarian agent** (GPU 1) would do automatically by querying Object Passports from the OKG. The human operator plays the Librarian role: knowing which files and lines are relevant and loading only those.
 
 This command directly validates the Anthill's context efficiency claim. A 1B model given `/read file.py 10-25` performs measurably better than the same model given the full file, because it cannot be distracted by irrelevant surrounding code. Multi-file reading enables loading a call chain (interface + implementation + test) in a single step — a direct approximation of the Librarian's `get_neighbors()` traversal.
 
@@ -187,12 +188,22 @@ Runs an autonomous agentic loop configured by `.1bcoder/agent.txt`:
 max_turns = 10
 auto_apply = true
 
+# tools: used by /agent — minimal set for small models
 tools =
     read
+    insert
+    save
+    patch
+
+# advanced_tools: used by /agent advance — full set for larger models
+advanced_tools =
+    read
     run
-    edit
+    insert
     save
     bkup
+    diff
+    patch
     map index
     map find
     map idiff
@@ -210,6 +221,10 @@ The model receives a system prompt listing available tools (2-line summaries ext
 **Code preview before execution**: before each ACTION is executed, the agent shows a preview of the command (and the last AI reply for `/edit code`, `/patch code` operations), followed by `execute? [Y/n/q]` — skip or abort without executing. The `-y` flag suppresses this confirmation. This is the Crooked Wall Principle applied to the agent execution layer.
 
 **`/agent continue`**: the agent saves its state (`self._agent_state`) at the end of each loop — including the thread's message history, remaining turns, and last task description. `/agent continue` restores this state and resumes from the stopping point. This implements primitive **session persistence** for the agent role specifically, analogous to checkpointing an Anthill pipeline mid-execution.
+
+**`/agent advance`**: uses the full `advanced_tools` set and a more capable system prompt — designed for 7B+ models. Includes `run`, `diff`, `map`, `bkup`, and all edit tools.
+
+**`/agent -y`**: skips per-action confirmation — all ACTIONs execute automatically. Works at any position in the command (`/agent -y task`, `/agent task -y`). Equivalent to `auto_apply = true` in `agent.txt` but scoped to a single run.
 
 **`/agent -t N`**: overrides `max_turns` from `agent.txt` for a single run.
 
@@ -240,7 +255,89 @@ Sends prompts to multiple models simultaneously using `concurrent.futures`. Each
 
 This directly implements **Multi-Instance Debate** from [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) §4.3. The user reviews multiple outputs and plays the Critic role — identifying where all models agree (structural signal) versus where they diverge (implementation choice). The profile system mirrors the Anthill's GPU farm worker configuration.
 
-### 2.9 Structural Diff — `/diff`
+### 2.9 Post-processors — `/proc`
+
+```
+/proc list
+/proc run <name> [args...]
+/proc on <name> [args...]     — persistent: runs after every LLM reply
+/proc off [name]              — stop one or all persistent processors
+/proc new <name>              — create processor from template
+```
+
+Post-processors are Python scripts that receive the last LLM reply on `stdin` and write results to `stdout`. The protocol:
+- `stdout` lines are displayed and optionally injected into context
+- `key=value` lines are extracted as named parameters
+- `ACTION: /command` lines are confirmed with the user then executed (in `run` mode)
+- Exit code non-zero = failure; `stderr` shown as warning
+
+Built-in processors:
+
+| Processor | Purpose | Mode |
+|---|---|---|
+| `extract-files` | Extract filenames; `ACTION: /read` if exactly one found | one-shot |
+| `extract-code` | Extract code blocks; `ACTION: /save` if one block + filename detected | one-shot |
+| `extract-list` | Convert first bullet/numbered list to comma-separated line | one-shot |
+| `grounding-check` | Score identifiers against `map.txt`, warn if <50% real | persistent |
+| `collect-files` | Accumulate filenames to `.1bcoder/collected-files.txt` | persistent |
+| `regexp-extract` | Extract all regex matches: `regexp-extract <pattern> [-i] [-u] [-g N]` | one-shot |
+| `add-save.py` | Accumulate code blocks across turns into a target file | persistent |
+
+**`/proc on` supports multiple simultaneous processors**: each is run in order after every reply. `/proc off <name>` stops one; `/proc off` stops all.
+
+**`regexp-extract`** is the map-reduce primitive for free-form model output. Because 1B models "think while they write" (generation IS reasoning), constraining output length constrains thinking. The correct pattern: let the model generate freely, then extract structure programmatically:
+
+```
+/proc run regexp-extract \b[0-9]{3}\b          # find 3-digit numbers
+/proc run regexp-extract "def (\w+)\(" -g 1 -u  # extract function names
+/proc run regexp-extract [\w./\\-]+\.py -u       # collect .py paths
+```
+
+In Anthill terms, `/proc` is the **discriminator layer**: a lightweight post-generation filter that validates or extracts structure from free-form output without requiring the model to constrain its own generation. This is architecturally equivalent to a Process Reward Model operating on finished output rather than token-by-token.
+
+### 2.10 Team Runs — `/team`
+
+```
+/team list
+/team show <name>
+/team run <name> [--param k=v ...]
+/team new <name>
+```
+
+Spawns multiple 1bcoder workers in parallel, each running a different plan against the same project. Each worker gets its own model, host, and plan. Results are saved to `.1bcoder/results/`; logs to `.1bcoder/team-logs/`.
+
+Team definition (`.1bcoder/teams/<name>.yaml`):
+```yaml
+workers:
+  - host: localhost:11434
+    model: qwen2.5-coder:1.5b
+    plan: team-tree-worker.txt
+  - host: openai://localhost:1234
+    model: qwen2.5-coder:1.5b
+    plan: team-search-worker.txt
+  - host: 192.168.0.10:11434
+    model: gemma3:4b
+    plan: team-map-worker.txt
+```
+
+`--param` values are forwarded to every worker plan as `{{placeholders}}`. After all workers finish, results are aggregated with a summary plan.
+
+Built-in team plans implement the **map-reduce pattern** for codebase analysis: `team-tree-worker.txt` (structural location), `team-search-worker.txt` (function-level search), `team-map-worker.txt` (dependency graph), `team-summarize.txt` (aggregation).
+
+In Anthill terms, `/team` is the **parallel agent dispatch** mechanism — the same function as the LangGraph orchestrator spawning role-specialized agents on separate GPUs, implemented as parallel subprocesses with plan-driven task assignment.
+
+### 2.11 Prompt Templates — `/prompt` and `/format`
+
+```
+/prompt save <name>    — save last user message as reusable template
+/prompt load           — numbered list, select, fill {{params}} interactively
+/format <description>  — inject strict output format constraint into context
+/format clear          — remove active format constraint
+```
+
+**`/prompt`** stores reusable message templates with `{{key}}` placeholders in `<install>/.1bcoder/prompts/`. Values are prompted interactively on load. Equivalent to parameterized task schemas in the Anthill's plan system — but at the message level rather than the command sequence level.
+
+**`/format`** injects a strict output format constraint as a system-level instruction before the next generation. Examples: `/format JSON array`, `/format one word`, `/format LINE N: content`. This complements `FIX_SYSTEM`/`PATCH_SYSTEM` by allowing ad-hoc format enforcement without modifying the system prompt. Particularly useful for forcing structured output from models that drift toward prose.
 
 ```
 /diff <file_a> <file_b> [-y]
@@ -250,7 +347,17 @@ Computes and displays a unified diff between any two files — not just before/a
 
 This is the Anthill's **Notary consistency check** applied manually and on-demand, extended to arbitrary file pairs rather than only OKG snapshots.
 
-### 2.10 Model Parameters — `/param`
+### 2.13 Structural Diff — `/diff`
+
+```
+/diff <file_a> <file_b> [-y]
+```
+
+Computes and displays a unified diff between any two files. Typical use: `file.py` vs `file.py.bkup`, two branches of the same module, or pre/post refactor snapshots. The diff output is injected into context, allowing the model to reason about what changed between two states.
+
+This is the Anthill's **Notary consistency check** applied manually and on-demand, extended to arbitrary file pairs rather than only OKG snapshots.
+
+### 2.14 Model Parameters — `/param`
 
 ```
 /param <key> <value>
@@ -260,7 +367,7 @@ Injects arbitrary model parameters into every subsequent generation request — 
 
 This implements the Anthill's **per-agent behavioral calibration**: a Coder agent running in `/fix` mode may be configured with `temperature 0.1` for determinism; a brainstorming run uses `temperature 0.9`. The human manually sets what the Router would select automatically per role.
 
-### 2.11 Think Block Management — `/think`
+### 2.15 Think Block Management — `/think`
 
 ```
 /think include
@@ -273,7 +380,7 @@ Some reasoning models (QwQ, DeepSeek-R1, certain Qwen variants) emit `<think>...
 
 This is the Anthill's **context hygiene layer**: intermediate cognitive artifacts are shown but not persisted unless explicitly requested.
 
-### 2.12 MCP Integration
+### 2.16 MCP Integration
 
 A full `MCPClient` class implements JSON-RPC over stdio, compatible with any standard MCP server. The `/mcp` command suite provides:
 
@@ -286,7 +393,7 @@ A full `MCPClient` class implements JSON-RPC over stdio, compatible with any sta
 
 This is the **nervous system** described in [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) §8.1. The filesystem, git, web, database, and memory servers available in `MCP.md` are exactly the external knowledge sources the Anthill agents use to access structured context without reading raw files. When Phase 1's `get_passport()` MCP server is built, the existing `/mcp connect` command will connect to it without any code changes.
 
-### 2.13 Output Management — `/save`
+### 2.17 Output Management — `/save`
 
 ```
 /save <file> [mode]
@@ -296,7 +403,7 @@ Modes: `overwrite`, `append-above` / `-aa`, `append-below` / `-ab`, `add-suffix`
 
 The `code` mode implements the Anthill's principle of treating model outputs as structured artifacts rather than raw text: the markdown wrapper is discarded and only the code payload is persisted.
 
-### 2.14 Context and Session Controls
+### 2.18 Context and Session Controls
 
 | Command | Role |
 |---|---|
@@ -312,6 +419,61 @@ The `code` mode implements the Anthill's principle of treating model outputs as 
 | `/help <cmd> [ctx]` | Show per-command help; `ctx` injects the help text into AI context |
 
 `/ctx save` / `/ctx load` implement primitive **session memory** — the ability to resume a working context across launches. In Anthill terms, this is a manual L2 memory tier (conversation history) without the L3 (OKG) or L4 (vector RAG) tiers.
+
+### 2.19 Named Agents and Aliases — `/agent <name>`, `/alias`
+
+```
+/agent <name> [-t N] [-y] <task>
+/<name> <task>                    — direct dispatch shorthand
+/alias /name = expansion          — define a command alias
+/alias save /name                 — persist to aliases.txt
+```
+
+The named agent system is the most architecturally significant development since the original `/agent` loop. It moves agent definition **out of code and into files**, enabling specialization without modifying `chat.py`.
+
+**Agent definition files** (`.1bcoder/agents/<name>.txt`):
+
+```ini
+description = What this agent does
+max_turns = 8
+auto_exec = true
+auto_apply = true
+
+system =
+    You are a ... Complete the task using the available tools.
+    ...
+    Available tools:
+    {tool_list}
+
+tools =
+    run
+    find
+
+aliases =
+    /schema = /run sqlite3 {{args}} ".schema"
+    /query  = /run sqlite3 {{args}}
+```
+
+Four fields define an agent's complete behavioral envelope:
+
+| Field | Role |
+|---|---|
+| `system =` | Inline multiline system prompt; `{tool_list}` substituted at runtime |
+| `tools =` | Whitelist of allowed tools — controls both what the agent knows and what it can do |
+| `aliases =` | Agent-scoped command shortcuts; active only during this agent's run |
+| `max_turns`, `auto_exec`, `auto_apply` | Execution parameters |
+
+**Agent-scoped aliases** are the critical primitive: they let the agent file define domain-specific shorthand commands (e.g. `/schema db` → `sqlite3 db ".schema"`) that are merged into `self._aliases` before the loop and fully restored after. The agent operates with an augmented vocabulary; the main session is unaffected.
+
+**Shared `_run_agent_loop`**: `/ask`, `/agent <name>`, and `/agent` all execute through a single shared loop. The `_in_agent` flag (True for the entire duration, regardless of `-y`) enables the code keyword warning system on `/patch`, `/save`, `/insert`, `/edit` — catching agent-generated commands that would fail silently.
+
+**Global alias table** (`aliases.txt`): loaded at startup, survives `/clear`. Global file ships `/ask = /agent ask` and `/advance = /agent advance` — turning what were hardcoded commands into first-class named agents. New agents are added by creating a file, not modifying code.
+
+**Context integration after completion**: when any agent loop finishes, the user is prompted `[s]ummary / [a]ll / [n]one` — pulling the agent's last reply, full conversation, or nothing into main context. This enables seamless chaining: `/ask` discovers the relevant function, then the main session modifies it.
+
+**The Thin Agent Principle** (empirical finding, 2026-03-23): the SQLite agent (2 tools: `run`, `find`) with `qwen3:1.7b` completed DB research tasks reliably. The same model running `aider`'s general agent (12+ tools, large system prompt) with `nemotron-3-nano:4b` failed to start due to context overflow; when it did start, it looped the system prompt. The finding: **for models ≤4B parameters, a narrow tool surface and a domain-specific system prompt are more predictive of task success than model capability alone**. See [1BCODER_SPECIAL_AGENTS.md](1BCODER_SPECIAL_AGENTS.md) for the full experimental design.
+
+In Anthill terms, each named agent is a **minimal SKILL.md instantiation**: system prompt = behavioral specification, tool list = allowed verb space, aliases = domain vocabulary. The agent file is what the Dynamic SKILL.md (Gap 5.1) would load and update automatically. The named agent system is the missing link between the static `agent.txt` whitelist and a fully dynamic per-role behavioral configuration.
 
 ---
 
@@ -338,8 +500,18 @@ The `code` mode implements the Anthill's principle of treating model outputs as 
 | `agent.txt` tool whitelist | SKILL.md (behavioral constraint) | **Primitive** — static config, no Researcher update |
 | `FIX_SYSTEM` / `PATCH_SYSTEM` | SKILL.md (output format constraint) | **Primitive** — hardcoded, not dynamic |
 | `/bkup save/restore` | Pre-change state preservation | **Implemented** — rotating snapshots, no silent overwrite |
+| `/readln <file>` | Librarian retrieval with line-number anchoring (for `/fix`/`/patch` targeting) | **Implemented** — line numbers in context |
 | `/parallel` | Multi-Instance Debate (Section 4.3) | **Implemented** — concurrent model queries |
 | `/parallel profile` | GPU farm worker configuration | **Implemented** — saved profiles in profiles.txt |
+| `/proc run <name>` | Post-generation discriminator / structured extraction layer | **Implemented** — stdin/stdout pipeline, ACTION protocol |
+| `/proc on <name>` (multiple) | Persistent discriminator chain after every reply | **Implemented** — list of active procs, ordered execution |
+| `regexp-extract` proc | Map-reduce extraction: free generation → programmatic structure | **Implemented** — regex with -i/-u/-g flags |
+| `grounding-check` proc | Identifier grounding validation against map.txt | **Implemented** — warns if <50% real identifiers |
+| `/team run` | Parallel agent dispatch — role-specialized workers on separate plans | **Implemented** — concurrent subprocesses, per-worker logs |
+| `/prompt save/load` | Parameterized task schema templates | **Implemented** — {{key}} substitution, interactive fill |
+| `/format <description>` | Ad-hoc output format constraint injection | **Implemented** — appended to system context before generation |
+| `/agent advance` | Full toolset agent loop for 7B+ models | **Implemented** — advanced_tools whitelist, richer system prompt |
+| `/agent -y` | Autonomous execution mode (no per-action confirmation) | **Implemented** — any position in command |
 | MCP client + servers | MCP nervous system (Section 8.1) | **Implemented** — full JSON-RPC client |
 | `/ctx save` / `/ctx load` | L2 memory tier (conversation history) | **Implemented** — file-serialized context |
 | `/ctx compact` | Context compression / session summarization | **Implemented** — AI-distills history into compact digest |
@@ -348,7 +520,14 @@ The `code` mode implements the Anthill's principle of treating model outputs as 
 | `/param <key> <value>` | Per-agent behavioral calibration (temperature, top_p…) | **Implemented** — auto-cast, passed to provider |
 | `/think exclude/include` | Context hygiene — chain-of-thought artifact filtering | **Implemented** — shown but not persisted by default |
 | Agent multi-ACTION + code preview | Compound tool call per turn + Crooked Wall execution gate | **Implemented** — findall + Y/n/q per action |
-| `/agent continue` | Pipeline checkpoint / resume | **Implemented** — `_agent_state` saved, restored on demand |
+| Named agent files (`agents/<name>.txt`) | Dynamic SKILL.md per role — system prompt + tool whitelist + aliases | **Implemented** — file-driven, no code change needed |
+| Agent-scoped aliases (`aliases =` in agent file) | Per-role domain vocabulary — active only during agent run | **Implemented** — saved/restored around `_run_agent_loop` |
+| Global `aliases.txt` | Session-persistent command shortcuts; survives `/clear` | **Implemented** — loaded at startup, global then local |
+| `/ask = /agent ask` alias | Router-level dispatch to named agent | **Implemented** — `ask.txt` defines system + tools + aliases |
+| `/sqlite` agent (2 tools) | Minimal SKILL.md — domain specialist with aliased primitives | **Implemented** — first empirical thin agent, validated 2026-03-23 |
+| `[s]/[a]/[n]` context prompt | Agent result integration gate — human decides what enters main context | **Implemented** — after every agent loop |
+| `_in_agent` flag | Agent execution context signal — enables code keyword warnings | **Implemented** — True for full loop duration, regardless of -y |
+| Shared `_run_agent_loop` | Single orchestration substrate for all agent types | **Implemented** — /ask, /agent <name>, /agent all share the loop |
 | Global plan library | Two-tier SKILL.md (global templates + local overrides) | **Implemented** — 20 built-in plans shipped with tool |
 | `.1bcoder/` directory | BCODER_DIR / project-scoped workspace | **Stub** — flat files, no graph |
 | Status line (model + ctx%) | Operator situational awareness | **Implemented** — printed before each prompt |
@@ -380,6 +559,23 @@ The `code` mode implements the Anthill's principle of treating model outputs as 
 - Multi-provider API abstraction (`ollama://`, `openai://` schemes)
 - Model parameter injection (`/param`) — temperature, top_p, seed, etc.
 - Think block hygiene (`/think`) — shown, not persisted by default
+- `/readln` — context injection with line numbers for precise `/fix`/`/patch` targeting
+- `/proc` post-processor pipeline: stdin/stdout, ACTION protocol, persistent mode
+- Multiple simultaneous `/proc on` processors — ordered chain after every reply
+- Built-in processors: `extract-files`, `extract-code`, `extract-list`, `grounding-check`, `collect-files`, `regexp-extract`, `add-save`
+- `/team` parallel worker dispatch — yaml-defined, per-worker plan + log, `--param` forwarding
+- `/prompt` reusable message templates with `{{key}}` substitution
+- `/format` ad-hoc output format constraint injection
+- `/agent advance` — full toolset for 7B+ models (`advanced_tools` whitelist)
+- `/agent -y` flag — autonomous execution, any position in command
+- Two-tier `agent.txt`: `tools` (small models) + `advanced_tools` (7B+ models)
+- Named agent system: `.1bcoder/agents/<name>.txt` with inline system prompt, tool list, agent-scoped aliases
+- Shared `_run_agent_loop`: single orchestration substrate for `/ask`, `/agent <name>`, `/agent`
+- Global `aliases.txt`: session-persistent shortcuts, survive `/clear`; `/ask`, `/advance`, `/sqlite` defined as named agents
+- `[s]/[a]/[n]` context integration gate after every agent loop
+- `_in_agent` flag: code keyword warning system for `/patch`, `/save`, `/insert`, `/edit` in agent context
+- **Thin Agent Principle** (2026-03-23): empirical finding that ≤5 domain-specific tools outperform large general toolsets for models ≤4B; `sqlite` agent (2 tools) validated with `qwen3:1.7b`
+- `/help <alias>`: resolves alias and shows target agent file metadata (description, tools, aliases)
 
 **Phase 1 (missing — next step):**
 - `ontology_extractor.py` — AST parser generating Object Passports from source files (map_index.py is the regex precursor)
@@ -496,9 +692,9 @@ The core thesis — that context quality substitutes for model scale — is vali
 
 ---
 
-**Document Version**: 1.3
+**Document Version**: 1.5
 **Created**: 2026-03-05
-**Updated**: 2026-03-09
+**Updated**: 2026-03-23
 **Project**: SIMARGL / Anthill Research Program
 **Relation to**:
 - [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) — parent architecture document
@@ -506,6 +702,23 @@ The core thesis — that context quality substitutes for model scale — is vali
 - [FINAL_PRODUCT.md](FINAL_PRODUCT.md) — SIMARGL product architecture (codeXpert = 1bcoder's planned MCP evolution)
 - [TWO_PHASE_REFLECTIVE_AGENT.md](TWO_PHASE_REFLECTIVE_AGENT.md) — agent architecture precursor
 - [PHENOMENOLOGICAL_CODE_UNDERSTANDING.md](PHENOMENOLOGICAL_CODE_UNDERSTANDING.md) — philosophical grounding (Observer Loop, symbol grounding)
+
+**Changelog v1.5** (2026-03-23):
+- §2.19 (new): Named agents and aliases — agent files, shared loop, thin agent principle, Anthill mapping
+- §3.1: Added 8 new mapping table rows (named agents, aliases, sqlite agent, _in_agent, shared loop, context gate)
+- §3.2: Updated Phase 0 completion list with named agent system and thin agent principle
+- See [1BCODER_SPECIAL_AGENTS.md](1BCODER_SPECIAL_AGENTS.md) for experimental design
+
+**Changelog v1.4** (2026-03-18):
+- §1.4: Updated `chat.py` line count (~4500+)
+- §2.1: Added `/readln` — line-number injection variant
+- §2.6: Updated `agent.txt` to two-tier `tools`/`advanced_tools`; added `/agent advance`, `/agent -y`
+- §2.9 (new): `/proc` post-processor pipeline — full protocol description, all built-in processors, map-reduce framing, Anthill discriminator mapping
+- §2.10 (new): `/team` parallel worker dispatch — yaml format, built-in plans, Anthill mapping
+- §2.11 (new): `/prompt` templates and `/format` constraint injection
+- §2.13 (new): `/diff` moved and renumbered from old §2.9
+- §3.1: Added `/readln`, `/proc`, `/team`, `/prompt`, `/format`, `/agent advance`, `/agent -y` to mapping table
+- §3.2: Updated Phase 0 completion list with all new features
 
 **Changelog v1.3** (2026-03-09):
 - §2.5: `/map idiff` now computes ORPHAN_DRIFT + GHOST ALERT; `detect_ghosts()` in `map_query.py`

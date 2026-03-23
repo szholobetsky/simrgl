@@ -117,21 +117,27 @@ This document provides a structured overview of all metrics, concepts, and appro
 
 ## 8. Architectural Approaches
 
-| Approach | Description | Source File |
-|----------|-------------|-------------|
-| **Two-Phase Reflective Agent** | Phase 1: Reasoning + Search, Phase 2: Reflection + Refinement | [TWO_PHASE_REFLECTIVE_AGENT.md](TWO_PHASE_REFLECTIVE_AGENT.md) |
-| **Three Specialized Agents** | Intent Discovery + Search/Grounding + Synthesis/Reflection | [TWO_PHASE_REFLECTIVE_AGENT.md](TWO_PHASE_REFLECTIVE_AGENT.md), [FILTERING_CONTEXT_CONCEPT.md](FILTERING_CONTEXT_CONCEPT.md) |
-| **Dual MCP Server Architecture** | Separate servers for file-level and task-level embeddings | [DUAL_MCP_SERVER_ARCHITECTURE.md](DUAL_MCP_SERVER_ARCHITECTURE.md) |
-| **Dual Collection System** | RECENT (last N tasks) vs ALL (complete history) | [DUAL_SERVER_RAG_EVALUATION.md](DUAL_SERVER_RAG_EVALUATION.md) |
-| **Anthill OS** | Distributed cognitive OS: network of SLMs (1B–8B) on commodity GPU mining hardware, coordinated via ontological knowledge graph | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) |
-| **Ontological Knowledge Graph (OKG)** | RDF-triplet graph as Single Point of Truth for codebase structure; functions as a DP memoization table — computed once, queried by all agents | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) |
-| **Object Passport** | Minimum-description-length YAML summary of a code artifact (methods, dependencies, architectural tags); replaces raw file reading for context injection | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) |
-| **Reduction Ladder** | 8-level semantic compression hierarchy: Natural Language → Requirements → Code → Ontology → Passport → Knowledge → Meta-Knowledge → Map of the Unknowable | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) |
-| **Adversarial Integrity / Crooked Wall Principle** | Architectural adversarialism: each agent validates input against the OKG rather than accepting it from the previous agent; grounded in Popperian falsificationism | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) |
-| **Kantian Observer Loop** | Code = noumenon (thing-in-itself); OKG = phenomenon (structured perception); Scanner = transcendental filter; post-change OKG consistency check = reality validation | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) |
-| **Qualia Horizon / Map of the Unknowable** | Explicit meta-cognitive catalog of tasks requiring emergent properties of scale (≥14B parameters): aesthetic design, architectural foresight; routes to Oracle gateway | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) |
-| **Oracle Gateway** | Privacy-preserving interface to cloud LLMs (Claude, Gemini): sends only Object Passports, never source code; used only for Qualia-boundary tasks | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) |
-| **SKILL.md** | Per-agent constitution: tool manifest, domain knowledge primer, behavioral constraints, escalation criteria; updated by Researcher agent on failure | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) |
+| Approach | Description | Source File | Status |
+|----------|-------------|-------------|--------|
+| **Two-Phase Reflective Agent** | Phase 1: Reasoning + Search, Phase 2: Reflection + Refinement | [TWO_PHASE_REFLECTIVE_AGENT.md](TWO_PHASE_REFLECTIVE_AGENT.md) | concept |
+| **Three Specialized Agents** | Intent Discovery + Search/Grounding + Synthesis/Reflection | [TWO_PHASE_REFLECTIVE_AGENT.md](TWO_PHASE_REFLECTIVE_AGENT.md), [FILTERING_CONTEXT_CONCEPT.md](FILTERING_CONTEXT_CONCEPT.md) | concept |
+| **Dual MCP Server Architecture** | Separate servers for file-level and task-level embeddings | [DUAL_MCP_SERVER_ARCHITECTURE.md](DUAL_MCP_SERVER_ARCHITECTURE.md) | concept |
+| **Dual Collection System** | RECENT (last N tasks) vs ALL (complete history) | [DUAL_SERVER_RAG_EVALUATION.md](DUAL_SERVER_RAG_EVALUATION.md) | concept |
+| **Anthill OS** | Distributed cognitive OS: network of SLMs (1B–8B) on commodity GPU mining hardware, coordinated via ontological knowledge graph | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) | concept |
+| **Ontological Knowledge Graph (OKG)** | RDF-triplet graph as Single Point of Truth for codebase structure; functions as a DP memoization table — computed once, queried by all agents | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) | concept |
+| **Object Passport** | Minimum-description-length YAML summary of a code artifact (methods, dependencies, architectural tags); replaces raw file reading for context injection | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) | concept |
+| **Reduction Ladder** | 8-level semantic compression hierarchy: Natural Language → Requirements → Code → Ontology → Passport → Knowledge → Meta-Knowledge → Map of the Unknowable | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) | concept |
+| **Adversarial Integrity / Crooked Wall Principle** | Architectural adversarialism: each agent validates input against the OKG rather than accepting it from the previous agent; grounded in Popperian falsificationism | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) | concept |
+| **Kantian Observer Loop** | Code = noumenon (thing-in-itself); OKG = phenomenon (structured perception); Scanner = transcendental filter; post-change OKG consistency check = reality validation | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) | concept |
+| **Qualia Horizon / Map of the Unknowable** | Explicit meta-cognitive catalog of tasks requiring emergent properties of scale (≥14B parameters): aesthetic design, architectural foresight; routes to Oracle gateway | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) | concept |
+| **Oracle Gateway** | Privacy-preserving interface to cloud LLMs (Claude, Gemini): sends only Object Passports, never source code; used only for Qualia-boundary tasks | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) | concept |
+| **SKILL.md** | Per-agent constitution: tool manifest, domain knowledge primer, behavioral constraints, escalation criteria; updated by Researcher agent on failure | [ANTHILL_DISTRIBUTED_COGNITIVE_OS.md](ANTHILL_DISTRIBUTED_COGNITIVE_OS.md) | concept |
+| **1bcoder** | Terminal REPL for 1B models: constrained generation, map index, plan-based decomposition, agent loop, MCP support — human-in-the-loop Anthill prototype | [1BCODER.md](1BCODER.md) | **implemented** |
+| **Project Map (`/map`)** | Regex-based codebase scanner → flat-file index; find/trace/diff queries; ORPHAN_DRIFT + GHOST ALERT alerts; partial re-index | [1BCODER.md](1BCODER.md) | **implemented** |
+| **Post-processors (`/proc`)** | stdin/stdout pipeline: extract-files, extract-code, grounding-check, collect-files, regexp-extract; persistent mode runs after every reply | [1BCODER.md](1BCODER.md) | **implemented** |
+| **Team runs (`/team`)** | Parallel 1bcoder workers each running a plan; per-worker logs; aggregate with summary plan | [1BCODER.md](1BCODER.md) | **implemented** |
+| **Parallel queries (`/parallel`)** | Send same prompt to N models simultaneously; saved profiles | [1BCODER.md](1BCODER.md) | **implemented** |
+| **Swarm Memory GC** | Fixed 25-line shared memory file + generational garbage collection; each agent writes one distilled line; GC compresses 3→1; stigmergic coordination without infrastructure | [SWARM_MEMORY_GEN.md](SWARM_MEMORY_GEN.md) | concept |
 
 ---
 
@@ -193,6 +199,7 @@ LOW ◄────────────────────┼───�
 | [symmetry/EMBEDDING.md](symmetry/EMBEDDING.md) | Calibration invariance, rotation matrices, IRR, aggregation | EN |
 | [symmetry/PASSPORT.md](symmetry/PASSPORT.md) | Object Passport, YES/NO classification, map.txt integration | EN |
 | [SYMBOL_GROUNDING_ESSAY.md](SYMBOL_GROUNDING_ESSAY.md) | Philosophical essay on symbol grounding in code navigation | EN |
+| [SWARM_MEMORY_GEN.md](SWARM_MEMORY_GEN.md) | Constrained shared memory + generational GC for multi-agent coordination | EN |
 | [ua/](ua/) | Ukrainian translations | UA |
 
 ---

@@ -71,11 +71,14 @@ Tasks that require the model to decide *what to look at* — refactoring across 
 - **`<think>` tag support** — reasoning blocks shown in terminal, stripped from context by default; `/think include` passes model reasoning to the next turn
 - Run shell commands and inject their output with `/run`
 - Save AI replies to files with `/save` (code-fence stripping, multiple files, append modes)
-- **Session persistence** — `/ctx save` / `/ctx load` dump and restore full conversations; `/ctx compact` summarizes and compresses the context via AI
+- **Session persistence** — `/ctx save` / `/ctx load` dump and restore full conversations; `/ctx compact` summarizes and compresses the context via AI; `/ctx savepoint` marks a position for rollback or selective compaction; `/ctx clear N` drops the last N messages
 - **Plans** — reusable sequences of commands stored as `.txt` files, run step-by-step or fully automated
 - **Plan from history** — `/plan create ctx` captures this session's commands into a reusable plan automatically
 - **Project map** — scan any codebase into a searchable index (`/map index`), query it (`/map find`), trace call chains (`/map trace`), and diff changes (`/map idiff`) — now includes `ORPHAN_DRIFT` alert (dead code delta) and `GHOST ALERT` (deleted file that other files depended on)
-- **Agent mode** — `/agent <task>` runs an autonomous loop: the agent prompt instructs the model to emit one ACTION per turn (multiple ACTIONs are executed in order if the model emits them), checks `/help` before using a command, and stops when done. Configurable via `.1bcoder/agent.txt`
+- **Ask mode** — `/ask <question>` is an alias for `/agent ask`: a read-only research loop for 4B models that explores the project with tree/find/map tools, never edits files, auto-truncates large results to protect context
+- **Agent mode** — `/agent <task>` runs an autonomous loop; stops when the model outputs plain text with no ACTION; after the loop a `[s]ummary / [a]ll / [n]one` prompt lets you pull agent results into main context
+- **Named agents** — define custom agents in `.1bcoder/agents/<name>.txt` (system prompt, tools, max_turns, aliases); call with `/agent <name> task` or `/<name> task` directly; agent-scoped aliases active only during that run
+- **Aliases** — define command shortcuts with `/alias /name = expansion` (supports `{{args}}`); persisted in `aliases.txt`; loaded from global then project directory at startup and survive `/clear`
 - **Backup/restore** — `/bkup save` rotates existing backups (`file.bkup` → `file.bkup(1)`, `file.bkup(2)`…) so no snapshot is ever overwritten; `/bkup restore` always restores the latest
 - **MCP support** — connect external tool servers (filesystem, web, git, database, browser…) via the Model Context Protocol
 - **Parallel queries** — send prompts to multiple models simultaneously with `/parallel`, with saved profiles
@@ -491,15 +494,29 @@ Standalone tools (usable without 1bcoder):
 
 ---
 
+### Ask mode — read-only research for 4B models
+
+`/ask` is an alias for `/agent ask` — it loads its system prompt, tools, and aliases from `.1bcoder/agents/ask.txt` (global install) or your project's local override. Designed for 4B models (nemotron, qwen3:4b, ministral3:3b). The model navigates the project using `tree`, `find`, `map find`, and `map keyword` — it never edits files. All actions are auto-executed without confirmation.
+
+```
+/ask what does this project do
+/ask -t 5 where is authentication handled
+/ask how are books stored in the database
+```
+
+Each tool result is truncated at ~1K tokens to protect the model's context window — if a result is too large, the model receives a specific hint on how to narrow the query (e.g. `use /tree <subfolder>` or `add more keywords to /map find`).
+
+The system prompt guides the model from broad to narrow: tree → map find → map keyword → find → read. On a second `/ask` in the same session the model skips `/tree` if the project structure is already in context.
+
+When the loop finishes you are prompted: **`[s]ummary / [a]ll / [n]one`** — choose how much of the agent's conversation to pull into your main context.
+
+**What 4B models can do with `/ask`:** 10-step investigation, understand project structure, predict where relevant code is located — tasks that normally require 30B+ models in open-ended agent mode.
+
+---
+
 ### Agent mode
 
 `/agent` runs an autonomous loop: the model reads the task and decides which tool to use. The agent prompt instructs the model to emit one ACTION per turn; if it emits multiple, all are executed in order. Stops when the model outputs plain text with no ACTION.
-
-The agent system prompt is kept minimal for small model compatibility. Two file operations are taught explicitly:
-- **Modify existing file**: write SEARCH/REPLACE block → `ACTION: /patch <file> code`
-- **Create or replace file**: write full code block → `ACTION: /edit <file> code`
-
-If the model writes a code block without an ACTION, the agent detects this and offers to save the code to a file.
 
 ```
 /agent [-t N] [-y] <task> [plan step1, step2, ...]
@@ -516,7 +533,10 @@ If the model writes a code block without an ACTION, the agent detects this and o
 | `e` | Edit the command before executing (copies to clipboard on Windows) |
 | `f` | Send feedback to the AI and skip the action (redirect the model mid-loop) |
 | `q` | Stop the agent |
-- **`plan step1, step2, ...`** — optional comma-separated list of items injected as hints one per turn; lets you drive the agent through multiple files or sub-tasks in sequence. If a turn produces an empty reply or no ACTION, the agent continues to the next plan step automatically
+
+- **`plan step1, step2, ...`** — optional comma-separated list of items injected as hints one per turn
+
+When the loop finishes you are prompted: **`[s]ummary / [a]ll / [n]one`** — choose how much of the agent's conversation to pull into your main context.
 
 ```
 /agent find and fix the divide by zero bug in calc.py
@@ -525,89 +545,93 @@ If the model writes a code block without an ACTION, the agent detects this and o
 /agent read file plan models.py, views.py, urls.py
 ```
 
-**`/agent advance`** uses the full advanced toolset and system prompt — designed for larger models (32B+), includes `run`, `diff`, `map`, `bkup`, and all edit tools:
-
-```
-/agent advance refactor the auth module
-/agent advance read and summarise plan models.py, views.py
-```
-
-**`/agent continue`** resumes the last session (saved automatically on stop, Ctrl+C, or max_turns). Optionally pass a follow-up instruction:
-
-```
-/agent continue
-/agent continue now also add error handling
-/agent continue -t 5 -y
-```
-
-The agent loop (default, with confirmation):
-```
-[agent] turn 1/10
-AI:
-ACTION: /help read
-ACTION: /help edit
-
-[agent] action: /help read
-  execute? [Y/n/q]: Y
-[tool result] /read <file> [file2 ...] [start-end] ...
-
-[agent] action: /help edit
-  execute? [Y/n/q]: Y
-[tool result] /edit <file> code ...
-
-[agent] turn 2/10
-ACTION: /read calc.py
-ACTION: /read README.md
-
-[agent] action: /read calc.py
-  execute? [Y/n/q]: Y
-[agent] action: /read README.md
-  execute? [Y/n/q]: Y
-
-[agent] turn 3/10
-ACTION: /fix calc.py 2
-
-[agent] action: /fix calc.py 2
-  execute? [Y/n/q]: Y
-
-...
-
-[agent] turn 5/10
-AI: The bug is fixed. divide() now returns None when b is 0.
-[agent] task complete
-```
-
-Configure in `.1bcoder/agent.txt`:
+Configure the default agent in `.1bcoder/agent.txt`:
 
 ```ini
 max_turns = 10
 auto_apply = true
 
-# tools: used by /agent — minimal set for small models
 tools =
     read
     insert
     save
     patch
-
-# advanced_tools: used by /agent advance — full set for larger models
-advanced_tools =
-    read
-    run
-    insert
-    save
-    bkup
-    diff
-    patch
-    map index
-    map find
-    map idiff
-    map diff
-    map trace
-    help
 ```
 
-Remove tools from either list to restrict what the model can use.
+---
+
+### Named agents
+
+Custom agents are defined in `.1bcoder/agents/<name>.txt` (project-local) or `<install>/.1bcoder/agents/<name>.txt` (global). Local files override global ones. Call them with `/agent <name> task` or directly as `/<name> task`.
+
+**Agent file format:**
+
+```ini
+# .1bcoder/agents/myagent.txt
+description = What this agent does
+max_turns = 10
+auto_exec = false
+auto_apply = false
+
+system =
+    You are a ... Complete the task using the available tools.
+
+    To call a tool, write ACTION: followed by the command.
+    ...
+
+    Available tools:
+    {tool_list}
+
+tools =
+    read
+    find
+    run
+
+aliases =
+    /search = /map find {{args}}
+    /sql    = /run python db.py "{{args}}"
+```
+
+- **`system =`** — inline multiline system prompt; indented lines continue the block; `{tool_list}` is substituted automatically from the `tools =` list
+- **`tools =`** — one tool name per indented line; controls what the agent knows about and what gets shown in its system prompt
+- **`aliases =`** — agent-scoped aliases; active only during this agent's run, restored to global state after; `{{args}}` is replaced by everything after the alias name
+
+Built-in named agents (global install):
+
+| Agent | Command | Description |
+|---|---|---|
+| `ask` | `/ask <question>` or `/agent ask` | Read-only research — tree, find, map, never edits |
+| `advance` | `/advance <task>` or `/agent advance` | Full toolset for 7B+ models |
+
+**`/agent advance`** — named agent from `agents/advance.txt`, full toolset for larger models (7B+), includes `run`, `diff`, `map`, `bkup`, and all edit tools. Shortcut: `/advance`:
+
+```
+/agent advance refactor the auth module
+/advance read and summarise plan models.py, views.py
+```
+
+---
+
+### Aliases
+
+Define command shortcuts with `/alias`:
+
+```
+/alias /name = expansion          define an alias ({{args}} = everything after the name)
+/alias                            list all active aliases
+/alias clear /name                remove an alias (session only)
+/alias save /name                 persist to .1bcoder/aliases.txt
+```
+
+Aliases are loaded at startup from the global `aliases.txt` then the project-local one and **survive `/clear`**. They are expanded before any command is dispatched, so aliases can expand to other aliases (up to 10 levels deep).
+
+```
+/alias /grep = /find {{args}} -c
+/alias /kw   = /map keyword extract {{args}} -f -c
+/alias save /grep
+```
+
+**Agent-scoped aliases** — an agent's `aliases =` section is merged into the active alias table before the loop starts and fully restored after. The agent can use its own shorthand commands in `ACTION:` lines; they disappear when the agent finishes.
 
 ---
 
@@ -807,10 +831,16 @@ Built-in team plans in `<install>/.1bcoder/plans/`:
 | `/host <url> [-sc]` | Switch host and provider (see below); `-sc` keeps context |
 | `/ctx <n>` | Set context window size in tokens (default 8192) |
 | `/ctx` | Show current usage vs limit |
+| `/ctx clear` | Clear all conversation messages (keeps `/param` and num_ctx) |
+| `/ctx clear <n>` | Remove last N messages from context |
 | `/ctx cut` | Remove oldest messages until context fits |
 | `/ctx compact` | Ask AI to summarize the conversation, replace context with summary |
 | `/ctx save <file>` | Save full conversation to file |
 | `/ctx load <file>` | Restore a saved conversation |
+| `/ctx savepoint set` | Mark current position as a savepoint |
+| `/ctx savepoint rollback` | Remove all messages added since the savepoint |
+| `/ctx savepoint compact` | Summarize messages since savepoint, replace with summary |
+| `/ctx savepoint show` | Show savepoint info and messages added since |
 | `/think exclude` | Strip `<think>` blocks from context — shown in terminal only (default) |
 | `/think include` | Keep `<think>` blocks in context (pass model reasoning to next turn) |
 | `/param <key> <value>` | Set a model parameter for every request (e.g. `temperature`, `enable_thinking`) |
@@ -882,6 +912,8 @@ The status line before each `>` prompt shows the same info in compact form:
 ├── run.bat           # Windows quick-launch
 ├── MCP.md            # MCP server quick-reference
 └── .1bcoder/              # global install assets
+    ├── agents/            # built-in named agent definitions (ask.txt, advance.txt)
+    ├── aliases.txt        # global aliases loaded at startup (/ask, /advance, ...)
     ├── plans/             # built-in plan .txt files (team workers, examples)
     ├── teams/             # /team yaml definitions
     ├── prompts/           # /prompt saved templates
@@ -889,9 +921,11 @@ The status line before each `>` prompt shows the same info in compact form:
 
 Project folder (created by /init or /team run):
 .1bcoder/
+    ├── agents/            # project-specific agent definitions (override global)
+    ├── aliases.txt        # project-local aliases (merged over global at startup)
     ├── plans/             # project-specific plan .txt files
     ├── teams/             # project-specific team yamls (override global)
-    ├── agent.txt          # agent mode config (max_turns, auto_apply, tools)
+    ├── agent.txt          # default agent config (max_turns, auto_apply, tools)
     ├── profiles.txt       # /parallel worker profiles
     ├── map.txt            # generated by /map index
     ├── map.prev.txt       # previous snapshot (for /map diff)
