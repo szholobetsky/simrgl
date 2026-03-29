@@ -1,2 +1,0 @@
-python chat.py
-pause
