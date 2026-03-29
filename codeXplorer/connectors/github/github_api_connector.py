@@ -71,21 +71,26 @@ class GitHubApiConnector:
                 return "", "", ""
 
             if response.status_code == 403:
-                # Rate limit hit — log and return empty so the caller can retry later
-                reset_ts = response.headers.get("X-RateLimit-Reset", "unknown")
-                self.logger.warning(
-                    f"GitHub rate limit hit. Reset at timestamp {reset_ts}. "
-                    f"Consider adding a GITHUB_TOKEN to config.py."
-                )
-                return "", "", ""
+                reset_ts = response.headers.get("X-RateLimit-Reset")
+                if reset_ts:
+                    sleep_secs = max(0, int(reset_ts) - int(time.time())) + 5
+                    self.logger.warning(
+                        f"GitHub rate limit hit. Sleeping {sleep_secs}s until reset."
+                    )
+                    time.sleep(sleep_secs)
+                    # Retry once after sleeping
+                    response = requests.get(url, headers=self.headers, timeout=30)
+                    if response.status_code != 200:
+                        return "", "", ""
+                    data = response.json()
+                else:
+                    self.logger.warning(
+                        f"GitHub rate limit hit. Consider adding a GITHUB_TOKEN to config.py."
+                    )
+                    return "", "", ""
 
             response.raise_for_status()
             data = response.json()
-
-            # Skip pull requests — they appear under /issues but are not task descriptions
-            if "pull_request" in data:
-                self.logger.debug(f"#{issue_number} is a pull request, skipping")
-                return "", "", ""
 
             title = data.get("title", "") or ""
             description = data.get("body", "") or ""  # plain Markdown, cleaner than Jira ADF

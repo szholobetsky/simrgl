@@ -97,7 +97,7 @@ class DatabaseManager:
             cursor = conn.cursor()
 
             cursor.execute("""
-                INSERT INTO RAWDATA
+                INSERT OR IGNORE INTO RAWDATA
                 (ID, SHA, AUTHOR_NAME, AUTHOR_EMAIL, CMT_DATE, MESSAGE, PATH, DIFF)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """, (commit_id, sha, author_name, author_email, date, message, path, diff))

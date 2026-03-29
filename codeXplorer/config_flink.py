@@ -11,11 +11,11 @@ import os
 
 # Path to the local Git repository to analyze
 # Example: '/home/user/projects/my-repo' or 'C:/Projects/my-repo'
-REPO_PATH = '/home/stzh/Projects/data/repos/celery'
+REPO_PATH = '/home/stzh/Projects/data/repos/Flink/flink'
 
 # Git branch to extract commits from
 # Common values: 'master', 'main', 'develop'
-BRANCH = 'main'
+BRANCH = 'master'
 
 
 # ============================================================================
@@ -25,7 +25,7 @@ BRANCH = 'main'
 # Path to the SQLite database file where data will be stored
 # The file will be created if it doesn't exist
 # Example: './data.db' or '../data/project.db'
-DB_FILE = '/home/stzh/Projects/data/db/celery.db'
+DB_FILE = '../data/flink.db'
 
 
 # ============================================================================
@@ -33,7 +33,7 @@ DB_FILE = '/home/stzh/Projects/data/db/celery.db'
 # ============================================================================
 
 # Which issue tracker to use: 'jira', 'github', or 'youtrack'
-TRACKER_TYPE = 'github'
+TRACKER_TYPE = 'jira'
 
 
 # ============================================================================
@@ -41,10 +41,10 @@ TRACKER_TYPE = 'github'
 # ============================================================================
 
 # Repository owner (username or organization)
-GITHUB_OWNER = 'celery'
+GITHUB_OWNER = 'django'
 
 # Repository name
-GITHUB_REPO = 'celery'
+GITHUB_REPO = 'django'
 
 # Personal access token — optional for public repos, but strongly recommended.
 # Without a token: 60 requests/hour (not enough for large projects).
@@ -157,7 +157,7 @@ GITHUB_GENERIC_MASK = r'(?:fix(?:e[sd])?|clos(?:e[sd]?)|resolv(?:e[sd]?))\s*[:#]
 GITHUB_BROAD_MASK = r'#(\d+)'
 
 # Active pattern to use for task extraction
-CURRENT_MASK = GITHUB_BROAD_MASK
+CURRENT_MASK = BRACKETED_MASK
 
 
 # ============================================================================
