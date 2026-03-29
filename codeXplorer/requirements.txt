@@ -16,3 +16,11 @@ tqdm>=4.62.0
 
 # Python type hints (for better code quality)
 typing-extensions>=4.0.0
+
+# Fuzzy string matching (for commit_matcher.py)
+# Faster alternative to stdlib difflib — ~5x speedup
+rapidfuzz>=3.0.0
+
+# Future: embedding-based matching (commit_matcher.py — EMBEDDING PLAN)
+# pip install sentence-transformers faiss-cpu   (CPU)
+# pip install sentence-transformers faiss-gpu   (GPU, recommended)

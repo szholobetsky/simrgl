@@ -1,0 +1,7 @@
+host: ollama://localhost:11434
+model: lfm2.5-thinking:1.2b
+ctx: 9000
+params:
+  num_ctx: 9000
+vars:
+  num_ctx: 9000

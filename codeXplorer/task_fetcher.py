@@ -7,25 +7,47 @@ import logging
 from tqdm import tqdm
 from typing import Optional
 
+import config
 from connectors.jira import JiraApiConnector, JiraHtmlConnector, JiraSeleniumConnector
+from connectors.github import GitHubApiConnector
+from connectors.youtrack import YouTrackApiConnector
+from connectors.gitlab import GitLabApiConnector
 
 
 class TaskFetcher:
-    """Fetches task details from Jira and updates the database."""
+    """Fetches task details from a tracker (Jira or GitHub) and updates the database."""
 
     def __init__(self, jira_url: str, connector_type: str = 'api'):
         """
         Initialize the task fetcher.
 
         Args:
-            jira_url: Base URL of the Jira instance
-            connector_type: Type of connector to use ('api', 'html', or 'selenium')
+            jira_url: Base URL of the Jira instance (ignored when tracker_type='github')
+            connector_type: Jira connector type ('api', 'html', 'selenium').
+                            Ignored when config.TRACKER_TYPE == 'github'.
         """
-        self.jira_url = jira_url
         self.logger = logging.getLogger(__name__)
 
-        # Initialize the appropriate connector
-        if connector_type == 'api':
+        tracker_type = getattr(config, 'TRACKER_TYPE', 'jira')
+
+        if tracker_type == 'github':
+            self.connector = GitHubApiConnector(
+                owner=config.GITHUB_OWNER,
+                repo=config.GITHUB_REPO,
+                token=getattr(config, 'GITHUB_TOKEN', None),
+            )
+        elif tracker_type == 'youtrack':
+            self.connector = YouTrackApiConnector(
+                base_url=config.YOUTRACK_URL,
+                token=getattr(config, 'YOUTRACK_TOKEN', None),
+            )
+        elif tracker_type == 'gitlab':
+            self.connector = GitLabApiConnector(
+                base_url=config.GITLAB_URL,
+                project=config.GITLAB_PROJECT,
+                token=getattr(config, 'GITLAB_TOKEN', None),
+            )
+        elif connector_type == 'api':
             self.connector = JiraApiConnector(jira_url)
         elif connector_type == 'html':
             self.connector = JiraHtmlConnector(jira_url)

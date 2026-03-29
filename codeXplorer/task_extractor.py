@@ -33,9 +33,14 @@ class TaskExtractor:
         if not message:
             return None
 
-        match = re.match(self.task_pattern, message)
+        match = re.search(self.task_pattern, message)
         if match:
-            task_name = match.group(0)
+            # Use group(1) if pattern has a capture group (e.g. GitHub patterns),
+            # otherwise fall back to the full match group(0)
+            if match.lastindex and match.lastindex >= 1:
+                task_name = match.group(1)
+            else:
+                task_name = match.group(0)
 
             # Handle bracketed format like [JIRA-123]
             if task_name.startswith('[') and task_name.endswith(']'):

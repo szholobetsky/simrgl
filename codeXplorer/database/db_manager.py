@@ -280,6 +280,175 @@ class DatabaseManager:
             if conn:
                 conn.close()
 
+    def get_unmatched_commits(self) -> List[Tuple]:
+        """
+        Get commits that have no TASK_NAME assigned yet.
+        Used by commit_matcher — returns only truly unmatched rows.
+
+        Returns:
+            List of (id, sha, message) tuples
+        """
+        conn = None
+        try:
+            conn = sqlite3.connect(self.db_file)
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT DISTINCT SHA, MESSAGE
+                FROM RAWDATA
+                WHERE TASK_NAME IS NULL AND MESSAGE IS NOT NULL
+            """)
+            return cursor.fetchall()
+        except sqlite3.Error as error:
+            self.logger.error(f"Error fetching unmatched commits: {error}")
+            raise
+        finally:
+            if conn:
+                conn.close()
+
+    def get_all_tasks_with_titles(self) -> List[Tuple]:
+        """
+        Get all tasks that have a title — used by commit_matcher for fuzzy/embedding matching.
+
+        Returns:
+            List of (name, title) tuples
+        """
+        conn = None
+        try:
+            conn = sqlite3.connect(self.db_file)
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT NAME, TITLE FROM TASK
+                WHERE TITLE IS NOT NULL AND TITLE != ''
+            """)
+            return cursor.fetchall()
+        except sqlite3.Error as error:
+            self.logger.error(f"Error fetching tasks with titles: {error}")
+            raise
+        finally:
+            if conn:
+                conn.close()
+
+    def update_task_name_by_sha(self, sha: str, task_name: str):
+        """
+        Update TASK_NAME for all RAWDATA rows matching a commit SHA.
+        Used by commit_matcher (which works per SHA, not per row ID).
+        """
+        conn = None
+        try:
+            conn = sqlite3.connect(self.db_file)
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE RAWDATA SET TASK_NAME = ?
+                WHERE SHA = ? AND TASK_NAME IS NULL
+            """, (task_name, sha))
+            conn.commit()
+        except sqlite3.Error as error:
+            self.logger.error(f"Error updating task name by SHA: {error}")
+            raise
+        finally:
+            if conn:
+                conn.close()
+
+    def upsert_task_with_details(self, name: str, title: str,
+                                 description: str, comments: str):
+        """
+        Insert task with full details, or update if name already exists.
+        Used by bulk_task_fetcher — inserts all tasks regardless of commit refs.
+        """
+        conn = None
+        try:
+            conn = sqlite3.connect(self.db_file)
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO TASK (NAME, TITLE, DESCRIPTION, COMMENTS)
+                VALUES (?, ?, ?, ?)
+                ON CONFLICT(NAME) DO UPDATE SET
+                    TITLE       = excluded.TITLE,
+                    DESCRIPTION = excluded.DESCRIPTION,
+                    COMMENTS    = excluded.COMMENTS
+            """, (name, title, description, comments))
+            conn.commit()
+        except sqlite3.Error as error:
+            self.logger.error(f"Error upserting task {name}: {error}")
+            raise
+        finally:
+            if conn:
+                conn.close()
+
+    def bulk_upsert_tasks(self, tasks: List[Tuple]):
+        """
+        Batch upsert tasks for efficiency during bulk fetch.
+
+        Args:
+            tasks: List of (name, title, description, comments) tuples
+        """
+        conn = None
+        try:
+            conn = sqlite3.connect(self.db_file)
+            cursor = conn.cursor()
+            batch_size = 200
+            for i in range(0, len(tasks), batch_size):
+                cursor.executemany("""
+                    INSERT INTO TASK (NAME, TITLE, DESCRIPTION, COMMENTS)
+                    VALUES (?, ?, ?, ?)
+                    ON CONFLICT(NAME) DO UPDATE SET
+                        TITLE       = excluded.TITLE,
+                        DESCRIPTION = excluded.DESCRIPTION,
+                        COMMENTS    = excluded.COMMENTS
+                """, tasks[i:i + batch_size])
+                conn.commit()
+            self.logger.info(f"Bulk upserted {len(tasks)} tasks")
+        except sqlite3.Error as error:
+            self.logger.error(f"Error bulk upserting tasks: {error}")
+            raise
+        finally:
+            if conn:
+                conn.close()
+
+    def create_match_log_table(self):
+        """
+        Create MATCH_LOG table for tracking how each commit-task link was established.
+        Schema: SHA, TASK_NAME, METHOD ('regex'|'fuzzy'|'embedding'), SCORE (0-100)
+        """
+        conn = None
+        try:
+            conn = sqlite3.connect(self.db_file)
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS MATCH_LOG (
+                    ID        INTEGER PRIMARY KEY AUTOINCREMENT,
+                    SHA       TEXT NOT NULL,
+                    TASK_NAME TEXT NOT NULL,
+                    METHOD    TEXT NOT NULL,
+                    SCORE     REAL,
+                    UNIQUE(SHA, TASK_NAME)
+                )
+            """)
+            conn.commit()
+        except sqlite3.Error as error:
+            self.logger.error(f"Error creating MATCH_LOG table: {error}")
+            raise
+        finally:
+            if conn:
+                conn.close()
+
+    def insert_match_log(self, sha: str, task_name: str, method: str, score: float):
+        """Log a commit-task match with its method and confidence score."""
+        conn = None
+        try:
+            conn = sqlite3.connect(self.db_file)
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR IGNORE INTO MATCH_LOG (SHA, TASK_NAME, METHOD, SCORE)
+                VALUES (?, ?, ?, ?)
+            """, (sha, task_name, method, score))
+            conn.commit()
+        except sqlite3.Error as error:
+            self.logger.error(f"Error inserting match log: {error}")
+        finally:
+            if conn:
+                conn.close()
+
     def get_distinct_task_names(self) -> List[str]:
         """
         Get all distinct task names from RAWDATA.
