@@ -11,11 +11,11 @@ import os
 
 # Path to the local Git repository to analyze
 # Example: '/home/user/projects/my-repo' or 'C:/Projects/my-repo'
-REPO_PATH = '/home/stzh/Projects/data/repos/kubernetes'
+REPO_PATH = '/home/stzh/Projects/data/repos/celery'
 
 # Git branch to extract commits from
 # Common values: 'master', 'main', 'develop'
-BRANCH = 'master'
+BRANCH = 'main'
 
 
 # ============================================================================
@@ -25,7 +25,7 @@ BRANCH = 'master'
 # Path to the SQLite database file where data will be stored
 # The file will be created if it doesn't exist
 # Example: './data.db' or '../data/project.db'
-DB_FILE = '/home/stzh/Projects/data/db/kubernetes.db'
+DB_FILE = '/home/stzh/Projects/data/db/celery.db'
 
 
 # ============================================================================
@@ -41,10 +41,10 @@ TRACKER_TYPE = 'github'
 # ============================================================================
 
 # Repository owner (username or organization)
-GITHUB_OWNER = 'kubernetes'
+GITHUB_OWNER = 'celery'
 
 # Repository name
-GITHUB_REPO = 'kubernetes'
+GITHUB_REPO = 'celery'
 
 # Personal access token — optional for public repos, but strongly recommended.
 # Without a token: 60 requests/hour (not enough for large projects).
