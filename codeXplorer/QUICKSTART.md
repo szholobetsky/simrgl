@@ -53,6 +53,16 @@ The tool will:
 4. Fetch task details from Jira
 5. Save everything to SQLite database
 
+### Interrupted? Resume from the Task step
+
+If commit extraction finished but the process was interrupted before task fetching completed, skip the slow git scan and resume from where you left off:
+
+```bash
+python main_task.py
+```
+
+This picks up the existing database and only fetches tasks that are not yet loaded (tasks with no TITLE). Safe to run multiple times.
+
 ## Step 4: Explore Your Data
 
 Use any SQLite browser or command line:

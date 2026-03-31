@@ -71,7 +71,9 @@ All configuration is done in `config.py`. Key settings:
 
 ## Usage
 
-Run the tool:
+### Full pipeline
+
+Run the complete pipeline from scratch:
 
 ```bash
 python main.py
@@ -84,6 +86,21 @@ The tool will execute the following steps:
 3. **Extract Task IDs**: Identifies task identifiers in commit messages
 4. **Fetch Task Details**: Retrieves task information from Jira
 5. **Complete**: Data is saved to the SQLite database
+
+### Resuming from the Task step
+
+If commit extraction (step 2) has already completed and was interrupted before or during task fetching, use `main_task.py` to resume without re-scanning the repository:
+
+```bash
+python main_task.py
+```
+
+This script:
+- Connects to the existing database (does **not** recreate tables or touch RAWDATA)
+- Re-runs task ID extraction from commit messages (safe to repeat — duplicate TASK names are silently skipped)
+- Fetches tracker details only for tasks that have no TITLE yet, so already-loaded tasks are not re-fetched
+
+Use this whenever the process is interrupted after commits are in the database.
 
 ## Database Schema
 
@@ -213,7 +230,8 @@ WHERE t.TITLE IS NOT NULL;
 
 ```
 refactor/
-├── main.py                      # Main entry point
+├── main.py                      # Main entry point (full pipeline)
+├── main_task.py                 # Resume entry point (task steps only)
 ├── config.py                    # Configuration file
 ├── requirements.txt             # Python dependencies
 ├── README.md                    # This file

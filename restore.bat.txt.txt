@@ -14,3 +14,5 @@ claude --resume 22feb8e6-2108-4754-b317-27f6e49729b2 - новий концепт
 claude --resume 35f6c18b-9b35-41e7-88ce-b33b582a9038 - agents, alias, ask, ...
 
 claude --resume "agent-plan-file-parsing"
+
+claude --resume 28f79f21-78cd-4a21-9e26-750a4d90e479 codeXlorer
