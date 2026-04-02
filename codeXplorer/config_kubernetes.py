@@ -11,11 +11,11 @@ import os
 
 # Path to the local Git repository to analyze
 # Example: '/home/user/projects/my-repo' or 'C:/Projects/my-repo'
-REPO_PATH = '/data/data/com.termux/files/home/data/vscode'
+REPO_PATH = '/data/data/com.termux/files/home/data/kubernetes'
 
 # Git branch to extract commits from
 # Common values: 'master', 'main', 'develop'
-BRANCH = 'main'
+BRANCH = 'master'
 
 
 # ============================================================================
@@ -25,7 +25,7 @@ BRANCH = 'main'
 # Path to the SQLite database file where data will be stored
 # The file will be created if it doesn't exist
 # Example: './data.db' or '../data/project.db'
-DB_FILE = '/data/data/com.termux/files/home/data/db/vscode.db'
+DB_FILE = '/data/data/com.termux/files/home/data/db/kubernetes.db'
 
 
 # ============================================================================
@@ -41,10 +41,10 @@ TRACKER_TYPE = 'github'
 # ============================================================================
 
 # Repository owner (username or organization)
-GITHUB_OWNER = 'microsoft'
+GITHUB_OWNER = 'kubernetes'
 
 # Repository name
-GITHUB_REPO = 'vscode'
+GITHUB_REPO = 'kubernetes'
 
 # Personal access token — optional for public repos, but strongly recommended.
 # Without a token: 60 requests/hour (not enough for large projects).
