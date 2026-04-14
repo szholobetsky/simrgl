@@ -1,3 +1,9 @@
 [submodule "1bcoder"]
 	path = 1bcoder
 	url = https://github.com/szholobetsky/1bcoder.git
+[submodule "yasna"]
+	path = yasna
+	url = https://github.com/szholobetsky/yasna.git
+[submodule "svitovyd"]
+	path = svitovyd
+	url = https://github.com/szholobetsky/svitovyd.git
