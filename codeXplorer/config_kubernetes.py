@@ -11,7 +11,7 @@ import os
 
 # Path to the local Git repository to analyze
 # Example: '/home/user/projects/my-repo' or 'C:/Projects/my-repo'
-REPO_PATH = '/home/stzh/Projects/data/repos/kubernetes'
+REPO_PATH = '/data/data/com.termux/files/home/data/kubernetes'
 
 # Git branch to extract commits from
 # Common values: 'master', 'main', 'develop'
@@ -25,7 +25,7 @@ BRANCH = 'master'
 # Path to the SQLite database file where data will be stored
 # The file will be created if it doesn't exist
 # Example: './data.db' or '../data/project.db'
-DB_FILE = '/home/stzh/Projects/data/db/kubernetes.db'
+DB_FILE = '/data/data/com.termux/files/home/data/db/kubernetes.db'
 
 
 # ============================================================================
