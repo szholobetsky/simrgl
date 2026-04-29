@@ -1,0 +1,138 @@
+Так, це правильний підхід — простий і зрозумілий. Параметризація через змінну на початку файлу, користувач редагує один рядок.
+proc/translate_from.py — перекладає вхід користувача на англійську:
+python#!/usr/bin/env python3
+"""
+Translate user input to English before sending to LLM.
+
+To configure: change NATIVE_LANG to your language code.
+Common codes: uk (Ukrainian), de (German), fr (French),
+              pl (Polish), es (Spanish), zh (Chinese)
+
+Install language package first:
+    python -m argostranslate.package install --from NATIVE_LANG --to en
+"""
+
+import sys
+import argostranslate.translate
+
+# === CONFIGURE YOUR LANGUAGE HERE ===
+NATIVE_LANG = "uk"
+# ====================================
+
+TARGET_LANG = "en"
+
+text = sys.stdin.read().strip()
+if not text:
+    sys.exit(0)
+
+try:
+    translated = argostranslate.translate.translate(
+        text, NATIVE_LANG, TARGET_LANG
+    )
+    print(translated)
+except Exception as e:
+    print(text, file=sys.stderr)
+    print(f"[translate_from] error: {e}", file=sys.stderr)
+    print(text)  # fallback: pass original
+proc/translate_to.py — перекладає відповідь моделі назад:
+python#!/usr/bin/env python3
+"""
+Translate LLM response back to your native language.
+
+To configure: change NATIVE_LANG to your language code.
+Must match the code used in translate_from.py
+
+Install language package first:
+    python -m argostranslate.package install --from en --to NATIVE_LANG
+"""
+
+import sys
+import argostranslate.translate
+
+# === CONFIGURE YOUR LANGUAGE HERE ===
+NATIVE_LANG = "uk"
+# ====================================
+
+SOURCE_LANG = "en"
+
+text = sys.stdin.read().strip()
+if not text:
+    sys.exit(0)
+
+try:
+    translated = argostranslate.translate.translate(
+        text, SOURCE_LANG, NATIVE_LANG
+    )
+    print(translated)
+except Exception as e:
+    print(text, file=sys.stderr)
+    print(f"[translate_to] error: {e}", file=sys.stderr)
+    print(text)  # fallback: pass original
+
+Як встановлювати мовні пакети — ось що треба написати в документації:
+bash# 1. Встановити argostranslate
+pip install argostranslate
+
+# 2. Встановити мовні пакети (потрібні два — в обидва боки)
+#    Замінити "uk" на свій код мови
+
+python -c "
+import argostranslate.package
+argostranslate.package.update_package_index()
+available = argostranslate.package.get_available_packages()
+
+# знайти і встановити uk → en
+pkg = next(p for p in available 
+           if p.from_code == 'uk' and p.to_code == 'en')
+argostranslate.package.install_from_path(pkg.download())
+
+# знайти і встановити en → uk  
+pkg = next(p for p in available 
+           if p.from_code == 'en' and p.to_code == 'uk')
+argostranslate.package.install_from_path(pkg.download())
+
+print('Done')
+"
+Або можна зробити окремий скрипт setup_translate.py який приймає код мови як аргумент:
+bashpython setup_translate.py uk
+python#!/usr/bin/env python3
+"""
+Download argostranslate language packages for 1bcoder translation procs.
+Usage: python setup_translate.py <lang_code>
+Example: python setup_translate.py uk
+"""
+
+import sys
+import argostranslate.package
+
+if len(sys.argv) < 2:
+    print("Usage: python setup_translate.py <lang_code>")
+    print("Example: python setup_translate.py uk")
+    sys.exit(1)
+
+lang = sys.argv[1]
+
+print(f"Updating package index...")
+argostranslate.package.update_package_index()
+available = argostranslate.package.get_available_packages()
+
+for from_code, to_code in [(lang, "en"), ("en", lang)]:
+    try:
+        pkg = next(p for p in available 
+                   if p.from_code == from_code 
+                   and p.to_code == to_code)
+        print(f"Downloading {from_code} → {to_code}...")
+        argostranslate.package.install_from_path(pkg.download())
+        print(f"  OK")
+    except StopIteration:
+        print(f"  WARNING: package {from_code}→{to_code} not found")
+
+print("Done. Edit NATIVE_LANG in proc/translate_from.py and proc/translate_to.py")
+
+Використання після встановлення:
+/proc before on translate_from
+/proc on translate_to
+Або alias як обговорювали:
+/alias /native = /proc before on translate_from
+/alias /english = /proc before off && /proc off
+Важливо для Termux — пакети завантажуються один раз (~100MB на пару мов) і потім працюють повністю офлайн. Ідеально для телефону.

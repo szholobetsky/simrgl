@@ -7,3 +7,6 @@
 [submodule "svitovyd"]
 	path = svitovyd
 	url = https://github.com/szholobetsky/svitovyd.git
+[submodule "simargl"]
+	path = simargl
+	url = https://github.com/szholobetsky/simargl.git
