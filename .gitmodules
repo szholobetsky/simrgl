@@ -10,3 +10,9 @@
 [submodule "simargl"]
 	path = simargl
 	url = https://github.com/szholobetsky/simargl.git
+[submodule "vyrii"]
+	path = vyrii
+	url = https://github.com/szholobetsky/vyrii.git
+[submodule "radogast"]
+	path = radogast
+	url = https://github.com/szholobetsky/radogast.git
