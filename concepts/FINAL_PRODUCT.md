@@ -466,6 +466,91 @@ simargl/
 
 ---
 
-**Document Version**: 1.0
-**Created**: 2026-02-28
+## 11. Android Deployment — vyrii + Local LLM on Phones
+
+**Goal**: run the full vyrii stack (UI + LLM server) on an Android phone — for field/shelter/offline use, and to turn a fleet of phones into parallel workers (Team profiles, nightly consolidation via apscheduler).
+
+**Key enabler** (vyrii commit `5a5a96f` "create flask api to be able to run vyrii without rust"): the default vyrii mode is now **Flask + static HTML/JS UI** (port 5000) with pure-Python dependencies only (`flask`, `flask-cors`, `waitress`, `apscheduler`, `requests`). Gradio and FastAPI are optional extras. **Zero Rust, zero C extensions** — this single decision is what makes every Android path below cheap.
+
+**Second enabler**: `llama-server` (llama.cpp) exposes an OpenAI-compatible `/v1/chat/completions`, and vyrii already supports `openai://` hosts. **Ollama is therefore not required on the phone** — llama-server replaces it entirely.
+
+### Why Google Play blocks the Termux path
+
+- Android 10+ W^X: apps with `targetSdkVersion ≥ 29` cannot `exec()` files from their writable home directory. Termux F-Droid stays on targetSdk 28; Play requires current targetSdk. The Play build of Termux survives on a `system_linker_exec` hack, is functionally frozen (~v0.108), and itself violates Play policy.
+- Play "Device and Network Abuse" policy forbids downloading executable code — which is exactly what `pkg install` / `ollama pull` of binaries does.
+- **Legal Play loophole**: native libraries shipped inside the APK as `jniLibs/*.so` are extracted to the read-only `nativeLibraryDir`, and `exec()` from there IS allowed at any targetSdk. Models downloaded at runtime are *data*, not code — also allowed.
+
+### Variant A — Termux bootstrap script (1 day)
+
+Not an app; a one-liner after installing Termux from F-Droid:
+
+```bash
+curl -fsSL https://.../vyrii-droid.sh | bash
+# pkg install ollama python        (ollama is in official Termux repo since Apr 2025)
+# pip install vyrii                (pure Python — installs cleanly)
+# ollama pull qwen3:1.7b
+# termux-wake-lock                 (prevents Android from killing the server)
+# Termux:Boot autostart script
+# → open http://localhost:5000
+```
+
+Natural continuation of the existing `vyrii_auto.sh`. Distribution: GitHub. Covers the fleet-of-phones scenario immediately.
+
+### Variant B — Companion APK (~1 week)
+
+A small sideloaded app that orchestrates Termux: checks Termux is installed, pushes the bootstrap via the `RUN_COMMAND` intent (`allow-external-apps`), then acts as a WebView on `localhost:5000`. Looks like a "vyrii app" with an icon; all machinery stays in Termux. Distribution: APK / F-Droid (not Play — it orchestrates downloading executables).
+
+### Variant C — Termux fork with custom bootstrap (~weeks)
+
+Self-contained APK "vyrii-droid": fork of termux-app (GPLv3 — fork must stay GPL; precedents: UserLAnd, Andronix) with python + ollama/llama-server + vyrii pre-installed in the bootstrap archive, launcher activity = WebView. One APK, zero commands for the user. Distribution: GitHub releases / F-Droid. Still not Play-eligible (same exec model).
+
+### Variant D — Native Play-legal APK (feasibility 1–2 evenings; full build 1–2 weeks)
+
+The only variant that can legitimately enter Google Play:
+
+```
+APK
+├── jniLibs/arm64-v8a/
+│   ├── libllamaserver.so          ← renamed llama-server (NDK build)
+│   └── libllama.so, libggml*.so
+├── Chaquopy: Python + pip install vyrii   ← pure Python, no wheel battles
+└── Kotlin ForegroundService:
+      exec(nativeLibraryDir + "/libllamaserver.so")   # port 8080, LD_LIBRARY_PATH set
+      python thread: waitress → flask_api (port 5000), host = openai://localhost:8080
+      WebView → http://localhost:5000                  # the same HTML UI as desktop
+```
+
+Packaging tool notes (the "PyToApk" question): there is **no true PyInstaller equivalent** for Android. Closest options: **Chaquopy** (Python SDK inside a normal Gradle project — best fit), **Briefcase/BeeWare** (one-command packaging, Chaquopy backend underneath), **Buildozer/python-for-android** (Kivy-centric, recipe pain — not recommended here).
+
+Android-specific gotchas:
+1. `os.environ["HOME"] = filesDir` before importing vyrii (redirects `~/.vyrii`);
+2. `lxml` (web/html extras) is a C extension — Chaquopy has prebuilt wheels; optional anyway;
+3. 16 KB page-size alignment required for native libs on Android 15+ — build llama.cpp with NDK r27+;
+4. `extractNativeLibs=true` so the `.so` files land on the filesystem;
+5. Foreground service + battery-optimization exemption to keep the server alive;
+6. GGUF models downloaded at runtime into the app files dir (Play-legal: data, not code);
+7. llama.cpp on Android: CPU by default; experimental Vulkan/OpenCL on Adreno is a potential GPU bonus over ollama-in-Termux (CPU-only).
+
+**Phase-0 fallback** (if Python embedding stalls): llama-server ships its own built-in web chat UI — a Kotlin shell + jniLibs alone is already a working local-chat APK for Play. Not vyrii, but the skeleton vyrii drops onto later.
+
+### Variant E — Play thin client (trivial)
+
+A WebView/native client that only connects to a vyrii server running elsewhere (PC, home server). Executes nothing locally → passes Play review without any tricks. The one thing publishable to Play *today* with near-zero effort.
+
+### Recommended sequence
+
+| Step | Variant | Effort | Outcome |
+|------|---------|--------|---------|
+| 1 | A — Termux script | 1 day | Fleet of phone workers working immediately |
+| 2 | D — feasibility spike | 1–2 evenings | Chaquopy hello-world + `pip install vyrii` + Flask in a thread + WebView |
+| 3 | D — full APK | 1–2 weeks | Play-publishable native vyrii with local LLM |
+| opt | C — Termux fork | weeks | Boxed APK for terminal-averse users (F-Droid) |
+| opt | E — thin client | days | Play presence pointing at user's own server |
+
+Ties to `AUTOMATICAL_AGENTS_LOGICAL_EXTERNAL_APPROACH.md`: phones running vyrii become both parallel evaluation workers (pair-checking, dedupe) and hosts for nightly knowledge consolidation via the built-in apscheduler.
+
+---
+
+**Document Version**: 1.1
+**Created**: 2026-02-28 · **Updated**: 2026-06-12 (added §11 Android Deployment)
 **Purpose**: Final product vision synthesizing all conversations, experiments, and concepts
