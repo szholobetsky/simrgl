@@ -139,7 +139,7 @@ Goal: maximize EVOLUTION zone (high Novelty + high Structurality).
 |---|---|---|---|
 | simargl | Симаргл — guardian | Semantic Index: Map Artifacts, Retrieve from Git Log | Research complete |
 | 1bcoder | — | CLI coding assistant, local LLM interface | Production (PyPI v0.1.x) |
-| vyrii | — | Local LLM server (Flask default, port 5000) | Production |
+| vyrii | Вирій | Local LLM server (Flask default, port 5000) | Production |
 | yasna | Ясна — goddess of fate | Knowledge memory system for ctx files | Planned only |
 | svitovyd | Світовид — four-faced god | Code structure map service (extract from 1bcoder) | Discussed, not planned |
 | radogast | Радогост | (supporting role) | Active |

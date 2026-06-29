@@ -486,6 +486,52 @@ Use `/parallel` to generate N implementations of the same leaf function with dif
 
 ---
 
+## 11. Context Enrichment via Library Routing
+
+During the `--think` step, the model produces a plan that typically lists the libraries
+and symbols it intends to use. Before the code generation step begins, deepagent_code
+can intercept these mentions and automatically enrich the context with real documentation
+or local code examples.
+
+### The routing rule
+
+For each library or symbol mentioned in the think output:
+
+```
+svitovyd find <symbol>
+    → results found  →  internal code  →  RAG via simargl
+    → empty result   →  external lib   →  DDG web search
+```
+
+The check is a single `svitovyd find` call. If the symbol appears in the local codebase
+(as a file name, class name, or identifier), it is treated as internal and fed to the
+RAG pipeline. If svitovyd returns nothing, the symbol is external and a web search is
+performed instead.
+
+This avoids maintaining any whitelist of public packages. The question is not
+"is this on PyPI?" but simply "is this in our code?". Standard library modules
+(`socket`, `datetime`, `os`) and popular packages (`requests`, `psutil`) will return
+empty from svitovyd and go to DDG. A private class like `MyExceptionHandler` or
+`ProjectDbConnector` will be found by svitovyd and go to RAG.
+
+### Why this ordering matters
+
+The enrichment happens before generation, not during. Each function implementation
+receives pre-fetched context as additional input. The model does not decide when to
+search — the orchestrator does, based on the think output alone.
+
+### Practical limits
+
+Web search results are unpredictable in length and relevance. A reasonable strategy
+is to take only the first DDG result, extract the first code block found on the page,
+and inject that. For RAG, a top-3 chunk retrieval from simargl is sufficient.
+
+The total injected context per function should be kept under ~500 tokens to avoid
+overwhelming small models (1B–4B). If multiple external libraries are found, search
+them all but concatenate only the most relevant snippet per library.
+
+---
+
 ## 10. Open Questions
 
 1. **Skeleton parsing reliability**: can a small model consistently produce parseable skeletons (`name(args)  # comment`)? If not, need a more structured output format (YAML? JSON?).
