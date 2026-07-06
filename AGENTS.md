@@ -198,6 +198,9 @@ Research ideas, not yet implemented unless stated:
 | `PHENOMENOLOGICAL_CODE_UNDERSTANDING.md` | Husserl/Heidegger applied to code navigation |
 | `DEEPAGENT_AND_DEEPAGENT_MD.md` | Recursive markdown generation with parallel workers |
 | `ANTHILL_DISTRIBUTED_COGNITIVE_OS.md` | Distributed agent OS concept |
+| `CTXTIMER.md` | Empirical context-limit measurement for local LLMs (`/flow ctxtimer` in 1bcoder) |
+| `IGPU_OFFLOAD_THRESHOLD.md` | When Vulkan/iGPU offload helps vs hurts local LLM inference — empirical hardware threshold |
+| `LIMITED_CONTEXT.md` | Sliding-window context (`/ctx window`) — RS/BM25/DP/TextRank algorithms for retaining gist beyond the ctxtimer ceiling |
 
 ---
 
