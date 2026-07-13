@@ -1073,6 +1073,105 @@ But `list:` only helps for dimensions the user anticipated before decomposition.
 
 ---
 
+## Part XIII: Prompt DNA — Evaluation *With* an LLM (logprobs)
+
+### Why Parts I–XII Are Not Enough
+
+Every metric so far is a structural proxy computed from text alone — novelty, grounding, ROUGE coverage, drift, entropy, FSM stage detection. None of them asks the model anything. This is deliberate (see "What This Is Not," below) and it is also a real limit: perfect keyword coverage of a task does not mean the model can actually *reason* about it correctly. A context can contain every term needed to compare two databases and the model can still weigh the wrong criterion as most important, or fail to notice a term is even relevant.
+
+**Prompt DNA** closes exactly this gap, deliberately, at the cost of one or more real LLM calls per check. Where Parts I–XII ask "does the context *contain* what's needed?", Prompt DNA asks "does the model, *given* this context, actually *derive* the right conclusion?" — a functional/behavioral test, not a structural one.
+
+### The Core Mechanism
+
+Modern local model servers (confirmed empirically against Ollama 0.31.1, both the native `/api/generate`/`/api/chat` and the OpenAI-compatible `/v1/chat/completions`) can return `logprobs`/`top_logprobs`: the actual probability distribution the model considered for a token position, not just the text it happened to sample. This is the same technique `lm-evaluation-harness` (EleutherAI) uses to score MMLU/ARC/HellaSwag-style benchmarks — comparing logprobs of answer-choice tokens directly, never generating and parsing free text.
+
+**"DNA of an answer"** = the full distribution across a small set of candidate classes, not just the top-1 pick:
+
+```
+Question: Хто виграє наступний чемпіонат світу з футболу?
+A) Бразилія   B) Оман   C) Молдова
+
+DNA = { A: 82%, B: 10%, C: 6%, other: 2% }
+```
+
+This distribution is comparable across models, across context variants, and across time — a scalar "did it get it right" throws all of that away.
+
+### Three Gotchas, Found by Testing Against a Live Model (not theoretical)
+
+**1. Chat-completion does not force the answer position.** A chat-style request lets the model preface however it wants. Tested directly: llama3.2:1b, given the exact question above with "Answer (one letter only)" instructions, replied "I" (starting "I think...") — none of A/B/C appeared anywhere in its top-5 `top_logprobs`. **Fix:** use raw completion (`/api/generate` with `"raw": true`), where the prompt string ends *exactly* at the point the answer token belongs, so the very next token genuinely is the classification.
+
+**2. The generated token is not necessarily the most probable one.** With non-zero temperature, sampling is not argmax. Observed directly: llama3.2:1b generated `" \n"` (logprob −3.64) while `" A"` had a *higher* logprob (−0.075) and was literally first in its own `top_logprobs` list. **Fix:** for classification, ignore the generated "response" text entirely — read only the `top_logprobs` distribution at that position.
+
+**3. Tokenization silently splits "the same" answer into different tokens.** In the same result, `" A"` (leading space) and `"A"` (no space) appeared as two *separate* entries with very different logprobs (−0.075 vs −4.73). **Fix:** merge probability mass across every tokenization of a class before comparing:
+
+```
+P(class) = Σ P(t)   for every token t that is a valid surface form of that class
+```
+
+**4. `top_logprobs` is top-N, not full-vocabulary.** Ollama returned only the 5–10 most likely tokens at that position. If the target class isn't among them, its probability is simply invisible — not zero, unknown. This is the actual justification for the single-letter-label trick (`A`/`B`/`C`/`D`): a prompt that explicitly asks for a letter makes the letters overwhelmingly likely to be near the top, sidestepping the top-N ceiling. Comparing raw multi-token words directly (`Brazil` vs `Oman`) is fragile for exactly this reason, on top of gotcha #3.
+
+### Formulas
+
+**Normalized probability over the candidate set** (restricted softmax — ignore probability mass outside the enumerated classes):
+
+```
+P(classᵢ | prompt) = exp(logprobᵢ) / Σⱼ exp(logprobⱼ)      for j ∈ candidate_classes
+```
+
+**Context contribution (delta / ablation)** — the methodologically important formula. A model may already know "Oracle is expensive" from pretraining alone; a raw DNA reading with context cannot distinguish "the context taught it this" from "it always knew this." Isolate the context's own marginal effect by comparing against a no-context (or alternative-context) baseline:
+
+```
+ΔP(expected_class) = P_with_context(expected_class) − P_baseline(expected_class)
+```
+
+where `baseline` = the identical probe question with *no* context, or with a rival context variant (Opt1 vs Opt2). This is the standard ablation-study move from interpretability research, applied at the prompt level instead of the activation level.
+
+**Distributional shift (when there is no single "expected" class, just "did context change anything")**:
+
+```
+D_KL(P_with_context ‖ P_baseline) = Σᵢ P_with_context(i) · log( P_with_context(i) / P_baseline(i) )
+```
+
+### Two Probe Categories — Different Cost, Different ROI
+
+Not all probes are equal. Two genuinely different categories emerged from working through concrete examples:
+
+| | **Domain / decision probes** | **Capability / smoke-test probes** |
+|---|---|---|
+| Example | "Biggest con of Oracle?" → expect `price` | "Does this model handle relative vs. absolute paths?" |
+| Authoring cost | Bespoke per question | Written once |
+| Reusability | Low — tied to one decision | High — reusable across every dispatch to that model |
+| Analogous to | Integration test | Unit test / smoke test |
+| Answers | "Is *this* context good enough for *this* decision?" | "Is this model even competent enough to attempt this class of task?" |
+
+The capability class has the better cost/benefit ratio and should be built first if anything is built at all. A concrete instance discovered empirically: a **convergence/duplication probe** — feed a model 2–3 overlapping chunks about the same term, ask it to define the term from each independently, and check whether the definitions genuinely diverge or just restate the opening sentence with a new tail. This is a direct, cheap (few seconds) predictor of whether a `/flow glossary index` run *without* `--unique` will produce a bloated term file — confirmed retroactively against a real case: a 24+ hour `/flow glossary index` run over the sqlfluff docs (800KB input, gemma model, `--unique` not set) produced one term file (`line-position.md`) at 131KB — three near-duplicate `DEFINITION` paragraphs and repeated `FACTS` openings, with genuinely new information only in the tail of each repetition. A convergence probe on 2–3 chunks would have predicted this in seconds, before a day of compute. (The bloat itself followed a Zipf/power-law-like distribution — one 131KB outlier against a 10KB second-largest file — meaning in this instance the fix was a one-off manual edit, not evidence that every run needs this tooling; the probe's value is in catching *systemic* redundancy across many files, not rare single-file outliers.)
+
+### Sketch of a Flow / Command
+
+```
+/logprob "<question with candidates>" options:(A, B, C, D)  [context: <path or none>]
+```
+
+Under the hood: build a raw-completion prompt (question + lettered options + "Answer (one letter only):"), call the raw-generate endpoint with `logprobs: true, top_logprobs: 10, options: {num_predict: 1}`, merge tokenization variants per letter, normalize over the candidate set, print the DNA. A `--baseline` flag re-runs the same probe with the context stripped out and prints the delta.
+
+Implementation note (also verified empirically): `logprobs`/`top_logprobs` are **top-level** fields in the Ollama request body — siblings of `"model"`/`"messages"`, *not* nested inside `"options"`, which is where 1bcoder's existing `self.params`/`/param` mechanism writes. A `/logprob` command cannot simply piggyback on `/param`; it needs its own small, dedicated (and much simpler — one-shot, non-streaming, no token-by-token state machine) request path.
+
+### Relationship to Radogast — Complementary, Not Merged
+
+Radogast already evaluates "the state of context," but structurally and passively: term coverage (defined/mentioned/absent), embedding-based drift, frequency balance, glossary presence — all computed *from the text*, continuously, across an ongoing session. It never queries the model to test comprehension.
+
+Prompt DNA is the opposite shape: deliberate, occasional, functional. You run it *before* committing to a context-building strategy, not continuously during a session. Folding it into Radogast's codebase was considered and rejected — Radogast is already under-used because planning a context-accumulation strategy is itself hard, and small local models don't help much with that planning; adding more machinery to an already-heavy, rarely-run tool would make it "ще складнішим і ще більш непотрібнішим," not more valuable. If built, this should be a small, standalone script — not a `/flow`, not part of Radogast — specifically so its actual (manual, occasional) usage rate can be observed honestly before investing further.
+
+### Open Questions and Doubts
+
+- **Who authors the probe questions, and how subjective is "expected class"?** For domain probes, someone has to decide that "price" is *the* correct top consideration for Oracle's biggest con — itself a judgment call, not a fact. This doesn't disappear with tooling; it moves the subjectivity from "which prompt is good" to "which probe/expected-answer is good."
+- **Usage risk mirrors Radogast's own history.** A tool nobody runs is worthless regardless of how sound the underlying idea is. Recommendation: build the smallest possible standalone version first and observe real usage for a few weeks before adding GUI, vyrii integration, or automation.
+- **No decision yet on a vyrii GUI.** The original motivating scenario (comparing context variants in a separate window/web UI, "context engineer" being able to prove impact) is appealing, but was explicitly *not* decided — automation is not currently wanted (an n8n-analog in vyrii was explicitly rejected as too heavy; `vyrii scheduler → 1bcoder --run script` was judged too weak a mechanism for serious automation), and building a GUI/analytical layer ahead of any confirmed manual-use pattern risks the same fate as Radogast. Tentative position: standalone CLI/script first, GUI only if standalone usage actually proves out.
+- **Product-focus risk.** Taking this seriously enough (automation, guaranteed "correct" context generation) shifts the product from "helps a developer write code via 1bcoder" toward "a context/script that guarantees a certain outcome" — a different tool for a different audience. Worth naming explicitly so it isn't drifted into by accident.
+- **Applicability boundary.** Multiple-choice-shaped probes (domain-knowledge) don't naturally fit most real delegated tasks, which are open-ended ("find where X is defined," "review Y"). The generalization — decomposing open-ended success criteria into a checklist of YES/NO logprob probes (rubric-based LLM-as-judge, but reading `logprob(YES)` instead of parsing judge text) — is plausible but untested.
+
+---
+
 ## Summary: Metrics Cheatsheet
 
 | Metric | Type | Measures | Needs embeddings? |
@@ -1092,8 +1191,10 @@ But `list:` only helps for dimensions the user anticipated before decomposition.
 | Stage FSM state | Context | Which stages are complete | No |
 | Terminal signal detection | Context | Stage genuinely closed | No |
 | Weighted stage coverage | Context | Progress incl. in-progress | No |
+| Prompt DNA | Reply (LLM call) | Actual model comprehension/reasoning | No (needs `logprobs`) |
+| DNA delta / ablation | Reply (LLM call) | Context's own marginal contribution | No (needs `logprobs`) |
 
-The embedding-based metrics (context drift) require a small sentence-transformer model but provide the most semantically meaningful signal. All others run on pure text in milliseconds.
+The embedding-based metrics (context drift) require a small sentence-transformer model but provide the most semantically meaningful signal. All others run on pure text in milliseconds. Prompt DNA (Part XIII) is the one deliberate exception to "no LLM call required" — it trades that speed for a functional read of what the model actually concluded, not just what the context structurally contains.
 
 ### DeepAgent Parameters
 
@@ -1110,7 +1211,7 @@ The embedding-based metrics (context drift) require a small sentence-transformer
 
 ## What This Is Not
 
-This system does not evaluate whether the LLM's answer is *correct*. Correctness requires a ground truth, which requires a human or another LLM. What it evaluates is whether the conversation is *efficiently covering the task space* — a structural property that can be measured without understanding the content.
+This system (Parts I–XII) does not evaluate whether the LLM's answer is *correct*. Correctness requires a ground truth, which requires a human or another LLM. What it evaluates is whether the conversation is *efficiently covering the task space* — a structural property that can be measured without understanding the content. Part XIII (Prompt DNA) is the deliberate, occasional exception: it spends a real LLM call specifically to probe correctness/comprehension against a hand-authored expected answer — a different tool for a different, rarer question, not a replacement for the structural metrics above.
 
 The analogy: a doctor can measure a patient's temperature, blood pressure, and oxygen saturation without diagnosing the disease. These proxy signals are useful for triage even without diagnosis. Context evaluation metrics are the same: useful proxies, not ground truth.
 
