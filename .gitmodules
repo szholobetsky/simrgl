@@ -16,3 +16,6 @@
 [submodule "radogast"]
 	path = radogast
 	url = https://github.com/szholobetsky/radogast.git
+[submodule "alkonost"]
+	path = alkonost
+	url = https://github.com/szholobetsky/alkonost.git

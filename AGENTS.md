@@ -34,7 +34,9 @@ C:\Project\codeXplorer\capestone\simrgl\   ← THIS REPO (working dir)
 ├── info/        Results files, leaderboard, planning docs
 ├── 1bcoder/     git submodule → szholobetsky/1bcoder (STALE SNAPSHOT)
 ├── vyrii/       git submodule (STALE SNAPSHOT)
+├── alkonost/    git submodule → szholobetsky/alkonost (STALE SNAPSHOT)
 └── ...other submodules (radogast, yasna, svitovyd) — all STALE SNAPSHOTS
+    (syryn not yet added as a submodule here, though it's a live tool — see table below)
 ```
 
 **CRITICAL**: Submodules in this repo are pinned stale snapshots. All live code lives in `C:\Project\` (no "s"):
@@ -43,9 +45,11 @@ C:\Project\codeXplorer\capestone\simrgl\   ← THIS REPO (working dir)
 |---|---|
 | 1bcoder | `C:\Project\1bcoder\` |
 | vyrii | `C:\Project\vyrii\` |
-| yasna | (not yet implemented) |
-| svitovyd | (not yet implemented) |
+| yasna | `C:\Project\yasna\` |
+| svitovyd | `C:\Project\svitovyd\` |
 | radogast | `C:\Project\radogast\` |
+| syryn | `C:\Project\syryn\` |
+| alkonost | `C:\Project\alkonost\` |
 | simargl (this repo) | `C:\Project\codeXplorer\capestone\simrgl\` |
 
 When editing any tool, always work in `C:\Project\<tool>\`, never in the submodule copy inside simrgl.
@@ -139,10 +143,12 @@ Goal: maximize EVOLUTION zone (high Novelty + high Structurality).
 |---|---|---|---|
 | simargl | Симаргл — guardian | Semantic Index: Map Artifacts, Retrieve from Git Log | Research complete |
 | 1bcoder | — | CLI coding assistant, local LLM interface | Production (PyPI v0.1.x) |
-| vyrii | Вирій | Local LLM server (Flask default, port 5000) | Production |
-| yasna | Ясна — goddess of fate | Knowledge memory system for ctx files | Planned only |
-| svitovyd | Світовид — four-faced god | Code structure map service (extract from 1bcoder) | Discussed, not planned |
-| radogast | Радогост | (supporting role) | Active |
+| vyrii | Вирій | Local AI web UI (Flask default, port 5000) | Production |
+| yasna | Ясна — goddess of fate | Session memory — indexes conversations from all AI agents | Production (PyPI v0.1.8) |
+| svitovyd | Світовид — four-faced god | Project map — structural map of definitions/cross-file deps, MCP server | Production |
+| radogast | Радогост | Context drift monitor — measures how far an agent's conversation has drifted from the task | Active |
+| syryn | Сирин — sorrow/night bird | Bluetooth identity beacon for headless devices | Production |
+| alkonost | Алконост — joy/day bird, paired with Сирин | Task-board viewer/editor for `tasks.md`/`planMD`/`spec` (1bcoder's deepagent_* output) | Production |
 
 ### 1bcoder (`C:\Project\1bcoder\`)
 - PyPI: `pip install 1bcoder`
@@ -155,6 +161,14 @@ Goal: maximize EVOLUTION zone (high Novelty + high Structurality).
 - Pure Python dependencies: requests, flask, flask-cors, apscheduler, waitress
 - Optional extras: `vyrii[gradio]`, `vyrii[api]`, `vyrii[full]`
 - OpenAI-compatible endpoints + `/vyrii/*` endpoints, basic auth
+
+### alkonost (`C:\Project\alkonost\`)
+- PyPI: `pip install alkonost`; CLI entry `alkonost --port 8090 --root <dir>`
+- Flask (`flask_api.py`, `waitress.serve`, default port 8090) + static HTML/JS UI in `alkonost/ui/`, no build step
+- Reads/writes `.1bcoder/planMD/`, `.1bcoder/spec/`, `.1bcoder/tasks/` produced by 1bcoder's `deepagent_md`/`deepagent_spec`/`deepagent_task` — no import dependency on 1bcoder, independently re-implements the same file formats
+- No LLM calls — pure viewer/editor; makes zero AI calls itself
+- Zero-config: recursively discovers every `.1bcoder/` project under wherever it's started, two-level project→plan picker
+- 58 pytest + 48 `node --test` (client-side JS, no build step) — see `concepts/ALKONOST.md` for the full design rationale and `README.md` in the tool itself for user-facing docs
 
 ---
 
