@@ -1,3 +1,21 @@
 [submodule "1bcoder"]
 	path = 1bcoder
 	url = https://github.com/szholobetsky/1bcoder.git
+[submodule "yasna"]
+	path = yasna
+	url = https://github.com/szholobetsky/yasna.git
+[submodule "svitovyd"]
+	path = svitovyd
+	url = https://github.com/szholobetsky/svitovyd.git
+[submodule "simargl"]
+	path = simargl
+	url = https://github.com/szholobetsky/simargl.git
+[submodule "vyrii"]
+	path = vyrii
+	url = https://github.com/szholobetsky/vyrii.git
+[submodule "radogast"]
+	path = radogast
+	url = https://github.com/szholobetsky/radogast.git
+[submodule "alkonost"]
+	path = alkonost
+	url = https://github.com/szholobetsky/alkonost.git

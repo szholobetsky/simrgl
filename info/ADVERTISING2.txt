@@ -1,0 +1,40 @@
+Hello! I've been building AI coding tools specifically for developers who don't have a GPU but want to try conding with llm localy. All small agents like opencode, aider, pi or nanocoder is autonomous agents and they need at least 8b-14b models to do even simple operation. My solution is human directed console applications that can work with 0.5b-4b models and help you to understand unclear code, explain the bug, generate unit tests, docker file or simple function in exotic language. You can use the big set of unique tools designed for comfort work with 1b models.  The stack runs on anything with Python — including an Android phone via Termux. I tested it with 0.5B-4B models on Ollama. Some function I can run on my phone to free RAM on the laptop for running IDEs, databases and othe staff of test environment in dockers.  There is three main programme:
+
+
+
+
+
+1bcoder - the cli agent that has many manual commands for enrich context with project details. All comands (even autonomous /agent mode) designed especialy for 1b models, it has short promts, flexible context managment, step-by-step script, complex logic(flow), offline translator, postprocessing, hooks, search tools for files on the discs and project structure scaner.  Working with 1bcoder it is not an easy vibecode-session, but it allows small models assist you in your coding sessions if you will do strategy planning and managing context.  
+
+
+
+simargl(Semantic Index: Map Artifacts, Retrieve from Git Log) - MSR system, semantic scaner of project code and task tracking system, that allow developer to associate task description with concrete files or modules. We have three different approach that allow user to work with big code base (1gb or more) with very small llm models. 
+
+
+
+svitovyd (the same project structure scaner that is embedded to the 1bcoder but this version has mcp server and ui for user, so it can be used even with another coding agents like opencode, aider, nanocoder or as independednt product to navigate user in the huge codebase. 
+
+You can install it with pip like: 
+
+pip install 1bcoder, pip install simargl, pip install svitovyd
+
+No heavy dependencies. simargl downloads bge-small (~130MB) once, if you will use translator it will download language pairs (100Mb) or language model(600Mb) according to selected mode. Required installed ollama or some provider with openai protocol (lamacpp, lm studio, gpt4all, lama_files ... etc). 
+
+
+
+
+These project is open source. You can find repo here: 
+
+github.com/szholobetsky/1bcoder 
+
+github.com/szholobetsky/simargl 
+
+github.com/szholobetsky/svitovyd
+
+
+If it is helphul, we can add that it was done to implement PhD reseach results
+
+========================================
+
+
+Hello. Today I want to show how to use 1bcoder - the cli AI agent that designed to use with ultra small models, with 1 billion parameters, in software development. 

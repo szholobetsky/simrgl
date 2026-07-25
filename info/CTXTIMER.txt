@@ -1,0 +1,122 @@
+Нам треба розробити новий flow для 1бкодер. Я купив мініпк з i5-6500T і 32гб озп. Це чудова машинка для локальних мереж але я бачу що всі мої моделі мають певне
+  обмеження - вони не можуть працювати в середовищі з контекстом вище певного порогового значення. Я чим більше
+  модель тим нижче це порогове значення. Я говорив з сонетом і він каже що немає універсальної формули яка б показала
+  розмір контексту який вбьє модель. ПРопонує виміряти це емпірично. Для цього потрібен новий інструмент. Це повинна
+  бути python програма яка запускає модель з промптом з 100 500 1к 2к 3к 5к 7к 8.5к 10к 15к 20к ... але наша задача не
+  перебирати варіанти а знайти те найбілше значення N при якому при якому для поточного значення timeout модель втрачає управління. Для цього краще скористатись методом половиноого пошуку чи можливо дати параметр --bin / --seq які перемикатимуть половиний пошук на послідовний. Тепер, нам потрібно буде згенерувати і заготовити тексти задач англійською мовою на 100, 500, 1к, 2к і т.д. токенів. Власне наша система буде просто запускати генерацію і дивитись чи встигли ми почати генерувати текст до таймаута чи не встигли. Якшо встигли то можна не дожидатись поки текст буде згенерований а просто ставити pass для контексту такого розміру. Спробуєш реалізувати такий flow? Називемо його /flow ctxtimer 
+
+
+
+
+Нижче я скопіював нашу розмову з сонетом.
+
+ on the remote machine i have started ollama with gemma4-e4b. I have 32Gb of ram.
+
+  top - 16:51:11 up  2:05,  2 users,  load average: 3.64, 2.18, 1.79
+  Tasks: 201 total,   2 running, 199 sleeping,   0 stopped,   0 zombie
+  %Cpu(s): 99.8 us,  0.2 sy,  0.0 ni,  0.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+  MiB Mem :  31991.0 total,  10485.7 free,  11702.2 used,  10228.9 buff/cache
+  MiB Swap:   8192.0 total,   8192.0 free,      0.0 used.  20288.8 avail Mem
+
+      PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+    32067 ollama    20   0   11.3g  10.2g  13144 R 397.0  32.6   8:46.47 llama-server
+    31985 panteon   20   0 1341788 162328  35152 S   2.3   0.5   1:13.24 vyrii
+        1 root      20   0   23292  14336   9508 S   0.0   0.0   0:01.88 systemd
+        2 root      20   0       0      0      0 S   0.0   0.0   0:00.00 kthreadd
+        3 root      20   0       0      0      0 S   0.0   0.0   0:00.00 pool_workqueue_release
+        4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-rcu_gp
+        5 root       0 -20       0      0     orker/R-sync_wq
+        6 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-kvfree_rcu_reclaim
+        7 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-slub_flushwq
+        8 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-netns
+       10 root       0 -20       0      0     orker/0:0H-events_highpri
+       13 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker/R-mm_percpu_wq
+       14 root      20   0       0      0      0 S   0.0   0.0   0:00.02 ksoftirqd/0                                         15 root      20   0       0      0     u_preempt
+       16 root      20   0       0      0      0 S   0.0   0.0   0:00.00 rcu_exp_par_gp_kthread_worker/0
+       17 root      20   0       0      0      0 S   0.0   0.0   0:00.00 rcu_exp_gp_kthread_worker
+       18 root      rt   0       0      0      0 S   0.0   0.0   0:00.02 migration/0
+
+  it is my top on that machine.                                                                                        
+  I saw that first 10k tokens context is work pretty fast, but whn context became longer that 10K tokens the repsonse appear much later. Now i have 360s timeout and i am not sure i will have the first bit of response before this        interval. It is CPU only macbhine. Earlier iproblem on 8k tokens. And I do notunderstand what happen after 10k. I though that maybe system try to use swoap file. But not. I have 32Gb and it free. I run only xubuntu and ollama, nothing else
+
+Not swapping — you're right to rule that out (0 swap used, plenty of free RAM). What you're hitting is intrinsic to how transformer attention scales, made worse by being CPU-only.
+
+Why the cliff around 8-10k tokens:                                                                                   
+1. Attention cost isn't linear. The linear projections (Q/K/V, FFN) scale O(n · d²). The attention score computation scales O(n² · d). For a ~4B model, hidden dim d is roughly 2500-3000. Once n (context length) approaches that order o magnitude, the n² term stops being negligibltotal compute grows faster than linearlyright around the range you're seeing (8-10k). Below that, you're in the "linear-feeling" zone; above it, each         additional token costs disproportionately mo
+2. KV cache stops fitting in cache. At small context the KV cache (and working set) fits in L2/L3 cache. Once it grows past that (a few thousand tokens easily blows a typical few-MB-to-few-tens-of-MB cache), every generated token has to stream the full KV cache from RAM. On CPU this becomes memory-bandwidth bound, not compute bound — you have plenty of free RAM capacity but bandwidth is a different resource than capacity, and it doesn't show up in free/top as pressure. This is a much better fit for "fast then suddenly much slower" than a smooth degradation would be.          3. Decode cost per token also grows with conerate has to attend over all prior KV cacheentries. So even ignoring prefill, tokens/sec drops as the conversation grows — this is expected, not a bug.
+                                                                                                                      top showing llama-server pinned at ~397% con ~4 threads, consistent with bothexplanations.                                                                                                        
+Practical mitigations, roughly in order of impact:
+
+- Quantize the KV cache: set OLLAMA_KV_CACHE_TYPE=q8_0 (or q4_0 for more aggressive) before starting ollama serve. This shrinks the KV cache 2-4x, pushing the "fits in cache" cliff further out and reducing memory bandwidth per token.
+- Enable flash attention: OLLAMA_FLASH_ATTENTION=1. Reduces memory traffic for the attention computation, helps more  as context grows.
+- Trim your context — if you're accumulating full conversation history, truncate/summarize older turns instead of resending everything every time.                                                                                      - Check num_thread — make sure it matches phs; oversubscription can hurt throughput onceyou're compute-bound.                                                                                                 - Raise your client timeout or switch to stru get the first token before the fullresponse completes — 360s for a CPU box at large context is genuinely tight for a MoE-ish 4B model.
+
+If you tell me your num_ctx setting and whether you're already streaming responses, I can help narrow down which lever will help most.
+                                                                                                                        Baked for 46s
+
+❯ qwen3.6:35b-a3b - дуже гарна модель. Вона майже миттєво починає відповідати якшо контекст путий і ти просто запитав   її hello. Впринцпи ще коє як працює поки кон токенів. Але як зараз контекст 3334 токени- то навіть 600секнунд не вистачає ллм щоб почати процес "мислення". Я можу поексперементувати ще і дати йому не 10хв а скажімо 20хв на роздуми чи навіть пів години. Але думати пів години про 3тисячі токенів в контексті - надмірна      витрата часу. Як можна рохрахувати оцей час повідь? Я так розумію головним параметромбуде розмір мережі. gemma4-e4b (16b moe) працює при контексті 8k але 10 уже убиває. qwen3.6:35b-a3b помирає вже на 3000 токенів. Отже оцей b-param має бути десь в знаменнику.
+
+Це не проста лінійна залежність від "b" параметрів — тут два різні механізми, і саме тому gemma й qwen поводяться так по-різному.
+
+Різниця між gemma3n (matryoshka/elastic) і qwen3-MoE (sparse routing)
+                                                                                                                      gemma-e4b — це не класичний MoE з роутингом yoshka"-модель: з великої мережі берутьфіксовану підмережу приблизно на 4B параметрів, і ця підмережа однакова для кожного токена. Тобто скільки б токенів контексту не було, обсяг ваг, які треба прогнати через пам'ять, залишається сталим (~4-8GB). Деградація на 8-10k      токенів у неї — це "класична" причина з попеattention + KV-cache перестає влазити в кешпроцесора.
+
+qwen3.6-35b-a3b — це справжній sparse MoE: top-k експертів обираються окремо для кожного токена в кожному шарі. При контексті в 10-20 токенів ("hello") позиції ще не встигають "покрити" різноманіття експертів — торкається лиш кілька з них, тому швидко. Але вже на ~3000 токенах різні позиції в промпті починають активувати помітну частку всіх експертів моделі (по суті, статистика покриття — щось им більше різних токенів, тим швидшезачіпаються майже всі експерти). Коли покриття наближається до "майже всіх експертів торкнулись хоч раз", реальний обсяг ваг, які треба прочитати з RAM, наближається не до 3B (активні на один токен), а до майже всіх 35B. А
+CPU-inference тут пам'ять-бавнд (bandwidth-bу ви впираєтесь у пропускну здатність RAM для читання ~35B параметрів, а не в FLOPS для 3B.
+
+Тобто ваша гіпотеза "b у знаменнику" правильна лише для малого контексту (доки покриття експертів неповне). Після точки насичення покриття реальний знаменник стрибає з active_params на total_params, і подальше зростання контексту вже майже не впливає на цю компоненту — вона вже "заплатила по максимуму".
+
+Формула для грубої оцінки
+
+T_prefill(n) ≈ max(
+    compute_bound:  2 · active_params · n /
+    memory_bound:   bytes_touched(n) / RAM_bandwidth
+)
+
+де bytes_touched(n) росте від active_params_bytes (малий n) до total_params_bytes (n після точки насичення покриття
+експертів), плюс окремий доданок O(n²·d) на  моделей.
+
+Порахувати теоретично складно (точка насичення залежить від кількості експертів, top-k, розподілу маршрутизації), але виміряти емпірично — легко, і це набагато надійніше за формулу.
+
+Як виміряти емпірично
+
+Ollama API повертає точні таймінги в кожній відповіді:
+
+curl http://remote:11434/api/generate -d '{
+  "model": "qwen3.6:35b-a3b",
+  "prompt": "<ваш промпт>",
+  "stream": false
+}' | jq '{prompt_eval_count, prompt_eval_duration, eval_count, eval_duration}'
+
+prompt_eval_duration (в наносекундах) — це і є час до першого токена (prefill). Прогоніть це на контекстах ~500, 1000,
+1500, 2000, 2500, 3000, 3500 токенів і побудion / prompt_eval_count (нс на токенпрефілу). Якщо це MoE-насичення — побачите чіткий "коліно"-перегин: майже стала швидкість до якогось n, потім різкий стрибок і подальше майже плато (бо далі йде вже читання майже всієї моделі, і додається лише O(n²) складова).
+
+Це дасть вам конкретну відповідь "скільки токенів контексту безпечно для 600с" для конкретно цієї моделі на цьому залізі — набагато точніше за будь-яку теоретичну формулу.
+
+Практично
+
+- Для qwen3.6:35b-a3b на CPU з 32GB — це погана комбінація для контексту вище ~2-3k токенів, і збільшення таймауту до 20-30 хв це не вирішує принципово, лише ховає проблему.
+- gemma-e4b залишиться передбачуванішою для довшого контексту саме тому, що в неї немає per-token routing.
+- Якщо потрібен довгий контекст на цьому залзміру (напр. 7-8B dense, не MoE) часто дастькращий compromise, ніж великий sparse-MoE, саме через відсутність цього ефекту "покриття експертів".
+
+✻ Crunched for 1m 19s
+
+❯ тобто я можу використовувати модель на 35b лякі потребують великого розуму але самазадача не повинна виходити за рамки 1к токенів. А якщо потрібен багатокроковий пошук - накопиченя даних в контексті від різних джерел (раг, веб, запуск тестів, документація, текст програми, сімаргл і світовид) - то краще барти невелику dense model яка гарно виконує інструкції. Результатом роботи такої пошукової моделі - може бути перфразування проблеми з урахуваням всієї отриманої інгформації в короткий опис до 1000 токенів який ми згодуємо для 35b моделі
+
+Так, це правильна архітектура для вашого заліза — по суті "map-reduce" підхід, де dense-модель робить map (збір і стиснення розрізненого контексту), а MoE-модель робить reduce (глибоке міркування над вже стиснутим, малим входом).
+
+Кілька практичних уточнень до цієї схеми:
+
+Розподіл ролей
+- Dense model (пошук/накопичення): RAG-виклики, читання документації, парсинг результатів тестів, вихід з інструментів — все це природно "широкий, але неглибокий" контекст (багато токенів, невисока потреба в "розумі" на кожному кроці). Dense модель тут не має ефекту насичення експертів, тому масштабується з контекстом набагато передбачуваніше — саме те, що потрібно.
+- 35B MoE (фінальне міркування): вхід — вже нів. Тут ви платите повну "вартість покриттяекспертів" один раз, але за короткий вхід, тому й total time прийнятний.
+
+Нюанси, на які варто зважити
+
+1. Точка насичення могла б бути й вищою за 1000 — ви бачили злам на 3000-3334, а не рівно на 1000. Варто емпірично перевірити (той самий метод з prompt_eval_duration), скільки токенів контексту 35B-модель ще "тягне" за прийнятний час
+— можливо, у вас є запас до ~1500-2000, а неільше простору для стиснутого опису.
+2. Стиснення — це теж втрата інформації. Якщо dense-модель погано резюмує (пропускає нюанс з тестового виводу чи документації), 35B модель міркуватиме над неповною картиною і жодна "глибина розуму" це не компенсує. Варто перевірити на кількох реальних кейсах, чи резюме зберігає достатньо деталей (можливо, знадобиться структурований формат резюме — не вільний текст, а секції: "проблема", "що вже спробували", "релевантні фрагменти коду/логів", "гіпотеза" — це і компактніше, і легше валідувати вручну).
+3. Ітеративність: якщо 35B модель у відповідь просить "а що там у файлі X" — це знову виклик до dense-моделі за додатковим фактом, знову стиснення в короткий апдейт, знову подача в 35B. По суті цикл orchestrator (dense) ↔ reasoner (MoE), де dense модель ще й вирішує, коли досить контексту зібрано для передачі "нагору".
+4. Яку dense-модель обрати — для ролі "пошукезюмування" підійде щось на кшталт 7-8B dense з хорошим instruction-following (не обов'язково найрозумніша модель, головне — дисциплінованість формату виводу). Вона й на CPU буде швидшою за MoE навіть при контексті в 8-10к.
+
+Загалом підхід має сенс і добре узгоджується з тим, що ви побачили емпірично — головне, зафіксуйте реальну межу насичення для 35B через вимірювання, а не приймайте 1000 як універсальну константу.
