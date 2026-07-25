@@ -1,0 +1,31 @@
+@echo off
+echo ========================================
+echo ETL Pipeline - Full Configuration
+echo For Academic Research
+echo ========================================
+echo.
+echo Creating embeddings for ALL tasks with:
+echo - Split Strategy: modn (ID mod 200)
+echo - Sources: desc (title+description) + title (title only)
+echo - Targets: module + file
+echo - Window: all (complete history)
+echo - Model: bge-small
+echo.
+echo This will create 4 Qdrant collections:
+echo   1. rag_exp_desc_module_all_modn   (title+desc combined, module)
+echo   2. rag_exp_desc_file_all_modn     (title+desc combined, file)
+echo   3. rag_exp_title_module_all_modn  (title only, module)
+echo   4. rag_exp_title_file_all_modn    (title only, file)
+echo.
+echo For comparing title-only vs title+description effectiveness
+echo Estimated time: 25-35 minutes
+echo ========================================
+echo.
+
+python etl_pipeline.py --split_strategy modn --sources desc title --targets module file --windows all --model bge-small
+
+echo.
+echo ========================================
+echo ETL Pipeline completed!
+echo ========================================
+pause

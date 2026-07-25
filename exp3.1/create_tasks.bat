@@ -1,0 +1,36 @@
+@echo off
+echo ========================================
+echo Create Task Embeddings Collection
+echo ========================================
+echo.
+echo This will create individual task embeddings
+echo for task-to-task similarity search and
+echo module recreation.
+echo.
+echo Parameters:
+echo - Backend: Use current config (default: qdrant)
+echo - Source: TITLE + DESCRIPTION
+echo - Granularity: Individual tasks
+echo - Model: bge-small (384 dim)
+echo.
+echo Expected output:
+echo   task_embeddings_all_bge-small
+echo   (~9,799 tasks)
+echo.
+echo Estimated time: 10-15 minutes (CPU)
+echo                 3-5 minutes (GPU)
+echo ========================================
+echo.
+
+python create_task_collection.py
+
+echo.
+echo ========================================
+echo Task embeddings created!
+echo.
+echo You can now:
+echo - Search for similar historical tasks
+echo - Recreate module embeddings from tasks
+echo - Find what similar problems were solved
+echo ========================================
+pause

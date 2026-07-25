@@ -1,0 +1,45 @@
+@echo off
+echo ========================================
+echo RAG ETL Pipeline - PostgreSQL TEST MODE
+echo ========================================
+echo.
+echo This will create embeddings for TESTING
+echo using PostgreSQL+pgvector with LAST 1000 tasks only
+echo.
+echo Parameters:
+echo - Backend: PostgreSQL (pgvector)
+echo - Split Strategy: modn (ID mod 200)
+echo - Source: desc (TITLE + DESCRIPTION)
+echo - Targets: module + file
+echo - Window: w1000 (LAST 1000 TASKS ONLY)
+echo - Model: bge-small (384 dim)
+echo.
+echo Expected output:
+echo   PostgreSQL tables in 'vectors' schema:
+echo   - rag_exp_desc_module_w1000_modn_bge-small
+echo   - rag_exp_desc_file_w1000_modn_bge-small
+echo.
+echo Estimated time: 5-8 minutes (CPU)
+echo                 2-3 minutes (GPU)
+echo.
+echo Perfect for TESTING the RAG system quickly!
+echo ========================================
+echo.
+
+python etl_pipeline.py --backend postgres --split_strategy modn --sources desc --targets module file --windows w1000 --model bge-small
+
+echo.
+echo ========================================
+echo Test ETL Complete!
+echo.
+echo Collections created in PostgreSQL:
+echo - Module search (~20-30 modules from last 1000 tasks)
+echo - File search (~3000-5000 files from last 1000 tasks)
+echo.
+echo You can now test ragmcp with PostgreSQL backend
+echo.
+echo IMPORTANT: Update ragmcp/config.py to use w1000 collections:
+echo   COLLECTION_MODULE = 'rag_exp_desc_module_w1000_modn_bge-small'
+echo   COLLECTION_FILE = 'rag_exp_desc_file_w1000_modn_bge-small'
+echo ========================================
+pause

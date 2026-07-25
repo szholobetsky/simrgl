@@ -1,0 +1,35 @@
+@echo off
+echo ========================================
+echo Recreate FILE Collection Only
+echo ========================================
+echo.
+echo This will create file-level embeddings
+echo without recreating the module collection.
+echo.
+echo Parameters:
+echo - Split Strategy: modn (ID mod 200)
+echo - Source: desc (TITLE + DESCRIPTION)
+echo - Target: FILE only
+echo - Window: all (complete history)
+echo - Model: bge-small
+echo.
+echo Expected output:
+echo   rag_exp_desc_file_all_modn_bge-small
+echo   (~63,069 files)
+echo.
+echo Estimated time: 30-40 minutes (CPU)
+echo                 10-15 minutes (GPU)
+echo ========================================
+echo.
+
+python etl_pipeline.py --split_strategy modn --sources desc --targets file --windows all --model bge-small
+
+echo.
+echo ========================================
+echo File collection recreated!
+echo.
+echo You can now use both:
+echo - Module search (64 modules)
+echo - File search (63,069 files)
+echo ========================================
+pause

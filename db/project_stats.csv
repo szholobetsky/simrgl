@@ -1,0 +1,11 @@
+project,db_path,db_size_mb,commits_table_name,has_rawdata_table,has_task_table,rawdata_rows,distinct_commits,avg_files_per_commit,commits_with_task_name,linkage_rate_pct,distinct_linked_tasks,cmt_date_min,cmt_date_max,task_rows,tasks_with_description,tasks_with_comments,ticket_criterion_usable,commit_criterion_usable,comparable_ticket_vs_commit
+agilebill,/home/stzh/Projects/db/agilebill.db,66.22,COMMITS,True,True,7643,120,63.69,0,0.0,0,2008-11-19T20:00:58-08:00,2014-05-18T10:33:20-07:00,0,0,0,False,False,False
+celery,/home/stzh/Projects/db/celery.db,199.47,COMMITS,True,True,45482,13009,3.5,3277,25.19,2998,2009-04-24T13:30:00+02:00,2026-03-28T16:18:19+06:00,2998,2432,2188,True,True,True
+flink,/home/stzh/Projects/db/flink.db,1856.66,COMMITS,True,True,372550,36051,10.33,23102,64.08,17073,2010-12-15 17:02:01+01:00,2024-10-31 11:04:20+08:00,17073,14977,17052,True,True,True
+hadoop,/home/stzh/Projects/db/hadoop.db,1564.99,COMMITS,True,True,259081,27940,9.27,25870,92.59,24719,2009-05-19 04:20:40+00:00,2025-10-16 22:09:00+08:00,24737,23495,24668,True,True,True
+kubernetes,/home/stzh/Projects/db/kubernetes.db,8262.13,COMMITS,True,True,1300973,136848,9.51,58834,42.99,57964,2014-06-06T16:40:48-07:00,2026-03-30T18:00:15+05:30,57964,55720,57249,True,True,True
+pulumi,/home/stzh/Projects/db/pulumi.db,2080.37,COMMITS,True,True,189014,14891,12.69,9839,66.07,9531,2016-10-08T16:01:25-07:00,2026-04-02T09:23:25+00:00,9531,8639,6178,True,True,True
+rubocop,/home/stzh/Projects/db/rubocop.db,160.57,COMMITS,True,True,79731,16114,4.95,7408,45.97,6990,2012-04-21T13:06:42+03:00,2026-04-02T13:36:52+03:00,6990,6756,4805,True,True,True
+sonar,/home/stzh/Projects/db/sonar.db,1039.4,COMMITS,True,True,469836,37093,12.67,23944,64.55,9799,2010-09-06 14:08:06+00:00,2024-10-25 20:02:44+00:00,9799,9272,9272,True,True,True
+spark,/home/stzh/Projects/db/spark.db,1756.48,COMMITS,True,True,306804,45497,6.74,34829,76.55,30478,2010-03-29 16:17:55-07:00,2025-10-02 09:34:48+08:00,30478,22763,30477,True,True,True
+vscode,/home/stzh/Projects/db/vscode.db,12043.22,COMMITS,True,True,2609179,149664,17.43,74161,49.55,65546,2015-11-13T14:39:38+01:00,2026-04-01T16:52:00+09:00,65546,60488,30106,True,True,True

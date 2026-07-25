@@ -1,0 +1,36 @@
+@echo off
+echo ========================================
+echo RAG ETL Pipeline - PostgreSQL Backend
+echo ========================================
+echo.
+echo This will create embeddings using PostgreSQL+pgvector
+echo instead of Qdrant
+echo.
+echo Parameters:
+echo - Backend: PostgreSQL (pgvector)
+echo - Split Strategy: modn (ID mod 200)
+echo - Source: desc (TITLE + DESCRIPTION)
+echo - Targets: module + file
+echo - Window: all (complete history)
+echo - Model: bge-small (384 dim)
+echo.
+echo Expected output:
+echo   PostgreSQL tables in 'vectors' schema:
+echo   - rag_exp_desc_module_all_modn_bge-small
+echo   - rag_exp_desc_file_all_modn_bge-small
+echo.
+echo Estimated time: 30-40 minutes (CPU)
+echo                 10-15 minutes (GPU)
+echo ========================================
+echo.
+
+python etl_pipeline.py --backend postgres --split_strategy modn --sources desc --targets module file --windows all --model bge-small
+
+echo.
+echo ========================================
+echo ETL Complete!
+echo.
+echo Collections created in PostgreSQL
+echo You can now use ragmcp with PostgreSQL backend
+echo ========================================
+pause
