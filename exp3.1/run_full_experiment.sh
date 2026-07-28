@@ -47,6 +47,18 @@
 
 set -uo pipefail
 
+# Prevent two copies running at once (e.g. manually launched twice by
+# mistake) - held for the entire run, released automatically on exit,
+# crash, or kill. No stale-lockfile problem: flock ties the lock to this
+# process's open file descriptor, not to the file's mere existence.
+LOCK_FILE="/tmp/simrgl_exp3.1_run_full_experiment.lock"
+exec 200>"$LOCK_FILE"
+if ! flock -n 200; then
+  echo "Another run_full_experiment.sh is already running (lock: $LOCK_FILE) - not starting a second copy."
+  echo "Check with: pgrep -af run_full_experiment.sh"
+  exit 1
+fi
+
 MODELS="bge-small bge-large"
 STRATEGIES="recent modn"
 TARGETS="file module"
@@ -95,6 +107,12 @@ TOTAL_STEPS=${#STEPS[@]}
 log "===== Full experiment run starting - log: $LOG_FILE ====="
 log "Steps ($TOTAL_STEPS): ${STEPS[*]}"
 log "Strategies: $STRATEGIES | Models: $MODELS | Targets: $TARGETS | Windows: $WINDOWS"
+
+log "----- Ensuring Postgres is up (./run_postgres.sh) -----"
+if ! ./run_postgres.sh 2>&1 | tee -a "$LOG_FILE"; then
+  log "!!!!! Postgres did not come up - aborting before wasting GPU time on doomed ETL runs !!!!!"
+  exit 1
+fi
 
 PREV_PROJECT="none"
 PREV_TASK_UNIT="ticket"

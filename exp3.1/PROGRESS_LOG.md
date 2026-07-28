@@ -322,3 +322,75 @@ real ETL+eval through the full orchestrator, no errors).
 **Not yet launched** - still handed to the user to start themselves, per
 their explicit request to keep the multi-day run out of any single chat
 session (`nohup ./run_full_experiment.sh > /dev/null 2>&1 & disown`).
+
+---
+
+## 2026-07-25/26/27 — the run is actually going; monitoring tools; one real incident
+
+**Launched for real** via `./run.sh` (user ran it themselves, as planned).
+Built on request, all verified against the live run:
+- `monitor.sh` - one-shot status dump (process, current step, STATUS.md,
+  log tail, GPU, Postgres).
+- `monitor_con.sh` - `watch -n 30 ./monitor.sh`.
+- `monitor_dashboard.py` (+ `monitor_dashboard.sh` wrapper, `--interval N`
+  flag) - three nested progress bars: Level 1 = overall across all 19
+  steps (sums every checkpoint.json found), Level 2 = current
+  (project,task_unit)'s 72-variant grid, Level 3 = live tqdm-parsed
+  sub-progress of whatever's running right now (embedding batch / upsert /
+  eval). Also parses the log's "Processing variant: ..." lines to show
+  the current model/strategy/source/target/window in plain text - this
+  was the actual answer to "which window/granularity is running now."
+
+**Gotcha found while explaining the dashboard**: `checkpoint.json`'s
+`failed_etl`/`failed_experiments` lists are **append-only history**, not
+"currently failing" - `mark_etl_completed()` never removes a variant_id
+from `failed_etl` even after it succeeds on retry. So `done + failed` can
+exceed the step's true total, and a nonzero `failed_etl` count doesn't
+mean anything is currently broken - always cross-check
+`set(failed_ids) - set(completed_ids)` to see what's *actually* still
+outstanding, not just the raw failed count.
+
+**Real incident (evening of 2026-07-25 into 2026-07-26)**: user paused the
+run overnight (`kill`, safe - checkpoint-resumable), machine got rebooted
+(OS updates) before resuming. Podman containers do **not** survive a host
+reboot automatically even with `restart: unless-stopped` in
+`postgres-compose.yml` (that policy only applies while podman keeps
+running, not across a reboot) - so `semantic_vectors_db` was down when
+`./run.sh` was relaunched, and the run ground through ~16 variants'
+worth of GPU embedding time before failing each one at the Postgres
+upsert step with `Connection refused`, all while still burning GPU cycles
+uselessly on the doomed embedding computation itself.
+
+Fixed two ways:
+1. `podman start semantic_vectors_db` + relaunch `./run.sh` - the 16
+   failures auto-retried via checkpoint (they were never in
+   `completed_etl`) and all succeeded once Postgres was back.
+2. Built `run_postgres.sh` (idempotent - starts the container if stopped,
+   creates it via `postgres-compose.yml` if it doesn't exist at all, waits
+   up to 30s for `pg_isready`) and wired it into `run_full_experiment.sh`'s
+   very first step, so a `Connection refused` failure storm like this one
+   can't happen again regardless of whether the user remembers to run it
+   separately - the script now aborts immediately (before any GPU work)
+   if Postgres can't be reached, instead of grinding through embeddings
+   that are doomed to fail at the upsert step.
+
+**Second, smaller scare** (2026-07-27 morning): after another reboot (OS
+update) + `./run.sh` relaunch, GPU showed 0% utilization and the user
+worried CUDA had broken again. It hadn't (`torch.cuda.is_available()`
+still `True`, driver unchanged at 470.256.02) - the process was just in
+its normal fast checkpoint-skip phase (`[SKIP] ETL already completed`),
+which is pure Postgres-cleanup/CPU work with no embedding calls. GPU
+picked back up to 98% within ~15s once it reached a genuinely
+not-yet-computed variant. Worth remembering: 0% GPU right after a resume
+is *expected* for a few seconds/minutes while it fast-forwards through
+whatever's already done, not necessarily a sign of breakage.
+
+**Status as of this entry**: step 9/19 (`flink/ticket`), 630/1368
+variant-runs done overall, 7/19 steps fully finished
+(celery×{ticket,commit}, rubocop×{ticket,commit}, and others in progress).
+No unresolved failures. Postgres container: `semantic_vectors_db`, running.
+
+**Next:** nothing needed from a fresh session except monitoring
+(`./monitor.sh` / `./monitor_dashboard.sh`) unless something breaks. If
+resuming after any reboot, run `./run_postgres.sh` first as a sanity
+check even though `run_full_experiment.sh` now does this automatically.
