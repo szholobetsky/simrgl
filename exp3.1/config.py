@@ -3,6 +3,8 @@ Configuration file for RAG Research Experiment
 Defines all experiment variants and parameters
 """
 
+import hashlib
+
 # Directory containing one SQLite database per project (built by
 # codeXplorer). See db/project_stats.csv (repo root) for an inventory of
 # what's in each one, including which commits-table name it uses.
@@ -47,7 +49,20 @@ def collection_name(source, target, window, split, model_key=None, project=None,
     project = project or PROJECT
     task_unit = task_unit or TASK_UNIT
     model_suffix = f"_{model_key}" if model_key else ""
-    return f"{COLLECTION_PREFIX}_{project}_{task_unit}_{source}_{target}_{window}_{split}{model_suffix}"
+    base = f"{COLLECTION_PREFIX}_{project}_{task_unit}_{source}_{target}_{window}_{split}{model_suffix}"
+
+    # PostgreSQL silently truncates identifiers at 63 bytes (NAMEDATALEN),
+    # and vector_backends.py appends "_vector_idx" (11 chars) to this name
+    # for the HNSW index - so budget for that, not just the 63-byte table
+    # name limit, or two different variants (e.g. differing only in window
+    # or model, which sort near the end of the string) can truncate to the
+    # identical relation name and collide with "already exists" (hit for
+    # real on kubernetes/ticket/comments - the longest project+source combo).
+    max_safe_len = 63 - len("_vector_idx")
+    if len(base) > max_safe_len:
+        digest = hashlib.md5(base.encode()).hexdigest()[:8]
+        base = f"{base[:max_safe_len - len(digest) - 1]}_{digest}"
+    return base
 
 
 def task_collection_name(window, model_key=None, project=None):

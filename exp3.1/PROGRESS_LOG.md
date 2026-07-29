@@ -394,3 +394,86 @@ No unresolved failures. Postgres container: `semantic_vectors_db`, running.
 (`./monitor.sh` / `./monitor_dashboard.sh`) unless something breaks. If
 resuming after any reboot, run `./run_postgres.sh` first as a sanity
 check even though `run_full_experiment.sh` now does this automatically.
+
+---
+
+## 2026-07-28 — double-launch lock; real Postgres-identifier-truncation bug in kubernetes/ticket
+
+**Investigated an apparent "phantom parallel process" scare.** User asked
+why `pulumi` jumped from 56/72 (seen the evening before) to 72/72 with no
+visible catch-up work, then separately noticed two `run_full_experiment.sh`
+PIDs alive at once. Root-caused via log timestamps + `ps -o lstart`, not
+guesswork:
+- The 56→72 jump was real, not a shortcut: `pulumi` is one of the largest
+  DBs (9,531 tasks / 189k commits), so a full 72-variant sweep legitimately
+  takes ~2h per task_unit - checkpoint timestamps showed genuine
+  `Generating embeddings for source variant: ...` calls spaced across that
+  whole window, not an instant fake completion. The gap the user observed
+  was just real elapsed time between glancing at the dashboard and actually
+  issuing the stop command.
+- The two-PIDs-at-once finding was real, **but my first explanation of it
+  was wrong** (flagged and corrected by the user) - I claimed one process
+  had "survived overnight from the previous evening," with zero evidence
+  (never checked its actual start timestamp before killing it). The user
+  pointed out they always fully power off the machine when stopping work,
+  so nothing could survive a night that way. Actual cause, confirmed via
+  `~/.bash_history`: the user manually invoked `run.sh` **three times**
+  that morning (`sh run.sh`, `./run.sh`, `./run.sh` again) since the script
+  gives no feedback about an already-running instance - not a code bug, a
+  missing safety guard.
+
+**Fix**: added a `flock`-based lock, held for the entire run so it survives
+however the script is invoked:
+- `run_full_experiment.sh` - `exec 200>/tmp/simrgl_exp3.1_run_full_experiment.lock`
+  + `flock -n 200` right after `set -uo pipefail`; exits immediately with a
+  clear message if another instance already holds it. This is the
+  authoritative guard (self-releasing on crash/kill/exit, no stale-lockfile
+  problem since flock ties the lock to the open fd, not the file's mere
+  existence).
+- `run.sh` - a fast `pgrep -f run_full_experiment.sh` pre-check for
+  immediate synchronous feedback, so a duplicate launch says "already
+  running" instead of silently backgrounding a copy doomed to lose the
+  flock race a moment later.
+- Verified: `bash -n` on both, plus an isolated `flock`/`pgrep` test
+  confirming a second acquire attempt is correctly blocked while the first
+  holds the lock.
+
+**Separately found and fixed a real, unrelated bug** while investigating
+8 `DuplicateTable` failures reported for `kubernetes/ticket` (42/72, 8
+failed at the time). Scanned every `experiment_results/*/*/checkpoint.json`
+for `DuplicateTable` errors - **isolated to `kubernetes/ticket` only**,
+nowhere else in the 19-step grid. Root cause: PostgreSQL truncates
+identifiers at 63 bytes (`NAMEDATALEN`), and `vector_backends.py`
+(`create_collection`) appends `_vector_idx` (+11 chars) to
+`config.collection_name()`'s output for the HNSW index - the table name
+itself often fits in 63 bytes, but the *derived index name* doesn't, so
+Postgres silently truncates it. `kubernetes` (10 chars, the longest
+project name in the whole grid) + `comments` (8 chars, the longest source
+name) + `ticket` pushed several variants (differing only in the tail -
+`window`/`split`/`model`) past that threshold, so they truncated to the
+*same* index name and the second `CREATE INDEX` failed with
+`relation already exists`.
+
+**Fix**: `config.collection_name()` now checks the base name against
+`63 - len("_vector_idx")` (52 chars, the real safe budget, not the naive
+63), and appends an 8-char md5 hash suffix when it's over - guarantees
+uniqueness for any combination, at any name length. Verified: reconstructed
+all 8 previously-colliding variant names, confirmed they're now unique and
+the resulting index name is exactly 63 bytes (not truncated). Checked the
+full 19-step × 72-variant grid in Python - only these `kubernetes/ticket`
+combos were ever over the *old* (naive, table-name-only) 63-byte threshold,
+so this bug never silently affected any other already-completed project;
+everywhere else the two names just happened to be short enough by luck.
+
+**Important operational note**: this fix lives in `config.py`, imported
+once at process start - **the currently-running process has the old
+version loaded in memory and won't pick up the fix until restarted.**
+The 8 `kubernetes/ticket` variants stay in `failed_etl` (never reached
+`completed_etl`) and will auto-retry correctly next time `run.sh` is
+stopped and relaunched - no manual checkpoint editing needed. Not urgent
+to restart immediately; the rest of `kubernetes` and every other project
+are unaffected and can keep running until a natural pause point.
+
+**Status as of this entry**: single confirmed process running
+(`run_full_experiment.sh`, locked via flock), on `kubernetes/ticket`,
+42/72 done, 8 failed (real, fix pending restart to take effect).
