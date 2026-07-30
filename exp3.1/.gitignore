@@ -24,9 +24,12 @@ wheels/
 *.egg
 
 # Experiment Data & Results
+# experiment_results/ itself IS tracked (CSVs + checkpoint.json are small
+# and useful history) - only the large, fully-regenerable test-set dumps
+# (raw task text, ~1MB+ each x up to 75 files) are excluded.
 test_set.json
 experiment_results.csv
-experiment_results/
+experiment_results/*/*/test_set_*.json
 all_models_results.csv
 *_model_comparison_summary.csv
 

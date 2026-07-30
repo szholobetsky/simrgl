@@ -1,0 +1,536 @@
+{
+  "created_at": "2025-12-30T14:48:08.910744",
+  "last_updated": "2026-01-01T21:53:13.005469",
+  "completed_etl": [
+    "bge-small_recent_title_file_w100",
+    "bge-small_recent_title_file_w1000",
+    "bge-small_recent_title_file_all",
+    "bge-small_recent_title_module_w100",
+    "bge-small_recent_title_module_w1000",
+    "bge-small_recent_title_module_all",
+    "bge-small_recent_desc_file_w100",
+    "bge-small_recent_desc_file_w1000",
+    "bge-small_recent_desc_file_all",
+    "bge-small_recent_desc_module_w100",
+    "bge-small_recent_desc_module_w1000",
+    "bge-small_recent_desc_module_all",
+    "bge-small_recent_comments_file_w100",
+    "bge-small_recent_comments_file_w1000",
+    "bge-small_recent_comments_file_all",
+    "bge-small_recent_comments_module_w100",
+    "bge-small_recent_comments_module_w1000",
+    "bge-small_recent_comments_module_all",
+    "bge-small_modn_title_file_w100",
+    "bge-small_modn_title_file_w1000",
+    "bge-small_modn_title_file_all",
+    "bge-small_modn_title_module_w100",
+    "bge-small_modn_title_module_w1000",
+    "bge-small_modn_title_module_all",
+    "bge-small_modn_desc_file_w100",
+    "bge-small_modn_desc_file_w1000",
+    "bge-small_modn_desc_file_all",
+    "bge-small_modn_desc_module_w100",
+    "bge-small_modn_desc_module_w1000",
+    "bge-small_modn_desc_module_all",
+    "bge-small_modn_comments_file_w100",
+    "bge-small_modn_comments_file_w1000",
+    "bge-small_modn_comments_file_all",
+    "bge-small_modn_comments_module_w100",
+    "bge-small_modn_comments_module_w1000",
+    "bge-small_modn_comments_module_all",
+    "bge-large_recent_title_file_w100",
+    "bge-large_recent_title_file_w1000",
+    "bge-large_recent_title_file_all",
+    "bge-large_recent_title_module_w100",
+    "bge-large_recent_title_module_w1000",
+    "bge-large_recent_title_module_all",
+    "bge-large_recent_desc_file_w100",
+    "bge-large_recent_desc_file_w1000",
+    "bge-large_recent_desc_file_all",
+    "bge-large_recent_desc_module_w100",
+    "bge-large_recent_desc_module_w1000",
+    "bge-large_recent_desc_module_all",
+    "bge-large_recent_comments_file_w100",
+    "bge-large_recent_comments_file_w1000",
+    "bge-large_recent_comments_file_all",
+    "bge-large_recent_comments_module_w100",
+    "bge-large_recent_comments_module_w1000",
+    "bge-large_recent_comments_module_all",
+    "bge-large_modn_title_file_w100",
+    "bge-large_modn_title_file_w1000",
+    "bge-large_modn_title_file_all",
+    "bge-large_modn_title_module_w100",
+    "bge-large_modn_title_module_w1000",
+    "bge-large_modn_title_module_all",
+    "bge-large_modn_desc_file_w100",
+    "bge-large_modn_desc_file_w1000",
+    "bge-large_modn_desc_file_all",
+    "bge-large_modn_desc_module_w100",
+    "bge-large_modn_desc_module_w1000",
+    "bge-large_modn_desc_module_all",
+    "bge-large_modn_comments_file_w100",
+    "bge-large_modn_comments_file_w1000",
+    "bge-large_modn_comments_file_all",
+    "bge-large_modn_comments_module_w100",
+    "bge-large_modn_comments_module_w1000",
+    "bge-large_modn_comments_module_all",
+    "bge-m3_recent_title_file_w100",
+    "bge-m3_recent_title_file_w1000",
+    "bge-m3_recent_title_file_all",
+    "bge-m3_recent_title_module_w100",
+    "bge-m3_recent_title_module_w1000",
+    "bge-m3_recent_title_module_all",
+    "bge-m3_modn_title_file_w100",
+    "bge-m3_modn_title_file_w1000",
+    "bge-m3_modn_title_file_all",
+    "bge-m3_modn_title_module_w100",
+    "bge-m3_modn_title_module_w1000",
+    "bge-m3_modn_title_module_all"
+  ],
+  "completed_experiments": [
+    "bge-small_recent_title_file_w100",
+    "bge-small_recent_title_file_w1000",
+    "bge-small_recent_title_file_all",
+    "bge-small_recent_title_module_w100",
+    "bge-small_recent_title_module_w1000",
+    "bge-small_recent_title_module_all",
+    "bge-small_recent_desc_file_w100",
+    "bge-small_recent_desc_file_w1000",
+    "bge-small_recent_desc_file_all",
+    "bge-small_recent_desc_module_w100",
+    "bge-small_recent_desc_module_w1000",
+    "bge-small_recent_desc_module_all",
+    "bge-small_recent_comments_file_w100",
+    "bge-small_recent_comments_file_w1000",
+    "bge-small_recent_comments_file_all",
+    "bge-small_recent_comments_module_w100",
+    "bge-small_recent_comments_module_w1000",
+    "bge-small_recent_comments_module_all",
+    "bge-small_modn_title_file_w100",
+    "bge-small_modn_title_file_w1000",
+    "bge-small_modn_title_file_all",
+    "bge-small_modn_title_module_w100",
+    "bge-small_modn_title_module_w1000",
+    "bge-small_modn_title_module_all",
+    "bge-small_modn_desc_file_w100",
+    "bge-small_modn_desc_file_w1000",
+    "bge-small_modn_desc_file_all",
+    "bge-small_modn_desc_module_w100",
+    "bge-small_modn_desc_module_w1000",
+    "bge-small_modn_desc_module_all",
+    "bge-small_modn_comments_file_w100",
+    "bge-small_modn_comments_file_w1000",
+    "bge-small_modn_comments_file_all",
+    "bge-small_modn_comments_module_w100",
+    "bge-small_modn_comments_module_w1000",
+    "bge-small_modn_comments_module_all",
+    "bge-large_recent_title_file_w100",
+    "bge-large_recent_title_file_w1000",
+    "bge-large_recent_title_file_all",
+    "bge-large_recent_title_module_w100",
+    "bge-large_recent_title_module_w1000",
+    "bge-large_recent_title_module_all",
+    "bge-large_recent_desc_file_w100",
+    "bge-large_recent_desc_file_w1000",
+    "bge-large_recent_desc_file_all",
+    "bge-large_recent_desc_module_w100",
+    "bge-large_recent_desc_module_w1000",
+    "bge-large_recent_desc_module_all",
+    "bge-large_recent_comments_file_w100",
+    "bge-large_recent_comments_file_w1000",
+    "bge-large_recent_comments_file_all",
+    "bge-large_recent_comments_module_w100",
+    "bge-large_recent_comments_module_w1000",
+    "bge-large_recent_comments_module_all",
+    "bge-large_modn_title_file_w100",
+    "bge-large_modn_title_file_w1000",
+    "bge-large_modn_title_file_all",
+    "bge-large_modn_title_module_w100",
+    "bge-large_modn_title_module_w1000",
+    "bge-large_modn_title_module_all",
+    "bge-large_modn_desc_file_w100",
+    "bge-large_modn_desc_file_w1000",
+    "bge-large_modn_desc_file_all",
+    "bge-large_modn_desc_module_w100",
+    "bge-large_modn_desc_module_w1000",
+    "bge-large_modn_desc_module_all",
+    "bge-large_modn_comments_file_w100",
+    "bge-large_modn_comments_file_w1000",
+    "bge-large_modn_comments_file_all",
+    "bge-large_modn_comments_module_w100",
+    "bge-large_modn_comments_module_w1000",
+    "bge-large_modn_comments_module_all",
+    "bge-m3_recent_title_file_w100",
+    "bge-m3_recent_title_file_w1000",
+    "bge-m3_recent_title_file_all",
+    "bge-m3_recent_title_module_w100",
+    "bge-m3_recent_title_module_w1000",
+    "bge-m3_recent_title_module_all",
+    "bge-m3_modn_title_file_w100",
+    "bge-m3_modn_title_file_w1000",
+    "bge-m3_modn_title_file_all",
+    "bge-m3_modn_title_module_w100",
+    "bge-m3_modn_title_module_w1000",
+    "bge-m3_modn_title_module_all"
+  ],
+  "failed_etl": [
+    {
+      "variant_id": "bge-m3_recent_title_file_w100",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T20:59:37.277885"
+    },
+    {
+      "variant_id": "bge-m3_recent_title_file_w1000",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T20:59:51.050483"
+    },
+    {
+      "variant_id": "bge-m3_recent_title_file_all",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:00:04.774225"
+    },
+    {
+      "variant_id": "bge-m3_recent_title_module_w100",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:00:18.220415"
+    },
+    {
+      "variant_id": "bge-m3_recent_title_module_w1000",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:00:32.156842"
+    },
+    {
+      "variant_id": "bge-m3_recent_title_module_all",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:00:46.827131"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_file_w100",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:01:01.575365"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_file_w1000",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:01:17.058425"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_file_all",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:01:32.362715"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_module_w100",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:01:47.626399"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_module_w1000",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:02:03.040277"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_module_all",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:02:18.890886"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_file_w100",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:02:23.221012"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_file_w1000",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:02:27.675281"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_file_all",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:02:32.033459"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_module_w100",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:02:36.424023"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_module_w1000",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:02:40.908665"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_module_all",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:02:45.523566"
+    },
+    {
+      "variant_id": "bge-m3_modn_title_file_w100",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:02:50.328806"
+    },
+    {
+      "variant_id": "bge-m3_modn_title_file_w1000",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:02:55.252742"
+    },
+    {
+      "variant_id": "bge-m3_modn_title_file_all",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:02:59.962673"
+    },
+    {
+      "variant_id": "bge-m3_modn_title_module_w100",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:03:04.607060"
+    },
+    {
+      "variant_id": "bge-m3_modn_title_module_w1000",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:03:09.390088"
+    },
+    {
+      "variant_id": "bge-m3_modn_title_module_all",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:03:14.243252"
+    },
+    {
+      "variant_id": "bge-m3_modn_desc_file_w100",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:03:19.260631"
+    },
+    {
+      "variant_id": "bge-m3_modn_desc_file_w1000",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:03:23.921466"
+    },
+    {
+      "variant_id": "bge-m3_modn_desc_file_all",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:03:28.979858"
+    },
+    {
+      "variant_id": "bge-m3_modn_desc_module_w100",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:03:34.348675"
+    },
+    {
+      "variant_id": "bge-m3_modn_desc_module_w1000",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:03:39.751235"
+    },
+    {
+      "variant_id": "bge-m3_modn_desc_module_all",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:03:44.562907"
+    },
+    {
+      "variant_id": "bge-m3_modn_comments_file_w100",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:03:49.232664"
+    },
+    {
+      "variant_id": "bge-m3_modn_comments_file_w1000",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:03:54.152729"
+    },
+    {
+      "variant_id": "bge-m3_modn_comments_file_all",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:03:59.179080"
+    },
+    {
+      "variant_id": "bge-m3_modn_comments_module_w100",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:04:04.680631"
+    },
+    {
+      "variant_id": "bge-m3_modn_comments_module_w1000",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:04:09.682430"
+    },
+    {
+      "variant_id": "bge-m3_modn_comments_module_all",
+      "error": "ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.\nSee the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434",
+      "timestamp": "2026-01-01T21:04:14.476441"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_file_w100",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 705.94 MiB is free. Including non-PyTorch memory, this process has 5.23 GiB memory in use. Of the allocated memory 5.13 GiB is allocated by PyTorch, and 25.94 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:19:39.238992"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_file_w1000",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 703.94 MiB is free. Including non-PyTorch memory, this process has 5.24 GiB memory in use. Of the allocated memory 4.24 GiB is allocated by PyTorch, and 934.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:19:48.678303"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_file_all",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 601.94 MiB is free. Including non-PyTorch memory, this process has 5.34 GiB memory in use. Of the allocated memory 5.25 GiB is allocated by PyTorch, and 10.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:19:58.126265"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_module_w100",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 585.94 MiB is free. Including non-PyTorch memory, this process has 5.35 GiB memory in use. Of the allocated memory 5.25 GiB is allocated by PyTorch, and 26.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:20:07.618218"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_module_w1000",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 587.94 MiB is free. Including non-PyTorch memory, this process has 5.35 GiB memory in use. Of the allocated memory 5.25 GiB is allocated by PyTorch, and 24.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:20:17.262193"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_module_all",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 603.94 MiB is free. Including non-PyTorch memory, this process has 5.33 GiB memory in use. Of the allocated memory 5.25 GiB is allocated by PyTorch, and 8.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:20:26.601234"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_file_w100",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 779.94 MiB is free. Including non-PyTorch memory, this process has 5.16 GiB memory in use. Of the allocated memory 4.24 GiB is allocated by PyTorch, and 858.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:20:36.252261"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_file_w1000",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 799.94 MiB is free. Including non-PyTorch memory, this process has 5.14 GiB memory in use. Of the allocated memory 4.24 GiB is allocated by PyTorch, and 838.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:20:47.674191"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_file_all",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 799.94 MiB is free. Including non-PyTorch memory, this process has 5.14 GiB memory in use. Of the allocated memory 4.24 GiB is allocated by PyTorch, and 838.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:20:57.277194"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_module_w100",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 799.94 MiB is free. Including non-PyTorch memory, this process has 5.14 GiB memory in use. Of the allocated memory 4.24 GiB is allocated by PyTorch, and 838.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:21:07.287250"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_module_w1000",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 799.94 MiB is free. Including non-PyTorch memory, this process has 5.14 GiB memory in use. Of the allocated memory 4.24 GiB is allocated by PyTorch, and 838.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:21:16.876173"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_module_all",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 799.94 MiB is free. Including non-PyTorch memory, this process has 5.14 GiB memory in use. Of the allocated memory 4.24 GiB is allocated by PyTorch, and 838.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:21:26.673223"
+    },
+    {
+      "variant_id": "bge-m3_modn_desc_file_w100",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 705.94 MiB is free. Including non-PyTorch memory, this process has 5.23 GiB memory in use. Of the allocated memory 5.13 GiB is allocated by PyTorch, and 25.94 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:35:41.657506"
+    },
+    {
+      "variant_id": "bge-m3_modn_desc_file_w1000",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 703.94 MiB is free. Including non-PyTorch memory, this process has 5.24 GiB memory in use. Of the allocated memory 4.24 GiB is allocated by PyTorch, and 934.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:35:51.082175"
+    },
+    {
+      "variant_id": "bge-m3_modn_desc_file_all",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 601.94 MiB is free. Including non-PyTorch memory, this process has 5.34 GiB memory in use. Of the allocated memory 5.25 GiB is allocated by PyTorch, and 10.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:36:00.737298"
+    },
+    {
+      "variant_id": "bge-m3_modn_desc_module_w100",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 585.94 MiB is free. Including non-PyTorch memory, this process has 5.35 GiB memory in use. Of the allocated memory 5.25 GiB is allocated by PyTorch, and 26.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:36:10.285276"
+    },
+    {
+      "variant_id": "bge-m3_modn_desc_module_w1000",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 587.94 MiB is free. Including non-PyTorch memory, this process has 5.35 GiB memory in use. Of the allocated memory 5.25 GiB is allocated by PyTorch, and 24.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:36:19.631250"
+    },
+    {
+      "variant_id": "bge-m3_modn_desc_module_all",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 603.94 MiB is free. Including non-PyTorch memory, this process has 5.33 GiB memory in use. Of the allocated memory 5.25 GiB is allocated by PyTorch, and 8.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:36:29.033195"
+    },
+    {
+      "variant_id": "bge-m3_modn_comments_file_w100",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 779.94 MiB is free. Including non-PyTorch memory, this process has 5.16 GiB memory in use. Of the allocated memory 4.24 GiB is allocated by PyTorch, and 858.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:36:38.851179"
+    },
+    {
+      "variant_id": "bge-m3_modn_comments_file_w1000",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 799.94 MiB is free. Including non-PyTorch memory, this process has 5.14 GiB memory in use. Of the allocated memory 4.24 GiB is allocated by PyTorch, and 838.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:36:48.446167"
+    },
+    {
+      "variant_id": "bge-m3_modn_comments_file_all",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 799.94 MiB is free. Including non-PyTorch memory, this process has 5.14 GiB memory in use. Of the allocated memory 4.24 GiB is allocated by PyTorch, and 838.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:36:58.098128"
+    },
+    {
+      "variant_id": "bge-m3_modn_comments_module_w100",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 799.94 MiB is free. Including non-PyTorch memory, this process has 5.14 GiB memory in use. Of the allocated memory 4.24 GiB is allocated by PyTorch, and 838.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:37:07.788329"
+    },
+    {
+      "variant_id": "bge-m3_modn_comments_module_w1000",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 799.94 MiB is free. Including non-PyTorch memory, this process has 5.14 GiB memory in use. Of the allocated memory 4.24 GiB is allocated by PyTorch, and 838.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:37:17.476293"
+    },
+    {
+      "variant_id": "bge-m3_modn_comments_module_all",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 799.94 MiB is free. Including non-PyTorch memory, this process has 5.14 GiB memory in use. Of the allocated memory 4.24 GiB is allocated by PyTorch, and 838.00 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:37:27.312287"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_file_w100",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 1024.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 211.94 MiB is free. Including non-PyTorch memory, this process has 5.72 GiB memory in use. Of the allocated memory 4.62 GiB is allocated by PyTorch, and 1.01 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:51:27.535578"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_file_w1000",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 512.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 211.94 MiB is free. Including non-PyTorch memory, this process has 5.72 GiB memory in use. Of the allocated memory 4.99 GiB is allocated by PyTorch, and 663.50 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:51:37.524324"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_file_all",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 512.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 347.94 MiB is free. Including non-PyTorch memory, this process has 5.58 GiB memory in use. Of the allocated memory 5.11 GiB is allocated by PyTorch, and 399.50 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:51:48.332228"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_module_w100",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 512.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 265.94 MiB is free. Including non-PyTorch memory, this process has 5.66 GiB memory in use. Of the allocated memory 4.99 GiB is allocated by PyTorch, and 609.50 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:51:58.863110"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_module_w1000",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 512.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 333.94 MiB is free. Including non-PyTorch memory, this process has 5.60 GiB memory in use. Of the allocated memory 5.11 GiB is allocated by PyTorch, and 413.50 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:52:10.184674"
+    },
+    {
+      "variant_id": "bge-m3_recent_desc_module_all",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 512.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 461.94 MiB is free. Including non-PyTorch memory, this process has 5.47 GiB memory in use. Of the allocated memory 4.99 GiB is allocated by PyTorch, and 413.50 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:52:20.714165"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_file_w100",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 512.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 251.94 MiB is free. Including non-PyTorch memory, this process has 5.68 GiB memory in use. Of the allocated memory 5.11 GiB is allocated by PyTorch, and 495.50 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:52:32.316679"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_file_w1000",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 512.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 507.94 MiB is free. Including non-PyTorch memory, this process has 5.43 GiB memory in use. Of the allocated memory 4.49 GiB is allocated by PyTorch, and 879.50 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:52:42.574258"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_file_all",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 512.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 507.94 MiB is free. Including non-PyTorch memory, this process has 5.43 GiB memory in use. Of the allocated memory 4.99 GiB is allocated by PyTorch, and 367.50 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:52:52.749941"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_module_w100",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 512.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 251.94 MiB is free. Including non-PyTorch memory, this process has 5.68 GiB memory in use. Of the allocated memory 4.99 GiB is allocated by PyTorch, and 623.50 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:53:02.814718"
+    },
+    {
+      "variant_id": "bge-m3_recent_comments_module_w1000",
+      "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 512.00 MiB. GPU 0 has a total capacity of 5.93 GiB of which 251.94 MiB is free. Including non-PyTorch memory, this process has 5.68 GiB memory in use. Of the allocated memory 4.99 GiB is allocated by PyTorch, and 623.50 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)",
+      "timestamp": "2026-01-01T21:53:13.005451"
+    }
+  ],
+  "failed_experiments": [],
+  "current_model": "bge-m3",
+  "current_strategy": "recent"
+}

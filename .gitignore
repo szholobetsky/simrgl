@@ -6,7 +6,6 @@ nul
 .claude/
 
 # Experiment results and logs
-experiment_results/
 *.log
 
 # Virtual environments
