@@ -7,9 +7,12 @@
 # execution mechanics this script implements.
 #
 #   9 projects (no agilebill - it has zero TASK rows, so no query side at
-#   all) x 2 split strategies (recent, modn) x 2 embedding models
-#   (bge-small, bge-large - the only two that fit this GPU's 6GB VRAM) x
-#   3 train_sources x 3 query_sources x 2 targets x 3 windows.
+#   all) x 2 split strategies (recent, modn) x 1 embedding model
+#   (bge-small only - see EXPERIMENT_PLAN.md's model-scope note: exp3.1
+#   found bge-large's gain over bge-small statistically significant but
+#   small across every project except vscode, which OOM'd on bge-large
+#   entirely; not worth doubling exp3.2's cost on a still-unproven new
+#   axis) x 3 train_sources x 3 query_sources x 2 targets x 3 windows.
 #
 # Unlike exp3.1's run_full_experiment.sh, there is no ticket/commit
 # alternation per project - task_unit=cross always touches both the TASK
@@ -50,7 +53,7 @@ if ! flock -n 200; then
   exit 1
 fi
 
-MODELS="bge-small bge-large"
+MODELS="bge-small"
 STRATEGIES="recent modn"
 TARGETS="file module"
 WINDOWS="w100 w1000 all"

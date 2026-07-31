@@ -7,29 +7,43 @@ Written to survive being picked up cold in a brand new session, the same
 way `exp3.1/EXPERIMENT_PLAN.md` was — every fact needed to resume lives on
 disk, not in a running process or in conversation history.
 
-**Not yet implemented** — this is the plan; `IMPLEMENTATION_PLAN.md` covers
-what code needs to exist before any of this can run.
+**Implemented and unit-verified** (Phase A, this session — see `PROGRESS_LOG.md`
+once it exists for the full account). Not yet run against real data: that's
+Phase B, gated on `exp3.1` finishing (now done — see §8) and the
+model-scope decision below.
+
+**Model scope (decided after `exp3.1` finished):** `bge-small` only, not
+`bge-small` + `bge-large`. `exp3.1`'s completed run found `bge-large`'s
+MAP gain over `bge-small` statistically significant but small on every
+project except `vscode` — which OOM'd on `bge-large` entirely, so no
+`bge-large` comparison exists there at all. Given that, doubling `exp3.2`'s
+already-new 3×3 grid to also sweep a second model — one whose payoff was
+already shown to be marginal — isn't worth it for this first pass. Other
+architectures (`nomic-embed-text`, `exp4`'s model families) are explicitly
+deferred rather than folded in now: the point of this round is to isolate
+the cross-vocabulary question on its own, not stack multiple unproven
+variables into one run.
 
 ## 1. Execution order
 
 ```
 for project in [celery, rubocop, pulumi, sonar, flink, hadoop, spark, kubernetes, vscode]:
     for split_strategy in [recent, modn]:
-        for model in [bge-small, bge-large]:
-            for window in [w100, w1000, all]:
-                for train_source in [title, desc, diff]:
-                    # index build — happens ONCE per (project,split,model,window,train_source,target)
-                    for target in [file, module]:
-                        run ETL -> build collection from commit-message centroids
+        model = bge-small  # see model-scope note above
+        for window in [w100, w1000, all]:
+            for train_source in [title, desc, diff]:
+                # index build — happens ONCE per (project,split,model,window,train_source,target)
+                for target in [file, module]:
+                    run ETL -> build collection from commit-message centroids
 
-                    # eval — fans out over query_source AFTER the collection exists
-                    for target in [file, module]:
-                        for query_source in [title, desc, comments]:
-                            run eval -> MAP/MRR/P@k/R@k, query = ticket test set
+                # eval — fans out over query_source AFTER the collection exists
+                for target in [file, module]:
+                    for query_source in [title, desc, comments]:
+                        run eval -> MAP/MRR/P@k/R@k, query = ticket test set
 
-                    # cleanup — after every query_source has evaluated this target
-                    for target in [file, module]:
-                        delete collection
+                # cleanup — after every query_source has evaluated this target
+                for target in [file, module]:
+                    delete collection
 ```
 
 Same project ordering as `exp3.1` (smallest task-count first: `celery`
@@ -48,11 +62,11 @@ expensive" argument in `README.md`. See `IMPLEMENTATION_PLAN.md` for the
 exact loop restructuring this requires in
 `run_comprehensive_experiments.py`.
 
-Total variant-runs: 9 projects × 2 splits × 2 models × 3 windows × 3
-train_source × 3 query_source × 2 targets = **1,944 eval-runs**, backed by
-9 × 2 × 2 × 3 × 3 × 2 = **648 ETL/collection-builds** (same order of
-magnitude as `exp3.1`'s `commit`-mode ETL work across all 9 projects — see
-§7 for the timing argument).
+Total variant-runs: 9 projects × 2 splits × 1 model × 3 windows × 3
+train_source × 3 query_source × 2 targets = **972 eval-runs**, backed by
+9 × 2 × 1 × 3 × 3 × 2 = **324 ETL/collection-builds** (half `exp3.1`'s
+`commit`-mode ETL work across all 9 projects, since that ran both models —
+see §7 for the timing argument).
 
 ## 2. Data access
 
@@ -122,14 +136,14 @@ Same shape as `exp3.1` §5:
 
 1. Read `PROGRESS_LOG.md` first (once it exists) for the narrative — what
    was tried, decided, and why.
-2. Read `experiment_results/STATUS.md` — one row per project, `done/1944`
+2. Read `experiment_results/STATUS.md` — one row per project, `done/972`
    variant count (or per-project sub-totals if `status.py` is extended to
    show train/query breakdown — TBD, not required for correctness).
 3. Resume the first non-`done` project:
    ```bash
    cd exp3.2
    python3.12 run_comprehensive_experiments.py --project <name> \
-       --models bge-small bge-large --strategies recent modn
+       --models bge-small --strategies recent modn --task-unit cross
    ```
    Checkpoint skip-logic (`is_etl_completed` / `is_experiment_completed`)
    picks up mid-grid automatically.
@@ -168,36 +182,59 @@ measurement (different query text, ticket vs. commit), so don't expect
 exact agreement, but a wildly different order of magnitude would flag a
 bug before trusting the rest of the grid.
 
-## 7. Timing estimate
+## 7. Timing — real measurement (Phase B smoke test, 2026-07-30)
 
-No direct measurement yet (nothing built). Reasoning from `exp3.1`'s
-already-observed numbers:
+Measured directly: `celery` (cheapest project), `bge-small`, `recent`
+split, `w100` window, one `train_source` at a time, all 3 `query_source`
+values, both targets (`file`+`module`) — i.e. one full `(train_source,
+window, split, model)` cell = 1 embedding pass + 2 ETL builds + 6 evals.
 
-- **ETL side**: `exp3.2`'s embedding workload per project
-  (`train_source × target × window × split × model` = 3×2×3×2×2 = 72
-  collection-builds) is the *same size* as `exp3.1`'s `commit`-mode ETL
-  grid, which has already run to completion for most of the 9 projects
-  (see `exp3.1/PROGRESS_LOG.md` — e.g. `pulumi`'s full 72-variant sweep
-  took roughly ~2h on this GPU). So the ETL portion of `exp3.2` should cost
-  roughly the same wall-clock as `exp3.1`'s `commit`-mode run already did,
-  summed across the 9 projects.
-- **Eval side**: triples relative to `exp3.1`'s commit-mode (216 evals per
-  project instead of 72), but each eval is "encode 200 short ticket texts
-  + vector search + metric computation" — small next to embedding an
-  entire project's training set. Not measured directly in this codebase
-  yet.
+- **`train_source=desc` cell, cold (no checkpoint), end to end: 40.4s.**
+  Confirmed exactly **1** `"Generating embeddings for source variant"`
+  call across both targets and all 3 query_sources — the target-sharing
+  and query-fan-out caching both hold as designed (see §1's critical
+  loop-order requirement).
+- **`train_source=title` cell, same shape, run in two parts** (interrupted
+  after 2 of 3 `file`-target evals via `timeout 22s`, then resumed):
+  first part did ETL(file) + 2 evals in ~8s before being killed; resumed
+  run correctly `[SKIP]`ped the completed ETL (5-part id, no `_q` suffix)
+  and the 2 completed evals (6-part composite id), re-ran only the
+  interrupted 3rd eval, then did ETL(module) + all 3 module evals — total
+  resumed-run wall time 18.4s, no wasted recomputation, no double-counted
+  checkpoint entries, `failed_etl`/`failed_experiments` both empty
+  afterward.
+- **Real cost breakdown, not previously visible from `exp3.1`'s numbers**:
+  the query-encoder model (`SentenceTransformer`) reloads fresh **once per
+  eval** — 6 reloads per cell here, ~2.3s each ≈ 13.8s, roughly a third of
+  the 40.4s total for `w100` (where embedding-generation itself is nearly
+  free — only ~100 training texts). This didn't exist as a cost in
+  `exp3.1`'s matched-pair design (1 source → 1 eval, not 3), so it's new
+  to `exp3.2` specifically. Flagged, not fixed (see `IMPLEMENTATION_PLAN.md`'s
+  risk list) — worth revisiting if it turns out to dominate on the larger
+  windows/projects where it won't be diluted by a bigger embedding step.
 
-**Recommended before launching the full run**: a smoke test — one project
-(`celery`, cheapest), one model, one split, one window, one `train_source`,
-all three `query_source` values — timed directly, mirroring how `exp3.1`
-verified its embedding-caching fix before trusting the projected numbers
-in its own `EXPERIMENT_PLAN.md` §6a. Put a real number in this section
-once that's run instead of the qualitative argument above.
+**Extrapolation, with an explicit caveat**: at `w100`, one full
+`(train_source, split)` pass costs ~40s on `celery`, so one full `(split,
+window=w100)` slice (3 train_sources) ≈ 2 min, and both splits ≈ 4 min —
+for `w100` only. `w1000` and `all` will cost more (embedding-generation
+time grows with training-set size — `all` is celery's full ~2,400-task
+train set, `w1000` is capped at 1,000 — while the eval-side model-reload
++200-query-encode cost stays fixed regardless of window), so this is not
+a flat multiply-by-9-projects estimate. `celery` is also the smallest
+project by task count, so every other project will take longer in
+absolute terms. Treat "a few minutes per project at w100, more at
+w1000/all" as the honest current estimate — a real number for `w1000`/`all`
+needs its own timed run before the full 9-project launch, not extrapolated
+from `w100` alone.
 
 ## 8. Relationship to `exp3.1`
 
-- Runs **after** `exp3.1`'s full grid finishes — shared GPU, shared
-  Postgres instance, no benefit to interleaving.
+- **`exp3.1`'s full grid has finished.** `vscode`/`bge-large` failed with
+  an out-of-memory error and was not completed — every other
+  `(project, task_unit, model)` cell finished. This is now the basis for
+  the model-scope decision above, not a blocker for `exp3.2` starting.
+- Ran **after** `exp3.1`'s full grid finished, by design — shared GPU,
+  shared Postgres instance, no benefit to interleaving.
 - Shares the same Postgres container (`semantic_vectors_db`) and the same
   `switch_project.sh` between-project cleanup pattern — collections are
   namespaced by `task_unit='cross'` in `config.collection_name()`, so there

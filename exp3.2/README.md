@@ -59,29 +59,35 @@ numbers as a sanity check; the off-diagonal cells are the new information.
 
 ```
 TRAIN_SOURCE × QUERY_SOURCE × TARGET × WINDOW × SPLIT × MODEL
-     3       ×      3       ×   2    ×   3    ×   2   ×   2   = 216 variants/project
+     3       ×      3       ×   2    ×   3    ×   2   ×   1   = 108 variants/project
 ```
 
 - **`TARGET`**: `file` / `module` (unchanged from `exp3.1`).
 - **`WINDOW`**: `w100` / `w1000` / `all` (unchanged).
 - **`SPLIT`**: `recent` / `modn` (unchanged).
-- **`MODEL`**: `bge-small` / `bge-large` (unchanged — still the only two
-  that fit this GPU's 6GB VRAM).
+- **`MODEL`**: `bge-small` only. Decided after `exp3.1`'s full run
+  finished: `bge-large`'s MAP gain over `bge-small` was statistically
+  significant but small on every project it completed, and it OOM'd
+  outright on `vscode` (no `bge-large` result there at all). Not worth
+  doubling `exp3.2`'s cost on a still-marginal axis when the whole point
+  of this round is to cleanly isolate the cross-vocabulary question.
+  `nomic-embed-text` and the `exp4` architecture families are deliberately
+  deferred, not folded in here — one new variable at a time.
 
-No subsetting on any axis — same "full grid, every project" principle
-`exp3.1`'s `PROGRESS_LOG.md` (2026-07-25 entry) settled on after an earlier
-attempt to trim it turned out to rest on an unstated, unverified
-assumption.
+Every other axis (`TRAIN_SOURCE`, `QUERY_SOURCE`, `TARGET`, `WINDOW`,
+`SPLIT`, every project) still runs in full — same "full grid, no
+subsetting from unstated assumptions" principle `exp3.1`'s
+`PROGRESS_LOG.md` (2026-07-25 entry) settled on. The `MODEL` narrowing is
+different in kind: it's not an assumption, it's a conclusion drawn from
+`exp3.1`'s completed, measured results.
 
 **Cost note**: index-side embedding work depends only on `TRAIN_SOURCE`
 (not `QUERY_SOURCE`), so the actual GPU-heavy step — embedding training
-texts, aggregating to centroids, upserting — is the *same* 72
-`(train_source, target, window, split, model)` builds `exp3.1`'s
-`commit`-mode grid already did per project. What triples is the **eval**
-step (encode 200 query texts, vector search, compute metrics) — cheap
-relative to embedding generation. Expect total wall-clock closer to
-`exp3.1`'s commit-mode per-project time plus a moderate eval-time
-increment, not a flat 3×. Worth confirming with a small smoke test before
+texts, aggregating to centroids, upserting — is 36
+`(train_source, target, window, split)` builds per project (single
+model). What triples relative to that is the **eval** step (encode 200
+query texts, vector search, compute metrics) — cheap relative to
+embedding generation. Worth confirming with a small smoke test before
 committing to the full run (see `EXPERIMENT_PLAN.md` §7).
 
 ## Projects
@@ -113,13 +119,15 @@ project yet. The split is a deterministic function of `(project, split
 strategy, test_size)`, so the regenerated file is byte-identical to
 `exp3.1`'s — this is a convenience decision, not a methodological one.
 
-**Operationally**, `exp3.2` should still be launched only after `exp3.1`'s
-run finishes (per the plan discussed in this session) — both share the
-one GPU and the one Postgres instance, and running them concurrently would
-just mean context-switching the same hardware, not real parallelism.
-Collection names are namespaced by `task_unit='cross'`, so there's no
-naming collision risk either way — this is about resource contention, not
-correctness.
+**Operationally**, `exp3.2` was designed to launch only after `exp3.1`'s
+run finished — both share the one GPU and the one Postgres instance, and
+running them concurrently would just mean context-switching the same
+hardware, not real parallelism. `exp3.1`'s full run has since finished
+(all cells complete except `vscode`/`bge-large`, which OOM'd — see
+`EXPERIMENT_PLAN.md` §8), so that gate is now cleared. Collection names
+are namespaced by `task_unit='cross'` regardless, so there was never a
+naming collision risk either way — this was always about resource
+contention, not correctness.
 
 ## What this will tell us
 

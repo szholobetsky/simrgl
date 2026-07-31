@@ -25,11 +25,12 @@ import time
 RESULTS_DIR = 'experiment_results'
 LOG_GLOB = 'logs/cross_run_*.log'
 
-# Fixed grid in run_cross_experiment.sh: 2 models x 2 strategies x
-# 3 train_sources x 3 query_sources x 2 targets x 3 windows = 216 eval-runs
-# per project (same count for every step - single task_unit='cross' pass,
-# no ticket/commit alternation, no agilebill).
-VARIANTS_PER_STEP = 2 * 2 * 3 * 3 * 2 * 3
+# Fixed grid in run_cross_experiment.sh: 1 model (bge-small only - see
+# EXPERIMENT_PLAN.md's model-scope note) x 2 strategies x 3 train_sources
+# x 3 query_sources x 2 targets x 3 windows = 108 eval-runs per project
+# (same count for every step - single task_unit='cross' pass, no
+# ticket/commit alternation, no agilebill).
+VARIANTS_PER_STEP = 1 * 2 * 3 * 3 * 2 * 3
 TOTAL_STEPS = 9
 
 

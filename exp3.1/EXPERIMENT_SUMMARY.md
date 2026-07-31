@@ -59,6 +59,35 @@ but not a dramatic one — for most practical purposes bge-small (smaller,
 faster) is a reasonable choice; retrieval quality here appears bounded by
 the nature of the task→code problem itself, not embedding-model capacity.
 
+**Paired analysis (2026-07-31)**: comparing the two models on the exact same
+649 variants (identical project/task_unit/split/source/target/window, model
+as the only difference — the 35 `bge-large`/`vscode/commit` variants missing
+per `EXPERIMENT_RESTRICTIONS.md` are naturally excluded from the pairing):
+
+- Mean paired diff (bge-large − bge-small) = **+0.0121 MAP**, median +0.0104
+- bge-large wins **77.2%** of pairs, bge-small wins 22.7%
+- Paired t-test p = 5×10⁻³⁷; Wilcoxon signed-rank p = 1×10⁻⁴⁴ — the edge is
+  **statistically real and consistent**, not noise, and holds across nearly
+  every project (spark +0.021, celery +0.021, vscode +0.018 down to hadoop
+  +0.007, the weakest).
+- But the effect size is small in absolute terms (~1 MAP point) and not
+  monotonic per-configuration — some individual variants favor bge-large by
+  a lot (agilebill +0.10, sonar/hadoop +0.08), others favor bge-small by a
+  lot (sonar/ticket/desc/w1000: **−0.11**). So it's "slightly better on
+  average with real scatter," not "always better."
+
+**Cost side**: bge-large's 1024-dim vectors are ~2.7× the storage/memory of
+bge-small's 384-dim, and bge-large was the direct trigger (combined with the
+large `vscode.db` load) of the OOM crash documented in
+`EXPERIMENT_RESTRICTIONS.md` — a real operational risk on this hardware (16
+GB RAM / 6 GB VRAM), not just a theoretical cost.
+
+**Conclusion**: the ~+0.01 MAP gain does not justify the 2.7× overhead and
+demonstrated OOM risk on this hardware. **bge-small should be the default
+model for the full grid going forward**; bge-large is worth spot-checking
+only on a final best-configuration candidate, not running across the whole
+combinatorial sweep.
+
 ## 5. Ticket vs. commit (`task_unit`)
 
 Commit mode scored somewhat higher on average (0.370 vs 0.347 MAP) —
