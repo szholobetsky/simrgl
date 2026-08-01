@@ -22,7 +22,7 @@ This is **task-to-code retrieval** — a semantic search problem at the intersec
 ## Repository Map
 
 ```
-C:\Project\codeXplorer\capestone\simrgl\   ← THIS REPO (working dir)
+C:\Projects\simrgl\   ← THIS REPO (working dir)
 ├── exp0/        TF-IDF baseline (failed, historical reference only)
 ├── exp1/        Statistical analysis (Bradford, HHI distributions)
 ├── exp2/        Embedding models comparison (Word2Vec → BGE-large), module-level
@@ -32,27 +32,27 @@ C:\Project\codeXplorer\capestone\simrgl\   ← THIS REPO (working dir)
 ├── ragmcp/      Production MCP server + local Ollama agent
 ├── concepts/    Research concept documents (see list below)
 ├── info/        Results files, leaderboard, planning docs
-├── 1bcoder/     git submodule → szholobetsky/1bcoder (STALE SNAPSHOT)
-├── vyrii/       git submodule (STALE SNAPSHOT)
-├── alkonost/    git submodule → szholobetsky/alkonost (STALE SNAPSHOT)
-└── ...other submodules (radogast, yasna, svitovyd) — all STALE SNAPSHOTS
-    (syryn not yet added as a submodule here, though it's a live tool — see table below)
+├── 1bcoder/     Live code (formerly C:\Project\1bcoder\)
+├── vyrii/       Live code (formerly C:\Project\vyrii\)
+├── yasna/       Live code (formerly C:\Project\yasna\)
+├── alkonost/    Live code (formerly C:\Project\alkonost\)
+├── svitovyd/    Live code (formerly C:\Project\svitovyd\)
+├── radogast/    Live code (formerly C:\Project\radogast\)
+└── syryn/       Live code (formerly C:\Project\syryn\)
 ```
 
-**CRITICAL**: Submodules in this repo are pinned stale snapshots. All live code lives in `C:\Project\` (no "s"):
-
-| Tool | Live path |
+| Tool | Path |
 |---|---|
-| 1bcoder | `C:\Project\1bcoder\` |
-| vyrii | `C:\Project\vyrii\` |
-| yasna | `C:\Project\yasna\` |
-| svitovyd | `C:\Project\svitovyd\` |
-| radogast | `C:\Project\radogast\` |
-| syryn | `C:\Project\syryn\` |
-| alkonost | `C:\Project\alkonost\` |
-| simargl (this repo) | `C:\Project\codeXplorer\capestone\simrgl\` |
+| 1bcoder | `C:\Projects\simrgl\1bcoder\` |
+| vyrii | `C:\Projects\simrgl\vyrii\` |
+| yasna | `C:\Projects\simrgl\yasna\` |
+| svitovyd | `C:\Projects\simrgl\svitovyd\` |
+| radogast | `C:\Projects\simrgl\radogast\` |
+| syryn | `C:\Projects\simrgl\syryn\` |
+| alkonost | `C:\Projects\simrgl\alkonost\` |
+| simargl (this repo) | `C:\Projects\simrgl\` |
 
-When editing any tool, always work in `C:\Project\<tool>\`, never in the submodule copy inside simrgl.
+When editing any tool, work in `C:\Projects\simrgl\<tool>\`.
 
 ---
 
@@ -150,19 +150,19 @@ Goal: maximize EVOLUTION zone (high Novelty + high Structurality).
 | syryn | Сирин — sorrow/night bird | Bluetooth identity beacon for headless devices | Production |
 | alkonost | Алконост — joy/day bird, paired with Сирин | Task-board viewer/editor for `tasks.md`/`planMD`/`spec` (1bcoder's deepagent_* output) | Production |
 
-### 1bcoder (`C:\Project\1bcoder\`)
+### 1bcoder (`C:\Projects\simrgl\1bcoder\`)
 - PyPI: `pip install 1bcoder`
 - Key commands: `/agent`, `/flow`, `/proc`, `/parallel`, `/map`, `/translate`, `/role`, `/ctx compact`, `/script`, `/prompt`
 - Packaging: `_bcoder_data/` = wheel defaults; `~/.1bcoder/` = user global; `.1bcoder/` = project-local
 - Always edit `_bcoder_data/` for default changes, never `~/.1bcoder/`
 
-### vyrii (`C:\Project\vyrii\`)
+### vyrii (`C:\Projects\simrgl\vyrii\`)
 - Default: Flask API (`flask_api.py`, port 5000) + static HTML/JS UI in `vyrii/ui/`
 - Pure Python dependencies: requests, flask, flask-cors, apscheduler, waitress
 - Optional extras: `vyrii[gradio]`, `vyrii[api]`, `vyrii[full]`
 - OpenAI-compatible endpoints + `/vyrii/*` endpoints, basic auth
 
-### alkonost (`C:\Project\alkonost\`)
+### alkonost (`C:\Projects\simrgl\alkonost\`)
 - PyPI: `pip install alkonost`; CLI entry `alkonost --port 8090 --root <dir>`
 - Flask (`flask_api.py`, `waitress.serve`, default port 8090) + static HTML/JS UI in `alkonost/ui/`, no build step
 - Reads/writes `.1bcoder/planMD/`, `.1bcoder/spec/`, `.1bcoder/tasks/` produced by 1bcoder's `deepagent_md`/`deepagent_spec`/`deepagent_task` — no import dependency on 1bcoder, independently re-implements the same file formats
@@ -236,7 +236,7 @@ Research ideas, not yet implemented unless stated:
 ## Working Conventions
 
 - **Do not suggest open-sourcing code** until publications are complete (Авторське Свідоцтво → conference → open source).
-- **Before editing**: confirm which repo (live `C:\Project\<tool>\` vs stale submodule). On a new machine the live paths may differ — verify the path exists before editing.
+- **Before editing**: verify the path exists before editing. All tools are now in `C:\Projects\simrgl\<tool>\`.
 - **Before destructive git ops**: explicit confirmation required, not implied by prior discussion.
 - **Show findings first**: report what existing code already handles before proposing changes.
 - **No legacy code removal** without explicit permission — every line was added for a reason.
