@@ -32,27 +32,27 @@ C:\Projects\simrgl\   ← THIS REPO (working dir)
 ├── ragmcp/      Production MCP server + local Ollama agent
 ├── concepts/    Research concept documents (see list below)
 ├── info/        Results files, leaderboard, planning docs
-├── 1bcoder/     Live code (formerly C:\Project\1bcoder\)
-├── vyrii/       Live code (formerly C:\Project\vyrii\)
-├── yasna/       Live code (formerly C:\Project\yasna\)
-├── alkonost/    Live code (formerly C:\Project\alkonost\)
-├── svitovyd/    Live code (formerly C:\Project\svitovyd\)
-├── radogast/    Live code (formerly C:\Project\radogast\)
-└── syryn/       Live code (formerly C:\Project\syryn\)
+├── 1bcoder/     git submodule — PINNED SNAPSHOT, do not edit here (see below)
+├── vyrii/       Live code
+├── yasna/       Live code
+├── alkonost/    Live code
+├── svitovyd/    Live code
+├── radogast/    Live code
+└── syryn/       Live code
 ```
 
-| Tool | Path |
-|---|---|
-| 1bcoder | `C:\Projects\simrgl\1bcoder\` |
-| vyrii | `C:\Projects\simrgl\vyrii\` |
-| yasna | `C:\Projects\simrgl\yasna\` |
-| svitovyd | `C:\Projects\simrgl\svitovyd\` |
-| radogast | `C:\Projects\simrgl\radogast\` |
-| syryn | `C:\Projects\simrgl\syryn\` |
-| alkonost | `C:\Projects\simrgl\alkonost\` |
-| simargl (this repo) | `C:\Projects\simrgl\` |
+| Tool | Path | Notes |
+|---|---|---|
+| 1bcoder | `C:\Projects\1bcoder\` | independent clone (own git repo, remote `origin` = `github.com/szholobetsky/1bcoder`) — **this is where you edit**. `C:\Projects\simrgl\1bcoder\` is the same repo as a git submodule, pinned to whatever commit was last synced — treat it as a read-only snapshot, never edit it directly, its content will drift from `C:\Projects\1bcoder\` until someone manually re-syncs the submodule pointer. |
+| vyrii | `C:\Projects\simrgl\vyrii\` | git submodule, still edited in place (no independent clone yet) |
+| yasna | `C:\Projects\simrgl\yasna\` | git submodule, still edited in place (no independent clone yet) |
+| svitovyd | `C:\Projects\simrgl\svitovyd\` | git submodule, still edited in place (no independent clone yet) |
+| radogast | `C:\Projects\simrgl\radogast\` | git submodule, still edited in place (no independent clone yet) |
+| syryn | `C:\Projects\simrgl\syryn\` | git submodule, still edited in place (no independent clone yet) |
+| alkonost | `C:\Projects\simrgl\alkonost\` | git submodule, still edited in place (no independent clone yet) |
+| simargl (this repo) | `C:\Projects\simrgl\` | |
 
-When editing any tool, work in `C:\Projects\simrgl\<tool>\`.
+Before editing any tool, verify which of the two patterns above applies to it — check whether `C:\Projects\<tool>\` exists as its own independent git clone first; if not, the submodule copy under `C:\Projects\simrgl\<tool>\` is still the live one. More tools may migrate to the independent-clone pattern over time (1bcoder was first); update this table when that happens rather than assuming the old rule still holds.
 
 ---
 
@@ -150,11 +150,12 @@ Goal: maximize EVOLUTION zone (high Novelty + high Structurality).
 | syryn | Сирин — sorrow/night bird | Bluetooth identity beacon for headless devices | Production |
 | alkonost | Алконост — joy/day bird, paired with Сирин | Task-board viewer/editor for `tasks.md`/`planMD`/`spec` (1bcoder's deepagent_* output) | Production |
 
-### 1bcoder (`C:\Projects\simrgl\1bcoder\`)
-- PyPI: `pip install 1bcoder`
+### 1bcoder (`C:\Projects\1bcoder\` — independent clone, NOT `C:\Projects\simrgl\1bcoder\`)
+- PyPI: `pip install 1bcoder` — but the actually-installed package (`site-packages\_bcoder_data\`) is a separate, frozen snapshot from whatever version was last published; it does NOT auto-pick-up edits made in either git copy. To test local changes with the real `1bcoder` command, `pip install -e "C:\Projects\1bcoder"` (editable install) or manually copy changed files into `site-packages`.
 - Key commands: `/agent`, `/flow`, `/proc`, `/parallel`, `/map`, `/translate`, `/role`, `/ctx compact`, `/script`, `/prompt`
 - Packaging: `_bcoder_data/` = wheel defaults; `~/.1bcoder/` = user global; `.1bcoder/` = project-local
 - Always edit `_bcoder_data/` for default changes, never `~/.1bcoder/`
+- Three distinct copies exist on this machine — know which one you're touching: (1) `C:\Projects\1bcoder\` — independent clone, live dev, edit here; (2) `C:\Projects\simrgl\1bcoder\` — git submodule inside this repo, pinned snapshot, do not edit; (3) `site-packages\1bcoder-*` — installed PyPI package, only updates via `pip install`, not by editing files in place.
 
 ### vyrii (`C:\Projects\simrgl\vyrii\`)
 - Default: Flask API (`flask_api.py`, port 5000) + static HTML/JS UI in `vyrii/ui/`
@@ -211,6 +212,9 @@ Research ideas, not yet implemented unless stated:
 | `DUAL_MCP_SERVER_ARCHITECTURE.md` | Historical vs recent context servers |
 | `PHENOMENOLOGICAL_CODE_UNDERSTANDING.md` | Husserl/Heidegger applied to code navigation |
 | `DEEPAGENT_AND_DEEPAGENT_MD.md` | Recursive markdown generation with parallel workers |
+| `DEEPAGENT_SPEC.md` | deepagent_md tree → atomic WHO/WHAT/spec units → flat tasks.md rollup |
+| `DEEPAGENT_ARCHITECT.md` | Spec → interface/abstract/approach/class design, research-grounded |
+| `DEEPAGENT_TREE.md` | deepagent_tree/deepagent_tree_md — structured decomposition vs. prose, RRTrack empirical case study |
 | `ANTHILL_DISTRIBUTED_COGNITIVE_OS.md` | Distributed agent OS concept |
 | `CTXTIMER.md` | Empirical context-limit measurement for local LLMs (`/flow ctxtimer` in 1bcoder) |
 | `IGPU_OFFLOAD_THRESHOLD.md` | When Vulkan/iGPU offload helps vs hurts local LLM inference — empirical hardware threshold |
@@ -236,7 +240,7 @@ Research ideas, not yet implemented unless stated:
 ## Working Conventions
 
 - **Do not suggest open-sourcing code** until publications are complete (Авторське Свідоцтво → conference → open source).
-- **Before editing**: verify the path exists before editing. All tools are now in `C:\Projects\simrgl\<tool>\`.
+- **Before editing**: verify the path exists before editing. Most tools live in `C:\Projects\simrgl\<tool>\` (git submodule, live-edited in place) — **except 1bcoder**, which is edited at `C:\Projects\1bcoder\` (independent clone); its submodule copy inside `simrgl` is a pinned snapshot, never edit it directly. Check the tool table above for the current status of each.
 - **Before destructive git ops**: explicit confirmation required, not implied by prior discussion.
 - **Show findings first**: report what existing code already handles before proposing changes.
 - **No legacy code removal** without explicit permission — every line was added for a reason.
