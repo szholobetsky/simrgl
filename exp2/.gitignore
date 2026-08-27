@@ -28,11 +28,9 @@ glove_cache/
 *.log
 
 # Experiment results
-experiment_results/
-big_experiment_results/
-*.csv
-*.png
-!README.md
+# experiment_results/ / big_experiment_results/ (CSVs + plot PNGs) ARE
+# tracked - they're small and useful history. Only truly regenerable
+# working directories stay excluded below (glove_cache/ etc.).
 
 # Model files
 *.bin
