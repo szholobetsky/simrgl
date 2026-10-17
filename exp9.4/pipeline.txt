@@ -1,0 +1,27 @@
+# exp9.4: the exp9.3 passive search + the companions review, one 1bcoder session per (model, task).
+#   indexes (gamayun, simargl) -> /ask -> output-<id>.txt           = the model's own answer
+#   companions of that answer  -> the model revises -> review-<id>.txt
+# Statistics are saved after /ask and at the end, so time and tokens split into the two phases.
+/ctx {{ctx}}
+/param num_ctx {{ctx}}
+/param temperature 0
+GATE: expr_gate('"{{rp}}" != "default"') > :RP_DONE
+/param repeat_penalty {{rp}}
+:RP_DONE
+# the penalty looks back only repeat_last_n tokens (Ollama: 64); qwen3:1.7b T04 looped on a longer
+# cycle (made-up "[tool result]" + ACTION, 10 distinct lines) for an hour. num_predict caps any one
+# reply; replies of the finished pairs stayed far below it (~1-1.5k tokens per call).
+/param repeat_last_n 256
+/param num_predict 4096
+/param timeout 900
+/param run_timeout 300
+/read C:/Projects/simrgl/exp9.3/tasks/{{id}}.txt -> task
+/run python C:/Projects/simrgl/exp9.3/idx.py gamayun {{id}}
+/run python C:/Projects/simrgl/exp9.3/idx.py simargl {{id}}
+/ask -t 10 print out list of the most relevant files for fix the task: {{task}}
+/save C:/Projects/simrgl/exp9.4/out/{{tag}}/output-{{id}}.txt
+/stats save json C:/Projects/simrgl/exp9.4/out/{{tag}}/stats-ask-{{id}}.json
+/run python C:/Projects/simrgl/exp9.3/idx.py companions {{id}} C:/Projects/simrgl/exp9.4/out/{{tag}}/output-{{id}}.txt
+Above is your answer: the files to change for this task. Below it are files that changed together with the files of your list in past tasks, but are not in your list. Keep every file of your list, and add those of them this task needs too (tests, styles, snapshots, messages of the same feature); leave out the rest. Print the final list - your files first, then the added ones - one full path per line, nothing else. Task: {{task}}
+/save C:/Projects/simrgl/exp9.4/out/{{tag}}/review-{{id}}.txt
+/stats save json C:/Projects/simrgl/exp9.4/out/{{tag}}/stats-{{id}}.json

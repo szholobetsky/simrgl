@@ -1,0 +1,6 @@
+server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.tsx  
+server/sonar-web/src/main/js/components/controls/DateInput.tsx  
+server/sonar-web/src/main/js/apps/create/project/__tests__/ManualProjectCreate-test.tsx  
+server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx  
+server/sonar-web/src/main/js/apps/create/project/__tests__/\*snapshots\*/ManualProjectCreate-test.tsx.snap  
+server/sonar-web/src/main/js/components/controls/__tests__/\*snapshots\*/DateInput-test.tsx.snap

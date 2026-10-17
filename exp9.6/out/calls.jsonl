@@ -1,0 +1,80 @@
+{"group": "C", "cmd": "compass", "args": ["Fix documentation about synchronization of default group when using SSO authentication"], "out_chars": 118, "lines_read": 0, "sec": 1.7, "t": "15:09:14"}
+{"group": "C", "cmd": "compass", "args": ["Upgrade analyzers: Replace com.sonarsource.cpp sonar-cfamily-plugin 6.6.0 by 6.7.0, security plugins 8.1.0 by 8.2.1, csharp vbnet 8.1.0 by 8.4.0, java 6.0.0 by 6.1.0, javascript 6.1.0 by 6.2.0, python 2.3.0 by 2.5.0, css 1.1.1 by 1.2.0"], "out_chars": 267, "lines_read": 0, "sec": 2.0, "t": "15:09:16"}
+{"group": "C", "cmd": "compass", "args": ["T01: Fix documentation about synchronization of default group when using SSO authentication"], "out_chars": 123, "lines_read": 0, "sec": 1.7, "t": "15:09:19"}
+{"group": "C", "cmd": "compass", "args": ["T06", "Upgrade analyzers: Replace com.sonarsource.cpp sonar-cfamily-plugin 6.6.0 by 6.7.0, security plugins 8.1.0 by 8.2.1, csharp vbnet 8.1.0 by 8.4.0, java 6.0.0 by 6.1.0, javascript 6.1.0 by 6.2.0, python 2.3.0 by 2.5.0, css 1.1.1 by 1.2.0"], "out_chars": 321, "lines_read": 0, "sec": 3.2, "t": "15:09:27"}
+{"group": "C", "cmd": "compass", "args": ["T01", "Fix documentation about synchronization of default group when using SSO authentication"], "out_chars": 1123, "lines_read": 0, "sec": 3.0, "t": "15:09:28"}
+{"group": "C", "cmd": "read", "args": ["T06", "build.gradle", "125", "40"], "out_chars": 4360, "lines_read": 40, "sec": 0.0, "t": "15:09:31"}
+{"group": "C", "cmd": "gamayun", "args": ["SSO default group synchronization documentation"], "out_chars": 2619, "lines_read": 0, "sec": 1.7, "t": "15:09:34"}
+{"group": "C", "cmd": "glob", "args": ["T01", "**/*properties*"], "out_chars": 7210, "lines_read": 0, "sec": 0.1, "t": "15:09:38"}
+{"group": "C", "cmd": "companions", "args": ["build.gradle"], "out_chars": 809, "lines_read": 0, "sec": 1.8, "t": "15:09:38"}
+{"group": "C", "cmd": "grep", "args": ["T01", "groupsHeader"], "out_chars": 942, "lines_read": 0, "sec": 1.2, "t": "15:09:43"}
+{"group": "C", "cmd": "read", "args": ["T06", "sonar-application/build.gradle", "1", "50"], "out_chars": 1580, "lines_read": 50, "sec": 0.0, "t": "15:09:44"}
+{"group": "C", "cmd": "read", "args": ["T01", "sonar-application/src/main/assembly/conf/sonar.properties", "160", "20"], "out_chars": 1332, "lines_read": 20, "sec": 0.0, "t": "15:09:47"}
+{"group": "C", "cmd": "read", "args": ["T06", "sonar-application/build.gradle", "50", "100"], "out_chars": 4742, "lines_read": 100, "sec": 0.0, "t": "15:09:48"}
+{"group": "C", "cmd": "read", "args": ["T06", "sonar-application/bundled_plugins.gradle", "1", "60"], "out_chars": 1400, "lines_read": 20, "sec": 0.0, "t": "15:09:52"}
+{"group": "C", "cmd": "companions", "args": ["sonar-application/src/main/assembly/conf/sonar.properties"], "out_chars": 1329, "lines_read": 0, "sec": 2.2, "t": "15:09:53"}
+{"group": "C", "cmd": "grep", "args": ["T06", "6\\.[67]\\.0|8\\.[12][.0-9]|2\\.[35]\\.0", "gradle.properties"], "out_chars": 7, "lines_read": 0, "sec": 0.0, "t": "15:09:56"}
+{"group": "C", "cmd": "grep", "args": ["T01", "groupsHeader", "server/sonar-docs/src/pages/setup/sonar-properties.md"], "out_chars": 7, "lines_read": 0, "sec": 0.0, "t": "15:09:57"}
+{"group": "C", "cmd": "grep", "args": ["T01", "default group", "server/sonar-server/src/test/java/org/sonar/server/authentication/SsoAuthenticatorTest.java"], "out_chars": 7, "lines_read": 0, "sec": 0.0, "t": "15:10:01"}
+{"group": "C", "cmd": "simargl", "args": ["Upgrade analyzers plugins versions"], "out_chars": 3013, "lines_read": 0, "sec": 19.3, "t": "15:10:19"}
+{"group": "C", "cmd": "simargl", "args": ["Fix documentation about synchronization of default group when using SSO authentication"], "out_chars": 10284, "lines_read": 0, "sec": 14.1, "t": "15:10:19"}
+{"group": "C", "cmd": "glob", "args": ["T06", "**/*renovate*"], "out_chars": 8, "lines_read": 0, "sec": 0.1, "t": "15:10:25"}
+{"group": "C", "cmd": "compass", "args": ["T02", "Change message in projects list when main branch of project is not analyzed"], "out_chars": 997, "lines_read": 0, "sec": 1.9, "t": "15:10:28"}
+{"group": "C", "cmd": "glob", "args": ["T06", "**/build.gradle"], "out_chars": 1529, "lines_read": 0, "sec": 0.1, "t": "15:10:29"}
+{"group": "C", "cmd": "grep", "args": ["T02", "not analyzed|analyzed yet"], "out_chars": 2013, "lines_read": 0, "sec": 1.9, "t": "15:10:34"}
+{"group": "C", "cmd": "glob", "args": ["T06", "**/*.json"], "out_chars": 5507, "lines_read": 0, "sec": 0.1, "t": "15:10:35"}
+{"group": "C", "cmd": "read", "args": ["T02", "server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx", "1", "100"], "out_chars": 4641, "lines_read": 100, "sec": 0.0, "t": "15:10:38"}
+{"group": "C", "cmd": "grep", "args": ["T02", "not_analyzed", "server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx"], "out_chars": 157, "lines_read": 0, "sec": 0.0, "t": "15:10:41"}
+{"group": "C", "cmd": "compass", "args": ["T07", "Projects can be sorted by Security Review Rating. In the Projects page, it should be possible to sort Projects by Security Review Rating. This metric was introduced when we implement the Security Hotspots page/experience"], "out_chars": 1183, "lines_read": 0, "sec": 1.9, "t": "15:10:42"}
+{"group": "C", "cmd": "read", "args": ["T02", "server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx", "200", "20"], "out_chars": 939, "lines_read": 20, "sec": 0.0, "t": "15:10:45"}
+{"group": "C", "cmd": "glob", "args": ["T07", "**/projects**", "-type", "d"], "out_chars": 55, "lines_read": 0, "sec": 0.0, "t": "15:10:47"}
+{"group": "C", "cmd": "glob", "args": ["T07", "**/*Project*"], "out_chars": 7257, "lines_read": 0, "sec": 0.2, "t": "15:10:50"}
+{"group": "C", "cmd": "companions", "args": ["server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx"], "out_chars": 403, "lines_read": 0, "sec": 2.7, "t": "15:10:52"}
+{"group": "C", "cmd": "grep", "args": ["T07", "sort.*projects|projects.*sort", "**/*.tsx"], "out_chars": 5682, "lines_read": 0, "sec": 0.2, "t": "15:10:53"}
+{"group": "C", "cmd": "grep", "args": ["T03", "FOP|org.apache.fop|FileReportGenerator"], "out_chars": 6987, "lines_read": 0, "sec": 2.0, "t": "15:10:59"}
+{"group": "C", "cmd": "read", "args": ["T07", "server/sonar-web/src/main/js/apps/projects/components/ProjectsSortingSelect.tsx", "1", "80"], "out_chars": 3742, "lines_read": 80, "sec": 0.0, "t": "15:10:59"}
+{"group": "C", "cmd": "grep", "args": ["T07", "SORTING_METRICS|SORTING_LEAK", "server/sonar-web/src/main/js/apps/projects/utils.ts", "-A", "30"], "out_chars": 55, "lines_read": 0, "sec": 0.0, "t": "15:11:03"}
+{"group": "C", "cmd": "read", "args": ["T03", "server/sonar-server-common/src/main/java/org/sonar/server/log/ServerProcessLogging.java", "80", "15"], "out_chars": 1376, "lines_read": 15, "sec": 0.0, "t": "15:11:03"}
+{"group": "C", "cmd": "read", "args": ["T07", "server/sonar-web/src/main/js/apps/projects/utils.ts", "1", "100"], "out_chars": 4072, "lines_read": 100, "sec": 0.0, "t": "15:11:06"}
+{"group": "C", "cmd": "glob", "args": ["T03", "*FileReportGenerator*"], "out_chars": 8, "lines_read": 0, "sec": 0.1, "t": "15:11:08"}
+{"group": "C", "cmd": "read", "args": ["T07", "server/sonar-web/src/main/js/apps/projects/utils.ts", "100", "150"], "out_chars": 3256, "lines_read": 100, "sec": 0.0, "t": "15:11:10"}
+{"group": "C", "cmd": "companions", "args": ["server/sonar-server-common/src/main/java/org/sonar/server/log/ServerProcessLogging.java"], "out_chars": 779, "lines_read": 0, "sec": 2.5, "t": "15:11:13"}
+{"group": "C", "cmd": "grep", "args": ["T04", "Commit Status|permission"], "out_chars": 6439, "lines_read": 0, "sec": 1.9, "t": "15:11:19"}
+{"group": "C", "cmd": "companions", "args": ["server/sonar-web/src/main/js/apps/projects/utils.ts,server/sonar-web/src/main/js/apps/projects/components/ProjectsSortingSelect.tsx"], "out_chars": 786, "lines_read": 0, "sec": 4.4, "t": "15:11:20"}
+{"group": "C", "cmd": "grep", "args": ["T04", "statuses", "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java"], "out_chars": 167, "lines_read": 0, "sec": 0.0, "t": "15:11:24"}
+{"group": "C", "cmd": "grep", "args": ["T04", "statuses|Commit Status", "server/sonar-docs/**/*.md"], "out_chars": 7, "lines_read": 0, "sec": 0.0, "t": "15:11:28"}
+{"group": "C", "cmd": "companions", "args": ["server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java"], "out_chars": 286, "lines_read": 0, "sec": 3.3, "t": "15:11:34"}
+{"group": "C", "cmd": "compass", "args": ["T05", "Project creation form validation is buggy"], "out_chars": 906, "lines_read": 0, "sec": 2.4, "t": "15:11:41"}
+{"group": "C", "cmd": "grep", "args": ["T05", "validation", "server/sonar-web/src/main/js/apps/create/**"], "out_chars": 5124, "lines_read": 0, "sec": 0.1, "t": "15:11:45"}
+{"group": "C", "cmd": "simargl", "args": ["Projects sorting metric security review"], "out_chars": 8584, "lines_read": 0, "sec": 19.5, "t": "15:11:46"}
+{"group": "C", "cmd": "read", "args": ["T05", "server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx", "1", "60"], "out_chars": 1856, "lines_read": 38, "sec": 0.0, "t": "15:11:49"}
+{"group": "C", "cmd": "companions", "args": ["server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx"], "out_chars": 1400, "lines_read": 0, "sec": 1.6, "t": "15:11:54"}
+{"group": "C", "cmd": "compass", "args": ["T08", "Fix potential vulnerabilities of bundled libraries. CVE-2020-13934 CVE-2020-13935 by upgrading Tomcat to 8.5.57 or greater. CVE-2018-19360 in jackson-core in the commons-codec bundled with Elasticsearch. commons-codec CODEC-134. http-client bundled with Elasticsearch HTTPCLIENT-1803"], "out_chars": 790, "lines_read": 0, "sec": 2.2, "t": "15:11:58"}
+{"group": "C", "cmd": "grep", "args": ["T08", "tomcat", "build.gradle"], "out_chars": 212, "lines_read": 0, "sec": 0.1, "t": "15:12:02"}
+{"group": "C", "cmd": "grep", "args": ["T08", "jackson|commons-codec|http-client", "build.gradle"], "out_chars": 660, "lines_read": 0, "sec": 0.0, "t": "15:12:04"}
+{"group": "C", "cmd": "grep", "args": ["T08", "http-client|httpclient", "build.gradle"], "out_chars": 91, "lines_read": 0, "sec": 0.0, "t": "15:12:08"}
+{"group": "C", "cmd": "companions", "args": ["build.gradle,gradle.properties"], "out_chars": 847, "lines_read": 0, "sec": 1.8, "t": "15:12:13"}
+{"group": "C", "cmd": "simargl", "args": ["CVE vulnerabilities Tomcat jackson commons-codec"], "out_chars": 3224, "lines_read": 0, "sec": 12.7, "t": "15:12:29"}
+{"group": "C", "cmd": "glob", "args": ["T08", "**/*Tomcat*"], "out_chars": 1033, "lines_read": 0, "sec": 0.1, "t": "15:12:36"}
+{"group": "C", "cmd": "compass", "args": ["T09", "Remove no more used Sonar-Version HTTP header. The Sonar-Version HTTP header was used by the blue/green feature, which is no more used on SonarQube"], "out_chars": 844, "lines_read": 0, "sec": 4.1, "t": "15:12:46"}
+{"group": "C", "cmd": "read", "args": ["T09", "server/sonar-webserver/src/main/java/org/sonar/server/platform/web/WebServiceFilter.java", "80", "95"], "out_chars": 1116, "lines_read": 26, "sec": 0.0, "t": "15:12:51"}
+{"group": "C", "cmd": "companions", "args": ["server/sonar-webserver/src/main/java/org/sonar/server/platform/web/WebServiceFilter.java"], "out_chars": 167, "lines_read": 0, "sec": 3.0, "t": "15:12:57"}
+{"group": "C", "cmd": "simargl", "args": ["Remove HTTP header Sonar-Version blue green"], "out_chars": 8722, "lines_read": 0, "sec": 12.7, "t": "15:13:13"}
+{"group": "C", "cmd": "read", "args": ["T09", "server/sonar-web/src/main/js/app/components/extensions/legacy/request-legacy.ts", "155", "165"], "out_chars": 3317, "lines_read": 100, "sec": 0.0, "t": "15:13:20"}
+{"group": "C", "cmd": "grep", "args": ["T09", "Sonar-Version", "server/sonar-webserver/src/test/java/org/sonar/server/platform/web/WebServiceFilterTest.java"], "out_chars": 172, "lines_read": 0, "sec": 0.0, "t": "15:13:25"}
+{"group": "C", "cmd": "compass", "args": ["T10", "Github onboarding should be able to search forked project. During the onboarding, users are able to search for repositories in a GH organization. The default search behaviour is to exclude forked repository. We want repository forked inside an organization to be visible. Solution: add fork:true parameter in the search query"], "out_chars": 1422, "lines_read": 0, "sec": 1.6, "t": "15:13:31"}
+{"group": "C", "cmd": "grep", "args": ["T10", "fork|search", "server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx"], "out_chars": 7, "lines_read": 0, "sec": 0.0, "t": "15:13:35"}
+{"group": "C", "cmd": "glob", "args": ["T10", "**/alm*"], "out_chars": 5725, "lines_read": 0, "sec": 0.1, "t": "15:13:38"}
+{"group": "C", "cmd": "grep", "args": ["T10", "fork.*true|fork=true", "**/*.ts", "**/*.tsx"], "out_chars": 55, "lines_read": 0, "sec": 0.0, "t": "15:13:42"}
+{"group": "C", "cmd": "grep", "args": ["T10", "fork", "server/sonar-web/src/main/js/apps/create/project/**"], "out_chars": 7, "lines_read": 0, "sec": 0.0, "t": "15:13:45"}
+{"group": "C", "cmd": "glob", "args": ["T10", "**/github*.ts", "**/github*.tsx"], "out_chars": 55, "lines_read": 0, "sec": 0.0, "t": "15:13:48"}
+{"group": "C", "cmd": "glob", "args": ["T10", "**/*Github*"], "out_chars": 5221, "lines_read": 0, "sec": 0.1, "t": "15:13:51"}
+{"group": "C", "cmd": "grep", "args": ["T10", "search", "server/sonar-web/src/main/js/apps/create/project/GitHubProjectCreate.tsx"], "out_chars": 1514, "lines_read": 0, "sec": 0.0, "t": "15:13:55"}
+{"group": "C", "cmd": "read", "args": ["T10", "server/sonar-web/src/main/js/apps/create/project/GitHubProjectCreate.tsx", "200", "240"], "out_chars": 3661, "lines_read": 100, "sec": 0.0, "t": "15:13:58"}
+{"group": "C", "cmd": "read", "args": ["T10", "server/sonar-web/src/main/js/apps/create/project/GitHubProjectCreate.tsx", "110", "150"], "out_chars": 3647, "lines_read": 100, "sec": 0.0, "t": "15:14:02"}
+{"group": "C", "cmd": "grep", "args": ["T10", "getGithubRepositories", "server/sonar-web/src/main/js/apps/create/project/GitHubProjectCreate.tsx"], "out_chars": 238, "lines_read": 0, "sec": 0.0, "t": "15:14:06"}
+{"group": "C", "cmd": "read", "args": ["T10", "server/sonar-web/src/main/js/apps/create/project/GitHubProjectCreate.tsx", "1", "40"], "out_chars": 1979, "lines_read": 40, "sec": 0.0, "t": "15:14:09"}
+{"group": "C", "cmd": "grep", "args": ["T10", "getGithubRepositories", "server/sonar-web/src/main/js/api/alm-integrations.ts"], "out_chars": 112, "lines_read": 0, "sec": 0.0, "t": "15:14:12"}
+{"group": "C", "cmd": "read", "args": ["T10", "server/sonar-web/src/main/js/api/alm-integrations.ts", "190", "230"], "out_chars": 1789, "lines_read": 49, "sec": 0.1, "t": "15:14:15"}
+{"group": "C", "cmd": "companions", "args": ["server/sonar-web/src/main/js/api/alm-integrations.ts,server/sonar-web/src/main/js/apps/create/project/GitHubProjectCreate.tsx"], "out_chars": 1511, "lines_read": 0, "sec": 1.8, "t": "15:14:21"}
+{"group": "C", "cmd": "simargl", "args": ["Github repositories fork search parameter onboarding"], "out_chars": 11599, "lines_read": 0, "sec": 15.9, "t": "15:14:42"}

@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-10-04T18:44:08",
+  "session_seconds": 273,
+  "model": "qwen3:1.7b",
+  "host": "http://localhost:11434",
+  "requests": 2,
+  "tokens_gen": 1367,
+  "tokens_prompt": 3293,
+  "tokens_cached": 0,
+  "files_read": 1,
+  "run_calls": 3,
+  "ctx_clear": 0,
+  "ctx_compact": 0,
+  "mcp_calls": 0,
+  "speed_pp": {
+    "min": 55.9,
+    "avg": 57.6,
+    "max": 59.4,
+    "samples": 2
+  },
+  "speed_tg": {
+    "min": 7.5,
+    "avg": 7.6,
+    "max": 7.7,
+    "samples": 2
+  },
+  "by_model": {
+    "qwen3:1.7b": {
+      "requests": 2,
+      "tokens_gen": 1367,
+      "tokens_prompt": 3293,
+      "tokens_cached": 0,
+      "speed_pp": {
+        "min": 55.9,
+        "avg": 57.6,
+        "max": 59.4,
+        "samples": 2
+      },
+      "speed_tg": {
+        "min": 7.5,
+        "avg": 7.6,
+        "max": 7.7,
+        "samples": 2
+      }
+    }
+  },
+  "by_host": {
+    "http://localhost:11434": {
+      "requests": 2,
+      "tokens_gen": 1367,
+      "tokens_prompt": 0,
+      "tokens_cached": 0,
+      "speed_pp": {
+        "min": 55.9,
+        "avg": 57.6,
+        "max": 59.4,
+        "samples": 2
+      },
+      "speed_tg": {
+        "min": 7.5,
+        "avg": 7.6,
+        "max": 7.7,
+        "samples": 2
+      }
+    }
+  }
+}

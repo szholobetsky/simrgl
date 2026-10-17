@@ -1,0 +1,15 @@
+The most relevant files for updating the documentation regarding synchronization of the default group when using SSO authentication are:
+
+1. **`server/sonar-auth-github/src/main/java/org/sonar/auth/github/GitHubSettings.java`**  
+   - Contains configuration settings related to GitHub authentication, including `sonar.sso.groupsHeader`. The header's description needs clarification about default group behavior.
+
+2. **`server/sonar-web/src/main/js/apps/settings/components/authentication/GitLabAuthenticationTab.tsx`**  
+   - UI component for GitLab SSO authentication. The documentation should explicitly state that the default group is always set, even with SSO.
+
+3. **`server/sonar-web/src/main/js/apps/settings/components/authentication/GithubAuthenticationTab.tsx`**  
+   - UI component for GitHub SSO authentication. Similar updates are needed to reflect the revised behavior of the default group.
+
+4. **`server/sonar-auth-saml/src/main/java/org/sonar/auth/saml/SamlAuthenticator.java`**  
+   - Handles SAML-based authentication. The documentation should clarify that the default group is always set, regardless of SSO usage.
+
+These files are directly tied to the issue described in `sonar.properties`, and their updates will ensure the documentation aligns with the fix for SONAR-9014.

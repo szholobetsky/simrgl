@@ -1,0 +1,12 @@
+server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx
+server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.tsx
+server/sonar-web/src/main/js/api/project-management.ts
+server/sonar-web/src/main/js/apps/create/project/components/NewCodeDefinitionSelection.tsx
+server/sonar-web/src/main/js/components/controls/ValidationInput.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/ManualProjectCreate-test.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/Manual-it.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/ManualProjectCreate-test.tsx.snap
+sonar-core/src/main/resources/org/sonar/l10n/core.properties
+server/sonar-web/src/main/js/apps/create/project/manual/ManualProjectCreate.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/CreateProjectPage-test.tsx.snap
+server/sonar-web/src/main/js/api/alm-integrations.ts

@@ -1,0 +1,51 @@
+The most relevant files for fixing the project list message when the main branch isn't analyzed are:
+
+1. **`server/sonar-web/src/main/js/apps/overview/components/App.tsx`**  
+   - Contains logic for rendering the projects listing component. Modify the state or render logic to display the correct message.
+
+2. **`server/sonar-web/src/main/js/app/styles/init/type.css`**  
+   - Styles the projects list UI. Adjust CSS properties (e.g., `background-color`, `text-align`) to ensure the message is visible and clear.
+
+---
+
+### Steps to Fix:
+1. **Locate the Projects Listing Component**:  
+   In `App.tsx`, find where the projects list is rendered. Look for a section that displays the "Project is not analyzed yet." message.
+
+2. **Update the Message Logic** (if in code):  
+   If the message is set via state or props, modify the relevant variable or function to return the correct text.
+
+3. **Adjust UI Styles** (if in CSS):  
+   In `type.css`, ensure the projects list element has proper visibility and alignment. Add a fallback message if the main branch isn't analyzed.
+
+4. **Test Changes**:  
+   Verify that the message is displayed correctly on the projects page when the main branch is unanalyzed.
+
+---
+
+### Example Code Snippet (Hypothetical):
+In `App.tsx`:
+```typescript
+// Original line: const projectMessage = "Project is not analyzed yet.";
+const projectMessage = getProjectStatusMessage(); // Logic to determine message
+return (
+  <div className="projects-list">
+    {projectMessage}
+  </div>
+);
+```
+
+In `type.css`:
+```css
+.projects-list {
+  background-color: #f0f0f0;
+  text-align: center;
+}
+
+.project-message {
+  font-size: 16px;
+  color: #888;
+}
+```
+
+This approach ensures the message is both visible and clear, aligning with the project's requirements.

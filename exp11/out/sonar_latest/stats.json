@@ -1,0 +1,31 @@
+{
+  "train_tasks": 9772,
+  "held_out": 20,
+  "dev": false,
+  "terms": 4925,
+  "files": 62967,
+  "dirs": 10714,
+  "modules": 64,
+  "predicates": {
+    "train_tasks": 1,
+    "task_count": 63031,
+    "part_of": 73681,
+    "characterizes": 104999,
+    "anchor_of": 248,
+    "names": 15607,
+    "not_in": 165,
+    "co_changes_with": 9178,
+    "narrower_than": 5677,
+    "depends_on": 20
+  },
+  "params": {
+    "db": "C:\\Projects\\Data\\sonar.db",
+    "repo": "C:\\Projects\\Data\\sonarqube",
+    "out": "C:\\Projects\\simrgl\\exp11\\out\\sonar_latest",
+    "min_df": 5,
+    "max_df": 0.3,
+    "max_files": 30,
+    "dev": false
+  },
+  "seconds": 20.2
+}

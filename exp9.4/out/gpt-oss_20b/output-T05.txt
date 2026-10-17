@@ -1,0 +1,17 @@
+**Key files to inspect / modify for fixing “project‑creation form validation”**
+
+1. **`server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx`** – main entry point of the Create Project UI; orchestrates field rendering and submission logic.  
+2. **`server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.tsx`** – component that actually performs the project‑create API call after validations pass.  
+3. **`server/sonar-web/src/main/js/apps/create/project/components/NewCodeDefinitionSelection.tsx`** – handles new code definition selection, which may influence validation rules (e.g., key format).  
+4. **`server/sonar-web/src/main/js/api/project-management.ts`** – contains the REST wrapper used by `ManualProjectCreate`; check how errors are propagated back to the UI.  
+5. **`server/sonar-web/src/main/js/components/controls/ValidationInput.tsx`** – reusable input control with built‑in validation hooks; verify its error handling flow.  
+
+6. **Test helpers & snapshots (for regression checks)**  
+   - `server/sonar-web/src/main/js/apps/create/project/__tests__/Manual-it.tsx`  
+   - `server/sonar-web/src/main/js/apps/create/project/__tests__/ManualProjectCreate-test.tsx`  
+   - `server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/ManualProjectCreate-test.tsx.snap`
+
+7. **Optional backend side for reference / consistency**  
+   - `sonar-core/src/main/java/org/sonar/core/component/ComponentUpdater.java` – ensures that server‑side validations match client expectations.
+
+These files collectively implement and enforce project‑creation form validation. Inspecting them will reveal why invalid formats slip through or valid ones fail, allowing you to adjust either the front‑end logic (`ValidationInput`, submission handlers) or align it with the expected format rules defined in the documentation/tests.

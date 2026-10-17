@@ -1,0 +1,13 @@
+{
+ "file": {
+  "lam": 0.25,
+  "beta": 1,
+  "beta2": 0.5,
+  "mu": 0,
+  "gamma": 0
+ },
+ "module": {
+  "lam": 0.25,
+  "not_in": 1
+ }
+}

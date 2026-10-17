@@ -1,0 +1,7 @@
+ManualProjectCreate.tsx
+ManualProjectCreate-test.tsx
+ManualProjectCreate-test.tsx.snap
+CreateProjectPage.tsx
+api/components.ts
+components/common/ProjectKeyInput.tsx
+components/common/__tests__/__snapshots__/ProjectKeyInput-test.tsx.snap

@@ -1,0 +1,2 @@
+Github onboarding should be able to search forked project
+During the onboarding, users are able to search for repositories in a GH organization. The  default search behaviour is to exclude forked repository . We want repository forked inside an organization to be visible. Solution: add a "fork:true" parameter in the search query.

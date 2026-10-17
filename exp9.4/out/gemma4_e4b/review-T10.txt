@@ -1,0 +1,13 @@
+```text
+server/sonar-web/src/main/js/apps/create/project/GitHubProjectCreateRenderer.tsx
+server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubBinding.java
+server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/GitHubProjectCreateRenderer-test.tsx.snap
+server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx
+sonar-core/src/main/resources/org/sonar/l10n/core.properties
+server/sonar-ws/src/main/java/org/sonarqube/ws/client/almintegrations/AlmIntegrationsService.java
+server/sonar-web/src/main/js/apps/create/project/constants.ts
+server/sonar-web/src/main/js/apps/create/project/AzureProjectCreateRenderer.tsx
+server/sonar-web/src/main/js/apps/create/project/BitbucketSearchResults.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/BitbucketSearchResults-test.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/BitbucketSearchResults-test.tsx.snap
+```

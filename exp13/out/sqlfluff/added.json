@@ -1,0 +1,77 @@
+{
+"8684": [],
+"8665": [],
+"8682": [
+"test/fixtures/rules/std_rule_cases/LT02-indent-mysql.yml"
+],
+"8659": [],
+"8683": [],
+"8672": [],
+"8674": [
+"test/fixtures/dialects/duckdb/checkpoint.sql",
+"test/fixtures/dialects/duckdb/checkpoint.yml"
+],
+"8531": [
+"test/fixtures/dialects/mysql/function_compound_body.sql",
+"test/fixtures/dialects/mysql/function_compound_body.yml",
+"test/fixtures/dialects/mysql/procedure_body_single_statement.sql",
+"test/fixtures/dialects/mysql/procedure_body_single_statement.yml",
+"test/fixtures/dialects/mysql/procedure_compound_body.sql",
+"test/fixtures/dialects/mysql/procedure_compound_body.yml",
+"test/fixtures/dialects/mysql/procedure_compound_body_empty.sql",
+"test/fixtures/dialects/mysql/procedure_compound_body_empty.yml",
+"test/fixtures/dialects/mysql/procedure_compound_body_labelled.sql",
+"test/fixtures/dialects/mysql/procedure_compound_body_labelled.yml",
+"test/fixtures/dialects/mysql/procedure_compound_body_loop.sql",
+"test/fixtures/dialects/mysql/procedure_compound_body_loop.yml",
+"test/fixtures/dialects/mysql/procedure_compound_body_nested.sql",
+"test/fixtures/dialects/mysql/procedure_compound_body_nested.yml",
+"test/fixtures/dialects/mysql/procedure_compound_body_repeat.sql",
+"test/fixtures/dialects/mysql/procedure_compound_body_repeat.yml",
+"test/fixtures/dialects/mysql/procedure_compound_body_while.sql",
+"test/fixtures/dialects/mysql/procedure_compound_body_while.yml",
+"test/fixtures/dialects/mysql/trigger_body_single_statement.sql",
+"test/fixtures/dialects/mysql/trigger_body_single_statement.yml",
+"test/fixtures/dialects/mysql/trigger_compound_body.sql",
+"test/fixtures/dialects/mysql/trigger_compound_body.yml",
+"test/fixtures/dialects/mysql/trigger_compound_body_inline_begin.sql",
+"test/fixtures/dialects/mysql/trigger_compound_body_inline_begin.yml"
+],
+"8513": [],
+"8515": [
+"test/fixtures/dialects/sparksql/execute_immediate.sql",
+"test/fixtures/dialects/sparksql/execute_immediate.yml"
+],
+"8658": [],
+"8519": [
+"test/fixtures/dialects/databricks/drop_view.sql",
+"test/fixtures/dialects/databricks/drop_view.yml"
+],
+"8522": [
+"test/fixtures/dialects/databricks/struct_type_field_collate.sql",
+"test/fixtures/dialects/databricks/struct_type_field_collate.yml"
+],
+"8656": [],
+"8657": [],
+"8650": [],
+"8645": [],
+"8652": [],
+"8647": [],
+"8617": [],
+"8577": [
+"test/fixtures/dialects/oracle/sqlplus_set.sql",
+"test/fixtures/dialects/oracle/sqlplus_set.yml"
+],
+"8644": [],
+"8541": [
+"test/fixtures/dialects/oracle/merge_update_delete_where.sql",
+"test/fixtures/dialects/oracle/merge_update_delete_where.yml"
+],
+"8586": [],
+"8591": [],
+"8604": [],
+"8636": [],
+"8521": [],
+"8473": [],
+"8633": []
+}

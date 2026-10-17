@@ -1,0 +1,2 @@
+C:\Projects\simrgl\exp9.4\plugins\reporting\src\main\java\org\sonarqube\plugins\reporting\FileReportGenerator.java  
+C:\Projects\simrgl\exp9.4\plugins\reporting\src\test\java\org\sonarqube\plugins\reporting\FileReportGeneratorTest.java

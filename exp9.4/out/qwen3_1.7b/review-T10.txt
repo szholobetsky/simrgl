@@ -1,0 +1,10 @@
+```
+server/sonar-web/src/main/js/apps/create/project/GitHubProjectCreateRenderer.tsx
+server/sonar-web/src/main/js/apps/create/project/constants.ts
+server/sonar-web/src/main/js/apps/create/project/AzureProjectCreateRenderer.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/GitHubProjectCreateRenderer-test.tsx.snap
+server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/BitbucketSearchResults-test.tsx.snap
+server/sonar-web/src/main/js/apps/create/project/__tests__/AzureProjectsList-test.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/CreateProjectPage-test.tsx.snap
+server/sonar-web/src/main/js/apps/create/project/__tests__/BitbucketSearchResults-test.tsx.snap
+```

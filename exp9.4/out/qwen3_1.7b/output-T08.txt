@@ -1,0 +1,35 @@
+The most relevant files for addressing vulnerabilities in bundled Java/JS libraries are:
+
+1. **`build.gradle`**  
+   - Contains explicit dependency declarations for libraries like `jackson-core`, `commons-codec`, and `httpclient`.  
+   - Key entries: `dependencies { jackson, codec, elasticsearch, tomcat }`.
+
+2. **`pom.xml`**  
+   - Centralized dependency management for SonarQube components.  
+   - Critical lines: `<dependency><groupId>org.apache.tomcat</groupId><artifactId>tomcat-connectors</artifactId></dependency>` and `<dependency><groupId>com.fasterxml.jackson</groupId><artifactId>jackson-core</artifactId></dependency>`.
+
+3. **`sonar-application/pom.xml`**  
+   - Specifies bundled libraries (e.g., `elasticsearch`, `java`, `qube`).  
+   - Relevant entry: `<dependency><groupId>org.elasticsearch</groupId><artifactId>elasticsearch</artifactId></dependency>`.
+
+---
+
+### Steps to Address Vulnerabilities:
+1. **Audit Dependency Versions**:  
+   Check if the specified CVEs (`CVE-2020-13934`, `CVE-2020-13935`, `CVE-2018-19360`) are mitigated in the current versions of dependencies.  
+
+2. **Update Dependencies**:  
+   Upgrade Tomcat to 8.5.57+ or higher (for CVEs) and ensure `jackson-core`/`commons-codec` are patched via updates.  
+
+3. **Mark as False Positive**:  
+   If upgrades aren’t feasible, annotate vulnerabilities as false positives in SonarQube rules.  
+
+4. **Automate Audit**:  
+   Use tools like `/map keyword extract` to identify affected files and run audits on `build.gradle`/`pom.xml`.  
+
+--- 
+
+**Files to Focus On**:  
+- `build.gradle` (for Tomcat/TOMCAT-CONNECTORS)  
+- `sonar-application/pom.xml` (for Elasticsearch libraries)  
+- `pom.xml` (central dependency management)

@@ -1,0 +1,2503 @@
+{
+ "square": {
+  "depth1": {
+   "whole": {
+    "tasks": 12192,
+    "novelty": 0.5967,
+    "structurality": 0.7638,
+    "zone": "evolution",
+    "evolution": 0.4313,
+    "maintenance": 0.3325,
+    "disruption": 0.1654,
+    "stagnation": 0.0708
+   },
+   "units": 48,
+   "zones": {
+    "disruption": 39,
+    "stagnation": 1,
+    "evolution": 8
+   },
+   "rows": [
+    {
+     "unit": "flink-runtime",
+     "tasks": 3475,
+     "novelty": 0.6027,
+     "structurality": 0.6261,
+     "zone": "evolution",
+     "evolution": 0.3219,
+     "maintenance": 0.3042,
+     "disruption": 0.2808,
+     "stagnation": 0.0931
+    },
+    {
+     "unit": "docs",
+     "tasks": 2672,
+     "novelty": 0.6227,
+     "structurality": 0.3846,
+     "zone": "disruption",
+     "evolution": 0.1965,
+     "maintenance": 0.188,
+     "disruption": 0.4262,
+     "stagnation": 0.1893
+    },
+    {
+     "unit": "flink-table",
+     "tasks": 2259,
+     "novelty": 0.7181,
+     "structurality": 0.7552,
+     "zone": "evolution",
+     "evolution": 0.5284,
+     "maintenance": 0.2268,
+     "disruption": 0.1898,
+     "stagnation": 0.0551
+    },
+    {
+     "unit": "flink-connectors",
+     "tasks": 1415,
+     "novelty": 0.6585,
+     "structurality": 0.5843,
+     "zone": "evolution",
+     "evolution": 0.3306,
+     "maintenance": 0.2537,
+     "disruption": 0.3279,
+     "stagnation": 0.0878
+    },
+    {
+     "unit": "flink-core",
+     "tasks": 1386,
+     "novelty": 0.7031,
+     "structurality": 0.1965,
+     "zone": "disruption",
+     "evolution": 0.111,
+     "maintenance": 0.0855,
+     "disruption": 0.5921,
+     "stagnation": 0.2114
+    },
+    {
+     "unit": "flink-streaming-java",
+     "tasks": 1275,
+     "novelty": 0.6328,
+     "structurality": 0.4073,
+     "zone": "disruption",
+     "evolution": 0.1982,
+     "maintenance": 0.2091,
+     "disruption": 0.4346,
+     "stagnation": 0.1581
+    },
+    {
+     "unit": "flink-libraries",
+     "tasks": 833,
+     "novelty": 0.6639,
+     "structurality": 0.7299,
+     "zone": "evolution",
+     "evolution": 0.4484,
+     "maintenance": 0.2815,
+     "disruption": 0.2155,
+     "stagnation": 0.0546
+    },
+    {
+     "unit": "flink-tests",
+     "tasks": 810,
+     "novelty": 0.8079,
+     "structurality": 0.1242,
+     "zone": "disruption",
+     "evolution": 0.0906,
+     "maintenance": 0.0336,
+     "disruption": 0.7173,
+     "stagnation": 0.1585
+    },
+    {
+     "unit": "flink-python",
+     "tasks": 733,
+     "novelty": 0.555,
+     "structurality": 0.497,
+     "zone": "disruption",
+     "evolution": 0.2235,
+     "maintenance": 0.2735,
+     "disruption": 0.3316,
+     "stagnation": 0.1715
+    },
+    {
+     "unit": "flink-end-to-end-tests",
+     "tasks": 530,
+     "novelty": 0.6731,
+     "structurality": 0.4321,
+     "zone": "disruption",
+     "evolution": 0.2196,
+     "maintenance": 0.2125,
+     "disruption": 0.4535,
+     "stagnation": 0.1145
+    },
+    {
+     "unit": "(root)",
+     "tasks": 460,
+     "novelty": 0.5287,
+     "structurality": 0.0315,
+     "zone": "disruption",
+     "evolution": 0.0029,
+     "maintenance": 0.0286,
+     "disruption": 0.5258,
+     "stagnation": 0.4427
+    },
+    {
+     "unit": "flink-yarn",
+     "tasks": 387,
+     "novelty": 0.5319,
+     "structurality": 0.2203,
+     "zone": "disruption",
+     "evolution": 0.0722,
+     "maintenance": 0.1481,
+     "disruption": 0.4596,
+     "stagnation": 0.3201
+    },
+    {
+     "unit": "flink-clients",
+     "tasks": 386,
+     "novelty": 0.6332,
+     "structurality": 0.2598,
+     "zone": "disruption",
+     "evolution": 0.0923,
+     "maintenance": 0.1674,
+     "disruption": 0.5409,
+     "stagnation": 0.1993
+    },
+    {
+     "unit": "flink-runtime-web",
+     "tasks": 371,
+     "novelty": 0.6342,
+     "structurality": 0.453,
+     "zone": "disruption",
+     "evolution": 0.2372,
+     "maintenance": 0.2158,
+     "disruption": 0.397,
+     "stagnation": 0.15
+    },
+    {
+     "unit": "tools",
+     "tasks": 369,
+     "novelty": 0.6624,
+     "structurality": 0.1648,
+     "zone": "disruption",
+     "evolution": 0.083,
+     "maintenance": 0.0818,
+     "disruption": 0.5795,
+     "stagnation": 0.2557
+    },
+    {
+     "unit": "flink-formats",
+     "tasks": 332,
+     "novelty": 0.6846,
+     "structurality": 0.4926,
+     "zone": "disruption",
+     "evolution": 0.2877,
+     "maintenance": 0.2049,
+     "disruption": 0.3969,
+     "stagnation": 0.1105
+    },
+    {
+     "unit": "flink-java",
+     "tasks": 313,
+     "novelty": 0.708,
+     "structurality": 0.3272,
+     "zone": "disruption",
+     "evolution": 0.1929,
+     "maintenance": 0.1343,
+     "disruption": 0.5151,
+     "stagnation": 0.1578
+    },
+    {
+     "unit": "flink-dist",
+     "tasks": 298,
+     "novelty": 0.6007,
+     "structurality": 0.2258,
+     "zone": "disruption",
+     "evolution": 0.0712,
+     "maintenance": 0.1546,
+     "disruption": 0.5294,
+     "stagnation": 0.2448
+    },
+    {
+     "unit": "flink-state-backends",
+     "tasks": 267,
+     "novelty": 0.6258,
+     "structurality": 0.367,
+     "zone": "disruption",
+     "evolution": 0.1758,
+     "maintenance": 0.1912,
+     "disruption": 0.45,
+     "stagnation": 0.183
+    },
+    {
+     "unit": "flink-staging",
+     "tasks": 266,
+     "novelty": 0.8068,
+     "structurality": 0.6912,
+     "zone": "evolution",
+     "evolution": 0.5367,
+     "maintenance": 0.1545,
+     "disruption": 0.2701,
+     "stagnation": 0.0387
+    },
+    {
+     "unit": "flink-test-utils-parent",
+     "tasks": 216,
+     "novelty": 0.8241,
+     "structurality": 0.1083,
+     "zone": "disruption",
+     "evolution": 0.0862,
+     "maintenance": 0.0221,
+     "disruption": 0.7379,
+     "stagnation": 0.1538
+    },
+    {
+     "unit": "flink-kubernetes",
+     "tasks": 194,
+     "novelty": 0.6184,
+     "structurality": 0.4552,
+     "zone": "disruption",
+     "evolution": 0.2433,
+     "maintenance": 0.2119,
+     "disruption": 0.3751,
+     "stagnation": 0.1697
+    },
+    {
+     "unit": "flink-yarn-tests",
+     "tasks": 191,
+     "novelty": 0.5325,
+     "structurality": 0.1804,
+     "zone": "disruption",
+     "evolution": 0.049,
+     "maintenance": 0.1314,
+     "disruption": 0.4836,
+     "stagnation": 0.336
+    },
+    {
+     "unit": "flink-streaming-scala",
+     "tasks": 170,
+     "novelty": 0.6319,
+     "structurality": 0.1103,
+     "zone": "disruption",
+     "evolution": 0.057,
+     "maintenance": 0.0533,
+     "disruption": 0.5749,
+     "stagnation": 0.3148
+    },
+    {
+     "unit": "flink-contrib",
+     "tasks": 153,
+     "novelty": 0.7297,
+     "structurality": 0.3371,
+     "zone": "disruption",
+     "evolution": 0.2261,
+     "maintenance": 0.111,
+     "disruption": 0.5036,
+     "stagnation": 0.1593
+    },
+    {
+     "unit": "flink-scala",
+     "tasks": 143,
+     "novelty": 0.7164,
+     "structurality": 0.1345,
+     "zone": "disruption",
+     "evolution": 0.1054,
+     "maintenance": 0.0291,
+     "disruption": 0.611,
+     "stagnation": 0.2545
+    },
+    {
+     "unit": "flink-metrics",
+     "tasks": 139,
+     "novelty": 0.6174,
+     "structurality": 0.401,
+     "zone": "disruption",
+     "evolution": 0.2102,
+     "maintenance": 0.1908,
+     "disruption": 0.4072,
+     "stagnation": 0.1918
+    },
+    {
+     "unit": "flink-filesystems",
+     "tasks": 136,
+     "novelty": 0.617,
+     "structurality": 0.3945,
+     "zone": "disruption",
+     "evolution": 0.1903,
+     "maintenance": 0.2042,
+     "disruption": 0.4267,
+     "stagnation": 0.1788
+    },
+    {
+     "unit": "flink-examples",
+     "tasks": 133,
+     "novelty": 0.8253,
+     "structurality": 0.2764,
+     "zone": "disruption",
+     "evolution": 0.1887,
+     "maintenance": 0.0877,
+     "disruption": 0.6366,
+     "stagnation": 0.0869
+    },
+    {
+     "unit": "flink-mesos",
+     "tasks": 130,
+     "novelty": 0.618,
+     "structurality": 0.2055,
+     "zone": "disruption",
+     "evolution": 0.0867,
+     "maintenance": 0.1188,
+     "disruption": 0.5313,
+     "stagnation": 0.2632
+    },
+    {
+     "unit": "flink-streaming-connectors",
+     "tasks": 105,
+     "novelty": 0.7073,
+     "structurality": 0.5292,
+     "zone": "evolution",
+     "evolution": 0.3071,
+     "maintenance": 0.2221,
+     "disruption": 0.4002,
+     "stagnation": 0.0707
+    },
+    {
+     "unit": "flink-optimizer",
+     "tasks": 71,
+     "novelty": 0.8714,
+     "structurality": 0.1776,
+     "zone": "disruption",
+     "evolution": 0.1652,
+     "maintenance": 0.0124,
+     "disruption": 0.7062,
+     "stagnation": 0.1162
+    },
+    {
+     "unit": "flink-docs",
+     "tasks": 65,
+     "novelty": 0.6613,
+     "structurality": 0.1353,
+     "zone": "disruption",
+     "evolution": 0.0572,
+     "maintenance": 0.0781,
+     "disruption": 0.6041,
+     "stagnation": 0.2606
+    },
+    {
+     "unit": "flink-quickstart",
+     "tasks": 61,
+     "novelty": 0.4006,
+     "structurality": 0.4501,
+     "zone": "stagnation",
+     "evolution": 0.0883,
+     "maintenance": 0.3618,
+     "disruption": 0.3123,
+     "stagnation": 0.2376
+    },
+    {
+     "unit": "flink-scala-shell",
+     "tasks": 55,
+     "novelty": 0.604,
+     "structurality": 0.2303,
+     "zone": "disruption",
+     "evolution": 0.0926,
+     "maintenance": 0.1378,
+     "disruption": 0.5115,
+     "stagnation": 0.2582
+    },
+    {
+     "unit": "flink-architecture-tests",
+     "tasks": 52,
+     "novelty": 0.7795,
+     "structurality": 0.2501,
+     "zone": "disruption",
+     "evolution": 0.1389,
+     "maintenance": 0.1112,
+     "disruption": 0.6405,
+     "stagnation": 0.1093
+    },
+    {
+     "unit": "flink-queryable-state",
+     "tasks": 52,
+     "novelty": 0.8719,
+     "structurality": 0.2251,
+     "zone": "disruption",
+     "evolution": 0.1719,
+     "maintenance": 0.0532,
+     "disruption": 0.7001,
+     "stagnation": 0.0748
+    },
+    {
+     "unit": "flink-fs-tests",
+     "tasks": 51,
+     "novelty": 0.7461,
+     "structurality": 0.1201,
+     "zone": "disruption",
+     "evolution": 0.1097,
+     "maintenance": 0.0104,
+     "disruption": 0.6364,
+     "stagnation": 0.2436
+    },
+    {
+     "unit": "flink-addons",
+     "tasks": 48,
+     "novelty": 0.8804,
+     "structurality": 0.5778,
+     "zone": "evolution",
+     "evolution": 0.4895,
+     "maintenance": 0.0882,
+     "disruption": 0.3909,
+     "stagnation": 0.0314
+    },
+    {
+     "unit": "flink-rpc",
+     "tasks": 43,
+     "novelty": 0.7088,
+     "structurality": 0.5337,
+     "zone": "evolution",
+     "evolution": 0.3486,
+     "maintenance": 0.1851,
+     "disruption": 0.3602,
+     "stagnation": 0.1061
+    },
+    {
+     "unit": "flink-test-utils",
+     "tasks": 33,
+     "novelty": 0.8495,
+     "structurality": 0.0383,
+     "zone": "disruption",
+     "evolution": 0.0383,
+     "maintenance": 0.0,
+     "disruption": 0.8111,
+     "stagnation": 0.1505
+    },
+    {
+     "unit": "flink-compiler",
+     "tasks": 32,
+     "novelty": 0.9058,
+     "structurality": 0.3963,
+     "zone": "disruption",
+     "evolution": 0.3196,
+     "maintenance": 0.0767,
+     "disruption": 0.5861,
+     "stagnation": 0.0175
+    },
+    {
+     "unit": "flink-container",
+     "tasks": 30,
+     "novelty": 0.7822,
+     "structurality": 0.3684,
+     "zone": "disruption",
+     "evolution": 0.1728,
+     "maintenance": 0.1956,
+     "disruption": 0.6094,
+     "stagnation": 0.0222
+    },
+    {
+     "unit": "flink-shaded-hadoop",
+     "tasks": 28,
+     "novelty": 0.5602,
+     "structurality": 0.1146,
+     "zone": "disruption",
+     "evolution": 0.0993,
+     "maintenance": 0.0153,
+     "disruption": 0.4609,
+     "stagnation": 0.4244
+    },
+    {
+     "unit": "flink-dstl",
+     "tasks": 28,
+     "novelty": 0.6689,
+     "structurality": 0.3262,
+     "zone": "disruption",
+     "evolution": 0.1717,
+     "maintenance": 0.1545,
+     "disruption": 0.4972,
+     "stagnation": 0.1766
+    },
+    {
+     "unit": "flink-annotations",
+     "tasks": 24,
+     "novelty": 0.8034,
+     "structurality": 0.0444,
+     "zone": "disruption",
+     "evolution": 0.0444,
+     "maintenance": 0.0,
+     "disruption": 0.759,
+     "stagnation": 0.1966
+    },
+    {
+     "unit": ".github",
+     "tasks": 21,
+     "novelty": 0.7432,
+     "structurality": 0.1695,
+     "zone": "disruption",
+     "evolution": 0.1657,
+     "maintenance": 0.0038,
+     "disruption": 0.5774,
+     "stagnation": 0.253
+    },
+    {
+     "unit": "flink-batch-connectors",
+     "tasks": 21,
+     "novelty": 0.9623,
+     "structurality": 0.3601,
+     "zone": "disruption",
+     "evolution": 0.3281,
+     "maintenance": 0.0321,
+     "disruption": 0.6343,
+     "stagnation": 0.0056
+    }
+   ]
+  },
+  "depth2": {
+   "whole": {
+    "tasks": 12192,
+    "novelty": 0.5967,
+    "structurality": 0.6494,
+    "zone": "evolution",
+    "evolution": 0.3623,
+    "maintenance": 0.2871,
+    "disruption": 0.2344,
+    "stagnation": 0.1162
+   },
+   "units": 157,
+   "zones": {
+    "stagnation": 11,
+    "disruption": 128,
+    "evolution": 18
+   },
+   "rows": [
+    {
+     "unit": "flink-runtime",
+     "tasks": 3474,
+     "novelty": 0.6026,
+     "structurality": 0.6263,
+     "zone": "evolution",
+     "evolution": 0.322,
+     "maintenance": 0.3043,
+     "disruption": 0.2806,
+     "stagnation": 0.0931
+    },
+    {
+     "unit": "flink-core",
+     "tasks": 1385,
+     "novelty": 0.7029,
+     "structurality": 0.1961,
+     "zone": "disruption",
+     "evolution": 0.1105,
+     "maintenance": 0.0855,
+     "disruption": 0.5923,
+     "stagnation": 0.2116
+    },
+    {
+     "unit": "flink-streaming-java",
+     "tasks": 1275,
+     "novelty": 0.6328,
+     "structurality": 0.4073,
+     "zone": "disruption",
+     "evolution": 0.1982,
+     "maintenance": 0.2091,
+     "disruption": 0.4346,
+     "stagnation": 0.1581
+    },
+    {
+     "unit": "flink-table/flink-table-planner",
+     "tasks": 998,
+     "novelty": 0.7338,
+     "structurality": 0.4454,
+     "zone": "disruption",
+     "evolution": 0.3372,
+     "maintenance": 0.1083,
+     "disruption": 0.3967,
+     "stagnation": 0.1579
+    },
+    {
+     "unit": "flink-tests",
+     "tasks": 810,
+     "novelty": 0.8079,
+     "structurality": 0.1242,
+     "zone": "disruption",
+     "evolution": 0.0906,
+     "maintenance": 0.0336,
+     "disruption": 0.7173,
+     "stagnation": 0.1585
+    },
+    {
+     "unit": "flink-table/flink-table-planner-blink",
+     "tasks": 737,
+     "novelty": 0.7691,
+     "structurality": 0.512,
+     "zone": "evolution",
+     "evolution": 0.392,
+     "maintenance": 0.12,
+     "disruption": 0.377,
+     "stagnation": 0.1109
+    },
+    {
+     "unit": "docs/dev",
+     "tasks": 706,
+     "novelty": 0.6064,
+     "structurality": 0.3914,
+     "zone": "disruption",
+     "evolution": 0.1625,
+     "maintenance": 0.2289,
+     "disruption": 0.4439,
+     "stagnation": 0.1647
+    },
+    {
+     "unit": "docs/content",
+     "tasks": 689,
+     "novelty": 0.5887,
+     "structurality": 0.0584,
+     "zone": "disruption",
+     "evolution": 0.0483,
+     "maintenance": 0.01,
+     "disruption": 0.5404,
+     "stagnation": 0.4013
+    },
+    {
+     "unit": "docs/content.zh",
+     "tasks": 638,
+     "novelty": 0.5694,
+     "structurality": 0.0568,
+     "zone": "disruption",
+     "evolution": 0.0459,
+     "maintenance": 0.0109,
+     "disruption": 0.5235,
+     "stagnation": 0.4197
+    },
+    {
+     "unit": "flink-python/pyflink",
+     "tasks": 589,
+     "novelty": 0.5383,
+     "structurality": 0.3497,
+     "zone": "disruption",
+     "evolution": 0.1287,
+     "maintenance": 0.221,
+     "disruption": 0.4095,
+     "stagnation": 0.2407
+    },
+    {
+     "unit": "flink-table/flink-table-common",
+     "tasks": 503,
+     "novelty": 0.7288,
+     "structurality": 0.2039,
+     "zone": "disruption",
+     "evolution": 0.1349,
+     "maintenance": 0.0689,
+     "disruption": 0.5938,
+     "stagnation": 0.2023
+    },
+    {
+     "unit": "flink-table/flink-table-api-java",
+     "tasks": 491,
+     "novelty": 0.652,
+     "structurality": 0.1336,
+     "zone": "disruption",
+     "evolution": 0.0743,
+     "maintenance": 0.0593,
+     "disruption": 0.5777,
+     "stagnation": 0.2888
+    },
+    {
+     "unit": "flink-libraries/flink-table",
+     "tasks": 477,
+     "novelty": 0.6626,
+     "structurality": 0.8103,
+     "zone": "evolution",
+     "evolution": 0.5156,
+     "maintenance": 0.2947,
+     "disruption": 0.147,
+     "stagnation": 0.0427
+    },
+    {
+     "unit": "(root)",
+     "tasks": 460,
+     "novelty": 0.5287,
+     "structurality": 0.0315,
+     "zone": "disruption",
+     "evolution": 0.0029,
+     "maintenance": 0.0286,
+     "disruption": 0.5258,
+     "stagnation": 0.4427
+    },
+    {
+     "unit": "flink-connectors/flink-connector-hive",
+     "tasks": 454,
+     "novelty": 0.6069,
+     "structurality": 0.5228,
+     "zone": "evolution",
+     "evolution": 0.2601,
+     "maintenance": 0.2628,
+     "disruption": 0.3468,
+     "stagnation": 0.1304
+    },
+    {
+     "unit": "flink-yarn",
+     "tasks": 387,
+     "novelty": 0.5319,
+     "structurality": 0.2203,
+     "zone": "disruption",
+     "evolution": 0.0722,
+     "maintenance": 0.1481,
+     "disruption": 0.4596,
+     "stagnation": 0.3201
+    },
+    {
+     "unit": "flink-clients",
+     "tasks": 386,
+     "novelty": 0.6332,
+     "structurality": 0.2598,
+     "zone": "disruption",
+     "evolution": 0.0923,
+     "maintenance": 0.1674,
+     "disruption": 0.5409,
+     "stagnation": 0.1993
+    },
+    {
+     "unit": "docs/layouts",
+     "tasks": 321,
+     "novelty": 0.6208,
+     "structurality": 0.0693,
+     "zone": "disruption",
+     "evolution": 0.0306,
+     "maintenance": 0.0387,
+     "disruption": 0.5902,
+     "stagnation": 0.3405
+    },
+    {
+     "unit": "flink-python",
+     "tasks": 316,
+     "novelty": 0.6056,
+     "structurality": 0.2286,
+     "zone": "disruption",
+     "evolution": 0.1438,
+     "maintenance": 0.0848,
+     "disruption": 0.4618,
+     "stagnation": 0.3096
+    },
+    {
+     "unit": "flink-java",
+     "tasks": 312,
+     "novelty": 0.707,
+     "structurality": 0.3282,
+     "zone": "disruption",
+     "evolution": 0.1935,
+     "maintenance": 0.1347,
+     "disruption": 0.5135,
+     "stagnation": 0.1583
+    },
+    {
+     "unit": "flink-dist",
+     "tasks": 298,
+     "novelty": 0.6007,
+     "structurality": 0.2258,
+     "zone": "disruption",
+     "evolution": 0.0712,
+     "maintenance": 0.1546,
+     "disruption": 0.5294,
+     "stagnation": 0.2448
+    },
+    {
+     "unit": "docs/_includes",
+     "tasks": 296,
+     "novelty": 0.6501,
+     "structurality": 0.0253,
+     "zone": "disruption",
+     "evolution": 0.015,
+     "maintenance": 0.0103,
+     "disruption": 0.6352,
+     "stagnation": 0.3396
+    },
+    {
+     "unit": "flink-table/flink-sql-client",
+     "tasks": 286,
+     "novelty": 0.5684,
+     "structurality": 0.3738,
+     "zone": "disruption",
+     "evolution": 0.1151,
+     "maintenance": 0.2586,
+     "disruption": 0.4533,
+     "stagnation": 0.173
+    },
+    {
+     "unit": "flink-end-to-end-tests/test-scripts",
+     "tasks": 277,
+     "novelty": 0.6356,
+     "structurality": 0.2743,
+     "zone": "disruption",
+     "evolution": 0.0965,
+     "maintenance": 0.1778,
+     "disruption": 0.5391,
+     "stagnation": 0.1866
+    },
+    {
+     "unit": "flink-runtime-web",
+     "tasks": 261,
+     "novelty": 0.6496,
+     "structurality": 0.1929,
+     "zone": "disruption",
+     "evolution": 0.0986,
+     "maintenance": 0.0942,
+     "disruption": 0.551,
+     "stagnation": 0.2562
+    },
+    {
+     "unit": "flink-table/flink-table-runtime-blink",
+     "tasks": 244,
+     "novelty": 0.8124,
+     "structurality": 0.3321,
+     "zone": "disruption",
+     "evolution": 0.2381,
+     "maintenance": 0.0941,
+     "disruption": 0.5743,
+     "stagnation": 0.0936
+    },
+    {
+     "unit": "flink-connectors/flink-connector-kafka",
+     "tasks": 213,
+     "novelty": 0.6541,
+     "structurality": 0.3821,
+     "zone": "disruption",
+     "evolution": 0.2066,
+     "maintenance": 0.1755,
+     "disruption": 0.4475,
+     "stagnation": 0.1704
+    },
+    {
+     "unit": "docs/ops",
+     "tasks": 201,
+     "novelty": 0.724,
+     "structurality": 0.3038,
+     "zone": "disruption",
+     "evolution": 0.132,
+     "maintenance": 0.1719,
+     "disruption": 0.592,
+     "stagnation": 0.1041
+    },
+    {
+     "unit": "flink-kubernetes",
+     "tasks": 194,
+     "novelty": 0.6184,
+     "structurality": 0.4552,
+     "zone": "disruption",
+     "evolution": 0.2433,
+     "maintenance": 0.2119,
+     "disruption": 0.3751,
+     "stagnation": 0.1697
+    },
+    {
+     "unit": "flink-state-backends/flink-statebackend-rocksdb",
+     "tasks": 192,
+     "novelty": 0.5934,
+     "structurality": 0.3403,
+     "zone": "disruption",
+     "evolution": 0.1468,
+     "maintenance": 0.1935,
+     "disruption": 0.4466,
+     "stagnation": 0.2131
+    },
+    {
+     "unit": "flink-yarn-tests",
+     "tasks": 191,
+     "novelty": 0.5325,
+     "structurality": 0.1804,
+     "zone": "disruption",
+     "evolution": 0.049,
+     "maintenance": 0.1314,
+     "disruption": 0.4836,
+     "stagnation": 0.336
+    },
+    {
+     "unit": "flink-table/flink-table-runtime",
+     "tasks": 184,
+     "novelty": 0.8462,
+     "structurality": 0.2151,
+     "zone": "disruption",
+     "evolution": 0.1582,
+     "maintenance": 0.0569,
+     "disruption": 0.688,
+     "stagnation": 0.0969
+    },
+    {
+     "unit": "flink-end-to-end-tests",
+     "tasks": 175,
+     "novelty": 0.6142,
+     "structurality": 0.0302,
+     "zone": "disruption",
+     "evolution": 0.0114,
+     "maintenance": 0.0188,
+     "disruption": 0.6028,
+     "stagnation": 0.367
+    },
+    {
+     "unit": "flink-streaming-scala",
+     "tasks": 170,
+     "novelty": 0.6319,
+     "structurality": 0.1103,
+     "zone": "disruption",
+     "evolution": 0.057,
+     "maintenance": 0.0533,
+     "disruption": 0.5749,
+     "stagnation": 0.3148
+    },
+    {
+     "unit": "docs/apis",
+     "tasks": 165,
+     "novelty": 0.779,
+     "structurality": 0.0931,
+     "zone": "disruption",
+     "evolution": 0.0671,
+     "maintenance": 0.026,
+     "disruption": 0.7119,
+     "stagnation": 0.195
+    },
+    {
+     "unit": "flink-runtime-web/web-dashboard",
+     "tasks": 161,
+     "novelty": 0.6155,
+     "structurality": 0.6667,
+     "zone": "evolution",
+     "evolution": 0.3482,
+     "maintenance": 0.3185,
+     "disruption": 0.2673,
+     "stagnation": 0.066
+    },
+    {
+     "unit": "docs",
+     "tasks": 148,
+     "novelty": 0.7422,
+     "structurality": 0.1921,
+     "zone": "disruption",
+     "evolution": 0.0956,
+     "maintenance": 0.0965,
+     "disruption": 0.6466,
+     "stagnation": 0.1613
+    },
+    {
+     "unit": "flink-table/flink-sql-parser",
+     "tasks": 144,
+     "novelty": 0.6049,
+     "structurality": 0.2536,
+     "zone": "disruption",
+     "evolution": 0.127,
+     "maintenance": 0.1266,
+     "disruption": 0.4779,
+     "stagnation": 0.2685
+    },
+    {
+     "unit": "flink-staging/flink-streaming",
+     "tasks": 144,
+     "novelty": 0.8198,
+     "structurality": 0.7023,
+     "zone": "evolution",
+     "evolution": 0.5616,
+     "maintenance": 0.1408,
+     "disruption": 0.2583,
+     "stagnation": 0.0394
+    },
+    {
+     "unit": "flink-scala",
+     "tasks": 142,
+     "novelty": 0.7144,
+     "structurality": 0.1354,
+     "zone": "disruption",
+     "evolution": 0.1062,
+     "maintenance": 0.0293,
+     "disruption": 0.6082,
+     "stagnation": 0.2563
+    },
+    {
+     "unit": "flink-connectors/flink-connector-kinesis",
+     "tasks": 135,
+     "novelty": 0.6043,
+     "structurality": 0.5539,
+     "zone": "evolution",
+     "evolution": 0.2714,
+     "maintenance": 0.2825,
+     "disruption": 0.3329,
+     "stagnation": 0.1132
+    },
+    {
+     "unit": "flink-mesos",
+     "tasks": 130,
+     "novelty": 0.618,
+     "structurality": 0.2055,
+     "zone": "disruption",
+     "evolution": 0.0867,
+     "maintenance": 0.1188,
+     "disruption": 0.5313,
+     "stagnation": 0.2632
+    },
+    {
+     "unit": "flink-connectors/flink-connector-kafka-base",
+     "tasks": 118,
+     "novelty": 0.6601,
+     "structurality": 0.2256,
+     "zone": "disruption",
+     "evolution": 0.1274,
+     "maintenance": 0.0982,
+     "disruption": 0.5327,
+     "stagnation": 0.2417
+    },
+    {
+     "unit": "flink-libraries/flink-cep",
+     "tasks": 110,
+     "novelty": 0.5295,
+     "structurality": 0.6002,
+     "zone": "evolution",
+     "evolution": 0.2267,
+     "maintenance": 0.3735,
+     "disruption": 0.3028,
+     "stagnation": 0.097
+    },
+    {
+     "unit": "flink-test-utils-parent/flink-test-utils",
+     "tasks": 104,
+     "novelty": 0.7991,
+     "structurality": 0.0848,
+     "zone": "disruption",
+     "evolution": 0.0676,
+     "maintenance": 0.0172,
+     "disruption": 0.7314,
+     "stagnation": 0.1838
+    },
+    {
+     "unit": "flink-table/flink-sql-gateway",
+     "tasks": 103,
+     "novelty": 0.6718,
+     "structurality": 0.3199,
+     "zone": "disruption",
+     "evolution": 0.1883,
+     "maintenance": 0.1316,
+     "disruption": 0.4835,
+     "stagnation": 0.1966
+    },
+    {
+     "unit": "docs/data",
+     "tasks": 102,
+     "novelty": 0.3117,
+     "structurality": 0.0873,
+     "zone": "stagnation",
+     "evolution": 0.002,
+     "maintenance": 0.0853,
+     "disruption": 0.3098,
+     "stagnation": 0.6029
+    },
+    {
+     "unit": "flink-connectors/flink-connector-files",
+     "tasks": 102,
+     "novelty": 0.8481,
+     "structurality": 0.2966,
+     "zone": "disruption",
+     "evolution": 0.2332,
+     "maintenance": 0.0634,
+     "disruption": 0.6149,
+     "stagnation": 0.0885
+    },
+    {
+     "unit": "tools",
+     "tasks": 98,
+     "novelty": 0.6654,
+     "structurality": 0.0516,
+     "zone": "disruption",
+     "evolution": 0.0258,
+     "maintenance": 0.0258,
+     "disruption": 0.6396,
+     "stagnation": 0.3089
+    },
+    {
+     "unit": "docs/monitoring",
+     "tasks": 98,
+     "novelty": 0.6816,
+     "structurality": 0.1074,
+     "zone": "disruption",
+     "evolution": 0.0294,
+     "maintenance": 0.0781,
+     "disruption": 0.6522,
+     "stagnation": 0.2403
+    },
+    {
+     "unit": "tools/ci",
+     "tasks": 97,
+     "novelty": 0.6459,
+     "structurality": 0.2122,
+     "zone": "disruption",
+     "evolution": 0.1127,
+     "maintenance": 0.0996,
+     "disruption": 0.5333,
+     "stagnation": 0.2545
+    },
+    {
+     "unit": "flink-table/flink-table-api-java-bridge",
+     "tasks": 89,
+     "novelty": 0.771,
+     "structurality": 0.1856,
+     "zone": "disruption",
+     "evolution": 0.1089,
+     "maintenance": 0.0767,
+     "disruption": 0.6621,
+     "stagnation": 0.1523
+    },
+    {
+     "unit": "flink-contrib/flink-statebackend-rocksdb",
+     "tasks": 84,
+     "novelty": 0.5985,
+     "structurality": 0.2472,
+     "zone": "disruption",
+     "evolution": 0.1024,
+     "maintenance": 0.1448,
+     "disruption": 0.4961,
+     "stagnation": 0.2567
+    },
+    {
+     "unit": "flink-formats/flink-avro",
+     "tasks": 84,
+     "novelty": 0.8126,
+     "structurality": 0.3312,
+     "zone": "disruption",
+     "evolution": 0.2086,
+     "maintenance": 0.1225,
+     "disruption": 0.6039,
+     "stagnation": 0.0649
+    },
+    {
+     "unit": "flink-test-utils-parent/flink-test-utils-junit",
+     "tasks": 83,
+     "novelty": 0.8399,
+     "structurality": 0.107,
+     "zone": "disruption",
+     "evolution": 0.0787,
+     "maintenance": 0.0283,
+     "disruption": 0.7613,
+     "stagnation": 0.1317
+    },
+    {
+     "unit": "flink-libraries/flink-gelly",
+     "tasks": 83,
+     "novelty": 0.8241,
+     "structurality": 0.4778,
+     "zone": "disruption",
+     "evolution": 0.3583,
+     "maintenance": 0.1195,
+     "disruption": 0.4658,
+     "stagnation": 0.0564
+    },
+    {
+     "unit": "flink-connectors/flink-connector-base",
+     "tasks": 82,
+     "novelty": 0.6581,
+     "structurality": 0.4559,
+     "zone": "disruption",
+     "evolution": 0.201,
+     "maintenance": 0.2549,
+     "disruption": 0.4572,
+     "stagnation": 0.0869
+    },
+    {
+     "unit": "tools/azure-pipelines",
+     "tasks": 80,
+     "novelty": 0.4875,
+     "structurality": 0.1039,
+     "zone": "stagnation",
+     "evolution": 0.0442,
+     "maintenance": 0.0597,
+     "disruption": 0.4433,
+     "stagnation": 0.4528
+    },
+    {
+     "unit": "flink-formats/flink-parquet",
+     "tasks": 80,
+     "novelty": 0.6698,
+     "structurality": 0.3492,
+     "zone": "disruption",
+     "evolution": 0.1661,
+     "maintenance": 0.1831,
+     "disruption": 0.5037,
+     "stagnation": 0.1471
+    },
+    {
+     "unit": "flink-libraries/flink-state-processing-api",
+     "tasks": 79,
+     "novelty": 0.7264,
+     "structurality": 0.2854,
+     "zone": "disruption",
+     "evolution": 0.1508,
+     "maintenance": 0.1346,
+     "disruption": 0.5756,
+     "stagnation": 0.1389
+    },
+    {
+     "unit": "docs/setup",
+     "tasks": 74,
+     "novelty": 0.7509,
+     "structurality": 0.0578,
+     "zone": "disruption",
+     "evolution": 0.0451,
+     "maintenance": 0.0127,
+     "disruption": 0.7058,
+     "stagnation": 0.2364
+    },
+    {
+     "unit": "flink-examples/flink-examples-streaming",
+     "tasks": 73,
+     "novelty": 0.7898,
+     "structurality": 0.2167,
+     "zone": "disruption",
+     "evolution": 0.1649,
+     "maintenance": 0.0518,
+     "disruption": 0.6249,
+     "stagnation": 0.1584
+    },
+    {
+     "unit": "flink-connectors/flink-connector-jdbc",
+     "tasks": 72,
+     "novelty": 0.7949,
+     "structurality": 0.637,
+     "zone": "evolution",
+     "evolution": 0.4447,
+     "maintenance": 0.1923,
+     "disruption": 0.3503,
+     "stagnation": 0.0128
+    },
+    {
+     "unit": "flink-optimizer",
+     "tasks": 71,
+     "novelty": 0.8714,
+     "structurality": 0.1776,
+     "zone": "disruption",
+     "evolution": 0.1652,
+     "maintenance": 0.0124,
+     "disruption": 0.7062,
+     "stagnation": 0.1162
+    },
+    {
+     "unit": "flink-formats/flink-json",
+     "tasks": 67,
+     "novelty": 0.6621,
+     "structurality": 0.4316,
+     "zone": "disruption",
+     "evolution": 0.2008,
+     "maintenance": 0.2307,
+     "disruption": 0.4612,
+     "stagnation": 0.1072
+    },
+    {
+     "unit": "flink-connectors/flink-connector-elasticsearch-base",
+     "tasks": 66,
+     "novelty": 0.6807,
+     "structurality": 0.2029,
+     "zone": "disruption",
+     "evolution": 0.1079,
+     "maintenance": 0.095,
+     "disruption": 0.5728,
+     "stagnation": 0.2243
+    },
+    {
+     "unit": "flink-filesystems/flink-s3-fs-presto",
+     "tasks": 65,
+     "novelty": 0.412,
+     "structurality": 0.0778,
+     "zone": "stagnation",
+     "evolution": 0.0241,
+     "maintenance": 0.0537,
+     "disruption": 0.3879,
+     "stagnation": 0.5343
+    },
+    {
+     "unit": "flink-docs",
+     "tasks": 65,
+     "novelty": 0.6613,
+     "structurality": 0.1353,
+     "zone": "disruption",
+     "evolution": 0.0572,
+     "maintenance": 0.0781,
+     "disruption": 0.6041,
+     "stagnation": 0.2606
+    },
+    {
+     "unit": "tools/maven",
+     "tasks": 62,
+     "novelty": 0.9117,
+     "structurality": 0.0386,
+     "zone": "disruption",
+     "evolution": 0.026,
+     "maintenance": 0.0125,
+     "disruption": 0.8857,
+     "stagnation": 0.0758
+    },
+    {
+     "unit": "flink-filesystems/flink-s3-fs-hadoop",
+     "tasks": 61,
+     "novelty": 0.4489,
+     "structurality": 0.0382,
+     "zone": "stagnation",
+     "evolution": 0.0246,
+     "maintenance": 0.0135,
+     "disruption": 0.4243,
+     "stagnation": 0.5376
+    },
+    {
+     "unit": "docs/static",
+     "tasks": 61,
+     "novelty": 0.7792,
+     "structurality": 0.051,
+     "zone": "disruption",
+     "evolution": 0.0494,
+     "maintenance": 0.0016,
+     "disruption": 0.7298,
+     "stagnation": 0.2192
+    },
+    {
+     "unit": "flink-connectors/flink-connector-cassandra",
+     "tasks": 59,
+     "novelty": 0.7109,
+     "structurality": 0.2827,
+     "zone": "disruption",
+     "evolution": 0.1751,
+     "maintenance": 0.1077,
+     "disruption": 0.5359,
+     "stagnation": 0.1814
+    },
+    {
+     "unit": "flink-connectors/flink-connector-kafka-0.11",
+     "tasks": 55,
+     "novelty": 0.6186,
+     "structurality": 0.1387,
+     "zone": "disruption",
+     "evolution": 0.083,
+     "maintenance": 0.0557,
+     "disruption": 0.5356,
+     "stagnation": 0.3257
+    },
+    {
+     "unit": "flink-quickstart/flink-quickstart-java",
+     "tasks": 53,
+     "novelty": 0.3586,
+     "structurality": 0.0288,
+     "zone": "stagnation",
+     "evolution": 0.017,
+     "maintenance": 0.0118,
+     "disruption": 0.3416,
+     "stagnation": 0.6296
+    },
+    {
+     "unit": "flink-python/dev",
+     "tasks": 53,
+     "novelty": 0.6147,
+     "structurality": 0.045,
+     "zone": "disruption",
+     "evolution": 0.0434,
+     "maintenance": 0.0016,
+     "disruption": 0.5712,
+     "stagnation": 0.3838
+    },
+    {
+     "unit": "flink-end-to-end-tests/flink-end-to-end-tests-common",
+     "tasks": 53,
+     "novelty": 0.7577,
+     "structurality": 0.309,
+     "zone": "disruption",
+     "evolution": 0.1736,
+     "maintenance": 0.1354,
+     "disruption": 0.5842,
+     "stagnation": 0.1069
+    },
+    {
+     "unit": "flink-connectors/flink-connector-kafka-0.10",
+     "tasks": 52,
+     "novelty": 0.5335,
+     "structurality": 0.0318,
+     "zone": "disruption",
+     "evolution": 0.0185,
+     "maintenance": 0.0133,
+     "disruption": 0.515,
+     "stagnation": 0.4532
+    },
+    {
+     "unit": "flink-end-to-end-tests/flink-end-to-end-tests-common-kafka",
+     "tasks": 52,
+     "novelty": 0.6964,
+     "structurality": 0.1922,
+     "zone": "disruption",
+     "evolution": 0.0691,
+     "maintenance": 0.1231,
+     "disruption": 0.6273,
+     "stagnation": 0.1805
+    },
+    {
+     "unit": "flink-quickstart/flink-quickstart-scala",
+     "tasks": 51,
+     "novelty": 0.347,
+     "structurality": 0.022,
+     "zone": "stagnation",
+     "evolution": 0.0121,
+     "maintenance": 0.0099,
+     "disruption": 0.335,
+     "stagnation": 0.643
+    },
+    {
+     "unit": "flink-scala-shell",
+     "tasks": 51,
+     "novelty": 0.5893,
+     "structurality": 0.2239,
+     "zone": "disruption",
+     "evolution": 0.0949,
+     "maintenance": 0.129,
+     "disruption": 0.4944,
+     "stagnation": 0.2817
+    },
+    {
+     "unit": "flink-fs-tests",
+     "tasks": 51,
+     "novelty": 0.7461,
+     "structurality": 0.1201,
+     "zone": "disruption",
+     "evolution": 0.1097,
+     "maintenance": 0.0104,
+     "disruption": 0.6364,
+     "stagnation": 0.2436
+    },
+    {
+     "unit": "flink-formats/flink-orc",
+     "tasks": 51,
+     "novelty": 0.7292,
+     "structurality": 0.3167,
+     "zone": "disruption",
+     "evolution": 0.2205,
+     "maintenance": 0.0962,
+     "disruption": 0.5087,
+     "stagnation": 0.1746
+    },
+    {
+     "unit": "flink-connectors/flink-connector-pulsar",
+     "tasks": 51,
+     "novelty": 0.727,
+     "structurality": 0.5485,
+     "zone": "evolution",
+     "evolution": 0.429,
+     "maintenance": 0.1195,
+     "disruption": 0.298,
+     "stagnation": 0.1535
+    },
+    {
+     "unit": "flink-python/docs",
+     "tasks": 50,
+     "novelty": 0.5278,
+     "structurality": 0.0061,
+     "zone": "disruption",
+     "evolution": 0.0061,
+     "maintenance": 0.0,
+     "disruption": 0.5218,
+     "stagnation": 0.4722
+    },
+    {
+     "unit": "tools/travis",
+     "tasks": 49,
+     "novelty": 0.7017,
+     "structurality": 0.0321,
+     "zone": "disruption",
+     "evolution": 0.0173,
+     "maintenance": 0.0148,
+     "disruption": 0.6844,
+     "stagnation": 0.2835
+    },
+    {
+     "unit": "flink-formats/flink-csv",
+     "tasks": 48,
+     "novelty": 0.8316,
+     "structurality": 0.3724,
+     "zone": "disruption",
+     "evolution": 0.241,
+     "maintenance": 0.1314,
+     "disruption": 0.5906,
+     "stagnation": 0.037
+    },
+    {
+     "unit": "flink-state-backends/flink-statebackend-changelog",
+     "tasks": 47,
+     "novelty": 0.6929,
+     "structurality": 0.2822,
+     "zone": "disruption",
+     "evolution": 0.1264,
+     "maintenance": 0.1558,
+     "disruption": 0.5665,
+     "stagnation": 0.1513
+    },
+    {
+     "unit": "flink-libraries/flink-gelly-examples",
+     "tasks": 46,
+     "novelty": 0.8417,
+     "structurality": 0.2516,
+     "zone": "disruption",
+     "evolution": 0.2073,
+     "maintenance": 0.0443,
+     "disruption": 0.6344,
+     "stagnation": 0.114
+    },
+    {
+     "unit": "flink-connectors/flink-connector-elasticsearch6",
+     "tasks": 45,
+     "novelty": 0.6883,
+     "structurality": 0.0473,
+     "zone": "disruption",
+     "evolution": 0.0337,
+     "maintenance": 0.0136,
+     "disruption": 0.6546,
+     "stagnation": 0.2981
+    },
+    {
+     "unit": "docs/libs",
+     "tasks": 45,
+     "novelty": 0.7435,
+     "structurality": 0.143,
+     "zone": "disruption",
+     "evolution": 0.1131,
+     "maintenance": 0.03,
+     "disruption": 0.6304,
+     "stagnation": 0.2266
+    },
+    {
+     "unit": "flink-connectors/flink-connector-elasticsearch7",
+     "tasks": 43,
+     "novelty": 0.6936,
+     "structurality": 0.0956,
+     "zone": "disruption",
+     "evolution": 0.0559,
+     "maintenance": 0.0397,
+     "disruption": 0.6378,
+     "stagnation": 0.2667
+    },
+    {
+     "unit": "flink-libraries/flink-python",
+     "tasks": 43,
+     "novelty": 0.5233,
+     "structurality": 0.7107,
+     "zone": "evolution",
+     "evolution": 0.289,
+     "maintenance": 0.4217,
+     "disruption": 0.2343,
+     "stagnation": 0.055
+    },
+    {
+     "unit": "docs/fig",
+     "tasks": 43,
+     "novelty": 0.9476,
+     "structurality": 0.1678,
+     "zone": "disruption",
+     "evolution": 0.1179,
+     "maintenance": 0.0499,
+     "disruption": 0.8298,
+     "stagnation": 0.0024
+    },
+    {
+     "unit": "flink-connectors/flink-connector-kafka-0.9",
+     "tasks": 42,
+     "novelty": 0.5446,
+     "structurality": 0.0412,
+     "zone": "disruption",
+     "evolution": 0.0159,
+     "maintenance": 0.0254,
+     "disruption": 0.5287,
+     "stagnation": 0.4301
+    },
+    {
+     "unit": "tools/releasing",
+     "tasks": 40,
+     "novelty": 0.6126,
+     "structurality": 0.2193,
+     "zone": "disruption",
+     "evolution": 0.0953,
+     "maintenance": 0.124,
+     "disruption": 0.5173,
+     "stagnation": 0.2634
+    },
+    {
+     "unit": "flink-table/flink-sql-parser-hive",
+     "tasks": 39,
+     "novelty": 0.5406,
+     "structurality": 0.107,
+     "zone": "disruption",
+     "evolution": 0.0449,
+     "maintenance": 0.0621,
+     "disruption": 0.4957,
+     "stagnation": 0.3973
+    },
+    {
+     "unit": "flink-metrics/flink-metrics-jmx",
+     "tasks": 39,
+     "novelty": 0.6097,
+     "structurality": 0.1044,
+     "zone": "disruption",
+     "evolution": 0.0237,
+     "maintenance": 0.0807,
+     "disruption": 0.586,
+     "stagnation": 0.3096
+    },
+    {
+     "unit": "flink-metrics/flink-metrics-prometheus",
+     "tasks": 39,
+     "novelty": 0.5863,
+     "structurality": 0.2687,
+     "zone": "disruption",
+     "evolution": 0.0976,
+     "maintenance": 0.171,
+     "disruption": 0.4887,
+     "stagnation": 0.2427
+    },
+    {
+     "unit": "flink-connectors/flink-connector-filesystem",
+     "tasks": 39,
+     "novelty": 0.7588,
+     "structurality": 0.3585,
+     "zone": "disruption",
+     "evolution": 0.2489,
+     "maintenance": 0.1096,
+     "disruption": 0.5099,
+     "stagnation": 0.1315
+    },
+    {
+     "unit": "flink-staging/flink-gelly",
+     "tasks": 39,
+     "novelty": 0.8384,
+     "structurality": 0.7296,
+     "zone": "evolution",
+     "evolution": 0.6167,
+     "maintenance": 0.1129,
+     "disruption": 0.2217,
+     "stagnation": 0.0487
+    },
+    {
+     "unit": "flink-connectors",
+     "tasks": 38,
+     "novelty": 0.647,
+     "structurality": 0.0,
+     "zone": "disruption",
+     "evolution": 0.0,
+     "maintenance": 0.0,
+     "disruption": 0.647,
+     "stagnation": 0.353
+    },
+    {
+     "unit": "flink-architecture-tests/flink-architecture-tests-production",
+     "tasks": 38,
+     "novelty": 0.8212,
+     "structurality": 0.1556,
+     "zone": "disruption",
+     "evolution": 0.1068,
+     "maintenance": 0.0488,
+     "disruption": 0.7144,
+     "stagnation": 0.1299
+    },
+    {
+     "unit": "flink-libraries/flink-cep-scala",
+     "tasks": 36,
+     "novelty": 0.4299,
+     "structurality": 0.0529,
+     "zone": "stagnation",
+     "evolution": 0.0273,
+     "maintenance": 0.0256,
+     "disruption": 0.4026,
+     "stagnation": 0.5445
+    },
+    {
+     "unit": "flink-filesystems/flink-hadoop-fs",
+     "tasks": 36,
+     "novelty": 0.7609,
+     "structurality": 0.1603,
+     "zone": "disruption",
+     "evolution": 0.1063,
+     "maintenance": 0.0541,
+     "disruption": 0.6546,
+     "stagnation": 0.1851
+    },
+    {
+     "unit": "flink-streaming-connectors/flink-connector-kafka-base",
+     "tasks": 36,
+     "novelty": 0.7973,
+     "structurality": 0.1277,
+     "zone": "disruption",
+     "evolution": 0.0999,
+     "maintenance": 0.0277,
+     "disruption": 0.6974,
+     "stagnation": 0.175
+    },
+    {
+     "unit": "flink-examples/flink-examples-table",
+     "tasks": 36,
+     "novelty": 0.7166,
+     "structurality": 0.3269,
+     "zone": "disruption",
+     "evolution": 0.21,
+     "maintenance": 0.1168,
+     "disruption": 0.5065,
+     "stagnation": 0.1666
+    },
+    {
+     "unit": "flink-queryable-state/flink-queryable-state-runtime",
+     "tasks": 36,
+     "novelty": 0.8517,
+     "structurality": 0.1274,
+     "zone": "disruption",
+     "evolution": 0.0994,
+     "maintenance": 0.028,
+     "disruption": 0.7523,
+     "stagnation": 0.1203
+    },
+    {
+     "unit": "flink-table/flink-table-api-scala",
+     "tasks": 35,
+     "novelty": 0.5843,
+     "structurality": 0.0522,
+     "zone": "disruption",
+     "evolution": 0.0478,
+     "maintenance": 0.0044,
+     "disruption": 0.5365,
+     "stagnation": 0.4113
+    },
+    {
+     "unit": "flink-table/flink-table-api-scala-bridge",
+     "tasks": 35,
+     "novelty": 0.7361,
+     "structurality": 0.0418,
+     "zone": "disruption",
+     "evolution": 0.031,
+     "maintenance": 0.0108,
+     "disruption": 0.7051,
+     "stagnation": 0.2531
+    },
+    {
+     "unit": "flink-connectors/flink-jdbc",
+     "tasks": 35,
+     "novelty": 0.6581,
+     "structurality": 0.722,
+     "zone": "evolution",
+     "evolution": 0.4406,
+     "maintenance": 0.2813,
+     "disruption": 0.2175,
+     "stagnation": 0.0606
+    },
+    {
+     "unit": "flink-test-utils",
+     "tasks": 33,
+     "novelty": 0.8495,
+     "structurality": 0.0383,
+     "zone": "disruption",
+     "evolution": 0.0383,
+     "maintenance": 0.0,
+     "disruption": 0.8111,
+     "stagnation": 0.1505
+    },
+    {
+     "unit": "flink-addons/flink-streaming",
+     "tasks": 33,
+     "novelty": 0.885,
+     "structurality": 0.6809,
+     "zone": "evolution",
+     "evolution": 0.5748,
+     "maintenance": 0.1062,
+     "disruption": 0.3102,
+     "stagnation": 0.0088
+    },
+    {
+     "unit": "flink-connectors/flink-connector-kafka-0.8",
+     "tasks": 32,
+     "novelty": 0.5646,
+     "structurality": 0.06,
+     "zone": "disruption",
+     "evolution": 0.0539,
+     "maintenance": 0.006,
+     "disruption": 0.5106,
+     "stagnation": 0.4294
+    },
+    {
+     "unit": "flink-libraries/flink-gelly-scala",
+     "tasks": 32,
+     "novelty": 0.6966,
+     "structurality": 0.0497,
+     "zone": "disruption",
+     "evolution": 0.0462,
+     "maintenance": 0.0035,
+     "disruption": 0.6504,
+     "stagnation": 0.2999
+    },
+    {
+     "unit": "flink-rpc/flink-rpc-akka",
+     "tasks": 32,
+     "novelty": 0.6853,
+     "structurality": 0.3904,
+     "zone": "disruption",
+     "evolution": 0.1889,
+     "maintenance": 0.2015,
+     "disruption": 0.4964,
+     "stagnation": 0.1132
+    },
+    {
+     "unit": "flink-compiler",
+     "tasks": 32,
+     "novelty": 0.9058,
+     "structurality": 0.3963,
+     "zone": "disruption",
+     "evolution": 0.3196,
+     "maintenance": 0.0767,
+     "disruption": 0.5861,
+     "stagnation": 0.0175
+    },
+    {
+     "unit": "flink-state-backends/flink-statebackend-forst",
+     "tasks": 31,
+     "novelty": 0.7249,
+     "structurality": 0.4259,
+     "zone": "disruption",
+     "evolution": 0.2423,
+     "maintenance": 0.1836,
+     "disruption": 0.4826,
+     "stagnation": 0.0915
+    },
+    {
+     "unit": "flink-staging/flink-ml",
+     "tasks": 31,
+     "novelty": 0.6223,
+     "structurality": 0.6287,
+     "zone": "evolution",
+     "evolution": 0.3006,
+     "maintenance": 0.3282,
+     "disruption": 0.3217,
+     "stagnation": 0.0496
+    },
+    {
+     "unit": "flink-filesystems/flink-s3-fs-base",
+     "tasks": 29,
+     "novelty": 0.6559,
+     "structurality": 0.2045,
+     "zone": "disruption",
+     "evolution": 0.0818,
+     "maintenance": 0.1226,
+     "disruption": 0.5741,
+     "stagnation": 0.2215
+    },
+    {
+     "unit": "flink-metrics/flink-metrics-core",
+     "tasks": 29,
+     "novelty": 0.8192,
+     "structurality": 0.1807,
+     "zone": "disruption",
+     "evolution": 0.1156,
+     "maintenance": 0.0651,
+     "disruption": 0.7037,
+     "stagnation": 0.1157
+    },
+    {
+     "unit": "flink-filesystems/flink-fs-hadoop-shaded",
+     "tasks": 28,
+     "novelty": 0.3743,
+     "structurality": 0.0793,
+     "zone": "stagnation",
+     "evolution": 0.0516,
+     "maintenance": 0.0277,
+     "disruption": 0.3227,
+     "stagnation": 0.598
+    },
+    {
+     "unit": "flink-formats/flink-avro-confluent-registry",
+     "tasks": 28,
+     "novelty": 0.6621,
+     "structurality": 0.1281,
+     "zone": "disruption",
+     "evolution": 0.0736,
+     "maintenance": 0.0545,
+     "disruption": 0.5885,
+     "stagnation": 0.2834
+    },
+    {
+     "unit": "flink-dstl/flink-dstl-dfs",
+     "tasks": 28,
+     "novelty": 0.6689,
+     "structurality": 0.3262,
+     "zone": "disruption",
+     "evolution": 0.1717,
+     "maintenance": 0.1545,
+     "disruption": 0.4972,
+     "stagnation": 0.1766
+    },
+    {
+     "unit": "flink-connectors/flink-connector-elasticsearch5",
+     "tasks": 27,
+     "novelty": 0.4646,
+     "structurality": 0.0237,
+     "zone": "stagnation",
+     "evolution": 0.0129,
+     "maintenance": 0.0108,
+     "disruption": 0.4517,
+     "stagnation": 0.5246
+    },
+    {
+     "unit": "flink-queryable-state/flink-queryable-state-client-java",
+     "tasks": 26,
+     "novelty": 0.8862,
+     "structurality": 0.033,
+     "zone": "disruption",
+     "evolution": 0.0319,
+     "maintenance": 0.001,
+     "disruption": 0.8543,
+     "stagnation": 0.1127
+    },
+    {
+     "unit": "flink-filesystems/flink-oss-fs-hadoop",
+     "tasks": 25,
+     "novelty": 0.6439,
+     "structurality": 0.1357,
+     "zone": "disruption",
+     "evolution": 0.1193,
+     "maintenance": 0.0164,
+     "disruption": 0.5246,
+     "stagnation": 0.3397
+    },
+    {
+     "unit": "flink-table/flink-sql-gateway-api",
+     "tasks": 25,
+     "novelty": 0.6753,
+     "structurality": 0.1203,
+     "zone": "disruption",
+     "evolution": 0.0837,
+     "maintenance": 0.0366,
+     "disruption": 0.5916,
+     "stagnation": 0.2881
+    },
+    {
+     "unit": "docs/redirects",
+     "tasks": 25,
+     "novelty": 0.9854,
+     "structurality": 0.1755,
+     "zone": "disruption",
+     "evolution": 0.1745,
+     "maintenance": 0.001,
+     "disruption": 0.8109,
+     "stagnation": 0.0136
+    },
+    {
+     "unit": "flink-end-to-end-tests/flink-datastream-allround-test",
+     "tasks": 24,
+     "novelty": 0.6834,
+     "structurality": 0.2746,
+     "zone": "disruption",
+     "evolution": 0.1768,
+     "maintenance": 0.0979,
+     "disruption": 0.5067,
+     "stagnation": 0.2187
+    },
+    {
+     "unit": "flink-annotations",
+     "tasks": 24,
+     "novelty": 0.8034,
+     "structurality": 0.0444,
+     "zone": "disruption",
+     "evolution": 0.0444,
+     "maintenance": 0.0,
+     "disruption": 0.759,
+     "stagnation": 0.1966
+    },
+    {
+     "unit": "flink-test-utils-parent/flink-connector-test-utils",
+     "tasks": 24,
+     "novelty": 0.8677,
+     "structurality": 0.1081,
+     "zone": "disruption",
+     "evolution": 0.0967,
+     "maintenance": 0.0114,
+     "disruption": 0.771,
+     "stagnation": 0.1209
+    },
+    {
+     "unit": "flink-filesystems/flink-azure-fs-hadoop",
+     "tasks": 23,
+     "novelty": 0.4292,
+     "structurality": 0.082,
+     "zone": "stagnation",
+     "evolution": 0.0347,
+     "maintenance": 0.0473,
+     "disruption": 0.3945,
+     "stagnation": 0.5235
+    },
+    {
+     "unit": "flink-streaming-connectors/flink-connector-kafka-0.9",
+     "tasks": 23,
+     "novelty": 0.7191,
+     "structurality": 0.153,
+     "zone": "disruption",
+     "evolution": 0.0926,
+     "maintenance": 0.0603,
+     "disruption": 0.6265,
+     "stagnation": 0.2205
+    },
+    {
+     "unit": "flink-streaming-connectors/flink-connector-kafka-0.8",
+     "tasks": 23,
+     "novelty": 0.7483,
+     "structurality": 0.2081,
+     "zone": "disruption",
+     "evolution": 0.1523,
+     "maintenance": 0.0558,
+     "disruption": 0.596,
+     "stagnation": 0.1959
+    },
+    {
+     "unit": "flink-metrics/flink-metrics-influxdb",
+     "tasks": 23,
+     "novelty": 0.679,
+     "structurality": 0.2383,
+     "zone": "disruption",
+     "evolution": 0.0714,
+     "maintenance": 0.1668,
+     "disruption": 0.6075,
+     "stagnation": 0.1542
+    },
+    {
+     "unit": "docs/getting-started",
+     "tasks": 23,
+     "novelty": 0.6705,
+     "structurality": 0.3776,
+     "zone": "disruption",
+     "evolution": 0.1088,
+     "maintenance": 0.2688,
+     "disruption": 0.5617,
+     "stagnation": 0.0607
+    },
+    {
+     "unit": "flink-connectors/flink-connector-rabbitmq",
+     "tasks": 23,
+     "novelty": 0.6948,
+     "structurality": 0.5047,
+     "zone": "evolution",
+     "evolution": 0.2433,
+     "maintenance": 0.2614,
+     "disruption": 0.4515,
+     "stagnation": 0.0438
+    },
+    {
+     "unit": "docs/internals",
+     "tasks": 23,
+     "novelty": 0.9667,
+     "structurality": 0.0291,
+     "zone": "disruption",
+     "evolution": 0.0229,
+     "maintenance": 0.0061,
+     "disruption": 0.9438,
+     "stagnation": 0.0271
+    },
+    {
+     "unit": "flink-metrics/flink-metrics-statsd",
+     "tasks": 22,
+     "novelty": 0.6953,
+     "structurality": 0.1317,
+     "zone": "disruption",
+     "evolution": 0.1212,
+     "maintenance": 0.0105,
+     "disruption": 0.5741,
+     "stagnation": 0.2942
+    },
+    {
+     "unit": "flink-connectors/flink-connector-aws-kinesis-firehose",
+     "tasks": 22,
+     "novelty": 0.6949,
+     "structurality": 0.1373,
+     "zone": "disruption",
+     "evolution": 0.1204,
+     "maintenance": 0.0169,
+     "disruption": 0.5745,
+     "stagnation": 0.2881
+    },
+    {
+     "unit": "flink-libraries/flink-ml",
+     "tasks": 22,
+     "novelty": 0.8993,
+     "structurality": 0.305,
+     "zone": "disruption",
+     "evolution": 0.2979,
+     "maintenance": 0.0071,
+     "disruption": 0.6014,
+     "stagnation": 0.0936
+    },
+    {
+     "unit": "docs/quickstart",
+     "tasks": 22,
+     "novelty": 0.6938,
+     "structurality": 0.2571,
+     "zone": "disruption",
+     "evolution": 0.0286,
+     "maintenance": 0.2285,
+     "disruption": 0.6652,
+     "stagnation": 0.0778
+    },
+    {
+     "unit": "flink-formats/flink-sql-avro-confluent-registry",
+     "tasks": 21,
+     "novelty": 0.3407,
+     "structurality": 0.0302,
+     "zone": "stagnation",
+     "evolution": 0.0263,
+     "maintenance": 0.004,
+     "disruption": 0.3145,
+     "stagnation": 0.6553
+    },
+    {
+     "unit": "flink-table",
+     "tasks": 21,
+     "novelty": 0.6801,
+     "structurality": 0.0076,
+     "zone": "disruption",
+     "evolution": 0.0014,
+     "maintenance": 0.0062,
+     "disruption": 0.6786,
+     "stagnation": 0.3138
+    },
+    {
+     "unit": "flink-end-to-end-tests/flink-sql-client-test",
+     "tasks": 21,
+     "novelty": 0.7443,
+     "structurality": 0.0313,
+     "zone": "disruption",
+     "evolution": 0.0313,
+     "maintenance": 0.0,
+     "disruption": 0.7129,
+     "stagnation": 0.2557
+    },
+    {
+     "unit": "flink-metrics/flink-metrics-dropwizard",
+     "tasks": 21,
+     "novelty": 0.6756,
+     "structurality": 0.2096,
+     "zone": "disruption",
+     "evolution": 0.1264,
+     "maintenance": 0.0832,
+     "disruption": 0.5492,
+     "stagnation": 0.2412
+    },
+    {
+     "unit": "flink-connectors/flink-hbase",
+     "tasks": 21,
+     "novelty": 0.7898,
+     "structurality": 0.2056,
+     "zone": "disruption",
+     "evolution": 0.181,
+     "maintenance": 0.0247,
+     "disruption": 0.6088,
+     "stagnation": 0.1855
+    },
+    {
+     "unit": "flink-metrics/flink-metrics-datadog",
+     "tasks": 21,
+     "novelty": 0.5316,
+     "structurality": 0.4498,
+     "zone": "disruption",
+     "evolution": 0.164,
+     "maintenance": 0.2859,
+     "disruption": 0.3677,
+     "stagnation": 0.1825
+    },
+    {
+     "unit": "docs/concepts",
+     "tasks": 21,
+     "novelty": 0.795,
+     "structurality": 0.2486,
+     "zone": "disruption",
+     "evolution": 0.1291,
+     "maintenance": 0.1195,
+     "disruption": 0.6659,
+     "stagnation": 0.0855
+    },
+    {
+     "unit": "docs/flinkDev",
+     "tasks": 21,
+     "novelty": 0.6806,
+     "structurality": 0.2977,
+     "zone": "disruption",
+     "evolution": 0.0599,
+     "maintenance": 0.2378,
+     "disruption": 0.6206,
+     "stagnation": 0.0816
+    },
+    {
+     "unit": "flink-contrib/flink-storm",
+     "tasks": 21,
+     "novelty": 0.9303,
+     "structurality": 0.2115,
+     "zone": "disruption",
+     "evolution": 0.1922,
+     "maintenance": 0.0193,
+     "disruption": 0.7381,
+     "stagnation": 0.0504
+    },
+    {
+     "unit": "flink-libraries/flink-sql-client",
+     "tasks": 21,
+     "novelty": 0.7695,
+     "structurality": 0.5504,
+     "zone": "evolution",
+     "evolution": 0.3647,
+     "maintenance": 0.1857,
+     "disruption": 0.4048,
+     "stagnation": 0.0449
+    },
+    {
+     "unit": "docs/_layouts",
+     "tasks": 20,
+     "novelty": 0.6928,
+     "structurality": 0.0333,
+     "zone": "disruption",
+     "evolution": 0.0167,
+     "maintenance": 0.0167,
+     "disruption": 0.6762,
+     "stagnation": 0.2905
+    },
+    {
+     "unit": "flink-rpc/flink-rpc-core",
+     "tasks": 20,
+     "novelty": 0.7404,
+     "structurality": 0.129,
+     "zone": "disruption",
+     "evolution": 0.1283,
+     "maintenance": 0.0006,
+     "disruption": 0.6121,
+     "stagnation": 0.259
+    },
+    {
+     "unit": "flink-connectors/flink-connector-hbase-1.4",
+     "tasks": 20,
+     "novelty": 0.7942,
+     "structurality": 0.0371,
+     "zone": "disruption",
+     "evolution": 0.0303,
+     "maintenance": 0.0068,
+     "disruption": 0.7639,
+     "stagnation": 0.199
+    },
+    {
+     "unit": "flink-container",
+     "tasks": 20,
+     "novelty": 0.7425,
+     "structurality": 0.3384,
+     "zone": "disruption",
+     "evolution": 0.1134,
+     "maintenance": 0.225,
+     "disruption": 0.6291,
+     "stagnation": 0.0325
+    },
+    {
+     "unit": "flink-staging/flink-table",
+     "tasks": 20,
+     "novelty": 0.8949,
+     "structurality": 0.8186,
+     "zone": "evolution",
+     "evolution": 0.7168,
+     "maintenance": 0.1018,
+     "disruption": 0.1781,
+     "stagnation": 0.0033
+    }
+   ]
+  }
+ },
+ "growth": {
+  "growth_inside": 0.1555,
+  "growth_across": 0.0646,
+  "evolution": 0.2077,
+  "disruption": 0.17,
+  "maintenance": 0.2862,
+  "stagnation": 0.1159,
+  "tasks": 12192,
+  "novelty_as_now": 0.5978,
+  "growth": 0.2201,
+  "novelty_existing_files": 0.4843,
+  "tasks_adding_files": 4639
+ },
+ "words": {
+  "tasks_with_text": 17038,
+  "task_terms_df5": 8693,
+  "class_concepts": 2774,
+  "classes": 24025,
+  "tasks_to_code": 0.874,
+  "tasks_to_classes": 0.794,
+  "code_to_tasks": 0.8908,
+  "not_in_code": [
+   "lang",
+   "reflect",
+   "introduce",
+   "buildid",
+   "sun",
+   "due",
+   "delegatingmethodaccessorimpl",
+   "think",
+   "nativemethodaccessorimpl",
+   "elapsed",
+   "how",
+   "akka",
+   "propose",
+   "runworker",
+   "runners",
+   "introduced",
+   "want",
+   "invokemethod",
+   "streamtask",
+   "document",
+   "runreflectivecall",
+   "reflectivecallable",
+   "frameworkmethod",
+   "explosively",
+   "invokeexplosively"
+  ],
+  "unused_concepts_biggest": [
+   [
+    "bitmap",
+    66
+   ],
+   [
+    "ptf",
+    46
+   ],
+   [
+    "approx",
+    31
+   ],
+   [
+    "triton",
+    24
+   ],
+   [
+    "rescales",
+    24
+   ],
+   [
+    "telemetry",
+    21
+   ],
+   [
+    "rewriter",
+    19
+   ],
+   [
+    "recording",
+    16
+   ],
+   [
+    "mdc",
+    11
+   ],
+   [
+    "applier",
+    11
+   ],
+   [
+    "sqn",
+    10
+   ],
+   [
+    "seaweed",
+    9
+   ],
+   [
+    "ogg",
+    8
+   ],
+   [
+    "cse",
+    8
+   ],
+   [
+    "badge",
+    8
+   ],
+   [
+    "tester",
+    7
+   ],
+   [
+    "mixin",
+    6
+   ],
+   [
+    "udt",
+    6
+   ],
+   [
+    "humanize",
+    6
+   ],
+   [
+    "responder",
+    6
+   ],
+   [
+    "facet",
+    6
+   ],
+   [
+    "accum",
+    6
+   ],
+   [
+    "clashing",
+    5
+   ],
+   [
+    "triggerable",
+    5
+   ],
+   [
+    "cleanable",
+    5
+   ]
+  ],
+  "spread_median_units": 8,
+  "spread_one_unit": 0.0755,
+  "spread_5plus_units": 0.7162,
+  "most_spread": [
+   [
+    "source",
+    54
+   ],
+   [
+    "stream",
+    49
+   ],
+   [
+    "function",
+    48
+   ],
+   [
+    "output",
+    46
+   ],
+   [
+    "table",
+    42
+   ],
+   [
+    "state",
+    42
+   ],
+   [
+    "key",
+    42
+   ],
+   [
+    "options",
+    41
+   ],
+   [
+    "serializer",
+    39
+   ],
+   [
+    "sink",
+    37
+   ],
+   [
+    "class",
+    36
+   ],
+   [
+    "format",
+    36
+   ]
+  ]
+ }
+}

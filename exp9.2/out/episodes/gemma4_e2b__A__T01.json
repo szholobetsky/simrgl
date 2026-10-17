@@ -1,0 +1,35 @@
+{
+ "model": "gemma4:e2b",
+ "group": "A",
+ "task": "T01",
+ "answer": [],
+ "ranked": [],
+ "protocol_errors": 0,
+ "repeats": 0,
+ "dropped_turns_max": 0,
+ "prompt_tokens": 1254,
+ "output_tokens": 12,
+ "prompt_tokens_max": 643,
+ "seconds": 21.4,
+ "finished": true,
+ "turns": 2,
+ "rank_called": false,
+ "log": [
+  {
+   "turn": 1,
+   "reply": "ACTION: read sonar.properties\n",
+   "action": "read sonar.properties",
+   "result": "no such file in T01: sonar.properties",
+   "prompt_tokens": 611,
+   "dropped": 0
+  },
+  {
+   "turn": 2,
+   "reply": "ACTION: done",
+   "action": "done",
+   "result": "done",
+   "prompt_tokens": 643,
+   "dropped": 0
+  }
+ ]
+}

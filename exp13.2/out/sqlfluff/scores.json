@@ -1,0 +1,95 @@
+{
+ "_history": {
+  "commits": 7073,
+  "tasks": 4346,
+  "tasks_adding": 1703
+ },
+ "dir": {
+  "flat": {
+   "hit@1": 0.4,
+   "recall@1": 0.158,
+   "hit@3": 0.5,
+   "recall@3": 0.375,
+   "hit@5": 0.5,
+   "recall@5": 0.433,
+   "hit@10": 0.6,
+   "recall@10": 0.517
+  },
+  "simargl_units": {
+   "hit@1": 0.5,
+   "recall@1": 0.192,
+   "hit@3": 0.5,
+   "recall@3": 0.375,
+   "hit@5": 0.5,
+   "recall@5": 0.4,
+   "hit@10": 0.7,
+   "recall@10": 0.5
+  },
+  "oracle": {
+   "hit@1": 0.4,
+   "recall@1": 0.158,
+   "hit@3": 0.5,
+   "recall@3": 0.417,
+   "hit@5": 0.5,
+   "recall@5": 0.417,
+   "hit@10": 0.5,
+   "recall@10": 0.467
+  },
+  "prior": {
+   "hit@1": 0.1,
+   "recall@1": 0.05,
+   "hit@3": 0.1,
+   "recall@3": 0.1,
+   "hit@5": 0.2,
+   "recall@5": 0.125,
+   "hit@10": 0.5,
+   "recall@10": 0.283
+  },
+  "_tasks": 10,
+  "_rules": 2128
+ },
+ "parent": {
+  "flat": {
+   "hit@1": 0.7,
+   "recall@1": 0.317,
+   "hit@3": 0.7,
+   "recall@3": 0.633,
+   "hit@5": 0.7,
+   "recall@5": 0.633,
+   "hit@10": 0.8,
+   "recall@10": 0.8
+  },
+  "simargl_units": {
+   "hit@1": 0.6,
+   "recall@1": 0.267,
+   "hit@3": 0.7,
+   "recall@3": 0.633,
+   "hit@5": 0.7,
+   "recall@5": 0.667,
+   "hit@10": 0.8,
+   "recall@10": 0.8
+  },
+  "oracle": {
+   "hit@1": 0.7,
+   "recall@1": 0.317,
+   "hit@3": 0.7,
+   "recall@3": 0.667,
+   "hit@5": 0.7,
+   "recall@5": 0.667,
+   "hit@10": 0.7,
+   "recall@10": 0.7
+  },
+  "prior": {
+   "hit@1": 0.7,
+   "recall@1": 0.317,
+   "hit@3": 0.7,
+   "recall@3": 0.633,
+   "hit@5": 0.7,
+   "recall@5": 0.633,
+   "hit@10": 0.7,
+   "recall@10": 0.7
+  },
+  "_tasks": 10,
+  "_rules": 2387
+ }
+}

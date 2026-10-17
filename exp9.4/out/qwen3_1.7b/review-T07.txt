@@ -1,0 +1,6 @@
+server/sonar-web/src/main/js/apps/securityHotspots/SecurityHotspotsApp.tsx  
+server/sonar-web/src/main/js/apps/securityHotspots/SecurityHotspotsAppRenderer.tsx  
+server/sonar-web/src/main/js/apps/code/components/ComponentsHeader.tsx  
+server/sonar-web/src/main/js/apps/code/css/code.css  
+server/sonar-web/src/main/js/apps/code/__tests__/__snapshots__/ComponentsHeader-test.tsx.snap  
+server/sonar-web/server/webapi/SearchAction.java

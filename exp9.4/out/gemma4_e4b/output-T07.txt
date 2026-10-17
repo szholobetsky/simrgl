@@ -1,0 +1,9 @@
+Based on the structure of `server/sonar-web/src/main/js/apps/projects/utils.ts`, you need to introduce new constants representing "Security Review Rating" into your sortable metrics arrays and mapping object.
+
+Here is an outline of where changes should be made within **`server/sonar-web/src/main/js/apps/projects/utils.ts`**:
+
+1.  **Update `SORTING_METRICS`:** Add a general entry for security review rating (e.g., `{ value: 'securityReviewRating' }`).
+2.  **Update `SORTING_LEAK_METRICS`:** Add a specific leak metric entry for security review rating (e.g., `{ value: 'new_securityReviewRating', class: '...' }`).
+3.  **Update `SORTING_SWITCH`:** Map both `'security'` and potentially add mappings related to `"rating"` or `"reviewRating"` if they are used elsewhere, ensuring that the correct key maps to the newly defined values in the respective lists.
+
+This file appears to contain all necessary definitions for project sorting options.

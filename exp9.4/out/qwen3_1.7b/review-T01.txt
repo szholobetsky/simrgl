@@ -1,0 +1,9 @@
+```
+server/sonar-auth-github/src/main/java/org/sonar/auth/github/GitHubSettings.java
+server/sonar-web/src/main/js/apps/settings/components/authentication/GitLabAuthenticationTab.tsx
+server/sonar-web/src/main/js/apps/settings/components/authentication/GithubAuthenticationTab.tsx
+server/sonar-auth-saml/src/main/java/org/sonar/auth/saml/SamlAuthenticator.java
+sonar-core/src/main/resources/org/sonar/l10n/core.properties
+server/sonar-web/src/main/js/apps/settings/components/authentication/ConfigurationForm.tsx
+server/sonar-web/src/main/js/apps/settings/components/authentication/hook/useGithubConfiguration.ts
+```

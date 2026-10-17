@@ -1,0 +1,13 @@
+The file `server/sonar-web/src/main/js/apps/projects/components/ProjectsList.tsx` is the correct component for this fix, as it manages rendering the list of projects using `<ProjectCard />`.
+
+**Analysis:**
+1.  The current implementation uses a simple structure: if there are no projects (`projects.length === 0`), `renderNoProjects()` displays an empty state message. If projects exist, `renderList()` renders them via individual `<ProjectCard />` components.
+2.  This component does not currently contain logic to check the *status* of all listed projects (e.g., checking if every project's main branch is analyzed). It simply assumes that any received `project: Project[]` array should be displayed normally.
+
+**Conclusion:**
+To implement this fix, you will likely need to make changes in two places:
+
+1.  **The Data/State Layer (External):** The logic must first determine if the condition ("main branch of project is not analyzed") applies across multiple projects and pass a flag or status message down into `ProjectsList`.
+2.  **`server/sonar-web/src/main/js/apps/projects/components/ProjectsList.tsx` (This file):** You need to modify the `render()` method to check for this new state/flag *before* rendering the list, and if the condition is met, display a prominent warning message above or below the project cards.
+
+Since I cannot see where that status flag comes from, but assuming it should be handled in this component: you would need to modify `render()` to accept an additional prop (e.g., `hasMainBranchWarning`) and conditionally render a banner/message if true.

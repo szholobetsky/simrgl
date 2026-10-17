@@ -1,0 +1,7 @@
+# exp14.1 — three glossaries of sqlfluff, terms only (one LLM call per chunk); run from exp14.1:
+#   1bcoder --scriptapply "C:\Projects\simrgl\exp14.1\glossary_runs.txt" --host http://panteon.local:11434 --model gemma3:4b-it-q4_K_M
+# docs only: the docs glossary is the project's vocabulary; no code or task glossary is built (2026-10-11).
+# Incremental: run it again after a stop — the files read in full are skipped, a half-read one is read again.
+# --jev-model tev1:4b --jev-host localhost:11434: the decision model runs on THIS machine, the glossary model on
+# panteon — neither pushes the other out of memory, both work at once; it says per new term: domain / technology / noise
+/flow glossary index data/docs --project sqlfluff-docs --terms-only --jev-model tev1:4b --jev-host localhost:11434

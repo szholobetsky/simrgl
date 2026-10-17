@@ -1,0 +1,2 @@
+Change message in projects list when main branch of project is not analyzed
+Today, it's possible to analyze a branch of a provisioned project whereas main branch is not analyzed. With SONAR-10221, we now have a clear message in the homepage of the project. But in the projects page, the message for such a project is still confusing: "Project is not analyzed yet.".

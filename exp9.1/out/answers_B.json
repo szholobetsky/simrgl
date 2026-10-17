@@ -1,0 +1,122 @@
+{
+ "T01": [
+  "sonar-application/src/main/assembly/conf/sonar.properties",
+  "server/sonar-server/src/main/java/org/sonar/server/authentication/SsoAuthenticator.java",
+  "server/sonar-server/src/test/java/org/sonar/server/authentication/SsoAuthenticatorTest.java",
+  "server/sonar-webserver-api/src/main/java/org/sonar/server/authentication/UserIdentityAuthenticator.java",
+  "server/sonar-server/src/main/java/org/sonar/server/usergroups/DefaultGroupFinder.java",
+  "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+  "server/sonar-api/src/main/java/org/sonar/api/security/UserDetails.java",
+  "server/sonar-auth-plugin/src/main/java/org/sonar/server/auth/UserIdentityProvider.java",
+  "server/sonar-webserver-webapi/src/main/java/org/sonar/server/usergroups/UserGroupsWsSupport.java",
+  "server/sonar-server/src/test/resources/org/sonar/server/authentication/SsoAuthenticatorTest/should_sync_groups.xml"
+ ],
+ "T02": [
+  "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+  "server/sonar-web/src/main/js/apps/projects/components/ProjectsList.tsx",
+  "server/sonar-web/src/main/js/apps/projects/components/ProjectCard.tsx",
+  "server/sonar-web/src/main/js/apps/projects/components/AllProjects.tsx",
+  "server/sonar-webserver-webapi/src/main/java/org/sonar/server/project/ws/SearchAction.java",
+  "server/sonar-webserver-webapi/src/main/java/org/sonar/server/project/ws/ProjectDtoToWsProject.java",
+  "server/sonar-db-dao/src/main/java/org/sonar/db/project/ProjectDao.java",
+  "sonar-core/src/test/resources/org/sonar/core/l10n/core_en.properties",
+  "server/sonar-web/src/main/js/apps/projects/__tests__/ProjectsList-test.tsx",
+  "server/sonar-webserver-webapi/src/test/java/org/sonar/server/project/ws/SearchActionTest.java"
+ ],
+ "T03": [
+  "server/sonar-server-common/src/main/java/org/sonar/server/log/ServerProcessLogging.java",
+  "server/sonar-server-common/src/test/java/org/sonar/server/log/ServerProcessLoggingTest.java",
+  "sonar-pdf-plugin/src/main/java/org/sonar/pdfreport/engine/FileReportGenerator.java",
+  "sonar-pdf-plugin/src/main/java/org/sonar/pdfreport/engine/FreemarkerEngine.java",
+  "sonar-pdf-plugin/src/main/java/org/sonar/pdfreport/engine/ReportGenerator.java",
+  "sonar-pdf-plugin/src/test/java/org/sonar/pdfreport/engine/FileReportGeneratorTest.java",
+  "server/sonar-server-common/src/main/resources/logback.xml",
+  "sonar-pdf-plugin/src/main/resources/logback-pdf.xml",
+  "server/sonar-ce/src/main/java/org/sonar/ce/task/CeTaskProcessor.java",
+  "sonar-pdf-plugin/src/main/java/org/sonar/pdfreport/PdfReportPlugin.java"
+ ],
+ "T04": [
+  "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java",
+  "server/sonar-alm-client/src/test/java/org/sonar/alm/client/github/GithubApplicationClientImplTest.java",
+  "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClient.java",
+  "server/sonar-server-webapi/src/main/java/org/sonar/server/almintegration/ws/github/CheckPat.java",
+  "server/sonar-server-webapi/src/main/java/org/sonar/server/almintegration/ws/github/ListGithubOrganizations.java",
+  "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+  "server/sonar-webserver-webapi/src/main/java/org/sonar/server/almintegration/ws/GithubSettingsValidator.java",
+  "server/sonar-server-webapi/src/test/java/org/sonar/server/almintegration/ws/github/CheckPatTest.java",
+  "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/config/GithubAppConfiguration.java",
+  "server/sonar-server/src/main/java/org/sonar/server/almintegration/storage/GithubAppInstallationStorage.java"
+ ],
+ "T05": [
+  "server/sonar-web/src/main/js/apps/create/components/ProjectKeyInput.tsx",
+  "server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.tsx",
+  "server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx",
+  "server/sonar-webserver-webapi/src/main/java/org/sonar/server/project/ws/CreateAction.java",
+  "server/sonar-db-dao/src/main/java/org/sonar/db/project/ProjectKeyValidator.java",
+  "server/sonar-core/src/main/java/org/sonar/core/component/ComponentKeys.java",
+  "server/sonar-web/src/main/js/apps/create/components/__tests__/ProjectKeyInput-test.tsx",
+  "server/sonar-web/src/main/js/apps/create/project/__tests__/ManualProjectCreate-test.tsx",
+  "server/sonar-webserver-webapi/src/test/java/org/sonar/server/project/ws/CreateActionTest.java",
+  "sonar-core/src/test/java/org/sonar/core/component/ComponentKeysTest.java"
+ ],
+ "T06": [
+  "build.gradle",
+  "sonar-application/bundled_plugins.gradle",
+  "build.gradle.kts",
+  "gradle.properties",
+  "settings.gradle",
+  "gradle/dependencies.gradle",
+  "build-docker.gradle",
+  "sonar-application/build.gradle",
+  ".gradle/wrapper/gradle-wrapper.properties",
+  "version.gradle"
+ ],
+ "T07": [
+  "server/sonar-web/src/main/js/apps/projects/utils.ts",
+  "server/sonar-web/src/main/js/apps/projects/components/AllProjects.tsx",
+  "server/sonar-web/src/main/js/apps/projects/components/ProjectsList.tsx",
+  "sonar-plugin-api/src/main/java/org/sonar/api/measures/CoreMetrics.java",
+  "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+  "server/sonar-web/src/main/js/apps/projects/components/ProjectCard.tsx",
+  "server/sonar-db-dao/src/main/java/org/sonar/db/measure/ProjectMeasuresIndexDefinition.java",
+  "server/sonar-server-common/src/main/java/org/sonar/server/measure/index/ProjectMeasuresIndexDefinition.java",
+  "server/sonar-web/src/main/js/types/metrics.ts",
+  "server/sonar-db-migration/src/main/java/org/sonar/server/platform/db/migration/version/v82/DbVersion82.java"
+ ],
+ "T08": [
+  "build.gradle",
+  "gradle.properties",
+  "sonar-application/build.gradle",
+  "gradle/dependencies.gradle",
+  "server/sonar-web/package.json",
+  "server/sonar-web/yarn.lock",
+  "sonar-application/src/main/resources/elasticsearch/elasticsearch.yml",
+  "server/sonar-server-common/build.gradle",
+  "settings.gradle",
+  "build-docker.gradle"
+ ],
+ "T09": [
+  "server/sonar-webserver/src/main/java/org/sonar/server/platform/web/WebServiceFilter.java",
+  "server/sonar-webserver/src/test/java/org/sonar/server/platform/web/WebServiceFilterTest.java",
+  "server/sonar-web/src/main/js/app/components/extensions/legacy/request-legacy.ts",
+  "server/sonar-web/src/main/js/app/components/extensions/legacy/__tests__/request-legacy-test.ts",
+  "plugins/sonar-xoo-plugin/build.gradle",
+  "server/sonar-docs/src/pages/extend/developing-plugin.md",
+  "server/sonar-web/src/main/js/app/components/extensions/legacy/__tests__/__snapshots__/request-legacy-test.tsx.snap",
+  "server/sonar-webserver/src/main/java/org/sonar/server/platform/web/WebServiceFilterImpl.java",
+  "server/sonar-web/src/main/js/api/services.ts",
+  "server/sonar-docs/src/pages/extend/web-api-v2.md"
+ ],
+ "T10": [
+  "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java",
+  "server/sonar-alm-client/src/test/java/org/sonar/alm/client/github/GithubApplicationClientImplTest.java",
+  "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClient.java",
+  "server/sonar-web/src/main/js/apps/create/project/GithubProjectCreate.tsx",
+  "server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.tsx",
+  "server/sonar-server-common/src/main/java/org/sonar/server/almintegration/ws/GithubProjectCreate.java",
+  "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubBinding.java",
+  "server/sonar-docs/src/pages/integrations/github.md",
+  "server/sonar-web/src/main/js/api/alm-integration.ts",
+  "server/sonar-server-common/src/test/java/org/sonar/server/almintegration/ws/GithubProjectCreateTest.java"
+ ]
+}

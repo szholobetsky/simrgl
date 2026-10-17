@@ -1,0 +1,5 @@
+server/sonar-web/src/main/js/apps/projects/components/ProjectTableHeader.jsx  
+server/sonar-web/src/main/js/apps/projects/components/ProjectRow.jsx  
+server/sonar-web/src/main/js/apps/projects/pages/ProjectsPage.tsx  
+server/sonar-web/src/main/css/project.css  
+server/sonar-web/src/main/js/apps/projects/__tests__/__snapshots__/ProjectTableTest.test.tsx.snap

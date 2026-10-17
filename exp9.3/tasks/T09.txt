@@ -1,0 +1,2 @@
+Remove no more used Sonar-Version HTTP header
+The  Sonar-Version  HTTP header was used by the blue/green feature, which is no more used on SonarQube, and which has never been a public feature. As it's no more used anymore, this header should be removed.

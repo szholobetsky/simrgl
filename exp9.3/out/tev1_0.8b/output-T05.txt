@@ -1,0 +1,1448 @@
+<tool_call>
+read C:/Projects/simrgl/exp9.3/idx.py simargl T05
+    -c
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r
+    -f
+    -c
+    -i
+    -t
+    -y
+    -d 10
+    -r

@@ -1,0 +1,6 @@
+server/sonar-web/src/main/js/apps/projects/components/ProjectsList.tsx
+server/sonar-web/src/main/js/apps/projects/components/__tests__/__snapshots__/ProjectsList-test.tsx.snap
+server/sonar-web/src/main/js/apps/projects/components/ProjectCard.tsx
+server/sonar-web/src/main/js/apps/projects/components/__tests__/ProjectCardLeak-test.tsx
+server/sonar-web/src/main/js/apps/projects/components/__tests__/ProjectCardOverall-test.tsx
+server/sonar-web/src/main/js/apps/projects/components/AllProjects.tsx

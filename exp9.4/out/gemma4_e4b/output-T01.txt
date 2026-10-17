@@ -1,0 +1,1 @@
+ACTION: /read server\sonar-server\src\main\java\org\sonar\server\authentication/SsoAuthenticator.java

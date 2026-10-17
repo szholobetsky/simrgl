@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-10-04T21:16:21",
+  "session_seconds": 408,
+  "model": "gemma4:e4b",
+  "host": "http://panteon.local:11434",
+  "requests": 3,
+  "tokens_gen": 1335,
+  "tokens_prompt": 4752,
+  "tokens_cached": 0,
+  "files_read": 1,
+  "run_calls": 3,
+  "ctx_clear": 0,
+  "ctx_compact": 0,
+  "mcp_calls": 0,
+  "speed_pp": {
+    "min": 27.1,
+    "avg": 79.7,
+    "max": 184.7,
+    "samples": 3
+  },
+  "speed_tg": {
+    "min": 6.1,
+    "avg": 6.2,
+    "max": 6.2,
+    "samples": 3
+  },
+  "by_model": {
+    "gemma4:e4b": {
+      "requests": 3,
+      "tokens_gen": 1335,
+      "tokens_prompt": 4752,
+      "tokens_cached": 0,
+      "speed_pp": {
+        "min": 27.1,
+        "avg": 79.7,
+        "max": 184.7,
+        "samples": 3
+      },
+      "speed_tg": {
+        "min": 6.1,
+        "avg": 6.2,
+        "max": 6.2,
+        "samples": 3
+      }
+    }
+  },
+  "by_host": {
+    "http://panteon.local:11434": {
+      "requests": 3,
+      "tokens_gen": 1335,
+      "tokens_prompt": 0,
+      "tokens_cached": 0,
+      "speed_pp": {
+        "min": 27.1,
+        "avg": 79.7,
+        "max": 184.7,
+        "samples": 3
+      },
+      "speed_tg": {
+        "min": 6.1,
+        "avg": 6.2,
+        "max": 6.2,
+        "samples": 3
+      }
+    }
+  }
+}

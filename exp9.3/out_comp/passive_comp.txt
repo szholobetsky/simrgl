@@ -1,0 +1,18 @@
+# exp9.3, temporary variant: does a model improve its answer when it sees the companions?
+# Starts from the answer the model already gave (out/<tag>/output-<id>.txt, untouched), adds the
+# files that changed together with it in past tasks (held-out ontology) and asks for a revised list.
+# Writes only to out_comp/<tag>/.
+/ctx {{ctx}}
+/param num_ctx {{ctx}}
+/param temperature 0
+/param timeout 900
+/param run_timeout 300
+GATE: expr_gate('"{{rp}}" != "default"') > :RP_DONE
+/param repeat_penalty {{rp}}
+:RP_DONE
+/read C:/Projects/simrgl/exp9.3/tasks/{{id}}.txt -> task
+/read C:/Projects/simrgl/exp9.3/out/{{tag}}/output-{{id}}.txt
+/run python C:/Projects/simrgl/exp9.3/idx.py companions {{id}} C:/Projects/simrgl/exp9.3/out/{{tag}}/output-{{id}}.txt
+Task: {{task}}  -- The file above is your earlier answer: the files to change for this task. Below it are files that changed together with the files of your list in past tasks, but are not in your list. Keep every file of your list, and add those of them this task needs too (tests, styles, snapshots, messages of the same feature); leave out the rest. Print the final list - your files first, then the added ones - one path per line, nothing else.
+/save C:/Projects/simrgl/exp9.3/out_comp/{{tag}}/review-{{id}}.txt
+/stats save json C:/Projects/simrgl/exp9.3/out_comp/{{tag}}/stats-{{id}}.json

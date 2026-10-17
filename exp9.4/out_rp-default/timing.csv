@@ -1,0 +1,2 @@
+﻿model,task,seconds,exit,ctx,host
+gemma4:e4b,T01,1506,0,8192,panteon.local

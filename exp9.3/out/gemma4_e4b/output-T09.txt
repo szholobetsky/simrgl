@@ -1,0 +1,4 @@
+The most relevant files for fixing the removal of the "Sonar-Version" HTTP header are:
+
+1.  `server/sonar-webserver/src/main/java/org/sonar/server/platform/web/WebServiceFilter.java` (Where the header is set in the actual code)
+2.  `server/sonar-webserver/src/test/java/org/sonar/server/platform/web/WebServiceFilterTest.java` (Where the usage must be removed/updated in the corresponding test file)

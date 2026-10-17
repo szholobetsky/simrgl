@@ -1,0 +1,855 @@
+{
+ "summary": {
+  "simargl": {
+   "hit@10": 0.4,
+   "P@10": 0.14,
+   "R@10": 0.23,
+   "MRR": 0.283
+  },
+  "gamayun": {
+   "hit@10": 0.3,
+   "P@10": 0.08,
+   "R@10": 0.12,
+   "MRR": 0.225
+  },
+  "svitovyd": {
+   "hit@10": 0.2,
+   "P@10": 0.069,
+   "R@10": 0.2,
+   "MRR": 0.083
+  },
+  "fused": {
+   "hit@10": 0.6,
+   "P@10": 0.14,
+   "R@10": 0.32,
+   "MRR": 0.372
+  }
+ },
+ "rows": [
+  {
+   "task": "FLINK-27970",
+   "title": "[JUnit5 Migration] Module: flink-hadoop-buik",
+   "truth": 8,
+   "reachable": 8,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "svitovyd": {
+    "n": 0,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "agreed": [],
+   "top5": [
+    {
+     "file": "flink-python/src/test/java/org/apache/flink/table/runtime/arrow/ArrowReaderWriterTestBase.java",
+     "ranks": {
+      "S": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "pom.xml",
+     "ranks": {
+      "G": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-python/src/test/java/org/apache/flink/table/runtime/arrow/sources/ArrowSourceFunctionTestBase.java",
+     "ranks": {
+      "S": 2
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-runtime/src/main/java/org/apache/flink/runtime/security/modules/HadoopModule.java",
+     "ranks": {
+      "G": 2
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-dist/pom.xml",
+     "ranks": {
+      "G": 3
+     },
+     "ok": false
+    }
+   ],
+   "idents": []
+  },
+  {
+   "task": "FLINK-30196",
+   "title": "Replace usage of deprecated Mockito's methods with advised by Mockito",
+   "truth": 30,
+   "reachable": 30,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 1,
+    "first": 1
+   },
+   "svitovyd": {
+    "n": 0,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 1,
+    "first": 2
+   },
+   "agreed": [],
+   "top5": [
+    {
+     "file": "flink-yarn/src/main/java/org/apache/flink/yarn/Utils.java",
+     "ranks": {
+      "S": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "pom.xml",
+     "ranks": {
+      "G": 1
+     },
+     "ok": true
+    },
+    {
+     "file": ".github/workflows/docs.yml",
+     "ranks": {
+      "G": 2
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-yarn/src/main/java/org/apache/flink/yarn/YarnClusterDescriptor.java",
+     "ranks": {
+      "S": 2
+     },
+     "ok": false
+    },
+    {
+     "file": "docs/content.zh/_index.md",
+     "ranks": {
+      "G": 3
+     },
+     "ok": false
+    }
+   ],
+   "idents": []
+  },
+  {
+   "task": "FLINK-35268",
+   "title": "Support TTL for Async State API",
+   "truth": 38,
+   "reachable": 37,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 1,
+    "first": 2
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "svitovyd": {
+    "n": 0,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 1,
+    "first": 1
+   },
+   "agreed": [],
+   "top5": [
+    {
+     "file": "flink-state-backends/flink-statebackend-forst/src/main/java/org/apache/flink/state/forst/ForStKeyedStateBackend.java",
+     "ranks": {
+      "S": 2,
+      "G": 20
+     },
+     "ok": true
+    },
+    {
+     "file": "flink-runtime/src/test/java/org/apache/flink/runtime/asyncprocessing/AsyncExecutionControllerTest.java",
+     "ranks": {
+      "S": 6,
+      "G": 28
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-state-backends/flink-statebackend-forst/src/main/java/org/apache/flink/state/forst/ForStStateRequestClassifier.java",
+     "ranks": {
+      "S": 3,
+      "G": 35
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-runtime/src/main/java/org/apache/flink/runtime/state/ttl/TtlMapState.java",
+     "ranks": {
+      "S": 23,
+      "G": 11
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-state-backends/flink-statebackend-forst/src/main/java/org/apache/flink/state/forst/ForStStateExecutor.java",
+     "ranks": {
+      "S": 17,
+      "G": 32
+     },
+     "ok": false
+    }
+   ],
+   "idents": []
+  },
+  {
+   "task": "FLINK-36521",
+   "title": "",
+   "truth": 51,
+   "reachable": 51,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "svitovyd": {
+    "n": 0,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "agreed": [],
+   "top5": [
+    {
+     "file": "flink-runtime/src/main/java/org/apache/flink/runtime/source/coordinator/SourceCoordinator.java",
+     "ranks": {
+      "S": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "pom.xml",
+     "ranks": {
+      "G": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-runtime/src/main/java/org/apache/flink/runtime/source/coordinator/SourceCoordinatorProvider.java",
+     "ranks": {
+      "S": 2
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-runtime/src/main/java/org/apache/flink/streaming/runtime/tasks/StreamTask.java",
+     "ranks": {
+      "G": 2
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-runtime/src/main/scala/org/apache/flink/runtime/jobmanager/JobManager.scala",
+     "ranks": {
+      "G": 3
+     },
+     "ok": false
+    }
+   ],
+   "idents": []
+  },
+  {
+   "task": "FLINK-36571",
+   "title": "Flink dashboard does not show Busy / Backpressure",
+   "truth": 1,
+   "reachable": 1,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "svitovyd": {
+    "n": 6,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "agreed": [
+    {
+     "file": "flink-runtime-web/web-dashboard/src/app/pages/job/overview/backpressure/job-overview-drawer-backpressure.component.html",
+     "tools": "SG",
+     "ok": false
+    }
+   ],
+   "top5": [
+    {
+     "file": "flink-runtime-web/web-dashboard/src/app/pages/job/overview/backpressure/job-overview-drawer-backpressure.component.html",
+     "ranks": {
+      "S": 10,
+      "G": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-runtime-web/src/test/java/org/apache/flink/runtime/webmonitor/WebFrontendITCase.java",
+     "ranks": {
+      "S": 1,
+      "G": 30
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-table/flink-table-planner/src/main/scala/org/apache/flink/table/planner/plan/nodes/calcite/Expand.scala",
+     "ranks": {
+      "V": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-runtime-web/web-dashboard/web/js/index.js",
+     "ranks": {
+      "G": 2
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-runtime/src/main/java/org/apache/flink/runtime/dispatcher/DispatcherJob.java",
+     "ranks": {
+      "S": 2
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "isValid"
+   ]
+  },
+  {
+   "task": "FLINK-36589",
+   "title": "Decouple the initialization of sync and async keyed statebackend",
+   "truth": 14,
+   "reachable": 14,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 4,
+    "first": 1
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "svitovyd": {
+    "n": 3,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 2,
+    "first": 9
+   },
+   "agreed": [
+    {
+     "file": "flink-runtime/src/main/java/org/apache/flink/runtime/state/AsyncKeyedStateBackend.java",
+     "tools": "SV",
+     "ok": false
+    },
+    {
+     "file": "flink-runtime/src/main/java/org/apache/flink/runtime/state/KeyedStateBackend.java",
+     "tools": "GV",
+     "ok": false
+    },
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/RocksDBKeyedStateBackend.java",
+     "tools": "SG",
+     "ok": false
+    }
+   ],
+   "top5": [
+    {
+     "file": "flink-runtime/src/main/java/org/apache/flink/runtime/state/KeyedStateBackend.java",
+     "ranks": {
+      "S": 13,
+      "G": 5,
+      "V": 3
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-runtime/src/main/java/org/apache/flink/runtime/state/AsyncKeyedStateBackend.java",
+     "ranks": {
+      "S": 7,
+      "G": 19,
+      "V": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/RocksDBKeyedStateBackend.java",
+     "ranks": {
+      "S": 5,
+      "G": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-runtime/src/main/java/org/apache/flink/runtime/state/StateBackend.java",
+     "ranks": {
+      "S": 3,
+      "G": 12
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-runtime/src/test/java/org/apache/flink/runtime/state/StateBackendTestBase.java",
+     "ranks": {
+      "S": 14,
+      "G": 2
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "AsyncKeyedStateBackend",
+    "KeyedStateBackend"
+   ]
+  },
+  {
+   "task": "FLINK-36606",
+   "title": "TimestampITCase generates test artifacts outside of tmp folder",
+   "truth": 1,
+   "reachable": 1,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 1,
+    "first": 3
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "svitovyd": {
+    "n": 3,
+    "hits": 1,
+    "first": 3
+   },
+   "fused": {
+    "n": 10,
+    "hits": 1,
+    "first": 1
+   },
+   "agreed": [
+    {
+     "file": "flink-tests/src/test/java/org/apache/flink/test/streaming/runtime/TimestampITCase.java",
+     "tools": "SV",
+     "ok": true
+    }
+   ],
+   "top5": [
+    {
+     "file": "flink-tests/src/test/java/org/apache/flink/test/streaming/runtime/TimestampITCase.java",
+     "ranks": {
+      "S": 3,
+      "V": 3
+     },
+     "ok": true
+    },
+    {
+     "file": "flink-end-to-end-tests/run-nightly-tests.sh",
+     "ranks": {
+      "G": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-runtime/src/test/java/org/apache/flink/runtime/state/filesystem/FsMergingCheckpointStorageLocationTest.java",
+     "ranks": {
+      "S": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-table/flink-table-planner/src/test/scala/org/apache/flink/table/planner/runtime/batch/sql/TimestampITCase.scala",
+     "ranks": {
+      "V": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-runtime/src/test/java/org/apache/flink/runtime/util/TestingTaskManagerRuntimeInfo.java",
+     "ranks": {
+      "S": 2
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "TimestampITCase"
+   ]
+  },
+  {
+   "task": "FLINK-36621",
+   "title": "Build failure: StatefulSink not found",
+   "truth": 2,
+   "reachable": 2,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 1,
+    "first": 4
+   },
+   "svitovyd": {
+    "n": 8,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "agreed": [],
+   "top5": [
+    {
+     "file": "pom.xml",
+     "ranks": {
+      "S": 12,
+      "G": 5
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-connectors/flink-connector-kafka/src/main/java/org/apache/flink/streaming/connectors/kafka/FlinkKafkaProducer.java",
+     "ranks": {
+      "S": 19,
+      "G": 19
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-connectors/flink-connector-kafka/src/test/java/org/apache/flink/connector/kafka/sink/KafkaSinkITCase.java",
+     "ranks": {
+      "G": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-python/pyflink/datastream/connectors/kafka.py",
+     "ranks": {
+      "V": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-runtime/src/test/java/org/apache/flink/streaming/util/MockDeserializationSchema.java",
+     "ranks": {
+      "S": 1
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "sink2",
+    "KafkaSink"
+   ]
+  },
+  {
+   "task": "FLINK-36622",
+   "title": "Remove the dependency of StateBenchmark on RocksDBKeyedStateBackend AP",
+   "truth": 1,
+   "reachable": 1,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "svitovyd": {
+    "n": 4,
+    "hits": 1,
+    "first": 2
+   },
+   "fused": {
+    "n": 10,
+    "hits": 1,
+    "first": 9
+   },
+   "agreed": [
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/RocksDBKeyedStateBackend.java",
+     "tools": "SGV",
+     "ok": false
+    },
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/RocksDBKeyedStateBackendBuilder.java",
+     "tools": "SG",
+     "ok": false
+    }
+   ],
+   "top5": [
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/RocksDBKeyedStateBackend.java",
+     "ranks": {
+      "S": 5,
+      "G": 1,
+      "V": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/RocksDBKeyedStateBackendBuilder.java",
+     "ranks": {
+      "S": 4,
+      "G": 4
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/test/java/org/apache/flink/state/rocksdb/RocksDBStateBackendConfigTest.java",
+     "ranks": {
+      "S": 2,
+      "G": 11
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-runtime/src/main/java/org/apache/flink/runtime/state/KeyedStateBackend.java",
+     "ranks": {
+      "G": 19,
+      "V": 4
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/test/java/org/apache/flink/state/rocksdb/RocksDBAsyncSnapshotTest.java",
+     "ranks": {
+      "S": 1,
+      "G": 36
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "RocksDBKeyedStateBackend",
+    "StateBackendBenchmarkUtils",
+    "KeyedStateBackend"
+   ]
+  },
+  {
+   "task": "FLINK-4602",
+   "title": "Move RocksDB backend to proper package",
+   "truth": 150,
+   "reachable": 148,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 8,
+    "first": 1
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 6,
+    "first": 1
+   },
+   "svitovyd": {
+    "n": 0,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 8,
+    "first": 1
+   },
+   "agreed": [
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/contrib/streaming/state/RocksDBStateBackend.java",
+     "tools": "SG",
+     "ok": false
+    },
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/AbstractRocksDBState.java",
+     "tools": "SG",
+     "ok": true
+    },
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/RocksDBKeyedStateBackend.java",
+     "tools": "SG",
+     "ok": true
+    },
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/RocksDBMapState.java",
+     "tools": "SG",
+     "ok": true
+    },
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/test/java/org/apache/flink/state/rocksdb/RocksDBStateBackendConfigTest.java",
+     "tools": "SG",
+     "ok": true
+    }
+   ],
+   "top5": [
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/test/java/org/apache/flink/state/rocksdb/RocksDBStateBackendConfigTest.java",
+     "ranks": {
+      "S": 1,
+      "G": 3
+     },
+     "ok": true
+    },
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/RocksDBKeyedStateBackend.java",
+     "ranks": {
+      "S": 5,
+      "G": 1
+     },
+     "ok": true
+    },
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/contrib/streaming/state/RocksDBStateBackend.java",
+     "ranks": {
+      "S": 9,
+      "G": 2
+     },
+     "ok": false
+    },
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/AbstractRocksDBState.java",
+     "ranks": {
+      "S": 2,
+      "G": 10
+     },
+     "ok": true
+    },
+    {
+     "file": "flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/RocksDBMapState.java",
+     "ranks": {
+      "S": 7,
+      "G": 5
+     },
+     "ok": true
+    }
+   ],
+   "idents": []
+  }
+ ],
+ "combo": {
+  "S": [
+   9,
+   89
+  ],
+  "G": [
+   4,
+   90
+  ],
+  "S+G": [
+   4,
+   8
+  ],
+  "V": [
+   1,
+   20
+  ],
+  "S+V": [
+   1,
+   2
+  ],
+  "G+V": [
+   0,
+   1
+  ],
+  "S+G+V": [
+   0,
+   1
+  ]
+ },
+ "agree": {
+  "1": [
+   14,
+   199
+  ],
+  "2": [
+   5,
+   11
+  ],
+  "3": [
+   0,
+   1
+  ]
+ },
+ "top1_by_agreement": {
+  "1": [
+   1,
+   5
+  ],
+  "2": [
+   2,
+   4
+  ],
+  "3": [
+   0,
+   1
+  ]
+ }
+}

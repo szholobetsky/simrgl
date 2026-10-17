@@ -1,0 +1,27 @@
+Based on the historical context provided by running against related projects (`gamayun` and `simargl`) concerning vulnerability fixing and dependency upgrades in SonarQube editions, the following files are likely the most relevant for addressing potential vulnerabilities in bundled Java and JS third-party libraries:
+
+### Core Configuration Files (Where Dependencies Are Declared):
+
+These files define the overall build structure and declare major dependencies like Tomcat, Jackson, Elasticsearch, etc., making them primary targets for version updates.
+
+*   **`build.gradle`**: This Gradle script often manages core application dependencies across various modules. It was frequently updated during past tasks involving security fixes and upgrading components.
+*   **`pom.xml`**: The Maven configuration file(s). These scripts manage specific service modules' dependencies and were heavily involved in previous CVE remediation efforts.
+    *   Specifically, any top-level or main module `pom.xml`.
+*   **`sonar-application/build.gradle` / `sonar-application/pom.xml`**: Modules dedicated to the core sonar functionality will contain definitions for many bundled libraries that need auditing.
+*   **Dependency Module Build Scripts:** Any other component-specific `build.gradle` or `pom.xml` found within directories like `server/`, `sonar-webserver/`, or similar submodules mentioned in historical results.
+
+### Specific Areas of Concern (Based on Vulnerabilities Mentioned):
+
+1.  **Tomcat Upgrade (`CVE-2020-13934`, `CVE-2020-13935`):** Look specifically at build files defining web server runtime environments:
+    *   Files related to **`EmbeddedTomcatTest.java`** or classes using Tomcat connectors (e.g., `org.sonar.server.app`).
+    *   Any dependency declaration specifying a version range for **Tomcat**.
+2.  **Jackson Core & Commons Codec (`CVE-2018-19360`)**: These are Java library dependencies and must be updated across all relevant modules' configuration files, particularly those involving Elasticsearch integration.
+3.  **Elasticsearch Integration:** Files managing connections or data structures interacting with Elasticsearch often declare versions for associated clients and codecs. Check any module dealing with database persistence or search indexing.
+
+### Summary Plan:
+
+To fix this task, you should focus your changes primarily on updating the `<dependencies>` sections within the following types of files:
+
+1.  All top-level and submodule **`build.gradle`** files.
+2.  All primary service **`pom.xml`** files.
+3.  Configuration/Workflow scripts that manage overall project settings if they contain explicit dependency declarations (like `.github/workflows/*.yml`, though less likely for direct code fixes).

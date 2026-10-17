@@ -1,0 +1,6 @@
+server/sonar-server-common/src/main/java/org/sonar/server/log/ServerProcessLogging.java
+server/sonar-process/src/main/java/org/sonar/process/logging/RootLoggerConfig.java
+server/sonar-process/src/test/java/org/sonar/process/logging/LogbackJsonLayoutTest.java
+server/sonar-process/src/main/java/org/sonar/process/logging/LogbackJsonLayout.java
+server/sonar-process/src/test/java/org/sonar/process/logging/LogbackHelperTest.java
+server/sonar-process/src/main/java/org/sonar/process/logging/LogbackHelper.java

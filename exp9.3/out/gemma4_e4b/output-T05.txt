@@ -1,0 +1,21 @@
+Based on the previous task runs, the most relevant files for fixing the project creation form validation bug are located within the `server/sonar-web/src/main/js/apps/create/project/` directory.
+
+These files handle the core logic, UI components, and testing for project creation and validation.
+
+**Core Logic & Components:**
+
+*   `server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx` (Likely the main component handling the form.)
+*   `server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.tsx` (Handles manual project creation logic.)
+*   `server/sonar-web/src/main/js/api/project-management.ts` (API layer for project management, likely containing validation rules.)
+*   `server/sonar-web/src/main/js/apps/create/project/components/NewCodeDefinitionSelection.tsx` (A specific component within the creation flow that might have validation issues.)
+
+**Validation Utilities:**
+
+*   `server/sonar-web/src/main/js/components/controls/ValidationInput.tsx` (A reusable component for input validation, highly relevant to the bug.)
+
+**Testing Files (Useful for understanding expected behavior):**
+
+*   `server/sonar-web/src/main/js/apps/create/project/__tests__/ManualProjectCreate-test.tsx`
+*   `server/sonar-web/src/main/js/apps/create/project/__tests__/Manual-it.tsx`
+
+I recommend starting your investigation by reviewing the files listed under **Core Logic & Components** and **Validation Utilities**.

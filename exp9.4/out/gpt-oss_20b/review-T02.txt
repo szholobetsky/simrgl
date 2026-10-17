@@ -1,0 +1,7 @@
+server/sonar-web/src/main/js/app/styles/init/type.css  
+server/sonar-web/src/main/js/apps/overview/components/App.tsx  
+server/sonar-web/src/main/js/apps/overview/components/EmptyOverview.tsx  
+server/sonar-web/src/main/js/apps/overview/components/__tests__/App-test.tsx  
+server/sonar-web/src/main/js/apps/overview/components/__tests__/EmptyOverview-test.tsx  
+server/sonar-web/src/main/js/apps/projects/components/ProjectListItem.jsx  
+server/sonar-web/src/main/js/apps/projects/components/__tests__/ProjectListItem-test.jsx

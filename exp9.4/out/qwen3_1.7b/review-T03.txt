@@ -1,0 +1,3 @@
+LogbackLogger.java  
+server/sonar-web/src/main/js/apps/quality-gates/utils.ts  
+sonar-db-dao/src/test/java/org/sonar/db/component/ComponentDaoTest

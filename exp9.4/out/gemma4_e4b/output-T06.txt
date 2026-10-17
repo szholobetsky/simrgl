@@ -1,0 +1,3 @@
+Based on the previous steps, the root `build.gradle` file contains explicit dependency declarations using the full coordinate names (e.g., `dependency 'com.sonarsource.cpp:sonar-cfamily-plugin:...'`) for nearly all the plugins listed in your task description. This makes it the primary and most critical file to modify.
+
+The list of most relevant files/locations is therefore concentrated within **`build.gradle`**.

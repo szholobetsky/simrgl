@@ -1,0 +1,6 @@
+server/sonar-web/src/main/js/apps/projects/utils.ts
+server/sonar-web/src/main/js/apps/projects/__tests__/utils-test.ts
+server/sonar-web/src/main/js/apps/projects/components/__tests__/AllProjects-test.tsx
+server/sonar-web/src/main/js/apps/projects/components/project-card/__tests__/ProjectCard-test.tsx
+server/sonar-web/src/main/js/apps/projects/components/AllProjects.tsx
+sonar-core/src/main/resources/org/sonar/l10n/core.properties

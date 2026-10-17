@@ -1,0 +1,3 @@
+Do not display FOP INFO logs when generating a PDF report
+FOP displays logs each time a report is generated, for each page. The FOP logger should be overloaded with something similar to in  FileReportGenerator : Logger logger = Loggers.get("org.apache.fop");
+logger.setLevel(LoggerLevel.ERROR);

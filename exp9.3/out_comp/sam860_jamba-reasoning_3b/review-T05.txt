@@ -1,0 +1,7 @@
+<files>
+server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/ManualProjectCreate-test.tsx.snap
+server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx
+sonar-core/src/main/resources/org/sonar/l10n/core.properties
+server/sonar-web/src/main/js/components/controls/__tests__/__snapshots__/DateInput-test.tsx.snap
+server/sonar-web/src/main/js/components/controls/__tests__/DateInput-test.tsx
+</files>

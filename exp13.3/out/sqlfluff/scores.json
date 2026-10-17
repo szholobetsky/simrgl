@@ -1,0 +1,241 @@
+{
+ "_truth": {
+  "tasks": 29,
+  "with_touched": 28,
+  "with_new_refs": 23,
+  "with_new_links": 19,
+  "touched_median": 10,
+  "new_refs_total": 180,
+  "new_links_total": 142,
+  "new_defs_total": 190
+ },
+ "touched": {
+  "simargl_units": {
+   "hit@1": 0.036,
+   "hit@10": 0.286,
+   "hit@50": 0.464,
+   "hit@100": 0.607,
+   "recall@1": 0.004,
+   "recall@10": 0.039,
+   "recall@50": 0.071,
+   "recall@100": 0.105,
+   "ap@100": 0.02
+  },
+  "simargl_files": {
+   "hit@1": 0.071,
+   "hit@10": 0.214,
+   "hit@50": 0.393,
+   "hit@100": 0.464,
+   "recall@1": 0.005,
+   "recall@10": 0.027,
+   "recall@50": 0.058,
+   "recall@100": 0.093,
+   "ap@100": 0.015
+  },
+  "gamayun_db": {
+   "hit@1": 0.0,
+   "hit@10": 0.071,
+   "hit@50": 0.25,
+   "hit@100": 0.357,
+   "recall@1": 0.0,
+   "recall@10": 0.006,
+   "recall@50": 0.045,
+   "recall@100": 0.068,
+   "ap@100": 0.005
+  },
+  "gamayun_files": {
+   "hit@1": 0.0,
+   "hit@10": 0.107,
+   "hit@50": 0.286,
+   "hit@100": 0.393,
+   "recall@1": 0.0,
+   "recall@10": 0.015,
+   "recall@50": 0.061,
+   "recall@100": 0.076,
+   "ap@100": 0.011
+  },
+  "svitovyd": {
+   "hit@1": 0.036,
+   "hit@10": 0.143,
+   "hit@50": 0.286,
+   "hit@100": 0.464,
+   "recall@1": 0.018,
+   "recall@10": 0.042,
+   "recall@50": 0.076,
+   "recall@100": 0.104,
+   "ap@100": 0.041
+  },
+  "flat": {
+   "hit@1": 0.036,
+   "hit@10": 0.214,
+   "hit@50": 0.357,
+   "hit@100": 0.5,
+   "recall@1": 0.002,
+   "recall@10": 0.043,
+   "recall@50": 0.091,
+   "recall@100": 0.112,
+   "ap@100": 0.019
+  },
+  "history": {
+   "hit@1": 0.321,
+   "hit@10": 0.714,
+   "hit@50": 0.893,
+   "hit@100": 0.964,
+   "recall@1": 0.024,
+   "recall@10": 0.199,
+   "recall@50": 0.407,
+   "recall@100": 0.501,
+   "ap@100": 0.143
+  },
+  "ids_flat": {
+   "hit@1": 0.071,
+   "hit@10": 0.286,
+   "hit@50": 0.607,
+   "hit@100": 0.643,
+   "recall@1": 0.021,
+   "recall@10": 0.045,
+   "recall@50": 0.122,
+   "recall@100": 0.187,
+   "ap@100": 0.041
+  },
+  "_tasks": 28
+ },
+ "new_refs": {
+  "simargl_units": {
+   "hit@1": 0.0,
+   "hit@10": 0.174,
+   "hit@50": 0.348,
+   "hit@100": 0.435,
+   "recall@1": 0.0,
+   "recall@10": 0.036,
+   "recall@50": 0.08,
+   "recall@100": 0.099,
+   "ap@100": 0.016
+  },
+  "simargl_files": {
+   "hit@1": 0.0,
+   "hit@10": 0.087,
+   "hit@50": 0.217,
+   "hit@100": 0.348,
+   "recall@1": 0.0,
+   "recall@10": 0.014,
+   "recall@50": 0.035,
+   "recall@100": 0.071,
+   "ap@100": 0.006
+  },
+  "gamayun_db": {
+   "hit@1": 0.0,
+   "hit@10": 0.043,
+   "hit@50": 0.13,
+   "hit@100": 0.217,
+   "recall@1": 0.0,
+   "recall@10": 0.014,
+   "recall@50": 0.047,
+   "recall@100": 0.055,
+   "ap@100": 0.01
+  },
+  "gamayun_files": {
+   "hit@1": 0.0,
+   "hit@10": 0.043,
+   "hit@50": 0.217,
+   "hit@100": 0.304,
+   "recall@1": 0.0,
+   "recall@10": 0.014,
+   "recall@50": 0.053,
+   "recall@100": 0.067,
+   "ap@100": 0.01
+  },
+  "svitovyd": {
+   "hit@1": 0.0,
+   "hit@10": 0.043,
+   "hit@50": 0.174,
+   "hit@100": 0.435,
+   "recall@1": 0.0,
+   "recall@10": 0.004,
+   "recall@50": 0.012,
+   "recall@100": 0.068,
+   "ap@100": 0.003
+  },
+  "flat": {
+   "hit@1": 0.0,
+   "hit@10": 0.043,
+   "hit@50": 0.217,
+   "hit@100": 0.348,
+   "recall@1": 0.0,
+   "recall@10": 0.011,
+   "recall@50": 0.049,
+   "recall@100": 0.076,
+   "ap@100": 0.006
+  },
+  "history": {
+   "hit@1": 0.174,
+   "hit@10": 0.348,
+   "hit@50": 0.783,
+   "hit@100": 0.826,
+   "recall@1": 0.015,
+   "recall@10": 0.118,
+   "recall@50": 0.3,
+   "recall@100": 0.33,
+   "ap@100": 0.089
+  },
+  "ids_flat": {
+   "hit@1": 0.0,
+   "hit@10": 0.043,
+   "hit@50": 0.435,
+   "hit@100": 0.435,
+   "recall@1": 0.0,
+   "recall@10": 0.011,
+   "recall@50": 0.091,
+   "recall@100": 0.115,
+   "ap@100": 0.009
+  },
+  "_tasks": 23
+ },
+ "new_links": {
+  "flat files x ids_flat": {
+   "hit@1": 0.0,
+   "hit@10": 0.0,
+   "hit@50": 0.0,
+   "hit@100": 0.158,
+   "recall@1": 0.0,
+   "recall@10": 0.0,
+   "recall@50": 0.0,
+   "recall@100": 0.044,
+   "ap@100": 0.001
+  },
+  "flat files x history": {
+   "hit@1": 0.0,
+   "hit@10": 0.0,
+   "hit@50": 0.0,
+   "hit@100": 0.105,
+   "recall@1": 0.0,
+   "recall@10": 0.0,
+   "recall@50": 0.0,
+   "recall@100": 0.022,
+   "ap@100": 0.0
+  },
+  "oracle files x ids_flat": {
+   "hit@1": 0.0,
+   "hit@10": 0.0,
+   "hit@50": 0.211,
+   "hit@100": 0.316,
+   "recall@1": 0.0,
+   "recall@10": 0.0,
+   "recall@50": 0.057,
+   "recall@100": 0.086,
+   "ap@100": 0.004
+  },
+  "oracle files x history": {
+   "hit@1": 0.053,
+   "hit@10": 0.158,
+   "hit@50": 0.316,
+   "hit@100": 0.526,
+   "recall@1": 0.004,
+   "recall@10": 0.032,
+   "recall@50": 0.079,
+   "recall@100": 0.167,
+   "ap@100": 0.014
+  },
+  "_tasks": 19
+ }
+}

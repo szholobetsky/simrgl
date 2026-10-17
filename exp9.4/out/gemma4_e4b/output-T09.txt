@@ -1,0 +1,6 @@
+Based on the search results, the removal of the `Sonar-Version` HTTP header affects implementation code and its associated unit tests within the web server component.
+
+The most relevant files for fixing this task are:
+
+1.  **`server/sonar-webserver/src/main/java/org/sonar/server/platform/web/WebServiceFilter.java`**: This file contains the actual logic responsible for *setting* the deprecated header (`wsResponse.setHeader("Sonar-Version", runtime.getApiVersion().toString());`). You will need to remove or comment out this line.
+2.  **`server/sonar-webserver/src/test/java/org/sonar/server/platform/web/WebServiceFilterTest.java`**: Since you are removing functionality, the corresponding unit test verifying this behavior (`verify(response).setHeader("Sonar-Version", RUNTIME_VERSION);`) must also be addressed (removed or modified) to ensure the build passes after the change.

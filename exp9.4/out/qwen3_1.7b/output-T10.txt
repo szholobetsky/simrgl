@@ -1,0 +1,63 @@
+To address the requirement that **forked projects inside an organization should appear in the GitHub Onboarding search**, we need to modify how forks are identified and displayed within the `GitHubProjectCreateRenderer.tsx` file.
+
+---
+
+### 🔍 Key Insight:
+Currently, the system excludes **forks** from search results by default — this is based on the presence of an `sqProjectKey`. However, the goal is to include all **forked repositories (regardless of import status)** into the search results.
+
+This means we must:
+
+1. Identify which logic determines whether a repository is marked as imported or not.
+2. Modify that logic so it includes **all forks**, even those without an `sqProjectKey`.
+
+---
+
+### ✅ Solution Plan
+
+#### 1️⃣ Locate Fork Detection Logic
+The current detection mechanism uses:
+```typescript
+r.sqProjectKey ? ... : ...
+```
+This implies that only imports with an `sqProjectKey` are considered "imported" and thus excluded from searches.
+
+We will change this behavior to allow **any repository** that does *not* have an `sqProjectKey` to be treated as a fork.
+
+---
+
+#### 2️⃣ Update Condition for Fork Identification
+Change the condition from checking `sqProjectKey` to check if the repository has no such key — i.e., treat any repo without an `sqProjectKey` as a **fork**.
+
+Update in code:
+```diff
+- r.sqProjectKey ? (
++ !r.sqProjectKey && (
+```
+
+---
+
+#### 3️⃣ Apply Fix Across Relevant Components
+Ensure the fix applies across relevant components, especially where the search filter is applied (e.g., when loading repositories).
+
+For example, update how `isChecked(r)` and `isDisabled(r)` behave:
+
+```diff
+- isChecked(r) = r.sqProjectKey;
++ isChecked(r) = !r.sqProjectKey;
+```
+
+---
+
+### 🛠 Final Code Changes Summary
+
+| File | Change |
+|------|---------|
+| `GitHubProjectCreateRenderer.tsx` | Replace `r.sqProjectKey` with `!r.sqProjectKey` in conditions determining import status. |
+| `GitHubProjectCreateRendererProps` | Ensure logic aligns with new detection criteria. |
+
+This change ensures all **forked projects**, regardless of whether they are imported or not, appear in GitHub Onboarding searches.
+
+---
+
+### ✅ Result
+With this modification, users will be able to **search for forked projects inside organizations** directly within SonarQube's GitHub Onboarding feature — including those that aren't yet fully integrated into the system.

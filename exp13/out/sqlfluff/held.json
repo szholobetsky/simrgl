@@ -1,0 +1,576 @@
+[
+ {
+  "name": "8684",
+  "text": "build(deps): bump rustls from 0.23.37 to 0.23.45 in /sqlfluffrs\nBumps [rustls](https://github.com/rustls/rustls) from 0.23.37 to 0.23.45.\n<details>\n<summary>Commits</summary>\n<ul>\n<li><a href=\"https://github.com/rustls/rustls/commit/2976d90fd1c2db6b518700dd101b714069cfcb17\"><code>2976d90</code></a> Prepare 0.23.45</li>\n<li><a href=\"https://github.com/rustls/rustls/commit/f9d4ee92b20da535ef5982ffcaf6f62385f79641\"><code>f9d4ee9</code></a> Handshake &quot;alignment&quot; check covers previously-received messages</li>\n<li><a href=\"https://github.com/rustls/rustls/commit/c4e92e8c9ee29ca3f552d4938efa73680c179179\"><code>c4e92e8</code></a> Keep data needed for HRR processing together</li>\n<li><a href=\"https://github.com/rustls/rustls/commit/e553a7a70f99cad4722f06b32cc37857008a7d3f\"><code>e553a7a</code></a> server: TLS1.2 is not available after a HRR</li>\n<li><a href=\"https://github.com/rustls/rustls/commit/5dff9da73798253d8d35909dd8548db522cd973c\"><code>5dff9da</code></a> Test whether server negotiates TLS1.2 after HRR</li>\n<li><a href=\"https://github.com/rustls/rustls/commit/185a063b5fe1e9698c589d8be6a83d67224b95a1\"><code>185a063</code></a> reject a second ClientHello that changes the cipher suite</li>\n<li><a href=\"https://github.com/rustls/rustls/commit/9fafe6dd0c15ea6e47399e94b2c6b647861f874b\"><code>9fafe6d</code></a> reject a second ClientHello that drops pre_shared_key</li>\n<li><a href=\"https://github.com/rustls/rustls/commit/1b42c5f78e8e826d6afa72ce0ead3e3a4e624d79\"><code>1b42c5f</code></a> providers: zeroize private key DER</li>\n<li><a href=\"https://github.com/rustls/rustls/commit/64ad386785c718c74262b79e6893813db381adfe\"><code>64ad386</code></a> Bump version to 0.23.44</li>\n<li><a href=\"https://github.com/rustls/rustls/commit/1efbf662ed79d1392c542c0822805a818d232ac0\"><code>1efbf66</code></a> bogo: remove PostQuantum setup</li>\n<li>Additional commits viewable in <a href=\"https://github.com/rustls/rustls/compare/v/0.23.37...v/0.23.45\">compare view</a></li>\n</ul>\n</det",
+  "files": [
+   "sqlfluffrs/Cargo.lock"
+  ]
+ },
+ {
+  "name": "8665",
+  "text": "fix: Send diagnostics to stderr in the Rust parser\n<!--Thanks for adding this feature!-->\r\n\r\n<!--Please give the Pull Request a meaningful title for the release notes-->\r\n\r\n### Brief summary of the change made\r\n<!--Please include `fixes #XXXX` to automatically close any corresponding issue when the pull request is merged. Alternatively if not fully closed you can say `makes progress on #XXXX`.-->\r\nSplit from #8115\r\n\r\nThis prevents diagnostic output from being sent on stdout and puts it in stderr.\r\n\r\n### Are there any other side effects of this change that we should be aware of?\r\nNone\r\n\r\n### Pull Request checklist\r\n- [x] Please confirm you have completed any of the necessary steps below.\r\n\r\n- Included test cases to demonstrate any code changes, which may be one or more of the following:\r\n  - `.yml` rule test cases in `test/fixtures/rules/std_rule_cases`.\r\n  - `.sql`/`.yml` parser test cases in `test/fixtures/dialects` (note YML files can be auto generated with `tox -e generate-fixture-yml`).\r\n  - Full autofix test cases in `test/fixtures/linter/autofix`.\r\n  - Other.\r\n- Added appropriate documentation for the change.\r\n- Created GitHub issues for any relevant followup/future enhancements if appropriate.\r\n\n<!-- This is an auto-generated description by cubic. -->\n---\n## Summary by cubic\nSwitches the Rust parser's diagnostic output and cache statistics from stdout to stderr so parser results on stdout stay clean.\n\n- Diagnostics and cache/pruning stats now emit via `log::error!`/`log::debug!` through a shared `sqlfluffrs_types::init_logging()` (default `warn`, overridable via `RUST_LOG`) used by Python and Rust entry points.\n- Adds a test asserting diagnostics land on stderr while stdout stays empty.\n\n<sup>Written for commit e05229cde9b2b7c0003a30cecc012ee8ee421ef2. Summary will update on new commits.</sup>\n\n<a href=\"https://cubic.dev/pr/sqlfluff/sqlfluff/pull/8665?utm_source=github\" target=\"_blank\" rel=\"noopener noreferrer\" data-no-image-dialog=\"true\"><picture><source med",
+  "files": [
+   "sqlfluffrs/Cargo.lock",
+   "sqlfluffrs/Cargo.toml",
+   "sqlfluffrs/sqlfluffrs_benchmarks/examples/time_tpc.rs",
+   "sqlfluffrs/sqlfluffrs_parser/Cargo.toml",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/helpers.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/iterative.rs",
+   "sqlfluffrs/sqlfluffrs_types/Cargo.toml",
+   "sqlfluffrs/sqlfluffrs_types/src/lib.rs",
+   "sqlfluffrs/src/python.rs",
+   "test/core/parser/rust_parser_test.py"
+  ]
+ },
+ {
+  "name": "8682",
+  "text": "fix(mysql): indent procedural bodies, conditions and assignment lists\n### Brief summary of the change made\r\n\r\n**Size note** - this is only +55/-49 of grammar (and even that's the same moves repeated over similar constructs) with minor fixture changes which look big due to indent level making a line appear to change, and some tests.\r\n\r\nFollow-up to #8531, where @keraion asked for `Indent`/`Dedent` in the\r\n`BEGIN ... END` body.  The other bodies and lists had the same indent gap, and I also [said in #8531](https://github.com/sqlfluff/sqlfluff/pull/8531#discussion_r4057742788) that I would unify some similar constructs (which makes sense as the MySQL/MariaDB parser source does too).  After looking at the recent `IF` improvements (#8380), it makes sense to do it as a segment (`statement_list`) rather than a grammar because `IF` already needs a node per branch to mark where each branch ends.  \r\n\r\nAs such, this fixes them all together, following one rule:\r\n\r\n- **A nested statement is indented under its header.** A `BEGIN ... END`\r\n  block keeps `BEGIN` and `END` at the header's level and indents its own\r\n  contents; a body written as a single statement is indented under the header.\r\n- **A statement's own list of assignments or actions is indented,** as\r\n  `UPDATE ... SET` already is.\r\n- **A condition that runs onto more lines is indented,** as a `WHERE`\r\n  clause's is.\r\n- **A query that is a statement's payload stays flat,** as `INSERT ... SELECT`\r\n  and `CREATE TABLE ... AS SELECT` already do. `CREATE VIEW ... AS SELECT` is\r\n  unchanged.\r\n\r\nChanges, all in `dialect_mysql.py` (MariaDB inherits them):\r\n\r\n- `BEGIN ... END`, `WHILE`, `LOOP` and `REPEAT` bodies are indented. For\r\n  `REPEAT`, `UNTIL` lines up with `REPEAT`.\r\n- `IF`, `ELSEIF`, `WHILE` and `UNTIL` conditions take an implicit indent, as\r\n  `WHERE` and `CASE WHEN` do. Until now a multi-line condition was flattened\r\n  to the keyword's level. By default `fix` now puts a line break after the\r\n  keyword; with `implici",
+  "files": [
+   "src/sqlfluff/dialects/dialect_mysql.py",
+   "test/dialects/mysql_test.py",
+   "test/fixtures/dialects/mariadb/begin.yml",
+   "test/fixtures/dialects/mariadb/create_or_replace_function.yml",
+   "test/fixtures/dialects/mariadb/create_or_replace_procedure.yml",
+   "test/fixtures/dialects/mariadb/create_trigger.yml",
+   "test/fixtures/dialects/mariadb/declare_continue_handler_sqlexception.yml",
+   "test/fixtures/dialects/mariadb/declare_exit_handler_sqlexception.yml",
+   "test/fixtures/dialects/mariadb/declare_undo_handler_sqlexception.yml",
+   "test/fixtures/dialects/mariadb/delimiter_function.yml",
+   "test/fixtures/dialects/mariadb/delimiter_procedure.yml",
+   "test/fixtures/dialects/mariadb/function_definer.yml",
+   "test/fixtures/dialects/mariadb/function_modifies_sql.yml",
+   "test/fixtures/dialects/mariadb/function_no_sql.yml",
+   "test/fixtures/dialects/mariadb/function_notdeterministic.yml",
+   "test/fixtures/dialects/mariadb/function_reads_sql.yml",
+   "test/fixtures/dialects/mariadb/function_return.yml",
+   "test/fixtures/dialects/mariadb/function_sql_security_definer.yml",
+   "test/fixtures/dialects/mariadb/function_sql_security_invoker.yml",
+   "test/fixtures/dialects/mariadb/handler_condition_name.yml",
+   "test/fixtures/dialects/mariadb/handler_error_code.yml",
+   "test/fixtures/dialects/mariadb/handler_not_found.yml",
+   "test/fixtures/dialects/mariadb/handler_sqlstate.yml",
+   "test/fixtures/dialects/mariadb/handler_sqlstate_value.yml",
+   "test/fixtures/dialects/mariadb/handler_sqlwarning.yml",
+   "test/fixtures/dialects/mariadb/if.yml",
+   "test/fixtures/dialects/mariadb/if_else.yml",
+   "test/fixtures/dialects/mariadb/if_elseif.yml",
+   "test/fixtures/dialects/mariadb/if_multiple_expression.yml",
+   "test/fixtures/dialects/mariadb/if_nested.yml",
+   "test/fixtures/dialects/mariadb/if_session_variable.yml",
+   "test/fixtures/dialects/mariadb/if_subquery_expression.yml",
+   "test/fixtures/dialects/mariadb/loop_label.yml",
+   "test/fixtures/dialects/mariadb/loop_multiple_statements.yml",
+   "test/fixtures/dialects/mariadb/loop_no_label.yml",
+   "test/fixtures/dialects/mariadb/nested_begin.yml",
+   "test/fixtures/dialects/mariadb/repeat_label.yml",
+   "test/fixtures/dialects/mariadb/repeat_multiple_statements.yml",
+   "test/fixtures/dialects/mariadb/repeat_no_label.yml",
+   "test/fixtures/dialects/mariadb/while_label.yml",
+   "test/fixtures/dialects/mariadb/while_no_label.yml",
+   "test/fixtures/dialects/mysql/begin.yml",
+   "test/fixtures/dialects/mysql/create_event.yml",
+   "test/fixtures/dialects/mysql/create_procedure.yml",
+   "test/fixtures/dialects/mysql/create_trigger.yml",
+   "test/fixtures/dialects/mysql/declare_continue_handler_sqlexception.yml",
+   "test/fixtures/dialects/mysql/declare_exit_handler_sqlexception.yml",
+   "test/fixtures/dialects/mysql/declare_undo_handler_sqlexception.yml",
+   "test/fixtures/dialects/mysql/delimiter_function.yml",
+   "test/fixtures/dialects/mysql/delimiter_procedure.yml",
+   "test/fixtures/dialects/mysql/function_compound_body.yml",
+   "test/fixtures/dialects/mysql/function_definer.yml",
+   "test/fixtures/dialects/mysql/function_modifies_sql.yml",
+   "test/fixtures/dialects/mysql/function_no_sql.yml",
+   "test/fixtures/dialects/mysql/function_notdeterministic.yml",
+   "test/fixtures/dialects/mysql/function_reads_sql.yml",
+   "test/fixtures/dialects/mysql/function_return.yml",
+   "test/fixtures/dialects/mysql/function_sql_security_definer.yml",
+   "test/fixtures/dialects/mysql/function_sql_security_invoker.yml",
+   "test/fixtures/dialects/mysql/handler_condition_name.yml",
+   "test/fixtures/dialects/mysql/handler_error_code.yml",
+   "test/fixtures/dialects/mysql/handler_not_found.yml",
+   "test/fixtures/dialects/mysql/handler_sqlstate.yml",
+   "test/fixtures/dialects/mysql/handler_sqlstate_value.yml",
+   "test/fixtures/dialects/mysql/handler_sqlwarning.yml",
+   "test/fixtures/dialects/mysql/if.yml",
+   "test/fixtures/dialects/mysql/if_else.yml",
+   "test/fixtures/dialects/mysql/if_elseif.yml",
+   "test/fixtures/dialects/mysql/if_multiple_expression.yml",
+   "test/fixtures/dialects/mysql/if_nested.yml",
+   "test/fixtures/dialects/mysql/if_session_variable.yml",
+   "test/fixtures/dialects/mysql/if_subquery_expression.yml",
+   "test/fixtures/dialects/mysql/loop_label.yml",
+   "test/fixtures/dialects/mysql/loop_multiple_statements.yml",
+   "test/fixtures/dialects/mysql/loop_no_label.yml",
+   "test/fixtures/dialects/mysql/nested_begin.yml",
+   "test/fixtures/dialects/mysql/procedure_compound_body.yml",
+   "test/fixtures/dialects/mysql/procedure_compound_body_labelled.yml",
+   "test/fixtures/dialects/mysql/procedure_compound_body_loop.yml",
+   "test/fixtures/dialects/mysql/procedure_compound_body_nested.yml",
+   "test/fixtures/dialects/mysql/procedure_compound_body_repeat.yml",
+   "test/fixtures/dialects/mysql/procedure_compound_body_while.yml",
+   "test/fixtures/dialects/mysql/repeat_label.yml",
+   "test/fixtures/dialects/mysql/repeat_multiple_statements.yml",
+   "test/fixtures/dialects/mysql/repeat_no_label.yml",
+   "test/fixtures/dialects/mysql/trigger_compound_body.yml",
+   "test/fixtures/dialects/mysql/trigger_compound_body_inline_begin.yml",
+   "test/fixtures/dialects/mysql/while_label.yml",
+   "test/fixtures/dialects/mysql/while_no_label.yml",
+   "test/fixtures/rules/std_rule_cases/LT02-indent-mysql.yml"
+  ]
+ },
+ {
+  "name": "8659",
+  "text": "DuckDB: Parse expressions in SET VARIABLE assignments\n### Brief summary of the change made\n\nDuckDB supports expressions and scalar subqueries in `SET VARIABLE`, but SQLFluff rejects assignments such as:\n\n```sql\nSET VARIABLE total = 1 + 2;\nSET VARIABLE answer = (SELECT 42);\n```\n\nUse `ExpressionSegment` for the assigned value. Add fixtures for arithmetic, a function call, scalar and aggregate subqueries, and existing list/date literal assignments. Both `=` and `TO` are covered.\n\nReference: [DuckDB SET VARIABLE documentation](https://duckdb.org/docs/current/sql/statements/set_variable).\n\n### Are there any other side effects of this change that we should be aware of?\n\nOnly the SET VARIABLE value grammar changes; configuration-setting grammar is unchanged. Existing variable literal values gain an `expression` wrapper in the parse tree, reflected in the generated fixture.\n\n### Validation\n\n- The expanded SET fixture failed before the grammar change.\n- DuckDB dialect tests: 123 passed.\n- Full Python 3.12 suite: 11,479 passed, 2,636 skipped.\n- `pre-commit run --all-files` passed, including mypy, Ruff, YAML linting, and codespell.\n- Executed all six added assignments on DuckDB 1.5.6 and checked each stored value with `getvariable()`.\n- Regenerated all 2,312 parser fixtures; no unrelated fixture changes.\n- Regenerated Rust grammar; `utils/rustify.py check` passed.\n\n### Pull Request checklist\n\n- [x] Included SQL and generated YAML parser fixtures.\n- [x] Linked documented dialect syntax.\n\n### AI assistance\n\nCodex identified the gap, implemented the patch, generated fixtures, and ran the validation above. Validation was tool-executed; no separate human manual test is claimed.\n\n\n<!-- This is an auto-generated description by cubic. -->\n---\n## Summary by cubic\nAllows parsing DuckDB `SET VARIABLE` assignments with expressions and scalar subqueries, which previously were rejected.\n\n- Replaces the restricted value grammar with `ExpressionSegment` so values like `1 + 2`, `upper('hello')",
+  "files": [
+   "src/sqlfluff/dialects/dialect_duckdb.py",
+   "test/fixtures/dialects/duckdb/set.sql",
+   "test/fixtures/dialects/duckdb/set.yml"
+  ]
+ },
+ {
+  "name": "8683",
+  "text": "docs: link navbar logo to sqlfluff.com\n### Brief summary of the change made\n\nPoint the VitePress navbar logo to https://sqlfluff.com/ using the built-in `logoLink` setting. Clicking the logo now returns to the main website.\n\n### Are there any other side effects of this change that we should be aware of?\n\nNone.\n\n### Pull Request checklist\n\n- [x] Confirmed the necessary steps below.\n- Validation: VitePress production build passed; checked the generated navbar HTML links the logo to https://sqlfluff.com/.\n- All repository pre-commit checks passed with `pre-commit run --all-files`.\n- Documentation-only configuration change; no additional test fixtures or follow-up issues needed.\n\n\n<!-- This is an auto-generated description by cubic. -->\n---\n## Summary by cubic\nMakes the VitePress navbar logo link to https://sqlfluff.com/ so clicking it takes users back to the main website instead of staying in the docs.\n\n<sup>Written for commit f7ddbf0c572a9adbafc8a0e4353caf8a3021fe18. Summary will update on new commits.</sup>\n\n<a href=\"https://cubic.dev/pr/sqlfluff/sqlfluff/pull/8683?utm_source=github\" target=\"_blank\" rel=\"noopener noreferrer\" data-no-image-dialog=\"true\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://www.cubic.dev/buttons/review-in-cubic-dark.svg\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://www.cubic.dev/buttons/review-in-cubic-light.svg\"><img alt=\"View guided diff\" src=\"https://www.cubic.dev/buttons/review-in-cubic-light.svg\"></picture></a> <a href=\"https://www.cubic.dev/action/auto-fix/pr/sqlfluff/sqlfluff/8683?returnTo=https%3A%2F%2Fgithub.com%2Fsqlfluff%2Fsqlfluff%2Fpull%2F8683&source=description\" target=\"_blank\" rel=\"noopener noreferrer\" data-no-image-dialog=\"true\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://www.cubic.dev/buttons/turn-on-auto-fix-dark.svg\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://www.cubic.dev/buttons/turn-on-auto-fix-light.svg\"><img alt=\"Turn on auto-fix\" src=",
+  "files": [
+   "docsv/.vitepress/config.ts"
+  ]
+ },
+ {
+  "name": "8672",
+  "text": "DuckDB: Parse CSV export options in COPY TO\n### Brief summary of the change made\n\nDuckDB accepts `COPY tbl TO 'output.csv' (FORMAT csv, DELIMITER '|', HEADER)`, but SQLFluff reports a parse error. Add the missing CSV options to the DuckDB `COPY TO` grammar.\n\nCovers header values, delimiters, null markers, quoting, line endings, date/time formats, and prefix/suffix options. Includes the `DELIM`/`SEP` and `NULLSTR` aliases, plus column lists and `*` for `FORCE_QUOTE`.\n\nReference: [DuckDB CSV options](https://duckdb.org/docs/current/sql/statements/copy#csv-options).\n\n### Are there any other side effects of this change that we should be aware of?\n\nThe grammar change is limited to DuckDB `COPY TO`.\n\n### Pull Request checklist\n\n- [x] Added SQL/YAML regression cases and completed the relevant focused checks.\n\nValidation:\n- The new regression fixture fails with the original grammar and parses with the fix.\n- All 12 new statements execute in DuckDB 1.5.6, with assertions on the exported CSV content.\n- 123 DuckDB checks pass; all 2,314 dialect fixtures regenerate without unrelated changes.\n- Five malformed CSV option cases are rejected by both DuckDB and SQLFluff.\n- Rust grammar generation/check and all pre-commit checks pass.\n- GitHub CI passes the Python 3.10–3.14 test jobs, with and without Rust, plus the dbt and SQLMesh plugin jobs.\n- The local full Python 3.12 run stopped at 84% without a final summary; it is not counted as a pass.\n\nAI assisted implementation and tests; validation used the local suite and actual DuckDB execution.\n\n<!-- This is an auto-generated description by cubic. -->\n---\n## Summary by cubic\nAdds support for DuckDB CSV export options in `COPY TO` statements so valid SQL like `COPY tbl TO 'output.csv' (FORMAT csv, DELIMITER '|', HEADER)` no longer triggers a parse error.\n\n- Covers `HEADER`, `DELIMITER`/`DELIM`/`SEP`, `NULL`/`NULLSTR`, `QUOTE`, `ESCAPE`, `NEW_LINE`, `DATEFORMAT`, `TIMESTAMPFORMAT`, `PREFIX`, `SUFFIX`, and `FORCE_QUOTE` with column lists ",
+  "files": [
+   "src/sqlfluff/dialects/dialect_duckdb.py",
+   "test/fixtures/dialects/duckdb/copy.sql",
+   "test/fixtures/dialects/duckdb/copy.yml"
+  ]
+ },
+ {
+  "name": "8674",
+  "text": "DuckDB: Parse CHECKPOINT statements\n### Brief summary of the change made\n\nDuckDB accepts `CHECKPOINT;` and `FORCE CHECKPOINT file_db;`, but SQLFluff reports parse errors. Add the missing DuckDB statement grammar, including the optional database name.\n\nThe regression fixture covers plain and forced checkpoints, unquoted and quoted names, lowercase keywords, and escaped quotes. Use a single identifier for the database name: DuckDB rejects multipart names such as `file_db.main`.\n\nReference: [DuckDB CHECKPOINT](https://duckdb.org/docs/current/sql/statements/checkpoint.html).\n\n### Are there any other side effects of this change that we should be aware of?\n\nThe change is limited to the DuckDB dialect. No shared grammar or keyword changes.\n\n### Pull Request checklist\n\n- [x] Added SQL/YAML regression cases.\n- [x] Confirmed all seven new statements fail with the original grammar and parse with the fix.\n- [x] Executed all seven statements in DuckDB 1.5.6 using temporary databases. Seven malformed forms remain rejected by DuckDB and SQLFluff.\n- [x] Passed 639 DuckDB/PostgreSQL checks and regenerated all 2,315 dialect fixtures without unrelated changes.\n- [x] Passed all pre-commit checks.\n\n- [x] Full Python 3.12 suite: 11,494 passed, 2,639 skipped (Rust-extension-only and Windows-only checks), 5 warnings.\n- [x] Rust grammar generation/check and all 62 Rust library tests passed. The compiled Rust parser also passed both DuckDB fixture tests, covering all 42 fixtures and their YAML output.\n\nAI-assisted grammar and tests; validation used direct DuckDB execution and the local SQLFluff checks listed above.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\n\n<!-- This is an auto-generated description by cubic. -->\n---\n## Summary by cubic\nAdds DuckDB `CHECKPOINT` and `FORCE CHECKPOINT` statement parsing so SQLFluff no longer reports parse errors. The optional database name accepts a single identifier, matching DuckDB's rejection of multipart names, and the change is limi",
+  "files": [
+   "src/sqlfluff/dialects/dialect_duckdb.py",
+   "test/fixtures/dialects/duckdb/checkpoint.sql",
+   "test/fixtures/dialects/duckdb/checkpoint.yml"
+  ]
+ },
+ {
+  "name": "8531",
+  "text": "fix(mysql): parse BEGIN...END bodies as compound statements\n### Brief summary of the change made\r\n\r\nMakes progress on #901, and related to #3599.\r\n\r\nEvery MySQL/MariaDB routine body with more than one statement is currently\r\nmis-parsed, silently: `BEGIN` is read as a transaction start and the remaining\r\nstatements escape to file scope, so rules run against a tree that doesn't\r\nrepresent the SQL. Three existing fixtures encode that wrong tree, so CI enforces\r\nthe bug on every run. They are corrected here.\r\n\r\n**Size, for triage:** the grammar change is 83 lines added and 63 removed, all in\r\n`dialect_mysql.py`. The other 98 files are 12 new fixtures (`.sql` and `.yml`\r\neach) and 74 regenerated `.yml` trees; most of the regenerated trees differ only\r\nbecause bodies now nest inside `compound_statement`.\r\n\r\nMySQL compound statement bodies were not contained in the parse tree.\r\n`FunctionDefinitionGrammar` matched `TransactionStatementSegment`, so `BEGIN`\r\nwas parsed as a transaction start and the statements that followed escaped to\r\nfile scope rather than nesting inside the routine. No error was raised, so\r\nrules ran against a tree that did not represent the SQL.\r\n\r\n```sql\r\nCREATE FUNCTION f1(p1 INT) RETURNS INT DETERMINISTIC\r\nBEGIN\r\n    DECLARE v1 INT;\r\n    SET v1 = p1 * 2;\r\n    RETURN v1;\r\nEND\r\n```\r\n\r\n`create_function_statement` ended at the first internal `;`, and `SET` and\r\n`RETURN` appeared as top level statements beside it.\r\n\r\nThe underlying cause is that `BEGIN` is two unrelated keywords in MySQL:\r\ntransaction control, closed by `COMMIT` or `ROLLBACK`, and a compound\r\nstatement, closed by `END`. Only the first was modelled, so blocks existed as a\r\nside effect of transaction parsing rather than in their own right.\r\n\r\nThis adds `CompoundStatementSegment` — optional label, `BEGIN`, a delimited\r\nstatement list, `END`, optional end label, per\r\nhttps://dev.mysql.com/doc/refman/8.0/en/begin-end.html — and uses it for\r\n`CREATE PROCEDURE` and `CREATE FUNCTION` bodies, `CREAT",
+  "files": [
+   "src/sqlfluff/dialects/dialect_mysql.py",
+   "test/fixtures/dialects/mariadb/begin.yml",
+   "test/fixtures/dialects/mariadb/create_or_replace_function.yml",
+   "test/fixtures/dialects/mariadb/create_or_replace_procedure.yml",
+   "test/fixtures/dialects/mariadb/create_trigger.yml",
+   "test/fixtures/dialects/mariadb/declare_continue_handler_sqlexception.yml",
+   "test/fixtures/dialects/mariadb/declare_exit_handler_sqlexception.yml",
+   "test/fixtures/dialects/mariadb/declare_undo_handler_sqlexception.yml",
+   "test/fixtures/dialects/mariadb/delimiter_function.yml",
+   "test/fixtures/dialects/mariadb/delimiter_procedure.yml",
+   "test/fixtures/dialects/mariadb/function_comment.yml",
+   "test/fixtures/dialects/mariadb/function_definer.yml",
+   "test/fixtures/dialects/mariadb/function_modifies_sql.yml",
+   "test/fixtures/dialects/mariadb/function_no_sql.yml",
+   "test/fixtures/dialects/mariadb/function_notdeterministic.yml",
+   "test/fixtures/dialects/mariadb/function_reads_sql.yml",
+   "test/fixtures/dialects/mariadb/function_return.yml",
+   "test/fixtures/dialects/mariadb/function_sql_security_definer.yml",
+   "test/fixtures/dialects/mariadb/function_sql_security_invoker.yml",
+   "test/fixtures/dialects/mariadb/handler_condition_name.yml",
+   "test/fixtures/dialects/mariadb/handler_error_code.yml",
+   "test/fixtures/dialects/mariadb/handler_not_found.yml",
+   "test/fixtures/dialects/mariadb/handler_sqlstate.yml",
+   "test/fixtures/dialects/mariadb/handler_sqlstate_value.yml",
+   "test/fixtures/dialects/mariadb/handler_sqlwarning.yml",
+   "test/fixtures/dialects/mariadb/loop_label.yml",
+   "test/fixtures/dialects/mariadb/loop_multiple_statements.yml",
+   "test/fixtures/dialects/mariadb/loop_no_label.yml",
+   "test/fixtures/dialects/mariadb/nested_begin.yml",
+   "test/fixtures/dialects/mariadb/procedure_definer.yml",
+   "test/fixtures/dialects/mariadb/procedure_in_param.yml",
+   "test/fixtures/dialects/mariadb/procedure_inout_param.yml",
+   "test/fixtures/dialects/mariadb/procedure_out_param.yml",
+   "test/fixtures/dialects/mariadb/repeat_label.yml",
+   "test/fixtures/dialects/mariadb/repeat_multiple_statements.yml",
+   "test/fixtures/dialects/mariadb/repeat_no_label.yml",
+   "test/fixtures/dialects/mariadb/while_label.yml",
+   "test/fixtures/dialects/mariadb/while_no_label.yml",
+   "test/fixtures/dialects/mysql/begin.yml",
+   "test/fixtures/dialects/mysql/create_event.yml",
+   "test/fixtures/dialects/mysql/create_procedure.yml",
+   "test/fixtures/dialects/mysql/create_trigger.yml",
+   "test/fixtures/dialects/mysql/declare_continue_handler_sqlexception.yml",
+   "test/fixtures/dialects/mysql/declare_exit_handler_sqlexception.yml",
+   "test/fixtures/dialects/mysql/declare_undo_handler_sqlexception.yml",
+   "test/fixtures/dialects/mysql/delimiter_function.yml",
+   "test/fixtures/dialects/mysql/delimiter_procedure.yml",
+   "test/fixtures/dialects/mysql/function_comment.yml",
+   "test/fixtures/dialects/mysql/function_compound_body.sql",
+   "test/fixtures/dialects/mysql/function_compound_body.yml",
+   "test/fixtures/dialects/mysql/function_definer.yml",
+   "test/fixtures/dialects/mysql/function_modifies_sql.yml",
+   "test/fixtures/dialects/mysql/function_no_sql.yml",
+   "test/fixtures/dialects/mysql/function_notdeterministic.yml",
+   "test/fixtures/dialects/mysql/function_reads_sql.yml",
+   "test/fixtures/dialects/mysql/function_return.yml",
+   "test/fixtures/dialects/mysql/function_sql_security_definer.yml",
+   "test/fixtures/dialects/mysql/function_sql_security_invoker.yml",
+   "test/fixtures/dialects/mysql/handler_condition_name.yml",
+   "test/fixtures/dialects/mysql/handler_error_code.yml",
+   "test/fixtures/dialects/mysql/handler_not_found.yml",
+   "test/fixtures/dialects/mysql/handler_sqlstate.yml",
+   "test/fixtures/dialects/mysql/handler_sqlstate_value.yml",
+   "test/fixtures/dialects/mysql/handler_sqlwarning.yml",
+   "test/fixtures/dialects/mysql/loop_label.yml",
+   "test/fixtures/dialects/mysql/loop_multiple_statements.yml",
+   "test/fixtures/dialects/mysql/loop_no_label.yml",
+   "test/fixtures/dialects/mysql/nested_begin.yml",
+   "test/fixtures/dialects/mysql/procedure_body_single_statement.sql",
+   "test/fixtures/dialects/mysql/procedure_body_single_statement.yml",
+   "test/fixtures/dialects/mysql/procedure_compound_body.sql",
+   "test/fixtures/dialects/mysql/procedure_compound_body.yml",
+   "test/fixtures/dialects/mysql/procedure_compound_body_empty.sql",
+   "test/fixtures/dialects/mysql/procedure_compound_body_empty.yml",
+   "test/fixtures/dialects/mysql/procedure_compound_body_labelled.sql",
+   "test/fixtures/dialects/mysql/procedure_compound_body_labelled.yml",
+   "test/fixtures/dialects/mysql/procedure_compound_body_loop.sql",
+   "test/fixtures/dialects/mysql/procedure_compound_body_loop.yml",
+   "test/fixtures/dialects/mysql/procedure_compound_body_nested.sql",
+   "test/fixtures/dialects/mysql/procedure_compound_body_nested.yml",
+   "test/fixtures/dialects/mysql/procedure_compound_body_repeat.sql",
+   "test/fixtures/dialects/mysql/procedure_compound_body_repeat.yml",
+   "test/fixtures/dialects/mysql/procedure_compound_body_while.sql",
+   "test/fixtures/dialects/mysql/procedure_compound_body_while.yml",
+   "test/fixtures/dialects/mysql/procedure_definer.yml",
+   "test/fixtures/dialects/mysql/procedure_in_param.yml",
+   "test/fixtures/dialects/mysql/procedure_inout_param.yml",
+   "test/fixtures/dialects/mysql/procedure_out_param.yml",
+   "test/fixtures/dialects/mysql/repeat_label.yml",
+   "test/fixtures/dialects/mysql/repeat_multiple_statements.yml",
+   "test/fixtures/dialects/mysql/repeat_no_label.yml",
+   "test/fixtures/dialects/mysql/trigger_body_single_statement.sql",
+   "test/fixtures/dialects/mysql/trigger_body_single_statement.yml",
+   "test/fixtures/dialects/mysql/trigger_compound_body.sql",
+   "test/fixtures/dialects/mysql/trigger_compound_body.yml",
+   "test/fixtures/dialects/mysql/trigger_compound_body_inline_begin.sql",
+   "test/fixtures/dialects/mysql/trigger_compound_body_inline_begin.yml",
+   "test/fixtures/dialects/mysql/while_label.yml",
+   "test/fixtures/dialects/mysql/while_no_label.yml"
+  ]
+ },
+ {
+  "name": "8513",
+  "text": "Databricks: restore LIVE and STREAMING LIVE view support\n### Brief summary of the change made\n\nThe `databricks` dialect rejects three forms its own reference documents, all dropped when #7405 rewrote `CreateViewStatementSegment` from scratch instead of subclassing `sparksql`:\n\n- Pipeline views: `CREATE [OR REPLACE] [GLOBAL] TEMPORARY [STREAMING] LIVE VIEW ...` — `sparksql` parses them, so the dialect named after Databricks was the one that could not.\n- The temporary view backed by a data source: `CREATE [OR REPLACE] TEMPORARY VIEW name [column_list] USING data_source [OPTIONS (...)]`.\n- The parenthesised `with_clause` list: `WITH ( schema_binding [, ...] )`.\n\n`test/fixtures/dialects/sparksql/databricks_dlt_create_view.sql` has covered the pipeline forms since well before that change. It simply was never exercised under the `databricks` dialect, so nothing failed.\n\nRestored here:\n\n- `LIVE`, with `STREAMING` bound to it rather than independently optional, because there is no `CREATE STREAMING VIEW`.\n- `OR REFRESH` is deliberately **not** accepted on a view. It belongs to streaming tables and materialized views, which have their own segments; the corpus of published Databricks SQL uses it with `MATERIALIZED VIEW`, `STREAMING TABLE` and `LIVE TABLE`, and with no `VIEW` form at all.\n- The data-source production, whose `TEMPORARY` is unbracketed (so `CREATE VIEW v USING csv` stays rejected) and whose `USING` data source and `OPTIONS` name-value pairs are all required.\n- The parenthesised `with_clause` list, as an alternative to the existing `WITH SCHEMA ...` and `WITH METRICS` forms.\n- `ConstraintStatementSegment` in the column list, so pipeline expectations (`CONSTRAINT valid_a EXPECT (a IS NOT NULL) ON VIOLATION DROP ROW`) parse.\n\nThe LIVE schema is [deprecated](https://docs.databricks.com/aws/en/ldp/live-schema) in favour of the default publishing mode, but the page is explicit that \"you can still use legacy publishing mode and the LIVE virtual schema for pipelines tha",
+  "files": [
+   "src/sqlfluff/dialects/dialect_databricks.py",
+   "test/dialects/databricks_test.py",
+   "test/fixtures/dialects/databricks/create_view.sql",
+   "test/fixtures/dialects/databricks/create_view.yml"
+  ]
+ },
+ {
+  "name": "8515",
+  "text": "SparkSQL: support EXECUTE IMMEDIATE\n### Brief summary of the change made\n\n`EXECUTE IMMEDIATE` was not implemented in this dialect at all. Not just the\nargument clauses — the simplest form was unparsable too:\n\n```sql\nEXECUTE IMMEDIATE 'SELECT 1';\n```\n\n[Spark's reference](https://spark.apache.org/docs/latest/sql-ref-syntax-aux-exec-imm.html)\ngives:\n\n```\nEXECUTE IMMEDIATE sql_string\n  [ INTO var_name [, ...] ]\n  [ USING { arg_expr [ AS ] [ alias ] } [, ...] ]\n```\n\nand adds that \"for compatibility with other SQL dialects, `EXECUTE IMMEDIATE`\nalso supports `USING ( { arg_expr [ AS ] [alias] } [, ...] )`\".\n\n[Databricks documents the same grammar](https://docs.databricks.com/aws/en/sql/language-manual/sql-ref-syntax-aux-execute-immediate),\ndown to that bracketed form, so this goes in SparkSQL and `databricks`\ninherits it rather than being written twice.\n\nFour details taken from the references and Spark's own parser rather than\nguessed:\n\n- **`sql_string` is an expression**, as in Spark's parser, so it is not\n  limited to a literal or a variable. The reference's own last example needs\n  that: `EXECUTE IMMEDIATE 'SELECT ' || func || '(c1) ...' USING 5 + 7 AS first`.\n- **`INTO` takes multipart identifiers**, again following Spark's parser, so a\n  session variable can be qualified: `INTO session.v1`,\n  `INTO system.session.v1`.\n- **`AS` is optional** before an alias. Spark's test suite uses the lower-case\n  `as` spelling.\n- **`INTO` takes no brackets.** See below.\n\nFound in a published Databricks notebook on parameterised queries, and in\nSpark's own `execute-immediate.sql` test input.\n\n### Are there any other side effects of this change that we should be aware of?\n\n`INTO (a, b)` is deliberately **not** accepted. Spark's test file labels that\nline `-- INTO does not support braces - parser error`, and the syntax block\ngives `INTO var_name [, ...]` unbracketed. The Databricks parameter\ndescription writes the heading as `INTO ( var_name [, ...] )`, which looks\nlike a contradiction ",
+  "files": [
+   "src/sqlfluff/dialects/dialect_sparksql.py",
+   "test/fixtures/dialects/sparksql/execute_immediate.sql",
+   "test/fixtures/dialects/sparksql/execute_immediate.yml"
+  ]
+ },
+ {
+  "name": "8658",
+  "text": "SQLite: Parse multiple ON CONFLICT clauses in INSERT\n### Brief summary of the change made\n\nSQLite allows multiple `ON CONFLICT` clauses in one INSERT, but SQLFluff reports a parse error at the second clause. For example:\n\n```sql\nINSERT INTO t1 (a, b) VALUES (1, 2)\nON CONFLICT (a) DO UPDATE SET b = excluded.b\nON CONFLICT (b) DO NOTHING;\n```\n\nAllow repeated targeted UPSERT clauses after both VALUES and SELECT, followed by at most one final targetless clause. Add SQL/YAML fixtures covering multiple targets, a conditional update, a final targetless clause, and RETURNING.\n\nReference: [SQLite UPSERT documentation](https://www.sqlite.org/lang_upsert.html). Multiple clauses have been supported since SQLite 3.35.0.\n\n### Are there any other side effects of this change that we should be aware of?\n\nThis changes only SQLite INSERT parsing. Existing zero- and single-clause inserts remain covered by the dialect fixtures.\n\n### Validation\n\n- New fixture failed before the grammar change, at the second `ON CONFLICT`.\n- SQLite dialect tests: 117 passed, including six invalid targetless-clause ordering cases.\n- Full Python suite: 11,485 passed, 2,636 skipped (Python 3.12).\n- `pre-commit run --all-files` passed, including mypy, Ruff, YAML linting, and codespell.\n- Executed all three added statements against SQLite 3.53.4, checking resulting rows across 10 insertion/conflict scenarios.\n- Regenerated all 2,312 parser fixtures; no unrelated fixture changes.\n- Regenerated Rust dialect tables; `utils/rustify.py check` passed.\n\n### Pull Request checklist\n\n- [x] Included SQL and generated YAML parser fixtures.\n- [x] Linked the documented SQLite syntax.\n\n### AI assistance\n\nCodex identified the gap, implemented the patch, generated fixtures, and ran the validation above. Validation was tool-executed; no separate human manual test is claimed.",
+  "files": [
+   "src/sqlfluff/dialects/dialect_sqlite.py",
+   "test/dialects/dialects_test.py",
+   "test/fixtures/dialects/sqlite/upsert.sql",
+   "test/fixtures/dialects/sqlite/upsert.yml"
+  ]
+ },
+ {
+  "name": "8519",
+  "text": "Databricks: parse DROP MATERIALIZED VIEW\n### Brief summary of the change made\n\n`DROP MATERIALIZED VIEW` is unparsable in the `databricks` dialect. The\n[reference](https://docs.databricks.com/aws/en/sql/language-manual/sql-ref-syntax-ddl-drop-view)\ngives:\n\n```\nDROP [ MATERIALIZED ] VIEW [ IF EXISTS ] view_name\n```\n\nand its own example uses `DROP MATERIALIZED VIEW employeeView`. The dialect\ninherited the ANSI segment, which accepts only `DROP VIEW`, so the documented\nmaterialized form fails:\n\n```sql\nDROP MATERIALIZED VIEW employeeview;   -- was unparsable\n```\n\nThe fix inserts `MATERIALIZED` as an optional keyword ahead of `VIEW` in a\n`databricks`-only override of `DropViewStatementSegment`. Apache Spark has no\nmaterialized views, so `sparksql` is deliberately left alone.\n\n### Are there any other side effects of this change that we should be aware of?\n\nNone beyond the widening: `DROP VIEW` and `DROP VIEW IF EXISTS` parse exactly\nas before, and `DROP MATERIALIZED` with no view is still rejected. The fixture\ncovers the plain, `IF EXISTS` and schema-qualified forms, and `DROP VIEW`\nremains covered by the existing sparksql fixture this dialect shares.\n\n### What tests/validation did you carry out?\n\n- `DROP MATERIALIZED VIEW mv`, `DROP MATERIALIZED VIEW IF EXISTS mv` and\n  `DROP MATERIALIZED VIEW cat.sch.mv` parse; the `DROP VIEW` forms are\n  unchanged.\n- `DROP MATERIALIZED` (dangling, no view) is still rejected.\n- Whole `test/dialects/` directory: **7021 passed**.\n- `ruff check` and `ruff format --check` clean on the changed file.\n\nThe syntax is taken from the reference page linked above, and the statement\nwas found against a corpus of published Databricks SQL.\n\n🤖 AI disclosure: written with AI assistance (DeepSeek v4.1 Flash via\nopencode); the validation above was run and reviewed by me.\n\n\n## AI assistance\n\nThis pull request was co-authored with AI assistants: **Claude Opus 5**\n(Anthropic) and **DeepSeek V4.1 Flash**. They drafted the grammar, the\nfixtures and the rejectio",
+  "files": [
+   "src/sqlfluff/dialects/dialect_databricks.py",
+   "test/fixtures/dialects/databricks/drop_view.sql",
+   "test/fixtures/dialects/databricks/drop_view.yml"
+  ]
+ },
+ {
+  "name": "8522",
+  "text": "SparkSQL/Databricks: accept NOT NULL and COLLATE on a struct field\n### Brief summary of the change made\n\nDatabricks documents a `STRUCT` field as\n\n```\nSTRUCT < [fieldName [:] fieldType [NOT NULL] [COLLATE collationName] [COMMENT str] [, …] ] >\n```\n\n([STRUCT type](https://docs.databricks.com/aws/en/sql/language-manual/data-types/struct-type))\n\n`StructTypeSchemaSegment` had the identifier, the optional colon, the type\nand the comment — but neither clause in between. So\n`STRUCT<a: INT COMMENT 'c'>` parsed while `STRUCT<a: INT NOT NULL>` and\n`STRUCT<a: STRING COLLATE UTF8_LCASE>` were unparsable, even though all\nthree sit in the same production.\n\n**`NOT NULL` is Spark's, so it is fixed in `sparksql`.** Spark's grammar has\nit:\n\n```\ncomplexColType\n    : errorCapturingIdentifier COLON? dataType (errorCapturingNot NULL)? commentSpec?\n    ;\n```\n\n`databricks` inherits this segment, so it is fixed there too.\n\n**`COLLATE` is Databricks', so it activates only there** — without a second\ncopy of the segment. ANSI already defines `CollateGrammar` as `Nothing()`,\n`sparksql` does not override it, and `dialect_databricks.py` already defines\nit as `Sequence(\"COLLATE\", Ref(\"CollationReferenceSegment\"))`. Adding\n`Ref(\"CollateGrammar\", optional=True)` in the documented position is\ntherefore inert for `sparksql` and every other dialect inheriting the\nsegment, and live for `databricks` alone. Restating the whole segment in\n`dialect_databricks.py` would have worked too, but a restated segment is how\nthis dialect lost `LIVE` views in #7405, so the extension point seemed the\nsafer shape.\n\n`STRING COLLATE UTF8_LCASE` already parsed as a top-level column and inside\na `CAST`; it just could not be nested.\n\n### Are there any other side effects of this change that we should be aware of?\n\nNarrow by construction. `NOT` and `NULL` are bound together as one optional\n`Sequence` rather than two independent optional keywords, and both clauses\nare positionally bound rather than floating:\n\n| statement | `spa",
+  "files": [
+   "src/sqlfluff/dialects/dialect_sparksql.py",
+   "test/fixtures/dialects/databricks/struct_type_field_collate.sql",
+   "test/fixtures/dialects/databricks/struct_type_field_collate.yml",
+   "test/fixtures/dialects/sparksql/create_table_complex_datatypes.sql",
+   "test/fixtures/dialects/sparksql/create_table_complex_datatypes.yml"
+  ]
+ },
+ {
+  "name": "8656",
+  "text": "Add sparksql fixtures for CREATE TEMPORARY TABLE with a USING provider\n## Summary\n\nCloses #4163.\n\nThe reported statement parses correctly on `main`:\n\n```sql\nCREATE TEMPORARY TABLE consolidationboard USING elastic\n```\n\nNothing in the sparksql fixtures covered it, though. `create_table_datasource.sql`\nis the file for the `USING <provider>` data-source syntax, and across its 70-odd\nlines there is no `TEMPORARY` table and no `USING` without a preceding column\ndefinition list — which is exactly the shape the issue reports. So the behaviour\nis right but unpinned.\n\nThis adds the two missing shapes to that fixture:\n\n- `CREATE TEMPORARY TABLE <name> USING <provider>` — no column list, as reported\n- `CREATE TEMPORARY TABLE <name> (<cols>) USING <provider> OPTIONS (...)` — with\n  a column list, so the `TEMPORARY` keyword is covered in both forms\n\n`USING` here takes the data source provider, per\nhttps://spark.apache.org/docs/latest/sql-ref-syntax-ddl-create-table-datasource.html.\n\nNo production code changes.\n\n## Verification\n\n- `pytest test/dialects/ -k sparksql` — 416 passed\n- `pytest test/dialects/dialects_test.py` (every dialect's parse fixtures) — 6947 passed\n- YAML regenerated with `python test/generate_parse_fixture_yml.py --dialect sparksql`;\n  only `create_table_datasource.yml` changed, so no other dialect's fixtures are\n  touched by this.\n- The new lines parse with no `unparsable` segment; I have not tried to\n  reproduce the original failure on the 1.3.2 the issue was filed against, so I\n  can only say it parses correctly today, not when it started doing so.\n\n## AI assistance\n\nPer the AI-assisted contributions section of `CONTRIBUTING.md`: this change was\ndeveloped with AI assistance. AI-assisted: re-testing the issue's reproducer\nagainst `main`, checking the existing fixture for coverage gaps, and drafting the\nfixture lines and this description. Manually validated: the reproducer was run\nthrough `sqlfluff parse` on this checkout, the coverage gap was confirmed by\nread",
+  "files": [
+   "test/fixtures/dialects/sparksql/create_table_datasource.sql",
+   "test/fixtures/dialects/sparksql/create_table_datasource.yml"
+  ]
+ },
+ {
+  "name": "8657",
+  "text": "DuckDB: Parse human-readable ROW_GROUP_SIZE_BYTES values\n### Brief summary of the change made\n\nDuckDB supports both human-readable strings and integer byte counts for `ROW_GROUP_SIZE_BYTES`, but SQLFluff currently rejects the string form:\n\n```sql\nCOPY (SELECT 42 AS value) TO 'output.parquet' (\n    FORMAT parquet,\n    ROW_GROUP_SIZE_BYTES '2MB'\n);\n```\n\nAllow `QuotedLiteralSegment` alongside `NumericLiteralSegment` for this COPY TO option. Add SQL/YAML fixtures covering `'2MB'` and `2097152`.\n\nReference: [DuckDB Parquet COPY options](https://duckdb.org/docs/current/sql/statements/copy#parquet-options).\n\n### Are there any other side effects of this change that we should be aware of?\n\nThe grammar change is limited to this DuckDB option; numeric values remain supported.\n\n### Validation\n\n- The new COPY fixture failed with a parse error before the grammar change.\n- Executed both forms using DuckDB 1.5.6 with `preserve_insertion_order = false`, read back the resulting Parquet files, and verified the expected row.\n- DuckDB dialect tests: 123 passed.\n- Full Python run: 11,474 passed, 2,636 skipped, five CLI integration failures caused by the venv executable directory missing from `PATH`. Rerunning the entire affected file with the venv on `PATH`: 9 passed.\n- Regenerated all 2,312 dialect fixtures successfully; no changes beyond the intended DuckDB fixture. Rust dialect tables regenerated and `utils/rustify.py check` passed.\n- `pre-commit run --all-files` passed, including mypy, Ruff, YAML linting, and codespell.\n\n### Pull Request checklist\n\n- [x] Included SQL and generated YAML parser fixtures.\n- [x] Linked the documented dialect syntax.\n\n### AI assistance\n\nCodex identified the grammar gap, implemented the patch, generated the fixtures, and ran the validation above. Validation was tool-executed; no separate human manual test is claimed.\n\n\n<!-- This is an auto-generated description by cubic. -->\n---\n## Summary by cubic\nAllows DuckDB `COPY` statements to use human-readable size",
+  "files": [
+   "src/sqlfluff/dialects/dialect_duckdb.py",
+   "test/fixtures/dialects/duckdb/copy.sql",
+   "test/fixtures/dialects/duckdb/copy.yml"
+  ]
+ },
+ {
+  "name": "8650",
+  "text": "perf(rust): cut frame-engine allocation and copying\n<!--Thanks for adding this feature!-->\r\n\r\n<!--Please give the Pull Request a meaningful title for the release notes-->\r\n\r\n### Brief summary of the change made\r\n<!--Please include `fixes #XXXX` to automatically close any corresponding issue when the pull request is merged. Alternatively if not fully closed you can say `makes progress on #XXXX`.-->\r\nThis removes a good number of the allocations and copies that happen within the frame engine\r\n\r\n- Share terminator sets as `Arc<[GrammarId]>`: ~40% of frames spilled the `SmallVec<4>`, ~17% of parse allocations.\r\n- `Box` compound `FrameContext` states: `TableParseFrame` 312B -> 144B, `memmove` 17% -> 5% of samples.\r\n- `settle_frame`: combine/commit `Combining` and `Complete` frames directly instead of a push/pop round trip.\r\n- Share empty `MatchResult`s, pool frame-stack buffers, and read terminator/children ids straight from the grammar tables. (I have a follow up to get this a bit faster without needing `unsafe`)\r\n- `check_and_handle_table_frame_cache` returns a `CacheLookup` enum.\r\n- Remove the never-set `element_key` from the result hand-off.\r\n\r\nParse time -27% to -37% across dialects (-34.6% overall).\r\n\r\n### Are there any other side effects of this change that we should be aware of?\r\nNone\r\n\r\n### Pull Request checklist\r\n- [x] Please confirm you have completed any of the necessary steps below.\r\n\r\n- Included test cases to demonstrate any code changes, which may be one or more of the following:\r\n  - `.yml` rule test cases in `test/fixtures/rules/std_rule_cases`.\r\n  - `.sql`/`.yml` parser test cases in `test/fixtures/dialects` (note YML files can be auto generated with `tox -e generate-fixture-yml`).\r\n  - Full autofix test cases in `test/fixtures/linter/autofix`.\r\n  - Other.\r\n- Added appropriate documentation for the change.\r\n- Created GitHub issues for any relevant followup/future enhancements if appropriate.\r\n\n<!-- This is an auto-generated description by cubic. -->\n---",
+  "files": [
+   "sqlfluffrs/ENGINE.md",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/core.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/frame.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/helpers.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/anynumberof.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/bracketed.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/delimited.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/frame.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/iterative.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/match_algorithms.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/oneof.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/ref_grammar.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/sequence.rs",
+   "sqlfluffrs/sqlfluffrs_types/src/grammar_api.rs"
+  ]
+ },
+ {
+  "name": "8645",
+  "text": "perf(rust): use a per-process regex cache\n<!--Thanks for adding this feature!-->\r\n\r\n<!--Please give the Pull Request a meaningful title for the release notes-->\r\n\r\n### Brief summary of the change made\r\n<!--Please include `fixes #XXXX` to automatically close any corresponding issue when the pull request is merged. Alternatively if not fully closed you can say `makes progress on #XXXX`.-->\r\nThe parser cached `RegexParser` patterns per `Parser` instance, but the Python bridge builds a `Parser` per file. Every grammar regex was recompiled for every file. Use the process-global `REGEX_CACHE` instead, and store `Arc<RegexMode>` there.\r\n\r\n### Are there any other side effects of this change that we should be aware of?\r\nNone\r\n\r\n### Pull Request checklist\r\n- [x] Please confirm you have completed any of the necessary steps below.\r\n\r\n- Included test cases to demonstrate any code changes, which may be one or more of the following:\r\n  - `.yml` rule test cases in `test/fixtures/rules/std_rule_cases`.\r\n  - `.sql`/`.yml` parser test cases in `test/fixtures/dialects` (note YML files can be auto generated with `tox -e generate-fixture-yml`).\r\n  - Full autofix test cases in `test/fixtures/linter/autofix`.\r\n  - Other.\r\n- Added appropriate documentation for the change.\r\n- Created GitHub issues for any relevant followup/future enhancements if appropriate.\r\n\n\n<!-- This is an auto-generated description by cubic. -->\n---\n## Summary by cubic\nReplaces the per-`Parser` regex cache with a process-global one, so grammar regexes are compiled once per process instead of once per file.\n\n- Stores `Arc<RegexMode>` in the global `REGEX_CACHE`, keyed by `(pattern, case_insensitive)`, and shares the same instance across all callers.\n- Adds a test verifying cached instances are shared and that case sensitivity is part of the cache key.\n\n<sup>Written for commit 24fc08572193c230ee4872b1a7df036a5ec95484. Summary will update on new commits.</sup>\n\n<a href=\"https://cubic.dev/pr/sqlfluff/sqlfluff/pull/8645?utm_",
+  "files": [
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/core.rs",
+   "sqlfluffrs/sqlfluffrs_types/src/regex.rs"
+  ]
+ },
+ {
+  "name": "8652",
+  "text": "fix: check that verbose-debug  compiles\n<!--Thanks for adding this feature!-->\r\n\r\n<!--Please give the Pull Request a meaningful title for the release notes-->\r\n\r\n### Brief summary of the change made\r\n<!--Please include `fixes #XXXX` to automatically close any corresponding issue when the pull request is merged. Alternatively if not fully closed you can say `makes progress on #XXXX`.-->\r\nCurrently `verbose-debug` feature doesn't compile, this fixes that and adds a check to make sure it continues to build.\r\n\r\n### Are there any other side effects of this change that we should be aware of?\r\nNone\r\n\r\n### Pull Request checklist\r\n- [x] Please confirm you have completed any of the necessary steps below.\r\n\r\n- Included test cases to demonstrate any code changes, which may be one or more of the following:\r\n  - `.yml` rule test cases in `test/fixtures/rules/std_rule_cases`.\r\n  - `.sql`/`.yml` parser test cases in `test/fixtures/dialects` (note YML files can be auto generated with `tox -e generate-fixture-yml`).\r\n  - Full autofix test cases in `test/fixtures/linter/autofix`.\r\n  - Other.\r\n- Added appropriate documentation for the change.\r\n- Created GitHub issues for any relevant followup/future enhancements if appropriate.\r\n\n<!-- This is an auto-generated description by cubic. -->\n---\n## Summary by cubic\nFixes the `verbose-debug` feature so the crate compiles with it enabled, and adds a CI check so it stays buildable.\n\n- Removes unused `vdebug` imports gated behind the feature across the parser modules.\n- Converts a token raw value to a string in `core.rs` to satisfy the borrow checker under the feature.\n- Adds a Clippy job step that builds the workspace with `verbose-debug` enabled.\n\n<sup>Written for commit 076e156f1f282bdc24227d0b4721a2ff38a32c40. Summary will update on new commits.</sup>\n\n<a href=\"https://cubic.dev/pr/sqlfluff/sqlfluff/pull/8652?utm_source=github\" target=\"_blank\" rel=\"noopener noreferrer\" data-no-image-dialog=\"true\"><picture><source media=\"(prefers-color-scheme",
+  "files": [
+   ".github/workflows/ci-tests.yml",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/cache.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/core.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/helpers.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/match_result.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/anynumberof.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/bracketed.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/delimited.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/frame.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/iterative.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/match_algorithms.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/oneof.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/ref_grammar.rs",
+   "sqlfluffrs/sqlfluffrs_parser/src/parser/table_driven/sequence.rs"
+  ]
+ },
+ {
+  "name": "8647",
+  "text": "fix(LT09): preserve comments after SELECT modifiers\n### Brief summary of the change made\n\nFixes #8646.\n\nLT09's search for a comment between `SELECT` and the first newline stopped at a `select_clause_modifier`. This missed a trailing comment after `DISTINCT`, `ALL`, or `TOP`, allowing the autofix to move the select target into a line comment.\n\nAllow the search to continue through modifier segments so the existing comment protection applies: report the LT09 violation without moving the target.\n\nSix YAML regression cases cover comments after `DISTINCT`, `ALL`, and Snowflake `TOP 10`, ordinary autofixing with `ALL` and `TOP`, and a comment after the target on its own line. Existing DISTINCT and other LT09 cases also pass.\n\n### Are there any other side effects of this change that we should be aware of?\n\nQueries with a comment after a modifier on the SELECT line retain the LT09 violation and are left unchanged by that rule, matching the existing behavior for a comment directly after SELECT. The CLI can therefore report an unfixable violation. The change does not alter configuration or SQL grammar.\n\n### Validation\n\nTested locally on Windows with Python 3.12.14:\n\n- The six new cases produced **3 failed, 3 passed** before the source change; all six pass after it.\n- `python -m pytest test/rules/yaml_test_cases_test.py -k LT09 -q --cov=sqlfluff.rules.layout.LT09 --cov-report=term-missing`: **52 passed**. LT09 file coverage is 99%; the uncovered line is the existing no-select-target return.\n- `python -m pytest test/rules -n 4 -q -rs --tb=short --basetemp=../sqlfluff-8646-test-temp-normal`: **2734 passed, 101 skipped**. All skips require the optional Rust parser. The run had one pytest cache-write permission warning. Earlier attempts hit local directory permissions; the successful run used normal permissions and a separate temporary directory.\n- `python -m pre_commit run --all-files`: all eight checks passed.\n- `ruff check .`, `ruff format --check .`, and `lint-imports`: passed.",
+  "files": [
+   "src/sqlfluff/rules/layout/LT09.py",
+   "test/fixtures/rules/std_rule_cases/LT09.yml"
+  ]
+ },
+ {
+  "name": "8617",
+  "text": "LT05: Do not move a trailing comment that contains a template tag\n### Brief summary of the change made\n\nmakes progress on #8616\n\nLT05 moves a long trailing comment before or after its line. When the source of the comment contains a Jinja tag, both moves corrupt the file:\n\n- With `trailing_comments = before` (the default), LT05 builds the moved comment from the rendered text, so the tags are lost. The delete of the original is split at the tag placeholders, and `generate_source_patches` skips the parts that contain a tag.\n- With `trailing_comments = after`, LT05 inserts a break before the tag placeholders. The tags, and any text between them, are copied onto the code line.\n\n`_fix_long_line_with_comment` now reports the line as unfixable when `comment_seg.pos_marker.is_literal()` is false. The check runs before both moves. The normal break path has a similar check in `_is_templated_safe_break` (#7640).\n\nMeasured with `sqlfluff fix --dialect ansi --rules LT05` on the three files from #8616:\n\n| file | `main` at `2e2275713`, `before` | `main`, `after` | this branch, both modes |\n|---|---|---|---|\n| q1, `{% if %}` | the text from the first tag on stays on the code line as SQL | ` {% if true %} more{% endif %}` is copied onto the code line | file unchanged |\n| q2, `{% set %}` | the comment is in the file twice | `{% set q = 1 %}` is copied onto the code line | file unchanged |\n| q3, `{# #}` | the text from the tag on stays on the code line as SQL | `{# x #}` is copied onto the code line | file unchanged |\n\nOn `main`, the command exits with 0 in both modes and reports 3 fixable violations. On this branch, it reports 3 unfixable violations, prints no \"Skipping edit patch\" warning and exits with 1.\n\n### Are there any other side effects of this change that we should be aware of?\n\nIn `after` mode, `main` moves `select a, b, c from tbl  -- comment{{ 'x' }} more text here that goes on and on and on` correctly. This branch reports that line as unfixable. A `{{ '' }}` tag in the sa",
+  "files": [
+   "src/sqlfluff/utils/reflow/reindent.py",
+   "test/fixtures/rules/std_rule_cases/LT05.yml"
+  ]
+ },
+ {
+  "name": "8577",
+  "text": "Oracle: parse common SQL*Plus SET commands\n### Brief summary of the change made\n\n`SqlplusSetStatementSegment` only handled `SET SCAN ON|OFF`, so other SQL*Plus `SET` commands were unparsable. `SET DEFINE OFF` is really common at the top of Oracle scripts - it turns off substitution variables, so an `&` in a string literal is left alone - and because the unparsable section runs to the end of the file, a script like this didn't get linted at all:\n\n```sql\nSET DEFINE OFF\nINSERT INTO tools (id, name) VALUES (1, 'Hammer & Tongs');\n```\n\nThis adds the `SET` system variables that come up most in deployment scripts: `DEFINE`, `ECHO`, `ESCAPE`, `FEEDBACK`, `FLAGGER`, `HEADING`, `LINESIZE`, `LONG`, `NULL`, `PAGESIZE`, `SERVEROUTPUT`, `SQLBLANKLINES`, `SUFFIX`, `TERMOUT`, `TIME`, `TIMING`, `TRIMSPOOL` and `VERIFY`, alongside the existing `SCAN`. Syntax is from the [SET System Variable Summary](https://docs.oracle.com/en/database/oracle/oracle-database/26/sqpug/SET-system-variable-summary.html).\n\nNames and values are plain keywords, with the new ones added to the Oracle unreserved keywords. Each variable takes its full name or its shortest documented abbreviation (e.g. `SERVEROUT`), one `SET` can set several of them (e.g. `SET ECHO OFF FEEDBACK OFF` - SQL*Plus accepts this even though the syntax summary shows one at a time), and it's still only tried at batch level. Each variable also only accepts its documented values rather than any tokens - SQL*Plus commands don't need a semicolon, so a looser grammar would end up swallowing the next line.\n\nUnquoted text values for `NULL` and `SUFFIX` are plain text tokens rather than identifiers, so reserved words work (`SET NULL NULL`) and capitalisation rules leave the text alone. Double-quoted text is a literal rather than a quoted identifier, so RF05 doesn't flag it.\n\nI've kept it to these variables so it's easy to review - happy to follow up with the rest of the list in another PR.\n\n### Are there any other side effects of this change tha",
+  "files": [
+   "pyproject.toml",
+   "src/sqlfluff/dialects/dialect_oracle.py",
+   "src/sqlfluff/dialects/dialect_oracle_keywords.py",
+   "test/fixtures/dialects/oracle/sqlplus_set.sql",
+   "test/fixtures/dialects/oracle/sqlplus_set.yml"
+  ]
+ },
+ {
+  "name": "8644",
+  "text": "build(deps): bump shell-quote from 1.8.3 to 1.12.0 in /docsv\nBumps [shell-quote](https://github.com/ljharb/shell-quote) from 1.8.3 to 1.12.0.\n<details>\n<summary>Changelog</summary>\n<p><em>Sourced from <a href=\"https://github.com/ljharb/shell-quote/blob/main/CHANGELOG.md\">shell-quote's changelog</a>.</em></p>\n<blockquote>\n<h2><a href=\"https://github.com/ljharb/shell-quote/compare/v1.11.0...v1.12.0\">v1.12.0</a> - 2026-10-02</h2>\n<h3>Fixed</h3>\n<ul>\n<li>[New] <code>parse</code>: support here-documents (<code>&amp;lt;&amp;lt;</code>) <a href=\"https://redirect.github.com/ljharb/shell-quote/issues/31\"><code>[#31](https://github.com/ljharb/shell-quote/issues/31)</code></a></li>\n</ul>\n<h3>Commits</h3>\n<ul>\n<li>[New] <code>parse</code>: support tab-stripping here-documents (<code>&amp;lt;&amp;lt;-</code>) <a href=\"https://github.com/ljharb/shell-quote/commit/dbfac376d4065d37539d3abdb5e76847f93797d3\"><code>dbfac37</code></a></li>\n<li>[New] <code>parse</code>: support output process substitution (<code>&amp;gt;(</code>) <a href=\"https://github.com/ljharb/shell-quote/commit/20533154bb57809c80f55318b8493aef49505f4e\"><code>2053315</code></a></li>\n<li>[New] <code>parse</code>: support the <code>case</code> test-next terminator (<code>;;&amp;</code>) <a href=\"https://github.com/ljharb/shell-quote/commit/7d688b9bec1917a22cccd4d4c887128a9c66e8a0\"><code>7d688b9</code></a></li>\n<li>[New] <code>parse</code>: support the <code>case</code> fall-through terminator (<code>;&amp;</code>) <a href=\"https://github.com/ljharb/shell-quote/commit/f27010ed04bcd925795b350afb1c49e36bbd1ba3\"><code>f27010e</code></a></li>\n<li>[New] <code>parse</code>: support redirecting output despite <code>noclobber</code> (<code>&amp;gt;|</code>) <a href=\"https://github.com/ljharb/shell-quote/commit/b78d19c14da6356cc12c46b3478203247ab8a295\"><code>b78d19c</code></a></li>\n<li>[New] <code>parse</code>: support opening a file for reading and writing (<code>&amp;lt;&amp;gt;</code>) <a href=\"https://github.com/ljharb/shel",
+  "files": [
+   "docsv/pnpm-lock.yaml"
+  ]
+ },
+ {
+  "name": "8541",
+  "text": "Oracle: support DELETE WHERE and INSERT ... WHERE in MERGE\n### Brief summary of the change made\noracle's `MERGE` now parses both optional clauses documented for its matched and not-matched branches:\n\n- `DELETE WHERE <condition>` after `UPDATE SET ... [WHERE ...]`\n- `WHERE <condition>` after the required `VALUES (...)` in an insert clause\n\nthe grammar follows oracle's `merge_update_clause` and `merge_insert_clause` documentation: https://docs.oracle.com/en/database/oracle/oracle-database/26/sqlrf/MERGE.html\n\n### Are there any other side effects of this change that we should be aware of?\n`VALUES` remains required in `WHEN NOT MATCHED THEN INSERT`. a focused rejection test now prevents invalid `INSERT (...) WHERE ...` forms from being accepted.\n\nthe oracle merge fixture and rejection test pass, with 4 focused checks passing. `ruff` and the generated parser build also pass.\n\n### AI disclosure\ni used an ai tool (claude code) to help write the original grammar and fixture. i verified the documented forms parse and the invalid missing-`VALUES` form is rejected.\n\n### Pull Request checklist\n- [x] Included a parser fixture and a focused rejection test",
+  "files": [
+   "src/sqlfluff/dialects/dialect_oracle.py",
+   "test/dialects/oracle_test.py",
+   "test/fixtures/dialects/oracle/merge_update_delete_where.sql",
+   "test/fixtures/dialects/oracle/merge_update_delete_where.yml"
+  ]
+ },
+ {
+  "name": "8586",
+  "text": "Snowflake: parse Cortex search service REFRESH\n### Brief summary of the change made\n\nAdd `REFRESH` support to Snowflake `ALTER CORTEX SEARCH SERVICE` statements. Includes generated parser fixtures for the standard and `IF EXISTS` forms.\n\nFixes #8579.\n\n### Are there any other side effects of this change that we should be aware of?\n\nNone. This only expands the Snowflake statement grammar.\n\n### Pull Request checklist\n- [x] Necessary steps completed.\n- [x] Included `.sql`/`.yml` parser test cases in `test/fixtures/dialects`.\n- [x] Added appropriate documentation for the change. No documentation update is needed for this grammar-only fix.\n- [x] Created GitHub issues for relevant follow-up or future enhancements. None needed.\n\n### Tests\n\n- `./.venv/bin/pytest test/dialects/dialects_test.py -k alter_cortex_search_service -q`",
+  "files": [
+   "src/sqlfluff/dialects/dialect_snowflake.py",
+   "test/fixtures/dialects/snowflake/alter_cortex_search_service.sql",
+   "test/fixtures/dialects/snowflake/alter_cortex_search_service.yml"
+  ]
+ },
+ {
+  "name": "8591",
+  "text": "feat(clickhouse): add support for replace table and for clone as\n<!--Thanks for adding this feature!-->\r\n\r\n<!--Please give the Pull Request a meaningful title for the release notes-->\r\n\r\n### Brief summary of the change made\r\n<!--Please include `fixes #XXXX` to automatically close any corresponding issue when the pull request is merged. Alternatively if not fully closed you can say `makes progress on #XXXX`.-->\r\na couple of improvements to `CreateTableStatementSegment`:\r\n1. the grammar now supports either `or replace` or `if not exists`, but not both at the same time\r\n2. added support for [`REPLACE TABLE`](https://clickhouse.com/docs/reference/statements/create/table/replace-table)\r\n3. added support for [`CLONE AS`](https://clickhouse.com/docs/reference/statements/create/table#with-a-schema-and-data-cloned-from-another-table)\r\n4. made the engine [optional](https://clickhouse.com/docs/reference/statements/create/table/temporary-table#syntax) for temporary table\r\n5. removed an unnecessary branch for temporary table:\r\n```sql\r\n# CREATE TEMPORARY TABLE AS\r\n                Sequence(\r\n                    \"AS\",\r\n                    Ref(\"SelectableGrammar\"),\r\n                    optional=True,\r\n                ),\r\n```\r\n\r\nall queries added to fixtures work and can be tested using the clickhouse fiddle link in the fixture\r\n\r\n### Are there any other side effects of this change that we should be aware of?\r\n\r\n\r\n### Pull Request checklist\r\n- [x] Please confirm you have completed any of the necessary steps below.\r\n\r\n- Included test cases to demonstrate any code changes, which may be one or more of the following:\r\n  - `.sql`/`.yml` parser test cases in `test/fixtures/dialects` (note YML files can be auto generated with `tox -e generate-fixture-yml`).\r\n- Added appropriate documentation for the change.\r\n\r\n\r\n\n<!-- This is an auto-generated description by cubic. -->\n---\n## Summary by cubic\nImproves ClickHouse `CREATE TABLE` parsing to support `REPLACE TABLE` and `CLONE AS`, and makes the",
+  "files": [
+   "src/sqlfluff/dialects/dialect_clickhouse.py",
+   "src/sqlfluff/dialects/dialect_clickhouse_keywords.py",
+   "test/fixtures/dialects/clickhouse/create_table.sql",
+   "test/fixtures/dialects/clickhouse/create_table.yml"
+  ]
+ },
+ {
+  "name": "8604",
+  "text": "Postgres: accept PG 16-17 utility options and ON/OFF/0/1 option values\n### Brief summary of the change made\r\n\r\nfixes #8602\r\n\r\nThe postgres dialect reads a boolean option value with `BooleanLiteralGrammar`, which is only `TRUE` or `FALSE`. This change adds `OptionBooleanGrammar`, which also accepts `ON`, `OFF` and an unsigned number. It uses the new grammar in `EXPLAIN`, `ANALYZE`, `REINDEX` and `COPY`. It also uses the new grammar for `ALLOW_CONNECTIONS` and `IS_TEMPLATE` in `CREATE DATABASE` and `ALTER DATABASE`, and for `DETERMINISTIC` in `CREATE COLLATION`.\r\n\r\nPostgreSQL reads these values with `utility_option_arg`, `copy_generic_opt_arg` and `createdb_opt_item` in `gram.y`. `CREATE COLLATION` reads the value as a `def_arg` in `gram.y`, and `DefineCollation` converts it with `defGetBoolean`. The new grammar accepts the six values that the `EXPLAIN` page lists (`TRUE`, `ON`, `1`, `FALSE`, `OFF`, `0`) and any unsigned number. `VACUUM` keeps its own value grammar, which reads `on` as an identifier.\r\n\r\nThe change also adds the options from PostgreSQL 16 and 17:\r\n\r\n- `EXPLAIN`: `GENERIC_PLAN [ boolean ]`, `SERIALIZE [ NONE | TEXT | BINARY ]` and `MEMORY [ boolean ]`.\r\n- `VACUUM`: `PROCESS_MAIN`, `SKIP_DATABASE_STATS`, `ONLY_DATABASE_STATS` and `BUFFER_USAGE_LIMIT`.\r\n- `ANALYZE`: `BUFFER_USAGE_LIMIT`, with a number or a quoted size such as `'1MB'`.\r\n\r\nThe 7 new option names go into `postgres_nondocs_keywords` as non-reserved keywords: `BUFFER_USAGE_LIMIT`, `GENERIC_PLAN`, `MEMORY`, `ONLY_DATABASE_STATS`, `PROCESS_MAIN`, `SERIALIZE` and `SKIP_DATABASE_STATS`. They stay unreserved, so a column or a table with one of these names still parses. New fixture statements in `explain.sql` and `vacuum.sql` use them as column names.\r\n\r\nMeasured with `sqlfluff lint --dialect postgres --rules LT01`, one statement at a time:\r\n\r\n| statement | `main` at `4d259e33f` | this branch |\r\n|---|---|---|\r\n| `EXPLAIN (ANALYZE ON, BUFFERS OFF) SELECT 1;` | unparsable | parses |\r\n| `EXPLAIN (GENER",
+  "files": [
+   "src/sqlfluff/dialects/dialect_postgres.py",
+   "src/sqlfluff/dialects/dialect_postgres_keywords.py",
+   "test/fixtures/dialects/postgres/alter_database.sql",
+   "test/fixtures/dialects/postgres/alter_database.yml",
+   "test/fixtures/dialects/postgres/analyze.sql",
+   "test/fixtures/dialects/postgres/analyze.yml",
+   "test/fixtures/dialects/postgres/copy.sql",
+   "test/fixtures/dialects/postgres/copy.yml",
+   "test/fixtures/dialects/postgres/create_collation.sql",
+   "test/fixtures/dialects/postgres/create_collation.yml",
+   "test/fixtures/dialects/postgres/create_database.sql",
+   "test/fixtures/dialects/postgres/create_database.yml",
+   "test/fixtures/dialects/postgres/explain.sql",
+   "test/fixtures/dialects/postgres/explain.yml",
+   "test/fixtures/dialects/postgres/reindex.sql",
+   "test/fixtures/dialects/postgres/reindex.yml",
+   "test/fixtures/dialects/postgres/vacuum.sql",
+   "test/fixtures/dialects/postgres/vacuum.yml"
+  ]
+ },
+ {
+  "name": "8636",
+  "text": "docs: retire legacy Sphinx source after VitePress cutover\n## Summary\n\n- Remove the obsolete Sphinx source tree, Read the Docs configuration, build dependencies, tox targets, pre-commit hook, and Sphinx-only test.\n- Retire the release-script edit of `gettingstarted.rst`; the VitePress installation guide no longer embeds a release-specific version output.\n- Update contributor guidance and the docs README for the live VitePress site, and replace the beta rollout plan with a current hosting guide.\n- Replace the Sphinx CI build with a VitePress build on PRs.\n- Default docs deployments to production indexing now that `docs.sqlfluff.com` is live. `DOCS_INDEXING_MODE=beta` remains an explicit override.\n\nHistorical pre-cutover Sphinx HTML remains published in R2. The shared picker and archive assembly support remain in `docsv/`; deleting current Sphinx source does not remove those published versions.\n\n## Legacy content audit\n\nI compared the old page list and main headings with the VitePress tree. The installation/basic/custom usage, why/vision, configuration and templating, production usage, troubleshooting, development guides, release notes, and generated CLI/rules/dialects/API/internals references all have current destinations. The old community page's Slack and social links are in the site footer; the starter configuration is inline in the current configuration guide.\n\nThe dialect inheritance guidance is now in `docsv/development/dialect.md`. Two details remain less fully represented; these are suggested homes if we want to retain them:\n\n| Legacy detail | Suggested VitePress home |\n| --- | --- |\n| The Python API page included `examples/03_getting_rules_and_dialects.py`, `04_config_overrides.py`, and `05_simple_api_config.py` as worked examples; the new generated API pages document the APIs but do not embed those three examples. | Add examples to `docsv/reference/api/index.md`, or teach `docsv/scripts/generate-api-docs.py` to include them. |\n| The old Git guide walked thro",
+  "files": [
+   ".github/workflows/ci-tests.yml",
+   ".github/workflows/publish-docs.yaml",
+   ".pre-commit-config.yaml",
+   ".readthedocs.yml",
+   "AGENTS.md",
+   "CONTRIBUTING.md",
+   "README.md",
+   "docs/AGENTS.md",
+   "docs/Makefile",
+   "docs/README.md",
+   "docs/generate-auto-docs.py",
+   "docs/make.bat",
+   "docs/requirements.txt",
+   "docs/source/_ext/sqlfluff_domain.py",
+   "docs/source/_partials/.gitignore",
+   "docs/source/_partials/README.md",
+   "docs/source/_partials/starter_config.cfg",
+   "docs/source/_static/custom.css",
+   "docs/source/_static/images/sqlfluff-lrg.png",
+   "docs/source/conf.py",
+   "docs/source/configuration/default_configuration.rst",
+   "docs/source/configuration/ignoring_configuration.rst",
+   "docs/source/configuration/index.rst",
+   "docs/source/configuration/layout.rst",
+   "docs/source/configuration/rule_configuration.rst",
+   "docs/source/configuration/setting_configuration.rst",
+   "docs/source/configuration/templating/dbt.rst",
+   "docs/source/configuration/templating/index.rst",
+   "docs/source/configuration/templating/jinja.rst",
+   "docs/source/configuration/templating/placeholder.rst",
+   "docs/source/configuration/templating/python.rst",
+   "docs/source/configuration/templating/variants.rst",
+   "docs/source/favicon-fluff.png",
+   "docs/source/gettingstarted.rst",
+   "docs/source/guides/contributing/architecture.rst",
+   "docs/source/guides/contributing/dialect.rst",
+   "docs/source/guides/contributing/docs.rst",
+   "docs/source/guides/contributing/git.rst",
+   "docs/source/guides/contributing/github_clone_button.png",
+   "docs/source/guides/contributing/github_example_merge_panel.png",
+   "docs/source/guides/contributing/github_example_pr.png",
+   "docs/source/guides/contributing/github_fork_status.png",
+   "docs/source/guides/contributing/github_reactions.png",
+   "docs/source/guides/contributing/plugins.rst",
+   "docs/source/guides/contributing/rules.rst",
+   "docs/source/guides/index.rst",
+   "docs/source/guides/setup/developing_custom_rules.rst",
+   "docs/source/guides/setup/teamrollout.rst",
+   "docs/source/guides/troubleshooting/how_to.rst",
+   "docs/source/index.rst",
+   "docs/source/inthewild.rst",
+   "docs/source/jointhecommunity.rst",
+   "docs/source/production/cli_use.rst",
+   "docs/source/production/diff_quality.rst",
+   "docs/source/production/github_actions.rst",
+   "docs/source/production/gitlab_ci.rst",
+   "docs/source/production/index.rst",
+   "docs/source/production/pre_commit.rst",
+   "docs/source/production/security.rst",
+   "docs/source/reference/api.rst",
+   "docs/source/reference/cli.rst",
+   "docs/source/reference/dialects.rst",
+   "docs/source/reference/index.rst",
+   "docs/source/reference/internals/config.rst",
+   "docs/source/reference/internals/functional.rst",
+   "docs/source/reference/internals/index.rst",
+   "docs/source/reference/internals/reflow.rst",
+   "docs/source/reference/internals/rules.rst",
+   "docs/source/reference/releasenotes.rst",
+   "docs/source/reference/rules.rst",
+   "docs/source/why_sqlfluff.rst",
+   "docsv/.vitepress/config.ts",
+   "docsv/README.md",
+   "docsv/development/dialect.md",
+   "docsv/development/documentation.md",
+   "docsv/development/shared-design-integration.md",
+   "docsv/development/versioned-docs-hosting.md",
+   "docsv/guide/install.md",
+   "pyproject.toml",
+   "requirements_dev.txt",
+   "test/docs_test.py",
+   "tox.ini",
+   "util.py"
+  ]
+ },
+ {
+  "name": "8521",
+  "text": "fix(CV07): guard one-sided liftable-whitespace fix independently\n### Brief summary of the change made\n\nRule `CV07` (`convention.statement_brackets`, aliased `L053`) crashes with an\nunhandled `AssertionError` on ordinary, valid SQL whenever a bracket-wrapped\ntop-level statement has liftable content (whitespace or an inline comment) on\nonly *one* side of its inner content — e.g.:\n\n```sql\n( SELECT foo FROM bar)\n```\n\n`CV07._eval` computes `leading`/`trailing` (liftable segments at the\nstart/end) separately, but gates `LintFix.create_before`/`create_after` on\ntheir *combination* (`lift_nodes = leading + trailing`). Both calls assert a\nnon-empty edit list (`src/sqlfluff/core/rules/fix.py:78-80`), so whenever\nexactly one side is empty — the common case, since most bracketed statements\ndon't have matching whitespace/comment on both sides — the empty side still\ngets called and raises `AssertionError: A create fix must have an edit.`\n\nEntry point: any `sqlfluff lint`/`sqlfluff fix` (CLI or the public API) with\n`CV07`/`L053` enabled (default rule set) over such a file. Before the fix,\nlinting the example above raises the `AssertionError` with a full traceback,\nand `sqlfluff fix` silently drops the fix instead of correcting the file.\n\nA second bug in the same block: when `trailing` is empty,\n`filtered_children[len(leading) : -len(trailing)]` evaluates `-len(trailing)`\nas `-0 == 0`, truncating to an empty slice whenever `leading` is non-empty —\nso patching only the assertion would make `fix()` silently drop the\nstatement's real content instead of crashing.\n\nFix: guard `create_before`/`create_after` independently on whether that\nside's list is non-empty, and compute the trailing slice bound as\n`len(filtered_children) - len(trailing)` so it degrades correctly to \"keep\neverything\" when `trailing` is empty.\n\n### Are there any other side effects of this change that we should be aware of?\n\nNone. All 10 pre-existing `CV07` fixtures (which all happen to have liftable\ncontent on both sid",
+  "files": [
+   "src/sqlfluff/rules/convention/CV07.py",
+   "test/fixtures/rules/std_rule_cases/CV07.yml"
+  ]
+ },
+ {
+  "name": "8473",
+  "text": "Add multiline-aware CV03 trailing comma policy\n## Summary\n- add require_multiline_forbid_single_line to CV03\n- require a trailing comma for multiline select clauses and forbid it for single-line clauses\n- determine multiline layout from rendered code while ignoring the trailing comma and non-code segments\n\nCloses #4574\n\n## Tests\n- all YAML rule cases (2,489 passed)\n- pre-commit hooks for all changed files\n\nAI assistance was used to draft the initial patch and tests. I manually reviewed the implementation, adjusted it to the current codebase, and ran the checks above.\n\n<!-- This is an auto-generated description by cubic. -->\n---\n## Summary by cubic\nAdds a new `select_clause_trailing_comma` policy, `require_multiline_forbid_single_line`, that requires trailing commas for multiline SELECT clauses and forbids them for single-line clauses. Multiline detection uses the rendered SQL from the SELECT keyword through the last target, ignoring comments, whitespace, and commas.\n\n**New Features**\n- New config value `require_multiline_forbid_single_line` added to `select_clause_trailing_comma`, alongside existing `forbid` and `require`.\n- Templated SELECT clauses are flagged but not auto-fixed, leaving the source unchanged.\n- All existing YAML rule cases pass (2,489 tests).\n\n<sup>Written for commit 4632ec57e51a9b06b5ceedbc9fec9e07d5065220. Summary will update on new commits.</sup>\n\n<a href=\"https://cubic.dev/pr/sqlfluff/sqlfluff/pull/8473?utm_source=github\" target=\"_blank\" rel=\"noopener noreferrer\" data-no-image-dialog=\"true\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://www.cubic.dev/buttons/review-in-cubic-dark.svg\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://www.cubic.dev/buttons/review-in-cubic-light.svg\"><img alt=\"Review in cubic\" src=\"https://www.cubic.dev/buttons/review-in-cubic-dark.svg\"></picture></a>\n\n<!-- End of auto-generated description by cubic. -->",
+  "files": [
+   "src/sqlfluff/rules/convention/CV03.py",
+   "src/sqlfluff/rules/convention/__init__.py",
+   "test/fixtures/rules/std_rule_cases/CV03.yml"
+  ]
+ },
+ {
+  "name": "8633",
+  "text": "fix(dialect): allow column reference in redshift's exclude syntax\n<!--Thanks for adding this feature!-->\r\n\r\n<!--Please give the Pull Request a meaningful title for the release notes-->\r\n\r\n### Brief summary of the change made\r\n<!--Please include `fixes #XXXX` to automatically close any corresponding issue when the pull request is merged. Alternatively if not fully closed you can say `makes progress on #XXXX`.-->\r\n\r\nThese are valid syntax in Redshift that got parsing error\r\n ` L:  x | P:   x |  PRS | Line x, Position x: Found unparsable section 'exclude....`\r\n```sql\r\nSELECT a.col1, b.* EXCLUDE (b.col2, b.col3) FROM table1 AS a, table2 AS b;\r\nSELECT a.col1, b.* EXCLUDE b.col2 FROM table1 AS a, table2 AS b;\r\n```\r\nPrior implementation only accept single identifier. I simply replace it with a column reference segment \r\n\r\n**How to reproduce** \r\n\r\nBelow sql executed in redshift successfully\r\n```sql\r\nselect \r\n    tbl.*\r\n    exclude (tbl.a, tbl.b) \r\nfrom \r\n    (select 1 as a, 2 as b, 3 as c) as tbl\r\n```\r\n\r\n<img width=\"478\" height=\"330\" alt=\"image\" src=\"https://github.com/user-attachments/assets/e58c76a8-7747-4b37-a295-6f92908f7be7\" />\r\n\r\nironically, redshift query editor also does not recognize the syntax :) \r\n\r\n\r\n\r\n\r\n### Are there any other side effects of this change that we should be aware of?\r\n\r\nShould be not. `ColumnReferenceSegment` is also a valid `SingleIdentifierGrammar`\r\n\r\n### Pull Request checklist\r\n- [x] Please confirm you have completed any of the necessary steps below.\r\n\r\n- Included test cases to demonstrate any code changes, which may be one or more of the following:\r\n  - `.yml` rule test cases in `test/fixtures/rules/std_rule_cases`.\r\n  - `.sql`/`.yml` parser test cases in `test/fixtures/dialects` (note YML files can be auto generated with `tox -e generate-fixture-yml`).\r\n  - Full autofix test cases in `test/fixtures/linter/autofix`.\r\n  - Other.\r\n- Added appropriate documentation for the change.\r\n- Created GitHub issues for any relevant followup/future enhance",
+  "files": [
+   "src/sqlfluff/dialects/dialect_redshift.py",
+   "test/fixtures/dialects/redshift/select_exclude.sql",
+   "test/fixtures/dialects/redshift/select_exclude.yml"
+  ]
+ }
+]

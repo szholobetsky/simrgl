@@ -1,0 +1,17 @@
+**Most relevant files to investigate / touch when fixing “Project creation form validation is buggy”**
+
+| # | File (relative path) | Why it matters |
+|---|----------------------|---------------|
+| 1 | `server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx` | The top‑level component that renders the whole project‑creation wizard. It wires together all form fields, validation hooks and ultimately triggers the API call to create a project. |
+| 2 | `server/sonar-web/src/main/js/apps/create/project/NewCodeDefinitionSelection.tsx` | Handles the “New Code” date range picker (start/end dates). Validation logic for these dates lives here – it’s where wrong/unexpected formats are currently being ignored or incorrectly accepted. |
+| 3 | `server/sonar-web/src/main/js/apps/create/project/__tests__/ManualProjectCreate-test.tsx` *(and related snapshots)* | Unit / snapshot tests that exercise the validation flow; useful for reproducing the bug and verifying a fix. |
+| 4 | `server/sonar-web/src/main/js/components/controls/ValidationInput.tsx` | Generic input component used by many fields (project key, name, description). The core “isValid” logic is implemented here – any change to how validation errors are surfaced should be checked in this file. |
+| 5 | `server/sonar-web/src/main/js/api/project-management.ts` | Contains the API wrapper that actually sends the POST request for project creation (`createProject`). It also contains client‑side pre‑checks (e.g., rejecting empty fields) and is where you can enforce a “prevent submit if validation errors exist” guard. |
+| 6 | `server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx` – **related helper files**: <br>• `CreateProjectFormContext.tsx` (if present, holds form state & validation context) <br>• `useValidation.ts` or similar hooks that aggregate field errors | These helpers centralise the logic for determining whether the “Create” button should be enabled. |
+| 7 | **Server‑side**: `<project-core>/src/main/java/org/sonar/core/component/...` (e.g., `ComponentUpdater.java`) | If client validation is bypassed, server side still rejects bad data – useful to confirm that the bug is purely front‑end and not a back‑end override. |
+| 8 | **Type definitions**: `<project-web>/src/main/js/types/types.ts` | Ensure that field types (e.g., `ProjectKey`, `DateRange`) match what validation expects; mismatches can cause silent failures. |
+
+> **Bottom line:**  
+> Start by inspecting the form component (`CreateProjectPage.tsx`) and its child components, especially the date picker in `NewCodeDefinitionSelection.tsx` and the generic validator in `ValidationInput.tsx`. Verify that the API call in `project-management.ts` is only executed when all validation flags are clear. If needed, add or tighten checks on the server side (`ComponentUpdater.java`) to guard against malformed input.
+
+These files collectively control how user input is validated, displayed and ultimately sent to the backend – they’re the most likely places where a “validation kicks in but doesn’t prevent creation” bug originates.

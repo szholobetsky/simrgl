@@ -1,0 +1,23 @@
+The most relevant files for removing the `Sonar-Version` HTTP header are:
+
+1. **`sonar-plugin-api/src/main/java/org/sonar/api/SonarQubeVersion.java`**  
+   - Directly defines the `SonarQubeVersion` class with the header.
+
+2. **`server/sonar-web/src/main/js/api/components.js`**  
+   - Likely contains the header in API components.
+
+3. **`server/sonar-web/src/main/js/apps/projects-admin/create-view.js`**  
+   - May include the header in project admin interfaces.
+
+4. **`server/sonar-web/src/main/js/apps/projects-admin/main.js`**  
+   - Contains the header in core application logic.
+
+5. **`server/sonar-web-server-core/src/test/java/org/sonar/server/rule/RegisterRulesTest.java`**  
+   - Shows the header in test code (deprecated).
+
+---
+
+**Action Plan:**  
+- Verify each file's content to locate the `Sonar-Version` header.  
+- Remove the header from all identified files.  
+- Ensure no residual references remain in documentation or tests.

@@ -222,3 +222,51 @@ The Qualia Horizon appears at compose time: the coherence of the final assembled
 **Section quality scoring**: after generation, score each section for relevance drift and flag sections that have deviated from the root task — allowing targeted regeneration rather than full reruns.
 
 **Integration with codeXplorer**: use `deepagent_md` to generate technical specification trees for software projects indexed by simargl, then use the generated documents as retrieval targets for task-to-document mapping.
+
+---
+
+## 9. Manual Control Layer: `redo` and `--review` (2026-09)
+
+§8 flagged "section quality scoring" and "targeted regeneration rather than full reruns" as open future work. Both are now implemented — not as a new scoring mechanism, but by reusing the plan-wide dedup machinery `--dedup` already provides (§ live dedup index, `radogast.live_index.LivePlanIndex`), wired into two new, explicit human-control primitives.
+
+### 9.1 Motivation: Ralph Needs a Leash
+
+A small local model running an unattended `deepagent_md`/`deepagent_tree` generation run reliably drifts off-topic mid-tree — e.g. reinventing generic networking protocol explanations inside a section that has nothing to do with networking — and nothing catches this until the whole run finishes and a human reads the output. Critically, this is not the same failure mode as an incomplete run: the node's file gets written, the tree continues past it, everything *looks* done. The existing `--dedup` auto-regenerate-once behavior already proves the shape of a fix (an automated check that can catch a problem and self-correct once, then defer to a human when it can't) — this section generalizes that shape into something a human can also drive interactively, not just something that runs silently in the background.
+
+### 9.2 `redo <plan_dir> <node_id> [--review]`
+
+Point fix for a single bad node, without discarding the rest of the tree. Workflow: hand-edit the numbered `## N.` section in the node's *parent* file (that section is exactly what `_extract_parent_section` already draws the child's own prompt from — see §3.2), then run `redo`. It:
+
+1. Backs up the node's entire descendant subtree to `<plan_dir>/_superseded/<node_id>_<timestamp>/` — moved, never deleted, so a worse regeneration is always recoverable.
+2. Re-derives the node's title from the (now hand-edited) parent section, exactly the way the original `_expand` recursion would have.
+3. Calls `_expand` on that node fresh, which reads the edited parent section via the unchanged `_extract_parent_section` path and rebuilds the deleted subtree underneath it.
+
+No new generation engine — `redo` is entirely a wrapper around calling `_expand` on an existing node id after clearing the way for it.
+
+### 9.3 `--review`: Interactive Per-Node Gate
+
+Global flag, works on the main run, `resume`, `continue`, and `redo` alike (all four already share the same `_expand` core loop). After every newly-generated node:
+
+1. The existing `LivePlanIndex` dedup check runs and prints its verdict to the console — always, never silently, regardless of what happens next. `--review` alone (without `--dedup`) still triggers this check purely for reporting; the two flags share one index-construction path.
+2. A menu is shown: `Continue? [y]es [n]o [b]ranch [a]ll`.
+
+| Key | Effect |
+|---|---|
+| `y` | Approve this node only; ask again at the next node. |
+| `n` | Reject — prompt for free-text feedback, fold it into the node's prompt (same mechanism as the dedup-retry block: append `Additional instruction: ...` and re-call `_generate`), rewrite the file, then re-run the gate on the fresh content. |
+| `b` | Approve, then auto-continue without asking through this node's *entire subtree*, resuming the prompt once traversal returns to this node's own depth/siblings. |
+| `a` | Approve, then auto-continue without asking for the *rest of the whole run*. |
+
+Safety override: even inside `b`/`a` auto-continue, if the dedup index's own one-shot auto-regeneration still leaves a node flagged ("needs manual review" — the existing §-live-dedup outcome), the gate forces itself back open regardless of trust level. Auto-trust never suppresses an unresolved radogast flag.
+
+`--review` (like `--dedup`) is incompatible with `--profile`: a per-node approval gate has no meaning against concurrently-generating BFS siblings. Both flags together with `--profile` are now a hard `error: ...` + abort at argument-parse time, replacing the previous silent "dedup skipped" behavior for consistency.
+
+### 9.4 Scope Across the Family
+
+Implemented identically (redo + subtree wipe + full review gate) in the three tree-structured engines — `deepagent_md.py`, `deepagent_tree_md.py`, `deepagent_tree.py` — each a fully independent copy of the machinery (confirmed: none of the three import from another), so the same patch was applied three times rather than factored into a shared module.
+
+A simplified version (no subtree — `redo` regenerates exactly one unit, review menu collapses to `[y]es [n]o [a]ll` since there's no subtree to "stay inside") was added to the two flat/independent-unit flows, `deepagent_spec.py` and `deepagent_test.py`, both of which had zero radogast integration before this — the same `LivePlanIndex` class is reused there too, just seeded from on-disk sibling units (`spec_*.md` / `test_*.<ext>`) instead of a `plan_dir` tree scan.
+
+### 9.5 Implementation Location
+
+All five files: `C:\Projects\1bcoder\_bcoder_data\flows\{deepagent_md,deepagent_tree_md,deepagent_tree,deepagent_spec,deepagent_test}.py` (independent clone — see AGENTS.md's submodule-migration table; never the pinned `C:\Projects\simrgl\1bcoder\` snapshot).

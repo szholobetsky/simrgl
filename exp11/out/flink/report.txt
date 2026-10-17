@@ -1,0 +1,109 @@
+10 tasks, 10 without mass changes, 10 with a file that still exists
+
+task         truth reach |   simargl   gamayun  svitovyd     fused | agreed  title
+FLINK-27970      8     8 |     0/-       0/-       0/-       0/-   |         [JUnit5 Migration] Module: flink-hadoop-buik
+FLINK-30196     30    30 |     0/-       1/1       0/-       1/2   |         Replace usage of deprecated Mockito's methods with advised by Mockito
+FLINK-35268     38    37 |     1/2       0/-       0/-       1/1   |         Support TTL for Async State API
+FLINK-36521     51    51 |     0/-       0/-       0/-       0/-   |         
+FLINK-36571      1     1 |     0/-       0/-       0/-       0/-   | ·       Flink dashboard does not show Busy / Backpressure
+FLINK-36589     14    14 |     4/1       0/-       0/-       2/9   | ···     Decouple the initialization of sync and async keyed statebackend
+FLINK-36606      1     1 |     1/3       0/-       1/3       1/1   | +       TimestampITCase generates test artifacts outside of tmp folder
+FLINK-36621      2     2 |     0/-       1/4       0/-       0/-   |         Build failure: StatefulSink not found
+FLINK-36622      1     1 |     0/-       0/-       1/2       1/9   | ··      Remove the dependency of StateBenchmark on RocksDBKeyedStateBackend AP
+FLINK-4602     150   148 |     8/1       6/1       0/-       8/1   | ·++++   Move RocksDB backend to proper package
+
+cell = hits in top 10 / rank of the first hit; agreed = files named by >= 2 tools (+ right, · wrong)
+
+  simargl   hit@10 0.40  P@10 0.14  R@10 (of reachable) 0.23  MRR 0.28
+  gamayun   hit@10 0.30  P@10 0.08  R@10 (of reachable) 0.12  MRR 0.23
+  svitovyd  hit@10 0.20  P@10 0.07  R@10 (of reachable) 0.20  MRR 0.08
+  fused     hit@10 0.60  P@10 0.14  R@10 (of reachable) 0.32  MRR 0.37
+
+precision of a file by who named it (top 10s, tasks without mass changes):
+  S+G+V    0/1    = 0.00
+  G+V      0/1    = 0.00
+  S+G      4/8    = 0.50
+  S+V      1/2    = 0.50
+  G        4/90   = 0.04
+  S        9/89   = 0.10
+  V        1/20   = 0.05
+  named by 3: 0/1 = 0.00
+  named by 2: 5/11 = 0.45
+  named by 1: 14/199 = 0.07
+
+the fused top-1, by how many tools name it:
+  3 tools: right in 0/1 tasks
+  2 tools: right in 2/4 tasks
+  1 tools: right in 1/5 tasks
+
+fused top 5 per task (tool ranks; + right):
+
+FLINK-27970  [JUnit5 Migration] Module: flink-hadoop-buik  (svitovyd identifiers: —)
+     S1             flink-python/src/test/java/org/apache/flink/table/runtime/arrow/ArrowReaderWriterTestBase.java
+     G1             pom.xml
+     S2             flink-python/src/test/java/org/apache/flink/table/runtime/arrow/sources/ArrowSourceFunctionTestBase.java
+     G2             flink-runtime/src/main/java/org/apache/flink/runtime/security/modules/HadoopModule.java
+     G3             flink-dist/pom.xml
+
+FLINK-30196  Replace usage of deprecated Mockito's methods with advised by Mockito  (svitovyd identifiers: —)
+     S1             flink-yarn/src/main/java/org/apache/flink/yarn/Utils.java
+   + G1             pom.xml
+     G2             .github/workflows/docs.yml
+     S2             flink-yarn/src/main/java/org/apache/flink/yarn/YarnClusterDescriptor.java
+     G3             docs/content.zh/_index.md
+
+FLINK-35268  Support TTL for Async State API  (svitovyd identifiers: —)
+   + S2 G20         flink-state-backends/flink-statebackend-forst/src/main/java/org/apache/flink/state/forst/ForStKeyedStateBackend.java
+     S6 G28         flink-runtime/src/test/java/org/apache/flink/runtime/asyncprocessing/AsyncExecutionControllerTest.java
+     S3 G35         flink-state-backends/flink-statebackend-forst/src/main/java/org/apache/flink/state/forst/ForStStateRequestClassifier.java
+     S23 G11        flink-runtime/src/main/java/org/apache/flink/runtime/state/ttl/TtlMapState.java
+     S17 G32        flink-state-backends/flink-statebackend-forst/src/main/java/org/apache/flink/state/forst/ForStStateExecutor.java
+
+FLINK-36521    (svitovyd identifiers: —)
+     S1             flink-runtime/src/main/java/org/apache/flink/runtime/source/coordinator/SourceCoordinator.java
+     G1             pom.xml
+     S2             flink-runtime/src/main/java/org/apache/flink/runtime/source/coordinator/SourceCoordinatorProvider.java
+     G2             flink-runtime/src/main/java/org/apache/flink/streaming/runtime/tasks/StreamTask.java
+     G3             flink-runtime/src/main/scala/org/apache/flink/runtime/jobmanager/JobManager.scala
+
+FLINK-36571  Flink dashboard does not show Busy / Backpressure  (svitovyd identifiers: isValid)
+     S10 G1         flink-runtime-web/web-dashboard/src/app/pages/job/overview/backpressure/job-overview-drawer-backpressure.component.html
+     S1 G30         flink-runtime-web/src/test/java/org/apache/flink/runtime/webmonitor/WebFrontendITCase.java
+     V1             flink-table/flink-table-planner/src/main/scala/org/apache/flink/table/planner/plan/nodes/calcite/Expand.scala
+     G2             flink-runtime-web/web-dashboard/web/js/index.js
+     S2             flink-runtime/src/main/java/org/apache/flink/runtime/dispatcher/DispatcherJob.java
+
+FLINK-36589  Decouple the initialization of sync and async keyed statebackend  (svitovyd identifiers: AsyncKeyedStateBackend, KeyedStateBackend)
+     S13 G5 V3      flink-runtime/src/main/java/org/apache/flink/runtime/state/KeyedStateBackend.java
+     S7 G19 V1      flink-runtime/src/main/java/org/apache/flink/runtime/state/AsyncKeyedStateBackend.java
+     S5 G1          flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/RocksDBKeyedStateBackend.java
+     S3 G12         flink-runtime/src/main/java/org/apache/flink/runtime/state/StateBackend.java
+     S14 G2         flink-runtime/src/test/java/org/apache/flink/runtime/state/StateBackendTestBase.java
+
+FLINK-36606  TimestampITCase generates test artifacts outside of tmp folder  (svitovyd identifiers: TimestampITCase)
+   + S3 V3          flink-tests/src/test/java/org/apache/flink/test/streaming/runtime/TimestampITCase.java
+     G1             flink-end-to-end-tests/run-nightly-tests.sh
+     S1             flink-runtime/src/test/java/org/apache/flink/runtime/state/filesystem/FsMergingCheckpointStorageLocationTest.java
+     V1             flink-table/flink-table-planner/src/test/scala/org/apache/flink/table/planner/runtime/batch/sql/TimestampITCase.scala
+     S2             flink-runtime/src/test/java/org/apache/flink/runtime/util/TestingTaskManagerRuntimeInfo.java
+
+FLINK-36621  Build failure: StatefulSink not found  (svitovyd identifiers: sink2, KafkaSink)
+     S12 G5         pom.xml
+     S19 G19        flink-connectors/flink-connector-kafka/src/main/java/org/apache/flink/streaming/connectors/kafka/FlinkKafkaProducer.java
+     G1             flink-connectors/flink-connector-kafka/src/test/java/org/apache/flink/connector/kafka/sink/KafkaSinkITCase.java
+     V1             flink-python/pyflink/datastream/connectors/kafka.py
+     S1             flink-runtime/src/test/java/org/apache/flink/streaming/util/MockDeserializationSchema.java
+
+FLINK-36622  Remove the dependency of StateBenchmark on RocksDBKeyedStateBackend AP  (svitovyd identifiers: RocksDBKeyedStateBackend, StateBackendBenchmarkUtils, KeyedStateBackend)
+     S5 G1 V1       flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/RocksDBKeyedStateBackend.java
+     S4 G4          flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/RocksDBKeyedStateBackendBuilder.java
+     S2 G11         flink-state-backends/flink-statebackend-rocksdb/src/test/java/org/apache/flink/state/rocksdb/RocksDBStateBackendConfigTest.java
+     G19 V4         flink-runtime/src/main/java/org/apache/flink/runtime/state/KeyedStateBackend.java
+     S1 G36         flink-state-backends/flink-statebackend-rocksdb/src/test/java/org/apache/flink/state/rocksdb/RocksDBAsyncSnapshotTest.java
+
+FLINK-4602  Move RocksDB backend to proper package  (svitovyd identifiers: —)
+   + S1 G3          flink-state-backends/flink-statebackend-rocksdb/src/test/java/org/apache/flink/state/rocksdb/RocksDBStateBackendConfigTest.java
+   + S5 G1          flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/RocksDBKeyedStateBackend.java
+     S9 G2          flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/contrib/streaming/state/RocksDBStateBackend.java
+   + S2 G10         flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/AbstractRocksDBState.java
+   + S7 G5          flink-state-backends/flink-statebackend-rocksdb/src/main/java/org/apache/flink/state/rocksdb/RocksDBMapState.java

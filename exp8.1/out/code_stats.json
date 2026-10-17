@@ -1,0 +1,32 @@
+{
+ "units": 75622,
+ "documents": 81,
+ "code_files": 10400,
+ "terms": 51856,
+ "function_words": 70,
+ "domain_core": 4,
+ "word_forms_merged": 1698,
+ "identifiers": 44743,
+ "files": 10474,
+ "dirs": 2074,
+ "modules": 23,
+ "symbols": 64910,
+ "predicates": {
+  "units": 1,
+  "unit_count": 10497,
+  "part_of": 12548,
+  "is": 1597,
+  "variant_of": 1698,
+  "defined_in": 121843,
+  "member_of": 52332,
+  "characterizes": 528609,
+  "has_part": 114547,
+  "used_in": 167227,
+  "anchor_of": 11591,
+  "names": 15934,
+  "related_to": 280656,
+  "narrower_than": 67480,
+  "is_a": 2
+ },
+ "seconds": 288.2
+}

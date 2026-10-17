@@ -1,0 +1,4 @@
+name,repo,db
+sonar,C:\Projects\Data\sonarqube,C:\Projects\Data\sonar.db
+flink,C:\Projects\Data\flink,C:\Projects\Data\flink.db
+sqlfluff,C:\Projects\DAnotation\Ummon\STA-2\sqlfluff,C:\Projects\DAnotation\Ummon\STA-2\sqlfluff\units.db

@@ -1,0 +1,2 @@
+Project creation form validation is buggy
+When creating a project, the field validation kicks in for wrong/unexpected formats, but doesn't actually prevent creation. Also, some formats that should be working (according to description) aren't accepted.

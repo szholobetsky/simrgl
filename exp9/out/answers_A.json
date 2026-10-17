@@ -1,0 +1,5 @@
+{"A1": ["sonar-application/src/main/assembly/conf/sonar.properties"],
+ "A2": ["sonar-application/src/main/assembly/conf/logback.xml", "server/sonar-server/src/main/java/org/sonar/server/app/ServerProcessLogging.java", "server/sonar-server/src/main/java/org/sonar/server/app/WebServerProcessLogging.java"],
+ "A3": ["server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx", "server/sonar-webserver-webapi/src/main/java/org/sonar/server/component/ComponentUpdater.java"],
+ "A4": ["server/sonar-webserver-webapi/src/main/java/org/sonar/server/component/ws/SearchProjectsAction.java", "server/sonar-webserver-es/src/main/java/org/sonar/server/measure/index/ProjectMeasuresIndex.java"],
+ "A5": ["server/sonar-webserver/src/main/java/org/sonar/server/platform/web/MasterServletFilter.java", "server/sonar-webserver-api/src/main/java/org/sonar/server/http/JakartaHttpResponse.java"]}

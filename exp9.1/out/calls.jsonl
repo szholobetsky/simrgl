@@ -1,0 +1,102 @@
+{"group": "A", "cmd": "gamayun", "args": ["Upgrade analyzers sonar-cfamily-plugin sonar-security sonar-css sonar-csharp sonar-java sonar-javascript sonar-python"], "out_chars": 2346, "lines_read": 0, "sec": 2.3, "t": "15:33:30"}
+{"group": "A", "cmd": "gamayun", "args": ["Fix documentation about synchronization of default group when using SSO authentication sonar.properties"], "out_chars": 3134, "lines_read": 0, "sec": 2.6, "t": "15:33:30"}
+{"group": "B", "cmd": "grep", "args": ["T06", "6\\.6\\.0\\.13759"], "out_chars": 130, "lines_read": 0, "sec": 1.2, "t": "15:33:33"}
+{"group": "B", "cmd": "glob", "args": ["T01", "**/*sonar.properties*"], "out_chars": 155, "lines_read": 0, "sec": 0.2, "t": "15:33:34"}
+{"group": "B", "cmd": "grep", "args": ["T06", "8\\.1\\.0\\.675"], "out_chars": 711, "lines_read": 0, "sec": 1.2, "t": "15:33:37"}
+{"group": "B", "cmd": "grep", "args": ["T01", "groupsHeader|sso.group", "sonar-application/src/main/assembly/conf/sonar.properties"], "out_chars": 289, "lines_read": 0, "sec": 0.1, "t": "15:33:37"}
+{"group": "B", "cmd": "grep", "args": ["T06", "sonar-css-plugin|sonar-csharp-plugin|sonar-vbnet-plugin|sonar-java-plugin|sonar-javascript-plugin|sonar-python-plugin"], "out_chars": 3772, "lines_read": 0, "sec": 1.1, "t": "15:33:41"}
+{"group": "B", "cmd": "read", "args": ["T01", "sonar-application/src/main/assembly/conf/sonar.properties", "160", "15"], "out_chars": 1024, "lines_read": 15, "sec": 0.0, "t": "15:33:41"}
+{"group": "B", "cmd": "read", "args": ["T06", "build.gradle", "130", "30"], "out_chars": 3542, "lines_read": 30, "sec": 0.0, "t": "15:33:44"}
+{"group": "B", "cmd": "glob", "args": ["T01", "**/*Sso*.java"], "out_chars": 5450, "lines_read": 0, "sec": 0.4, "t": "15:33:46"}
+{"group": "B", "cmd": "grep", "args": ["T07", "Security Review Rating"], "out_chars": 2420, "lines_read": 0, "sec": 1.9, "t": "15:33:51"}
+{"group": "B", "cmd": "grep", "args": ["T01", "group", "server/sonar-server/src/main/java/org/sonar/server/authentication/SsoAuthenticator.java"], "out_chars": 1073, "lines_read": 0, "sec": 0.1, "t": "15:33:51"}
+{"group": "B", "cmd": "glob", "args": ["T07", "**/server/sonar-web/src/main/js/**/*Project*"], "out_chars": 8, "lines_read": 0, "sec": 0.2, "t": "15:33:54"}
+{"group": "B", "cmd": "read", "args": ["T01", "server/sonar-server/src/main/java/org/sonar/server/authentication/SsoAuthenticator.java", "165", "20"], "out_chars": 1292, "lines_read": 20, "sec": 0.0, "t": "15:33:55"}
+{"group": "B", "cmd": "grep", "args": ["T07", "sort|Sort", "**/*Project*"], "out_chars": 5763, "lines_read": 0, "sec": 0.1, "t": "15:33:56"}
+{"group": "B", "cmd": "grep", "args": ["T01", "default.*group|group.*default", "server/sonar-server/src/test/java/org/sonar/server/authentication/SsoAuthenticatorTest.java"], "out_chars": 6512, "lines_read": 0, "sec": 0.1, "t": "15:33:59"}
+{"group": "B", "cmd": "read", "args": ["T07", "server/sonar-web/src/main/js/apps/projects/utils.ts", "1", "80"], "out_chars": 3586, "lines_read": 80, "sec": 0.0, "t": "15:34:00"}
+{"group": "B", "cmd": "grep", "args": ["T08", "8\\.5\\."], "out_chars": 6997, "lines_read": 0, "sec": 1.5, "t": "15:34:06"}
+{"group": "B", "cmd": "glob", "args": ["T01", "**/*.md"], "out_chars": 131, "lines_read": 0, "sec": 0.4, "t": "15:34:07"}
+{"group": "B", "cmd": "glob", "args": ["T01", "**/docs/**"], "out_chars": 8, "lines_read": 0, "sec": 0.2, "t": "15:34:10"}
+{"group": "B", "cmd": "read", "args": ["T08", "build.gradle", "275", "20"], "out_chars": 972, "lines_read": 20, "sec": 0.1, "t": "15:34:10"}
+{"group": "B", "cmd": "grep", "args": ["T08", "jackson-core|httpclient|http-client"], "out_chars": 5918, "lines_read": 0, "sec": 0.9, "t": "15:34:13"}
+{"group": "B", "cmd": "grep", "args": ["T02", "not analyzed|Project is not", "**/*.java"], "out_chars": 1214, "lines_read": 0, "sec": 1.3, "t": "15:34:16"}
+{"group": "B", "cmd": "read", "args": ["T08", "build.gradle", "200", "20"], "out_chars": 1047, "lines_read": 20, "sec": 0.0, "t": "15:34:17"}
+{"group": "B", "cmd": "grep", "args": ["T02", "not analyzed|analyzed yet", "**/*.properties"], "out_chars": 725, "lines_read": 0, "sec": 0.1, "t": "15:34:19"}
+{"group": "B", "cmd": "grep", "args": ["T08", "elasticsearch|Elasticsearch"], "out_chars": 6528, "lines_read": 0, "sec": 1.3, "t": "15:34:21"}
+{"group": "B", "cmd": "grep", "args": ["T02", "projects.not_analyzed", "**/*.java"], "out_chars": 7, "lines_read": 0, "sec": 0.4, "t": "15:34:23"}
+{"group": "B", "cmd": "glob", "args": ["T02", "**/*[Pp]roject*.js"], "out_chars": 8, "lines_read": 0, "sec": 0.2, "t": "15:34:26"}
+{"group": "B", "cmd": "grep", "args": ["T09", "Sonar-Version"], "out_chars": 1306, "lines_read": 0, "sec": 1.3, "t": "15:34:28"}
+{"group": "B", "cmd": "glob", "args": ["T02", "server/sonar-web/**/*[Pp]roject*.tsx"], "out_chars": 5742, "lines_read": 0, "sec": 0.1, "t": "15:34:29"}
+{"group": "B", "cmd": "glob", "args": ["T02", "server/sonar-web/**/projects/**/*.tsx"], "out_chars": 5087, "lines_read": 0, "sec": 0.2, "t": "15:34:32"}
+{"group": "B", "cmd": "grep", "args": ["T10", "github|Github|onboard|search"], "out_chars": 4210, "lines_read": 0, "sec": 2.0, "t": "15:34:34"}
+{"group": "B", "cmd": "glob", "args": ["T10", "**/*[Gg]ithub*Onboard*.tsx"], "out_chars": 8, "lines_read": 0, "sec": 0.2, "t": "15:34:38"}
+{"group": "B", "cmd": "grep", "args": ["T03", "FileReportGenerator|fop|FOP", "**/*.java"], "out_chars": 5333, "lines_read": 0, "sec": 0.9, "t": "15:34:39"}
+{"group": "B", "cmd": "grep", "args": ["T10", "fork", "**/*[Gg]ithub*"], "out_chars": 1376, "lines_read": 0, "sec": 0.1, "t": "15:34:41"}
+{"group": "B", "cmd": "glob", "args": ["T03", "**/FileReportGenerator.java"], "out_chars": 8, "lines_read": 0, "sec": 0.1, "t": "15:34:43"}
+{"group": "B", "cmd": "grep", "args": ["T10", "GithubApplicationClient", "**/*GithubApplicationClient*.java"], "out_chars": 4052, "lines_read": 0, "sec": 0.0, "t": "15:34:44"}
+{"group": "B", "cmd": "read", "args": ["T10", "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java", "1", "100"], "out_chars": 5087, "lines_read": 100, "sec": 0.0, "t": "15:34:47"}
+{"group": "A", "cmd": "simargl", "args": ["Upgrade analyzers sonar-cfamily-plugin sonar-security sonar-css sonar-csharp sonar-java sonar-javascript sonar-python"], "out_chars": 2892, "lines_read": 0, "sec": 72.6, "t": "15:34:47"}
+{"group": "B", "cmd": "grep", "args": ["T04", "commit.*status|permission", "**/*.java"], "out_chars": 6978, "lines_read": 0, "sec": 1.0, "t": "15:34:48"}
+{"group": "A", "cmd": "simargl", "args": ["Fix documentation about synchronization of default group when using SSO authentication sonar.properties"], "out_chars": 9605, "lines_read": 0, "sec": 72.9, "t": "15:34:48"}
+{"group": "B", "cmd": "grep", "args": ["T10", "listRepositories", "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java"], "out_chars": 250, "lines_read": 0, "sec": 0.0, "t": "15:34:51"}
+{"group": "B", "cmd": "glob", "args": ["T04", "**/GithubApplicationClient*Test.java"], "out_chars": 113, "lines_read": 0, "sec": 0.2, "t": "15:34:53"}
+{"group": "A", "cmd": "grep", "args": ["T06", "sonar-cfamily-plugin|sonar-security|sonar-css|sonar-csharp|sonar-java|sonar-javascript|sonar-python", "build.gradle"], "out_chars": 1481, "lines_read": 0, "sec": 0.1, "t": "15:34:53"}
+{"group": "A", "cmd": "read", "args": ["T01", "sonar-application/src/main/assembly/conf/sonar.properties", "1", "50"], "out_chars": 3044, "lines_read": 50, "sec": 0.0, "t": "15:34:54"}
+{"group": "B", "cmd": "read", "args": ["T10", "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java", "165", "30"], "out_chars": 1665, "lines_read": 30, "sec": 0.0, "t": "15:34:54"}
+{"group": "B", "cmd": "glob", "args": ["T05", "**/*[Cc]reate*[Pp]roject*.tsx"], "out_chars": 1733, "lines_read": 0, "sec": 0.2, "t": "15:34:57"}
+{"group": "A", "cmd": "grep", "args": ["T01", "groupsHeader|sonar.web.sso", "sonar-application/src/main/assembly/conf/sonar.properties"], "out_chars": 812, "lines_read": 0, "sec": 0.1, "t": "15:34:58"}
+{"group": "A", "cmd": "grep", "args": ["T06", "sonar-vbnet-plugin|vbnet", "**/*.gradle"], "out_chars": 247, "lines_read": 0, "sec": 0.0, "t": "15:34:59"}
+{"group": "A", "cmd": "read", "args": ["T01", "sonar-application/src/main/assembly/conf/sonar.properties", "153", "25"], "out_chars": 1429, "lines_read": 25, "sec": 0.0, "t": "15:35:00"}
+{"group": "A", "cmd": "read", "args": ["T06", "sonar-application/build.gradle", "1", "50"], "out_chars": 1580, "lines_read": 50, "sec": 0.0, "t": "15:35:02"}
+{"group": "A", "cmd": "grep", "args": ["T06", "bundledPlugin", "sonar-application/build.gradle"], "out_chars": 264, "lines_read": 0, "sec": 0.0, "t": "15:35:04"}
+{"group": "A", "cmd": "gamayun", "args": ["Change message in projects list when main branch of project is not analyzed"], "out_chars": 2763, "lines_read": 0, "sec": 1.9, "t": "15:35:07"}
+{"group": "A", "cmd": "glob", "args": ["T06", "**/*gradle*"], "out_chars": 2794, "lines_read": 0, "sec": 0.1, "t": "15:35:07"}
+{"group": "A", "cmd": "gamayun", "args": ["Projects sorted by Security Review Rating metric sort column projects page"], "out_chars": 2762, "lines_read": 0, "sec": 2.4, "t": "15:35:14"}
+{"group": "A", "cmd": "simargl", "args": ["Change message in projects list when main branch of project is not analyzed"], "out_chars": 12526, "lines_read": 0, "sec": 15.2, "t": "15:35:26"}
+{"group": "A", "cmd": "simargl", "args": ["Projects sorted by Security Review Rating metric sort"], "out_chars": 8246, "lines_read": 0, "sec": 14.7, "t": "15:35:32"}
+{"group": "A", "cmd": "grep", "args": ["T02", "not.analyzed|not yet", "sonar-core/src/main/resources/org/sonar/l10n/core.properties"], "out_chars": 543, "lines_read": 0, "sec": 0.0, "t": "15:35:35"}
+{"group": "A", "cmd": "grep", "args": ["T07", "SECURITY_REVIEW_RATING", "**/*.java"], "out_chars": 8863, "lines_read": 0, "sec": 0.2, "t": "15:35:38"}
+{"group": "A", "cmd": "grep", "args": ["T02", "projects.not_analyzed|ProjectCardOverallMeasures"], "out_chars": 745, "lines_read": 0, "sec": 1.2, "t": "15:35:40"}
+{"group": "A", "cmd": "grep", "args": ["T07", "sortFields|SORTS|addSort", "server/sonar-server/src/main/java/org/sonar/server/component/ws/SearchProjectsAction.java"], "out_chars": 7, "lines_read": 0, "sec": 0.1, "t": "15:35:42"}
+{"group": "A", "cmd": "read", "args": ["T02", "server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx", "205", "15"], "out_chars": 774, "lines_read": 15, "sec": 0.0, "t": "15:35:44"}
+{"group": "A", "cmd": "read", "args": ["T07", "server/sonar-server/src/main/java/org/sonar/server/component/ws/SearchProjectsAction.java", "1", "80"], "out_chars": 111, "lines_read": 0, "sec": 0.0, "t": "15:35:45"}
+{"group": "A", "cmd": "glob", "args": ["T07", "**/SearchProjects*.java"], "out_chars": 392, "lines_read": 0, "sec": 0.1, "t": "15:35:48"}
+{"group": "A", "cmd": "read", "args": ["T07", "server/sonar-webserver-webapi/src/main/java/org/sonar/server/component/ws/SearchProjectsAction.java", "1", "60"], "out_chars": 2857, "lines_read": 60, "sec": 0.0, "t": "15:35:50"}
+{"group": "A", "cmd": "gamayun", "args": ["Do not display FOP INFO logs when generating a PDF report FOP logger setLevel ERROR"], "out_chars": 2476, "lines_read": 0, "sec": 2.6, "t": "15:35:52"}
+{"group": "A", "cmd": "find", "args": ["T07", "ProjectMeasures"], "out_chars": 7409, "lines_read": 0, "sec": 0.3, "t": "15:35:55"}
+{"group": "A", "cmd": "grep", "args": ["T03", "FileReportGenerator|FOP|fop", "**/*.java"], "out_chars": 5333, "lines_read": 0, "sec": 0.2, "t": "15:35:56"}
+{"group": "A", "cmd": "read", "args": ["T03", "server/sonar-server-common/src/main/java/org/sonar/server/log/ServerProcessLogging.java", "80", "10"], "out_chars": 866, "lines_read": 10, "sec": 0.0, "t": "15:36:00"}
+{"group": "A", "cmd": "gamayun", "args": ["Upgrade Tomcat Jackson http-client CVE vulnerability dependencies fix elasticsearch bundled"], "out_chars": 2336, "lines_read": 0, "sec": 2.2, "t": "15:36:02"}
+{"group": "A", "cmd": "grep", "args": ["T03", "apache.fop|ImageImplRegistry"], "out_chars": 463, "lines_read": 0, "sec": 1.8, "t": "15:36:05"}
+{"group": "A", "cmd": "gamayun", "args": ["Remove the need for Commit Statuses permission github applications documentation warning"], "out_chars": 2774, "lines_read": 0, "sec": 2.3, "t": "15:36:12"}
+{"group": "A", "cmd": "simargl", "args": ["Fix vulnerabilities CVE Tomcat Jackson Elasticsearch bundled libraries upgrade"], "out_chars": 3244, "lines_read": 0, "sec": 15.4, "t": "15:36:22"}
+{"group": "A", "cmd": "grep", "args": ["T08", "tomcat|jackson|elasticsearch", "build.gradle"], "out_chars": 1360, "lines_read": 0, "sec": 0.0, "t": "15:36:26"}
+{"group": "A", "cmd": "grep", "args": ["T08", "commons-codec|http-client", "gradle.properties"], "out_chars": 7, "lines_read": 0, "sec": 0.0, "t": "15:36:30"}
+{"group": "A", "cmd": "simargl", "args": ["Remove the need for Commit Statuses permission github applications"], "out_chars": 9074, "lines_read": 0, "sec": 13.7, "t": "15:36:30"}
+{"group": "A", "cmd": "grep", "args": ["T04", "commit.*status|CommitStatuses|commitStatus", "-i"], "out_chars": 7, "lines_read": 0, "sec": 0.0, "t": "15:36:35"}
+{"group": "A", "cmd": "gamayun", "args": ["Remove Sonar-Version HTTP header blue green deployment"], "out_chars": 2348, "lines_read": 0, "sec": 1.7, "t": "15:36:36"}
+{"group": "A", "cmd": "glob", "args": ["T04", "**/GithubProvisioningConfigValidator*"], "out_chars": 8, "lines_read": 0, "sec": 0.1, "t": "15:36:38"}
+{"group": "A", "cmd": "grep", "args": ["T09", "Sonar-Version", "**/*"], "out_chars": 1306, "lines_read": 0, "sec": 0.4, "t": "15:36:39"}
+{"group": "A", "cmd": "glob", "args": ["T04", "**/Github*Validator*"], "out_chars": 218, "lines_read": 0, "sec": 0.1, "t": "15:36:42"}
+{"group": "A", "cmd": "read", "args": ["T04", "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubGlobalSettingsValidator.java", "1", "50"], "out_chars": 2536, "lines_read": 50, "sec": 0.0, "t": "15:36:45"}
+{"group": "A", "cmd": "read", "args": ["T04", "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubGlobalSettingsValidator.java", "50", "63"], "out_chars": 733, "lines_read": 14, "sec": 0.0, "t": "15:36:47"}
+{"group": "A", "cmd": "grep", "args": ["T04", "checkAppPermissions|commitStatus|commit.status", "**/*.java", "-i"], "out_chars": 55, "lines_read": 0, "sec": 0.0, "t": "15:36:50"}
+{"group": "A", "cmd": "grep", "args": ["T04", "checkAppPermissions"], "out_chars": 3156, "lines_read": 0, "sec": 0.7, "t": "15:36:53"}
+{"group": "A", "cmd": "read", "args": ["T04", "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java", "95", "30"], "out_chars": 1839, "lines_read": 30, "sec": 0.0, "t": "15:36:57"}
+{"group": "A", "cmd": "simargl", "args": ["Remove HTTP header Sonar-Version"], "out_chars": 7260, "lines_read": 0, "sec": 15.2, "t": "15:36:59"}
+{"group": "A", "cmd": "read", "args": ["T04", "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java", "115", "20"], "out_chars": 1438, "lines_read": 20, "sec": 0.0, "t": "15:37:00"}
+{"group": "A", "cmd": "grep", "args": ["T04", "statuses|Statuses|permission"], "out_chars": 6439, "lines_read": 0, "sec": 0.5, "t": "15:37:04"}
+{"group": "A", "cmd": "gamayun", "args": ["Github onboarding search forked repository fork parameter GH organization"], "out_chars": 2916, "lines_read": 0, "sec": 1.9, "t": "15:37:08"}
+{"group": "A", "cmd": "read", "args": ["T04", "server/sonar-alm-client/src/test/java/org/sonar/alm/client/github/GithubApplicationClientImplTest.java", "159", "30"], "out_chars": 1465, "lines_read": 30, "sec": 0.0, "t": "15:37:09"}
+{"group": "A", "cmd": "glob", "args": ["T10", "**/github/**/*.java"], "out_chars": 1097, "lines_read": 0, "sec": 0.1, "t": "15:37:11"}
+{"group": "A", "cmd": "grep", "args": ["T10", "fork", "**/github/**/*.java"], "out_chars": 1376, "lines_read": 0, "sec": 0.0, "t": "15:37:14"}
+{"group": "A", "cmd": "gamayun", "args": ["Project creation form validation is buggy when creating a project the field validation kicks in for wrong unexpected formats but doesn't actually prevent creation"], "out_chars": 2768, "lines_read": 0, "sec": 2.6, "t": "15:37:16"}
+{"group": "A", "cmd": "grep", "args": ["T10", "searchRepositories|searchRepositoriesQuery", "**/github/**/*.java"], "out_chars": 7, "lines_read": 0, "sec": 0.0, "t": "15:37:17"}
+{"group": "A", "cmd": "glob", "args": ["T10", "**/GithubApplicationClient*.java"], "out_chars": 311, "lines_read": 0, "sec": 0.1, "t": "15:37:19"}
+{"group": "A", "cmd": "grep", "args": ["T10", "searchRepositories|search", "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java"], "out_chars": 1234, "lines_read": 0, "sec": 0.0, "t": "15:37:22"}
+{"group": "A", "cmd": "read", "args": ["T10", "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java", "165", "185"], "out_chars": 4738, "lines_read": 94, "sec": 0.0, "t": "15:37:25"}
+{"group": "A", "cmd": "simargl", "args": ["Project creation form validation is buggy when creating a project the field validation kicks in for wrong formats but doesn't prevent creation"], "out_chars": 7312, "lines_read": 0, "sec": 13.7, "t": "15:37:34"}
+{"group": "A", "cmd": "glob", "args": ["T05", "**/create/project/**/*.tsx"], "out_chars": 723, "lines_read": 0, "sec": 0.1, "t": "15:37:40"}
+{"group": "A", "cmd": "glob", "args": ["T05", "server/sonar-web/src/main/js/apps/create/project/*.tsx"], "out_chars": 1401, "lines_read": 0, "sec": 0.1, "t": "15:37:44"}
+{"group": "A", "cmd": "glob", "args": ["T05", "server/sonar-web/src/main/js/apps/create/project/manual/**"], "out_chars": 8, "lines_read": 0, "sec": 0.1, "t": "15:37:47"}

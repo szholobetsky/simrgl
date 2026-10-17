@@ -1,0 +1,22 @@
+{
+ "bge-small": {
+  "texts": 9799,
+  "seconds": 707.1,
+  "dim": 384
+ },
+ "ollama://all-minilm": {
+  "texts": 9799,
+  "seconds": 1454.2,
+  "dim": 384
+ },
+ "ollama://granite-embedding:30m": {
+  "texts": 9799,
+  "seconds": 1499.4,
+  "dim": 384
+ },
+ "ollama://nomic-embed-text": {
+  "texts": 9799,
+  "seconds": 3213.8,
+  "dim": 768
+ }
+}

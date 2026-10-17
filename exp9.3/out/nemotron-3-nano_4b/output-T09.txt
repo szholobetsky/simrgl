@@ -1,0 +1,8 @@
+The “Sonar‑Version” HTTP header is set only in `WebServiceFilter.doFilter` (line 87).  
+To fix the task, delete that line so the header is no longer added to responses.
+
+**Action:**  
+- Edit `server/sonar-webserver/src/main/java/org/sonar/server/platform/web/WebServiceFilter.java`  
+- Remove the line: `wsResponse.setHeader("Sonar-Version", runtime.getApiVersion().toString());`  
+
+No other files need to be changed.

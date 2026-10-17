@@ -1,0 +1,25 @@
+your files first, then the added ones - one full path per line, nothing else.  
+Task: Remove the need for Commit Statuses permission  
+
+**Files to change:**  
+1. `DbVersion89.java` (database migration)  
+2. `DropGithubEndpointOnProjectLevelSetting.java` (migration script)  
+3. `RegisterPermissionTemplates.java` (permission template registration)  
+4. `RegisterPermissionTemplatesTest.java` (test logic)  
+5. `GitHubSynchronisationWarning.tsx` (warning UI/validate logic)  
+6. `core.properties` (documentation entries for GitHub)  
+7. `build.gradle` (tracking GitHub usage patterns)  
+
+**Added files (those changed together in past tasks):**  
+- `schema-sq.ddl` (changed with `DbVersion89.java`)  
+
+Final list:  
+```
+server/sonar-db-migration/src/main/java/org/sonar/server/platform/db/migration/version/v89/DbVersion89.java
+server/sonar-db-migration/src/main/java/org/sonar/server/platform/db/migration/version/v89/DropGithubEndpointOnProjectLevelSetting.java
+server/sonar-server/src/main/java/org/sonar/server/startup/RegisterPermissionTemplates.java
+server/sonar-server/src/test/java/org/sonar/server/startup/RegisterPermissionTemplatesTest.java
+server/sonar-web/src/main/js/apps/settings/components/pullRequestDecorationBinding/GitHubSynchronisationWarning.tsx
+sonar-core/src/main/resources/org/sonar/l10n/core.properties
+sonar-scanner-engine/build.gradle
+```

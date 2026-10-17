@@ -1,0 +1,17 @@
+The most relevant files for fixing the project creation form validation bug are:
+
+1. **`server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.tsx`**  
+   - Contains the implementation of the manual project creation form. Key areas to inspect include:  
+     - Form fields related to project name, description, and other metadata.  
+     - Logic that handles validation rules (e.g., format checks, character restrictions).  
+
+2. **`server/sonar-web/src/main/js/components/controls/DateInput.tsx`**  
+   - Critical for date-related validations. Check:  
+     - Date formatting constraints (e.g., `creation`, `project`, `creating`).  
+     - How invalid characters or formats are handled during submission.  
+
+3. **`server/sonar-web/src/main/js/apps/create/project/__tests__/ManualProjectCreate-test.tsx`**  
+   - Tests cases that simulate invalid inputs (e.g., invalid keys, malformed descriptions) and verify if validation errors are triggered.  
+   - Useful for debugging why certain valid formats (as per the description) are rejected.  
+
+These files directly address the root cause of the issue: incomplete validation logic and missing format checks in the project creation form.

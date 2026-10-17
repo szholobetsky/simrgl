@@ -1,0 +1,5 @@
+{"B1": ["server/sonar-webserver-webapi/src/main/java/org/sonar/server/project/ws/SearchAction.java"],
+ "B2": ["server/sonar-auth-github/src/main/java/org/sonar/auth/github/GithubAppPermissions.java", "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubGlobalSettingsValidator.java"],
+ "B3": ["build.gradle", "sonar-application/bundled_plugins.gradle"],
+ "B4": ["build.gradle", "sonar-application/build.gradle"],
+ "B5": ["server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java"]}

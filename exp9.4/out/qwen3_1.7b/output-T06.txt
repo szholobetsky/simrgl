@@ -1,0 +1,20 @@
+The most relevant files for upgrading analyzers are:
+
+1. **build.gradle**  
+   - Contains entries for:
+     - `com.sonarsource.cpp: sonar-cfamily-plugin` (upgrade from 6.6.0.13759 → 6.7.0.15300)
+     - `com.sonarsource.security: sonar-security-csharp-frontend-plugin` (upgrade from 8.1.0.675 → 8.2.1.1259)
+     - `org.sonarsource.java: sonar-java-plugin` (upgrade from 6.0.0.20538 → 6.1.0.20866)
+
+2. **sonar-application/build.gradle**  
+   - Includes updates for:
+     - `com.sonarsource.cfamily: sonar-cfamily-plugin`
+     - `com.sonarsource.php: sonar-php-frontend-plugin`
+     - `com.sonarsource.security: sonar-security-python-frontend-plugin`
+
+3. **pom.xml**  
+   - Lists upgrades for:
+     - `com.sonarsource.css: sonar-css-plugin` (from 1.1.1.1010 → 1.2.0.1325)
+     - `org.sonarsource.dotnet: sonar-csharp-plugin` (from 8.1.0.13383 → 8.4.0.15306)
+
+These files directly manage analyzer version upgrades, confirming the task's focus on updating dependencies.

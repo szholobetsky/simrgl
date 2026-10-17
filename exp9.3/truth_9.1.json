@@ -1,0 +1,130 @@
+{
+ "T01": {
+  "name": "SONAR-10246",
+  "files": [
+   "sonar-application/src/main/assembly/conf/sonar.properties"
+  ],
+  "before_sha": "301948519330547d1c1b7a12ad8d7d0ded750d15^",
+  "existed_before": [
+   "sonar-application/src/main/assembly/conf/sonar.properties"
+  ]
+ },
+ "T02": {
+  "name": "SONAR-10558",
+  "files": [
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+  ],
+  "before_sha": "9a9609134d2c5136baed9436f9f54eb20821a25e^",
+  "existed_before": [
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+  ]
+ },
+ "T03": {
+  "name": "SONAR-10766",
+  "files": [
+   "server/sonar-server-common/src/main/java/org/sonar/server/log/ServerProcessLogging.java"
+  ],
+  "before_sha": "692589aee8672fd1d94f5ff2fe34f4021199396e^",
+  "existed_before": [
+   "server/sonar-server-common/src/main/java/org/sonar/server/log/ServerProcessLogging.java"
+  ]
+ },
+ "T04": {
+  "name": "SONAR-12243",
+  "files": [
+   "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java",
+   "server/sonar-alm-client/src/test/java/org/sonar/alm/client/github/GithubApplicationClientImplTest.java"
+  ],
+  "before_sha": "a6ba3ff821bbc2d5ed79f3bea5e78bd257c0cb37^",
+  "existed_before": [
+   "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java",
+   "server/sonar-alm-client/src/test/java/org/sonar/alm/client/github/GithubApplicationClientImplTest.java"
+  ]
+ },
+ "T05": {
+  "name": "SONAR-12360",
+  "files": [
+   "server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.css",
+   "server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.tsx",
+   "server/sonar-web/src/main/js/apps/create/project/__tests__/ManualProjectCreate-test.tsx",
+   "server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/ManualProjectCreate-test.tsx.snap",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+  ],
+  "before_sha": "2fba950fd31175b42a3b097ff58ddda9c76fddfa^",
+  "existed_before": [
+   "server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.css",
+   "server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.tsx",
+   "server/sonar-web/src/main/js/apps/create/project/__tests__/ManualProjectCreate-test.tsx",
+   "server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/ManualProjectCreate-test.tsx.snap",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+  ]
+ },
+ "T06": {
+  "name": "SONAR-13097",
+  "files": [
+   "build.gradle",
+   "sonar-application/build.gradle"
+  ],
+  "before_sha": "9b4d7d25b5262193501e2a0420a9b66513733159^",
+  "existed_before": [
+   "build.gradle",
+   "sonar-application/build.gradle"
+  ]
+ },
+ "T07": {
+  "name": "SONAR-13564",
+  "files": [
+   "server/sonar-web/src/main/js/apps/projects/components/__tests__/__snapshots__/ProjectsSortingSelect-test.tsx.snap",
+   "server/sonar-web/src/main/js/apps/projects/utils.ts",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+  ],
+  "before_sha": "9676f33bfcdeb599e26de963a938e33e753261fe^",
+  "existed_before": [
+   "server/sonar-web/src/main/js/apps/projects/components/__tests__/__snapshots__/ProjectsSortingSelect-test.tsx.snap",
+   "server/sonar-web/src/main/js/apps/projects/utils.ts",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+  ]
+ },
+ "T08": {
+  "name": "SONAR-13905",
+  "files": [
+   "build.gradle",
+   "owasp-suppressions.xml",
+   "owasp-vulnerabilities.xml",
+   "sonar-application/build.gradle"
+  ],
+  "before_sha": "552f5bbe1d4eca4783a4da1325b16b0cd4d7783f^",
+  "existed_before": [
+   "build.gradle",
+   "sonar-application/build.gradle"
+  ]
+ },
+ "T09": {
+  "name": "SONAR-14212",
+  "files": [
+   "server/sonar-web/src/main/js/app/components/extensions/legacy/__tests__/request-legacy-test.ts",
+   "server/sonar-web/src/main/js/app/components/extensions/legacy/request-legacy.ts",
+   "server/sonar-webserver/src/main/java/org/sonar/server/platform/web/WebServiceFilter.java",
+   "server/sonar-webserver/src/test/java/org/sonar/server/platform/web/WebServiceFilterTest.java"
+  ],
+  "before_sha": "78ad25f06a00e099d277e26b634aaa593f5026ed^",
+  "existed_before": [
+   "server/sonar-web/src/main/js/app/components/extensions/legacy/__tests__/request-legacy-test.ts",
+   "server/sonar-web/src/main/js/app/components/extensions/legacy/request-legacy.ts",
+   "server/sonar-webserver/src/main/java/org/sonar/server/platform/web/WebServiceFilter.java",
+   "server/sonar-webserver/src/test/java/org/sonar/server/platform/web/WebServiceFilterTest.java"
+  ]
+ },
+ "T10": {
+  "name": "SONAR-14463",
+  "files": [
+   "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java",
+   "server/sonar-alm-client/src/test/java/org/sonar/alm/client/github/GithubApplicationClientImplTest.java"
+  ],
+  "before_sha": "96a4d055bf47973e6c4ed4373769d647fde8e0fd^",
+  "existed_before": [
+   "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java",
+   "server/sonar-alm-client/src/test/java/org/sonar/alm/client/github/GithubApplicationClientImplTest.java"
+  ]
+ }
+}

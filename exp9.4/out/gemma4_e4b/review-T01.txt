@@ -1,0 +1,1 @@
+server/sonar-web/src/main/js/apps/settings/components/authentication/__tests__/Authentication-it.tsx

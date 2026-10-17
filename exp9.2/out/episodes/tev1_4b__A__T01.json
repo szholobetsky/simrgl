@@ -1,0 +1,79 @@
+{
+ "model": "tev1:4b",
+ "group": "A",
+ "task": "T01",
+ "answer": [
+  "sonar-application/src/main/assembly/conf/sonar.properties"
+ ],
+ "ranked": [
+  "sonar-application/src/main/assembly/conf/sonar.properties"
+ ],
+ "protocol_errors": 0,
+ "repeats": 0,
+ "dropped_turns_max": 0,
+ "prompt_tokens": 9765,
+ "output_tokens": 111,
+ "prompt_tokens_max": 2203,
+ "seconds": 366.6,
+ "finished": true,
+ "turns": 7,
+ "rank_called": false,
+ "log": [
+  {
+   "turn": 1,
+   "reply": "ACTION: find sonar.properties -f",
+   "action": "find sonar.properties -f",
+   "result": "filenames (2):\n  server/sonar-process/src/test/resources/org/sonar/process/PropsTest/sonar.properties\n  sonar-application/src/main/assembly/conf/sonar.properties",
+   "prompt_tokens": 606,
+   "dropped": 0
+  },
+  {
+   "turn": 2,
+   "reply": "ACTION: read sonar-application/src/main/assembly/conf/sonar.properties",
+   "action": "read sonar-application/src/main/assembly/conf/sonar.properties",
+   "result": "sonar-application/src/main/assembly/conf/sonar.properties  lines 1-40 of 360\n    1  # Property values can:\n    2  # - reference an environment variable, for example sonar.jdbc.url= ${env:SONAR_JDBC_URL}\n    3  # - be encrypted. See https://redirect.sonarsource.com/doc/settings-encryption.html\n    4  \n    5  #--------------------------------------------------------------------------------------------------\n    6  # DATABASE\n    7  #\n    8  # IMPORTANT:\n    9  # - The embedded H2 database is used by default. It is recommended for tests but not for\n   10  #   production use. Supported databases are MySQL, Oracle, PostgreSQL and Microsoft SQLServer.\n   11  # - Changes to database connection URL (sonar.jdbc.url) can affect SonarSource licensed products.\n   12  \n   13  # User credentials.\n   14  # Permissions to create tables, indices and triggers must be granted to JDBC user.\n   15  # The schema must be created first.\n   16  #sonar.jdbc.username=\n   17  #sonar.jdbc.password=\n   18  \n   19  #----- Embedded Database (default)\n   20  # H2 embedded database server listening port, defaults to 9092\n   21  #sonar.embeddedDatabase.port=9092\n   22  \n   23  #----- MySQL 5.6 or greater\n   24  # Only InnoDB storage engine is supported (not myISAM).\n   25  # Only the bundled driver is supported. It can not be changed.\n   26  #sonar.jdbc.url=jdbc:mysql://localhost:3306/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance&useSSL=false\n   27  \n   28  \n   29  #----- Oracle 11g/12c\n   30  # The Oracle JDBC driver must be copied into the directory extensions/jdbc-driver/oracle/.\n   31  # Only the thin client is supported, and only the versions 11.2.x or 12.2.x must be used. See\n   32  # https://jira.sonarsource.com/browse/SONAR-9758 for more deta\n... cut (399 more chars)",
+   "prompt_tokens": 670,
+   "dropped": 0
+  },
+  {
+   "turn": 3,
+   "reply": "ACTION: grep -n \"sonar.web.sso.groupsHeader\" sonar-application/src/main/assembly/conf/sonar.properties",
+   "action": "grep -n \"sonar.web.sso.groupsHeader\" sonar-application/src/main/assembly/conf/sonar.properties",
+   "result": "unknown command 'grep'. Commands: gamayun, simargl, defines, find, read, keep, done",
+   "prompt_tokens": 1259,
+   "dropped": 0
+  },
+  {
+   "turn": 4,
+   "reply": "ACTION: find \"sonar.web.sso.groupsHeader\" -c",
+   "action": "find \"sonar.web.sso.groupsHeader\" -c",
+   "result": "content (5 matches in 4 files):\n  server/sonar-server/src/main/java/org/sonar/server/authentication/SsoAuthenticator.java\n       68: private static final String GROUPS_HEADER_PARAM = \"sonar.web.sso.groupsHeader\";\n  server/sonar-server/src/test/java/org/sonar/server/authentication/SsoAuthenticatorTest.java\n      290: settings.setProperty(\"sonar.web.sso.groupsHeader\", \"head-groups\");\n      306: settings.setProperty(\"sonar.web.sso.groupsHeader\", \"Groups\");\n  sonar-application/src/main/assembly/conf/sonar.properties\n      169: #sonar.web.sso.groupsHeader=X-Forwarded-Groups\n  tests/src/test/java/org/sonarqube/tests/user/SsoAuthenticationTest.java\n       63: .setServerProperty(\"sonar.web.sso.groupsHeader\", GROUPS_HEADER)",
+   "prompt_tokens": 1324,
+   "dropped": 0
+  },
+  {
+   "turn": 5,
+   "reply": "ACTION: read sonar-application/src/main/assembly/conf/sonar.properties 165 175",
+   "action": "read sonar-application/src/main/assembly/conf/sonar.properties 165 175",
+   "result": "sonar-application/src/main/assembly/conf/sonar.properties  lines 165-204 of 360\n  165  # Name of the header to get the list of user groups, separated by comma (optional).\n  166  # If the sonar.sso.groupsHeader is set, the user will belong to those groups if groups exist in SonarQube.\n  167  # If none of the provided groups exists in SonarQube, the user won't belong to any group.\n  168  # Note that the default group will NOT be automatically added when using SSO, it should be provided in the groups list, if needed.\n  169  #sonar.web.sso.groupsHeader=X-Forwarded-Groups\n  170  \n  171  # Interval used to know when to refresh name, email and groups.\n  172  # During this interval, if for instance the name of the user is changed in the header, it will only be updated after X minutes.\n  173  #sonar.web.sso.refreshIntervalInMinutes=5\n  174  \n  175  \n  176  #--------------------------------------------------------------------------------------------------\n  177  # COMPUTE ENGINE\n  178  # The Compute Engine is responsible for processing background tasks.\n  179  # Compute Engine is executed in a dedicated Java process. Default heap size is 512Mb.\n  180  # Use the following property to customize JVM options.\n  181  #    Recommendations:\n  182  #\n  183  #    The HotSpot Server VM is recommended. The property -server should be added if server mode\n  184  #    is not enabled by default on your environment:\n  185  #    http://docs.oracle.com/javase/8/docs/technotes/guides/vm/server-class.html\n  186  #\n  187  #sonar.ce.javaOpts=-Xmx512m -Xms128m -XX:+HeapDumpOnOutOfMemoryError\n  188  \n  189  # Same as previous property, but allows to not repeat all other settings like -Xmx\n  190  #sonar.ce.javaAdditionalOpts=\n  191  \n  192  \n  193  #-------------------------------------------------------\n... cut (751 more chars)",
+   "prompt_tokens": 1549,
+   "dropped": 0
+  },
+  {
+   "turn": 6,
+   "reply": "ACTION: keep sonar-application/src/main/assembly/conf/sonar.properties",
+   "action": "keep sonar-application/src/main/assembly/conf/sonar.properties",
+   "result": "kept. answer list: 1 file(s)",
+   "prompt_tokens": 2154,
+   "dropped": 0
+  },
+  {
+   "turn": 7,
+   "reply": "ACTION: done",
+   "action": "done",
+   "result": "done",
+   "prompt_tokens": 2203,
+   "dropped": 0
+  }
+ ]
+}

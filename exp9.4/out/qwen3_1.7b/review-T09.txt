@@ -1,0 +1,11 @@
+sonar-plugin-api/src/main/java/org/sonar/api/SonarQubeVersion.java  
+server/sonar-web/src/main/js/api/components.js  
+server/sonar-web/src/main/js/apps/projects-admin/create-view.js  
+server/sonar-web/src/main/js/apps/projects-admin/main.js  
+server/sonar-web-server-core/src/test/java/org/sonar/server/rule/RegisterRulesTest.java  
+
+server/sonar-web/src/main/js/apps/projects-admin/projects.js  
+server/sonar-web/src/main/js/apps/projects-admin/AppContainer.js  
+server/sonar-web/src/main/js/apps/projects-admin/header.js  
+server/sonar-web/tests/apps/code/store-test.js  
+server/sonar-web/src/main/js/apps/code/reducers/index.js

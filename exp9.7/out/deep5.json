@@ -1,0 +1,220 @@
+[
+ {
+  "name": "SONAR-8777",
+  "rev": "88db71f2968ddd983f90adc880b87e08ecd81dd3^",
+  "title": "Correctly display changelog of web service past updates",
+  "text": "Correctly display changelog of web service past updates\nWhen the response of a web service is updated, for the moment we add a line in the description of the action but it's not readable and not enough visible. A changelog feature should be introduced to understand past changes that happen in the web service.",
+  "files": [
+   "server/sonar-server/src/main/java/org/sonar/server/project/ws/CreateAction.java",
+   "server/sonar-server/src/main/java/org/sonar/server/project/ws/IndexAction.java",
+   "server/sonar-server/src/main/java/org/sonar/server/ws/ws/ListAction.java",
+   "server/sonar-server/src/main/resources/org/sonar/server/ws/ws/list-example.json",
+   "server/sonar-server/src/test/java/org/sonar/server/ws/ws/WebServicesWsTest.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/server/ws/Change.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/server/ws/Changelog.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/server/ws/WebService.java",
+   "sonar-plugin-api/src/test/java/org/sonar/api/server/ws/WebServiceTest.java"
+  ],
+  "modules": [
+   "server",
+   "sonar-plugin-api"
+  ],
+  "chain": [
+   "sonar-plugin-api/src/main/java/org/sonar/api/server/ws/WebService.java",
+   "sonar-plugin-api/src/test/java/org/sonar/api/server/ws/WebServiceTest.java",
+   "server/sonar-server/src/main/java/org/sonar/server/ws/ws/ListAction.java"
+  ],
+  "gamayun_top10": [
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+   "sonar-ws/src/main/protobuf/ws-issues.proto",
+   "server/sonar-ce-task-projectanalysis/src/main/java/org/sonar/ce/task/projectanalysis/container/ProjectAnalysisTaskContainerPopulator.java",
+   "server/sonar-web/src/main/js/apps/securityHotspots/components/HotspotActionsForm.tsx",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/rule/ws/RuleMapper.java",
+   "server/sonar-server/src/main/java/org/sonar/server/plugins/ws/PluginWSCommons.java",
+   "server/sonar-db-dao/src/schema/schema-sq.ddl",
+   "server/sonar-server/src/main/java/org/sonar/server/platform/ServerComponents.java",
+   "build.gradle",
+   "sonar-core/src/main/java/org/sonar/core/issue/DefaultIssue.java"
+  ],
+  "gamayun_right": 0,
+  "gamayun_AP": 0.0,
+  "needle_in_gamayun_top10": false
+ },
+ {
+  "name": "SONAR-11124",
+  "rev": "cd96a36db6438e47721332f7bef8b3e3a8a7f94c^",
+  "title": "Restrict scope of api/issues/tags ",
+  "text": "Restrict scope of api/issues/tags \nAdd optional  project  parameter This web service should not search in rules tags to find a match",
+  "files": [
+   "server/sonar-server/src/main/java/org/sonar/server/issue/index/IssueIndex.java",
+   "server/sonar-server/src/main/java/org/sonar/server/issue/ws/TagsAction.java",
+   "server/sonar-server/src/test/java/org/sonar/server/issue/index/IssueIndexTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/issue/ws/TagsActionTest.java",
+   "server/sonar-web/src/main/js/api/issues.ts",
+   "server/sonar-web/src/main/js/apps/issues/sidebar/AuthorFacet.tsx",
+   "server/sonar-web/src/main/js/apps/issues/sidebar/Sidebar.tsx",
+   "server/sonar-web/src/main/js/apps/issues/sidebar/TagFacet.tsx",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/issues/IssuesService.java",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/issues/TagsRequest.java"
+  ],
+  "modules": [
+   "server",
+   "sonar-ws"
+  ],
+  "chain": [
+   "server/sonar-server/src/test/java/org/sonar/server/issue/index/IssueIndexTest.java",
+   "server/sonar-server/src/main/java/org/sonar/server/issue/ws/TagsAction.java"
+  ],
+  "gamayun_top10": [
+   "sonar-ws/src/main/protobuf/ws-issues.proto",
+   "server/sonar-server/src/test/java/org/sonar/server/permission/ws/template/BulkApplyTemplateActionTest.java",
+   "server/sonar-server/src/main/java/org/sonar/server/rule/ws/SearchAction.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/issue/ws/SearchAction.java",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/permission/PermissionsService.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/issue/ws/SearchResponseFormat.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/rule/ws/SearchAction.java",
+   "server/sonar-server/src/main/java/org/sonar/server/rule/index/RuleIndex.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/rule/ws/RuleMapper.java"
+  ],
+  "gamayun_right": 0,
+  "gamayun_AP": 0.0,
+  "needle_in_gamayun_top10": false
+ },
+ {
+  "name": "SONAR-9253",
+  "rev": "c26d1c37fdcbc8cbdeb0390648c071297d72d027^",
+  "title": "Create an option panel on top of projects page",
+  "text": "Create an option panel on top of projects page\nMove the view option in the panel Move the graph options inside the same select as the view option Do panel animations",
+  "files": [
+   "it/it-tests/src/test/java/it/projectSearch/ProjectsPageTest.java",
+   "server/sonar-web/src/main/js/apps/projects/components/AllProjects.js",
+   "server/sonar-web/src/main/js/apps/projects/components/PageHeader.js",
+   "server/sonar-web/src/main/js/apps/projects/components/PerspectiveSelect.js",
+   "server/sonar-web/src/main/js/apps/projects/components/PerspectiveSelectOption.js",
+   "server/sonar-web/src/main/js/apps/projects/components/ProjectOptionBar.js",
+   "server/sonar-web/src/main/js/apps/projects/components/__tests__/PerspectiveSelect-test.js",
+   "server/sonar-web/src/main/js/apps/projects/components/__tests__/PerspectiveSelectOption-test.js",
+   "server/sonar-web/src/main/js/apps/projects/components/__tests__/ProjectOptionBar-test.js",
+   "server/sonar-web/src/main/js/apps/projects/components/__tests__/__snapshots__/PerspectiveSelect-test.js.snap",
+   "server/sonar-web/src/main/js/apps/projects/components/__tests__/__snapshots__/PerspectiveSelectOption-test.js.snap",
+   "server/sonar-web/src/main/js/apps/projects/components/__tests__/__snapshots__/ProjectOptionBar-test.js.snap",
+   "server/sonar-web/src/main/js/apps/projects/styles.css",
+   "server/sonar-web/src/main/js/apps/projects/utils.js",
+   "server/sonar-web/src/main/js/apps/projects/visualizations/Visualizations.js",
+   "server/sonar-web/src/main/js/components/icons-components/BubblesIcon.js",
+   "server/sonar-web/src/main/js/components/icons-components/CloseIcon.js",
+   "server/sonar-web/src/main/js/components/icons-components/ListIcon.js",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+  ],
+  "modules": [
+   "it",
+   "server",
+   "sonar-core"
+  ],
+  "chain": [
+   "server/sonar-web/src/main/js/apps/projects/styles.css",
+   "server/sonar-web/src/main/js/apps/projects/store/actions.js",
+   "server/sonar-web/src/main/js/apps/projects/components/AllProjects.js"
+  ],
+  "gamayun_top10": [
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+   "server/sonar-web/src/main/js/apps/overview/styles.css",
+   "server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx",
+   "server/sonar-web/src/main/js/apps/issues/__tests__/IssueApp-it.tsx",
+   "server/sonar-web/src/main/js/components/charts/bubble-chart.js",
+   "server/sonar-web/src/main/js/apps/issues/components/IssuesApp.tsx",
+   "build.gradle",
+   "server/sonar-web/src/main/js/apps/securityHotspots/__tests__/__snapshots__/SecurityHotspotsAppRenderer-test.tsx.snap",
+   "server/sonar-web/design-system/src/components/index.ts",
+   "server/sonar-web/src/main/js/apps/securityHotspots/SecurityHotspotsApp.tsx"
+  ],
+  "gamayun_right": 1,
+  "gamayun_AP": 0.053,
+  "needle_in_gamayun_top10": false
+ },
+ {
+  "name": "SONAR-17735",
+  "rev": "4bdd63589597f5b32f04f02a3a32fe3e6e2927d4^",
+  "title": "Telemetry Improvements",
+  "text": "Telemetry Improvements\nWHY We observe some inconsistencies in telemetry data. In order to clean up the data, we need to improve the payload in order to better understand what is happening. WHAT Make adjustments to the telemetry payload to further distinguish messages from each other. Current problems: It seems that the telemetry ping is sent again after a SonarQube upgrade, or a database upgrade  => this could not be reproduced Multiple telemetry pings are sent on the same day, when we expect only one a day HOW Investigate whether we should do a bug fix to not send a 2nd message after an SQ upgrade or downgrade Information about the validity of the license (to help understand if the ping might come from a restored backup on another database: the license would be invalid in this case) Timestamp of the local machine (to help understand what’s happening on SQ side when multiple pings are sent every day) Send a sequence (stored in the database) starting at 1, and increasing with every ping sent. This sequence is never reset. This will hopefully help us understand when the ping is from “the past” (A backup was restored), or if several instances are running with the same server id.",
+  "files": [
+   "server/sonar-server-common/src/main/java/org/sonar/server/telemetry/TelemetryData.java",
+   "server/sonar-server-common/src/main/java/org/sonar/server/telemetry/TelemetryDataJsonWriter.java",
+   "server/sonar-server-common/src/test/java/org/sonar/server/telemetry/TelemetryDataJsonWriterTest.java",
+   "server/sonar-webserver-api/src/main/java/org/sonar/server/telemetry/LicenseReader.java",
+   "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryDaemon.java",
+   "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryDataLoaderImpl.java",
+   "server/sonar-webserver-core/src/test/java/org/sonar/server/telemetry/TelemetryDaemonTest.java",
+   "server/sonar-webserver-core/src/test/java/org/sonar/server/telemetry/TelemetryDataLoaderImplTest.java",
+   "sonar-core/src/main/java/org/sonar/core/telemetry/TelemetryExtension.java"
+  ],
+  "modules": [
+   "server",
+   "sonar-core"
+  ],
+  "chain": [
+   "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryDataLoaderImpl.java",
+   "server/sonar-webserver-core/src/test/java/org/sonar/server/telemetry/TelemetryDataLoaderImplTest.java",
+   "server/sonar-webserver-core/src/test/java/org/sonar/server/telemetry/TelemetryDaemonTest.java"
+  ],
+  "gamayun_top10": [
+   "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryDataLoaderImpl.java",
+   "server/sonar-server-common/src/main/java/org/sonar/server/telemetry/TelemetryDataJsonWriter.java",
+   "server/sonar-db-dao/src/schema/schema-sq.ddl",
+   "build.gradle",
+   "server/sonar-server-common/src/test/java/org/sonar/server/telemetry/TelemetryDataJsonWriterTest.java",
+   "server/sonar-server-common/src/main/java/org/sonar/server/telemetry/TelemetryData.java",
+   "server/sonar-ce-task-projectanalysis/src/main/java/org/sonar/ce/task/projectanalysis/container/ProjectAnalysisTaskContainerPopulator.java",
+   "sonar-application/src/main/java/org/sonar/application/App.java",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/purge/PurgeMapper.java",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/purge/PurgeCommands.java"
+  ],
+  "gamayun_right": 4,
+  "gamayun_AP": 0.363,
+  "needle_in_gamayun_top10": false
+ },
+ {
+  "name": "SONAR-1915",
+  "rev": "0ea1701668dcabd5b36a13c0b359151f70cf898f^",
+  "title": "Deploy core plugins to maven repository",
+  "text": "Deploy core plugins to maven repository\nThis is required, because now we can have plugin inter-dependencies (see  ).",
+  "files": [
+   "plugins/sonar-checkstyle-plugin/pom.xml",
+   "plugins/sonar-clover-plugin/pom.xml",
+   "plugins/sonar-cobertura-plugin/pom.xml",
+   "plugins/sonar-core-plugin/pom.xml",
+   "plugins/sonar-cpd-plugin/pom.xml",
+   "plugins/sonar-design-plugin/pom.xml",
+   "plugins/sonar-findbugs-plugin/pom.xml",
+   "plugins/sonar-googleanalytics-plugin/pom.xml",
+   "plugins/sonar-pmd-plugin/pom.xml",
+   "plugins/sonar-squid-java-plugin/pom.xml",
+   "plugins/sonar-surefire-plugin/pom.xml",
+   "pom.xml"
+  ],
+  "modules": [
+   "plugins",
+   "root"
+  ],
+  "chain": [
+   "pom.xml",
+   "plugins/sonar-core-plugin/pom.xml"
+  ],
+  "gamayun_top10": [
+   "pom.xml",
+   "sonar-application/pom.xml",
+   "build.gradle",
+   "sonar-application/build.gradle",
+   "plugins/sonar-findbugs-plugin/pom.xml",
+   "sonar-plugin-api/pom.xml",
+   "sonar-core/src/main/java/org/sonar/core/plugins/PluginInstaller.java",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+   "sonar-server/src/test/java/org/sonar/server/plugins/PluginDeployerTest.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/CoreProperties.java"
+  ],
+  "gamayun_right": 2,
+  "gamayun_AP": 0.117,
+  "needle_in_gamayun_top10": false
+ }
+]

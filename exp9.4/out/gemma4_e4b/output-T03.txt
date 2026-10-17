@@ -1,0 +1,26 @@
+The most relevant file identified from your search results that controls logging levels is:
+
+**File:** `server\sonar-server-common\src\main\java\org/sonar/server/log/ServerProcessLogging.java`
+**Location (Line 85):** The code sets the logger level for FOP (`org.apache.fop`) to `INFO`.
+
+```java
+// Current implementation: Sets FOP logging to INFO, causing logs on every page generation.
+builder.immutableLevel("org.apache.fop", Level.INFO); 
+```
+
+**Proposed Fix:**
+To prevent the display of detailed FOP INFO logs during PDF report generation (as requested), you should change `Level.INFO` to a higher level like `Level.ERROR`. This will suppress informational messages while still allowing critical errors to be logged.
+
+You need to modify line 85 in this file:
+
+Change:
+```java
+builder.immutableLevel("org.apache.fop", Level.INFO);
+```
+To (or similar, depending on the exact `LoggerContext` API):
+```java
+// Change INFO to ERROR or WARN to suppress page-by-page logs from FOP.
+builder.immutableLevel("org.apache.fop", Level.ERROR); 
+```
+
+This change directly addresses the requirement of suppressing excessive logging output from Apache FOP when generating reports.

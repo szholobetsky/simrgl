@@ -1,0 +1,1 @@
+ACTION: /run python - <<'PY' import pathlib,re root=pathlib.Path('.') for p in root.rglob('*.*'):     try:         text=p.read_text(encoding='utf8','replace')     except Exception:         continue     if re.search(r"project\s+is\s+not\s+analyzed",text,flags=re.I):         print(p) PY

@@ -1,0 +1,2 @@
+Projects can be sorted by Security Review Rating
+In the Projects page, it should be possible to sort Projects by Security Review Rating. This metric was introduced when we implements the Security Hotspots page/experience and we forgot to update the Projects page accordingly.

@@ -1,0 +1,69 @@
+{"group": "G", "cmd": "grep", "args": ["D1", "changelog"], "out_chars": 5731, "lines_read": 0, "sec": 0.4, "t": "15:48:20"}
+{"group": "P", "cmd": "compass", "args": ["D1", "Correctly display changelog of web service past updates"], "out_chars": 843, "lines_read": 0, "sec": 1.9, "t": "15:48:24"}
+{"group": "G", "cmd": "grep", "args": ["D1", "web.?service|action|update"], "out_chars": 4832, "lines_read": 0, "sec": 1.1, "t": "15:48:27"}
+{"group": "G", "cmd": "grep", "args": ["D1", "response|api"], "out_chars": 4860, "lines_read": 0, "sec": 0.8, "t": "15:48:33"}
+{"group": "P", "cmd": "gamayun", "args": ["changelog history web service updates activity"], "out_chars": 2474, "lines_read": 0, "sec": 4.0, "t": "15:48:33"}
+{"group": "G", "cmd": "grep", "args": ["D1", "createAction"], "out_chars": 5920, "lines_read": 0, "sec": 0.4, "t": "15:48:38"}
+{"group": "G", "cmd": "grep", "args": ["D1", "description.*action|action.*description"], "out_chars": 6595, "lines_read": 0, "sec": 0.9, "t": "15:48:43"}
+{"group": "G", "cmd": "grep", "args": ["D1", "rule.*ws|rule.*action"], "out_chars": 6748, "lines_read": 0, "sec": 0.6, "t": "15:48:49"}
+{"group": "G", "cmd": "grep", "args": ["D1", "\\.html|\\.js|\\.vue"], "out_chars": 5339, "lines_read": 0, "sec": 0.5, "t": "15:48:55"}
+{"group": "G", "cmd": "read", "args": ["D1", "server/sonar-server/src/main/java/org/sonar/server/rule/ws", "1", "50"], "out_chars": 79, "lines_read": 0, "sec": 0.0, "t": "15:48:59"}
+{"group": "G", "cmd": "grep", "args": ["D1", "ShowAction|DetailsAction|getAction|show"], "out_chars": 5179, "lines_read": 0, "sec": 0.8, "t": "15:49:03"}
+{"group": "G", "cmd": "grep", "args": ["D1", "qualityProfile|QualityProfile"], "out_chars": 6576, "lines_read": 0, "sec": 0.4, "t": "15:49:09"}
+{"group": "G", "cmd": "grep", "args": ["D1", "changelog"], "out_chars": 5731, "lines_read": 0, "sec": 0.4, "t": "15:49:14"}
+{"group": "G", "cmd": "grep", "args": ["D1", "ChangeLog|Changelog|CHANGELOG|change_log|changeset|HistoryAction|History"], "out_chars": 5317, "lines_read": 0, "sec": 0.7, "t": "15:49:18"}
+{"group": "G", "cmd": "grep", "args": ["D1", "\\.html.*changelog|changelog.*\\.html"], "out_chars": 165, "lines_read": 0, "sec": 0.7, "t": "15:49:24"}
+{"group": "G", "cmd": "read", "args": ["D1", "it/it-tests/src/test/java/it/qualityProfile/QualityProfilesPageTest.java", "90", "10"], "out_chars": 421, "lines_read": 10, "sec": 0.0, "t": "15:49:28"}
+{"group": "G", "cmd": "grep", "args": ["D1", "qualityProfile.*history|qualityProfile.*change|profile.*changelog"], "out_chars": 6983, "lines_read": 0, "sec": 0.6, "t": "15:49:32"}
+{"group": "P", "cmd": "simargl", "args": ["changelog history updates display web service"], "out_chars": 10837, "lines_read": 0, "sec": 57.8, "t": "15:49:35"}
+{"group": "G", "cmd": "grep", "args": ["D1", "qualityprofile.*ws|QualityProfile"], "out_chars": 6576, "lines_read": 0, "sec": 0.4, "t": "15:49:38"}
+{"group": "G", "cmd": "grep", "args": ["D1", "qualityprofile/ws"], "out_chars": 7, "lines_read": 0, "sec": 0.4, "t": "15:49:41"}
+{"group": "P", "cmd": "find", "args": ["D1", "Name:ActionChangelog"], "out_chars": 1, "lines_read": 0, "sec": 0.2, "t": "15:49:43"}
+{"group": "G", "cmd": "grep", "args": ["D1", "ChangelogAction|ChangelogLoader"], "out_chars": 7187, "lines_read": 0, "sec": 0.4, "t": "15:49:45"}
+{"group": "P", "cmd": "find", "args": ["D1", "Name:changelog"], "out_chars": 1, "lines_read": 0, "sec": 0.3, "t": "15:49:47"}
+{"group": "P", "cmd": "find", "args": ["D1", "Name:web-api"], "out_chars": 1, "lines_read": 0, "sec": 0.2, "t": "15:49:50"}
+{"group": "G", "cmd": "read", "args": ["D1", "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/ws/ChangelogAction.java", "1", "50"], "out_chars": 2519, "lines_read": 50, "sec": 0.0, "t": "15:49:52"}
+{"group": "P", "cmd": "read", "args": ["D1", "server/sonar-web/src/main/js/apps/web-api/components/Action.js", "1", "20"], "out_chars": 1092, "lines_read": 20, "sec": 0.0, "t": "15:49:54"}
+{"group": "G", "cmd": "grep", "args": ["D1", "\\.proto|Changelog"], "out_chars": 5367, "lines_read": 0, "sec": 0.5, "t": "15:49:56"}
+{"group": "P", "cmd": "read", "args": ["D1", "server/sonar-web/src/main/js/apps/web-api/components/Action.js", "80", "30"], "out_chars": 1436, "lines_read": 30, "sec": 0.0, "t": "15:49:58"}
+{"group": "G", "cmd": "grep", "args": ["D1", "qualityprofile.*protos|protos.*qualityprofile|ws.*protos|QualityProfiles"], "out_chars": 6619, "lines_read": 0, "sec": 0.6, "t": "15:50:00"}
+{"group": "P", "cmd": "read", "args": ["D1", "server/sonar-web/src/main/js/apps/web-api/components/Action.js", "105", "20"], "out_chars": 876, "lines_read": 19, "sec": 0.0, "t": "15:50:02"}
+{"group": "P", "cmd": "read", "args": ["D1", "server/sonar-web/src/main/js/apps/web-api/components/ActionChangelog.js", "1", "30"], "out_chars": 92, "lines_read": 0, "sec": 0.0, "t": "15:50:06"}
+{"group": "G", "cmd": "grep", "args": ["D2", "api/issues/tags|TagsAction|IssueTagsAction"], "out_chars": 6291, "lines_read": 0, "sec": 1.0, "t": "15:50:07"}
+{"group": "G", "cmd": "read", "args": ["D2", "server/sonar-server/src/main/java/org/sonar/server/issue/ws/TagsAction.java", "1", "60"], "out_chars": 2733, "lines_read": 60, "sec": 0.0, "t": "15:50:13"}
+{"group": "G", "cmd": "read", "args": ["D2", "server/sonar-server/src/main/java/org/sonar/server/issue/ws/TagsAction.java", "60", "50"], "out_chars": 2578, "lines_read": 50, "sec": 0.0, "t": "15:50:17"}
+{"group": "G", "cmd": "grep", "args": ["D3", "projects.*page|projects.*panel|option.*panel"], "out_chars": 4769, "lines_read": 0, "sec": 1.5, "t": "15:50:24"}
+{"group": "P", "cmd": "simargl", "args": ["api issues tags scope project parameter"], "out_chars": 10207, "lines_read": 0, "sec": 15.1, "t": "15:50:26"}
+{"group": "G", "cmd": "grep", "args": ["D3", "graph.*option|option.*graph|view.*option"], "out_chars": 4160, "lines_read": 0, "sec": 0.7, "t": "15:50:29"}
+{"group": "P", "cmd": "find", "args": ["D2", "Name:TagsAction"], "out_chars": 1, "lines_read": 0, "sec": 0.3, "t": "15:50:33"}
+{"group": "G", "cmd": "grep", "args": ["D3", "apps/projects|ViewSelect|ProjectsHeader|OptionPanel"], "out_chars": 1069, "lines_read": 0, "sec": 1.0, "t": "15:50:34"}
+{"group": "G", "cmd": "read", "args": ["D3", "server/sonar-web/src/main/js/apps/projects/components/PageHeader.js", "1", "50"], "out_chars": 2029, "lines_read": 49, "sec": 0.0, "t": "15:50:38"}
+{"group": "P", "cmd": "defines", "args": ["D2", "tags"], "out_chars": 5074, "lines_read": 0, "sec": 1.4, "t": "15:50:39"}
+{"group": "G", "cmd": "grep", "args": ["D3", "GraphOptions|OptionsPanel|PageHeader"], "out_chars": 4493, "lines_read": 0, "sec": 1.6, "t": "15:50:45"}
+{"group": "P", "cmd": "read", "args": ["D2", "server/sonar-server/src/main/java/org/sonar/server/issue/ws/TagsAction.java", "1", "50"], "out_chars": 2365, "lines_read": 50, "sec": 0.0, "t": "15:50:46"}
+{"group": "G", "cmd": "grep", "args": ["D3", "apps/projects/components"], "out_chars": 7, "lines_read": 0, "sec": 0.4, "t": "15:50:51"}
+{"group": "P", "cmd": "read", "args": ["D2", "server/sonar-server/src/main/java/org/sonar/server/issue/ws/TagsAction.java", "50", "60"], "out_chars": 2994, "lines_read": 60, "sec": 0.0, "t": "15:50:51"}
+{"group": "G", "cmd": "grep", "args": ["D4", "telemetry|TelemetryClient|TelemetryData"], "out_chars": 6137, "lines_read": 0, "sec": 1.3, "t": "15:50:56"}
+{"group": "P", "cmd": "gamayun", "args": ["projects page panel options view graph animation"], "out_chars": 2430, "lines_read": 0, "sec": 2.1, "t": "15:50:59"}
+{"group": "G", "cmd": "grep", "args": ["D4", "TelemetryClient|TelemetryPayload|telemetry/.*\\.java"], "out_chars": 2443, "lines_read": 0, "sec": 0.9, "t": "15:51:01"}
+{"group": "G", "cmd": "grep", "args": ["D4", "TelemetryDataJsonWriter|TelemetryDataLoader"], "out_chars": 3534, "lines_read": 0, "sec": 1.0, "t": "15:51:07"}
+{"group": "G", "cmd": "grep", "args": ["D5", "maven|plugin.*deploy|repository|pom\\.xml"], "out_chars": 5261, "lines_read": 0, "sec": 0.6, "t": "15:51:13"}
+{"group": "G", "cmd": "grep", "args": ["D5", "plugins.*pom|core.*plugin.*pom"], "out_chars": 644, "lines_read": 0, "sec": 0.4, "t": "15:51:18"}
+{"group": "G", "cmd": "grep", "args": ["D5", "plugins/sonar-.*-plugin/pom.xml"], "out_chars": 7, "lines_read": 0, "sec": 0.2, "t": "15:51:21"}
+{"group": "P", "cmd": "simargl", "args": ["projects page view option panel graph animation"], "out_chars": 12258, "lines_read": 0, "sec": 20.5, "t": "15:51:24"}
+{"group": "G", "cmd": "read", "args": ["D5", "pom.xml", "1", "50"], "out_chars": 2086, "lines_read": 50, "sec": 0.0, "t": "15:51:26"}
+{"group": "P", "cmd": "compass", "args": ["D4", "Telemetry Improvements - fix double pings add license timestamp sequence"], "out_chars": 825, "lines_read": 0, "sec": 2.0, "t": "15:51:34"}
+{"group": "P", "cmd": "simargl", "args": ["telemetry ping license timestamp sequence database upgrade"], "out_chars": 11729, "lines_read": 0, "sec": 23.5, "t": "15:52:02"}
+{"group": "P", "cmd": "compass", "args": ["D5", "Deploy core plugins to maven repository"], "out_chars": 550, "lines_read": 0, "sec": 1.7, "t": "15:52:11"}
+{"group": "P", "cmd": "simargl", "args": ["deploy plugins maven repository dependencies"], "out_chars": 6853, "lines_read": 0, "sec": 13.7, "t": "15:52:28"}
+{"group": "P", "cmd": "find", "args": ["D1", "Name:Action.js"], "out_chars": 1, "lines_read": 0, "sec": 0.2, "t": "15:52:35"}
+{"group": "P", "cmd": "companions", "args": ["server/sonar-web/src/main/js/apps/web-api/components/Action.js"], "out_chars": 320, "lines_read": 0, "sec": 1.9, "t": "15:52:40"}
+{"group": "P", "cmd": "companions", "args": ["server/sonar-server/src/main/java/org/sonar/server/issue/ws/TagsAction.java server/sonar-server/src/main/java/org/sonar/server/issue/index/IssueIndex.java"], "out_chars": 1508, "lines_read": 0, "sec": 1.7, "t": "15:52:45"}
+{"group": "P", "cmd": "companions", "args": ["server/sonar-web/src/main/js/apps/projects/components/ProjectCard.js server/sonar-web/src/main/js/apps/projects/styles.css"], "out_chars": 923, "lines_read": 0, "sec": 1.6, "t": "15:52:50"}
+{"group": "P", "cmd": "defines", "args": ["D3", "option"], "out_chars": 3623, "lines_read": 0, "sec": 1.3, "t": "15:52:55"}
+{"group": "P", "cmd": "defines", "args": ["D3", "PageHeader"], "out_chars": 881, "lines_read": 0, "sec": 0.8, "t": "15:52:59"}
+{"group": "P", "cmd": "defines", "args": ["D3", "DisplayOptions"], "out_chars": 51, "lines_read": 0, "sec": 0.8, "t": "15:53:03"}
+{"group": "P", "cmd": "read", "args": ["D3", "server/sonar-web/src/main/js/apps/projects/components/PageHeader.tsx", "1", "40"], "out_chars": 89, "lines_read": 0, "sec": 0.0, "t": "15:53:06"}
+{"group": "P", "cmd": "read", "args": ["D3", "server/sonar-web/src/main/js/apps/projects/components/PageHeader.js", "1", "40"], "out_chars": 1769, "lines_read": 40, "sec": 0.0, "t": "15:53:09"}
+{"group": "P", "cmd": "companions", "args": ["server/sonar-server-common/src/main/java/org/sonar/server/telemetry/TelemetryData.java server/sonar-server-common/src/main/java/org/sonar/server/telemetry/TelemetryDataJsonWriter.java"], "out_chars": 1618, "lines_read": 0, "sec": 2.0, "t": "15:53:15"}
+{"group": "P", "cmd": "companions", "args": ["pom.xml sonar-application/pom.xml"], "out_chars": 855, "lines_read": 0, "sec": 2.4, "t": "15:53:20"}

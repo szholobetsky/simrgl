@@ -1,0 +1,1 @@
+ACTION: /run python - << 'PY' import pathlib for p in pathlib.Path('.').rglob('*.*'):     try:         text=p.read_text(errors='ignore')     except Exception as e:         continue     if 'sonar.sso.groupsHeader' in text:         print(p) PY

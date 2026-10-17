@@ -1,0 +1,12 @@
+**Most relevant source locations for removing the “Sonar‑Version” HTTP header**
+
+| File | Reason |
+|------|--------|
+| `server\sonar-webserver\src\main\java\org\sonar\server\platform\web\WebServiceFilter.java` | Adds the **Sonar-Version** header (`wsResponse.setHeader(...)`). This is where the header originates. |
+| `server\sonar-webserver\src\test\java\org\sonar\server\platform\web\WebServiceFilterTest.java` | Verifies that the header is set – will need updating/removal after change. |
+| `server\sonar-web/src/main/js/app/components/extensions/legacy/request-legacy.ts` | Reads the header from responses (`response.headers.get('Sonar-Version')`) in legacy blue/green logic. |
+| `server\sonar-web/src/main/js/app/components/extensions/legacy/__tests__/request-legacy-test.ts` | Mocks and asserts on the presence of this header; tests must be updated accordingly. |
+| `plugins\sonar-xoo-plugin/build.gradle` | Declares a project property named *Sonar-Version* used when packaging plugins (not strictly part of runtime code, but may need to be removed or renamed). |
+| `server\sonar-docs/src/pages/extend/developing‑plugin.md` | Documentation reference for the header; should be cleaned up once the feature is fully deprecated. |
+
+These six files contain all active references—both production code and test code—to the **Sonar-Version** HTTP header and are therefore the primary targets for removal or refactoring.

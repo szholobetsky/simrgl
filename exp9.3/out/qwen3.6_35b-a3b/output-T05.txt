@@ -1,0 +1,1 @@
+ACTION: /read server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.tsx 1-124

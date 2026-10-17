@@ -1,0 +1,798 @@
+[
+ {
+  "set": "dev",
+  "name": "SONAR-1915",
+  "files": 12,
+  "modules": [
+   "plugins",
+   "root"
+  ],
+  "direct": [
+   "plugins/sonar-checkstyle-plugin/pom.xml",
+   "plugins/sonar-clover-plugin/pom.xml",
+   "plugins/sonar-core-plugin/pom.xml",
+   "plugins/sonar-cpd-plugin/pom.xml",
+   "plugins/sonar-design-plugin/pom.xml",
+   "plugins/sonar-findbugs-plugin/pom.xml",
+   "plugins/sonar-pmd-plugin/pom.xml",
+   "plugins/sonar-squid-java-plugin/pom.xml",
+   "pom.xml"
+  ],
+  "needles": {
+   "plugins/sonar-cobertura-plugin/pom.xml": [
+    "changes together with",
+    "plugins/sonar-clover-plugin/pom.xml"
+   ]
+  },
+  "unreached": [
+   "plugins/sonar-googleanalytics-plugin/pom.xml",
+   "plugins/sonar-surefire-plugin/pom.xml"
+  ],
+  "ontology_first5": [
+   "pom.xml",
+   "sonar-application/pom.xml",
+   "build.gradle",
+   "sonar-application/build.gradle",
+   "plugins/sonar-findbugs-plugin/pom.xml"
+  ],
+  "truth": [
+   "plugins/sonar-checkstyle-plugin/pom.xml",
+   "plugins/sonar-clover-plugin/pom.xml",
+   "plugins/sonar-cobertura-plugin/pom.xml",
+   "plugins/sonar-core-plugin/pom.xml",
+   "plugins/sonar-cpd-plugin/pom.xml",
+   "plugins/sonar-design-plugin/pom.xml",
+   "plugins/sonar-findbugs-plugin/pom.xml",
+   "plugins/sonar-googleanalytics-plugin/pom.xml",
+   "plugins/sonar-pmd-plugin/pom.xml",
+   "plugins/sonar-squid-java-plugin/pom.xml",
+   "plugins/sonar-surefire-plugin/pom.xml",
+   "pom.xml"
+  ],
+  "text": "Deploy core plugins to maven repository\nThis is required, because now we can have plugin inter-dependencies (see  ).",
+  "top10": [
+   "pom.xml",
+   "sonar-application/pom.xml",
+   "build.gradle",
+   "sonar-application/build.gradle",
+   "plugins/sonar-findbugs-plugin/pom.xml",
+   "sonar-plugin-api/pom.xml",
+   "sonar-core/src/main/java/org/sonar/core/plugins/PluginInstaller.java",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+   "sonar-server/src/test/java/org/sonar/server/plugins/PluginDeployerTest.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/CoreProperties.java",
+   "sonar-core/src/main/java/org/sonar/core/plugins/DefaultPluginMetadata.java",
+   "sonar-core/src/test/java/org/sonar/core/plugins/DefaultPluginMetadataTest.java",
+   "sonar-batch/src/test/java/org/sonar/batch/bootstrap/BatchPluginRepositoryTest.java",
+   "server/sonar-server/src/main/java/org/sonar/server/plugins/ws/InstalledAction.java",
+   "sonar-scanner-engine/build.gradle",
+   "sonar-application/assembly.xml",
+   "test-monitoring/build.gradle",
+   ".cirrus.yml",
+   "sonar-batch/src/main/java/org/sonar/batch/scan/ProjectScanContainer.java",
+   "sonar-plugin-api/build.gradle",
+   "sonar-core/src/main/java/org/sonar/core/classloaders/ClassLoadersCollection.java",
+   "settings.gradle",
+   "sonar-core/build.gradle",
+   "sonar-batch/pom.xml",
+   "plugins/sonar-core-plugin/src/main/java/org/sonar/plugins/core/CorePlugin.java",
+   "server/sonar-server/src/main/java/org/sonar/server/plugins/ws/PluginWSCommons.java",
+   "sonar-core/src/test/java/org/sonar/core/plugins/PluginInstallerTest.java",
+   "plugins/sonar-pmd-plugin/pom.xml",
+   "sonar-server/src/main/java/org/sonar/server/plugins/PluginDeployer.java",
+   "sonar-batch/src/main/java/org/sonar/batch/bootstrap/BatchPluginRepository.java"
+  ],
+  "entries_seen": [
+   "pom.xml",
+   "plugins/sonar-findbugs-plugin/pom.xml",
+   "plugins/sonar-pmd-plugin/pom.xml"
+  ],
+  "chain": {
+   "plugins/sonar-core-plugin/pom.xml": "pom.xml",
+   "plugins/sonar-design-plugin/pom.xml": "pom.xml",
+   "plugins/sonar-checkstyle-plugin/pom.xml": "plugins/sonar-findbugs-plugin/pom.xml",
+   "plugins/sonar-pmd-plugin/pom.xml": "plugins/sonar-findbugs-plugin/pom.xml",
+   "plugins/sonar-squid-java-plugin/pom.xml": "plugins/sonar-findbugs-plugin/pom.xml",
+   "plugins/sonar-clover-plugin/pom.xml": "plugins/sonar-pmd-plugin/pom.xml"
+  },
+  "hub": 22,
+  "g2": {
+   "plugins/sonar-core-plugin/pom.xml": 40.9,
+   "plugins/sonar-design-plugin/pom.xml": 21.7,
+   "plugins/sonar-checkstyle-plugin/pom.xml": 31.9,
+   "plugins/sonar-pmd-plugin/pom.xml": 50.1,
+   "plugins/sonar-squid-java-plugin/pom.xml": 32.7,
+   "plugins/sonar-clover-plugin/pom.xml": 39.6
+  }
+ },
+ {
+  "set": "dev",
+  "name": "SONAR-11124",
+  "files": 10,
+  "modules": [
+   "server",
+   "sonar-ws"
+  ],
+  "direct": [
+   "server/sonar-server/src/main/java/org/sonar/server/issue/index/IssueIndex.java",
+   "server/sonar-server/src/main/java/org/sonar/server/issue/ws/TagsAction.java",
+   "server/sonar-server/src/test/java/org/sonar/server/issue/index/IssueIndexTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/issue/ws/TagsActionTest.java",
+   "server/sonar-web/src/main/js/api/issues.ts",
+   "server/sonar-web/src/main/js/apps/issues/sidebar/Sidebar.tsx",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/issues/IssuesService.java"
+  ],
+  "needles": {
+   "server/sonar-web/src/main/js/apps/issues/sidebar/AuthorFacet.tsx": [
+    "changes together with",
+    "server/sonar-web/src/main/js/api/issues.ts"
+   ],
+   "server/sonar-web/src/main/js/apps/issues/sidebar/TagFacet.tsx": [
+    "changes together with",
+    "server/sonar-web/src/main/js/api/issues.ts"
+   ],
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/issues/TagsRequest.java": [
+    "its module is linked (depends_on) to the module of",
+    "server/sonar-server/src/test/java/org/sonar/server/issue/index/IssueIndexTest.java"
+   ]
+  },
+  "unreached": [],
+  "ontology_first5": [
+   "sonar-ws/src/main/protobuf/ws-issues.proto",
+   "server/sonar-server/src/test/java/org/sonar/server/permission/ws/template/BulkApplyTemplateActionTest.java",
+   "server/sonar-server/src/main/java/org/sonar/server/rule/ws/SearchAction.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/issue/ws/SearchAction.java",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+  ],
+  "truth": [
+   "server/sonar-server/src/main/java/org/sonar/server/issue/index/IssueIndex.java",
+   "server/sonar-server/src/main/java/org/sonar/server/issue/ws/TagsAction.java",
+   "server/sonar-server/src/test/java/org/sonar/server/issue/index/IssueIndexTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/issue/ws/TagsActionTest.java",
+   "server/sonar-web/src/main/js/api/issues.ts",
+   "server/sonar-web/src/main/js/apps/issues/sidebar/AuthorFacet.tsx",
+   "server/sonar-web/src/main/js/apps/issues/sidebar/Sidebar.tsx",
+   "server/sonar-web/src/main/js/apps/issues/sidebar/TagFacet.tsx",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/issues/IssuesService.java",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/issues/TagsRequest.java"
+  ],
+  "text": "Restrict scope of api/issues/tags \nAdd optional  project  parameter This web service should not search in rules tags to find a match",
+  "top10": [
+   "sonar-ws/src/main/protobuf/ws-issues.proto",
+   "server/sonar-server/src/test/java/org/sonar/server/permission/ws/template/BulkApplyTemplateActionTest.java",
+   "server/sonar-server/src/main/java/org/sonar/server/rule/ws/SearchAction.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/issue/ws/SearchAction.java",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/permission/PermissionsService.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/issue/ws/SearchResponseFormat.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/rule/ws/SearchAction.java",
+   "server/sonar-server/src/main/java/org/sonar/server/rule/index/RuleIndex.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/rule/ws/RuleMapper.java",
+   "server/sonar-server/src/test/java/org/sonar/server/issue/index/IssueIndexTest.java",
+   "sonar-ws/src/main/protobuf/ws-qualityprofiles.proto",
+   "server/sonar-server/src/main/java/org/sonar/server/rule/ws/CreateAction.java",
+   "server/sonar-server/src/main/java/org/sonar/server/issue/index/IssueIndex.java",
+   "sonar-ws/src/main/protobuf/ws-rules.proto",
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/ws/SearchAction.java",
+   "sonar-ws/src/main/protobuf/ws-components.proto",
+   "server/sonar-server/src/test/java/org/sonar/server/rule/ws/SearchActionMediumTest.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/server/ws/WebService.java",
+   "server/sonar-server/src/main/java/org/sonar/server/issue/ws/SearchAction.java",
+   "sonar-ws/src/main/protobuf/ws-hotspots.proto",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/permission/PermissionsWsParameters.java",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/issue/IssuesWsParameters.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/server/ws/Request.java",
+   "server/sonar-server/src/test/java/org/sonar/server/permission/ws/template/ApplyTemplateActionTest.java",
+   "sonar-ws/src/main/protobuf/ws-commons.proto",
+   "server/sonar-server/src/test/java/org/sonar/server/rule/index/RuleIndexTest.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/rule/ws/UpdateAction.java",
+   "server/sonar-db-dao/src/test/java/org/sonar/db/rule/RuleDaoTest.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/rule/ws/RuleWsSupport.java"
+  ],
+  "entries_seen": [
+   "server/sonar-server/src/test/java/org/sonar/server/issue/index/IssueIndexTest.java"
+  ],
+  "chain": {
+   "server/sonar-server/src/main/java/org/sonar/server/issue/index/IssueIndex.java": "server/sonar-server/src/test/java/org/sonar/server/issue/index/IssueIndexTest.java",
+   "server/sonar-server/src/main/java/org/sonar/server/issue/ws/TagsAction.java": "server/sonar-server/src/test/java/org/sonar/server/issue/index/IssueIndexTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/issue/ws/TagsActionTest.java": "server/sonar-server/src/test/java/org/sonar/server/issue/index/IssueIndexTest.java"
+  },
+  "hub": 22,
+  "g2": {
+   "server/sonar-server/src/main/java/org/sonar/server/issue/index/IssueIndex.java": 183.9,
+   "server/sonar-server/src/main/java/org/sonar/server/issue/ws/TagsAction.java": 56.4,
+   "server/sonar-server/src/test/java/org/sonar/server/issue/ws/TagsActionTest.java": 56.4
+  }
+ },
+ {
+  "set": "test",
+  "name": "SONAR-17735",
+  "files": 9,
+  "modules": [
+   "server",
+   "sonar-core"
+  ],
+  "direct": [
+   "server/sonar-server-common/src/main/java/org/sonar/server/telemetry/TelemetryData.java",
+   "server/sonar-server-common/src/main/java/org/sonar/server/telemetry/TelemetryDataJsonWriter.java",
+   "server/sonar-server-common/src/test/java/org/sonar/server/telemetry/TelemetryDataJsonWriterTest.java",
+   "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryDaemon.java",
+   "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryDataLoaderImpl.java",
+   "server/sonar-webserver-core/src/test/java/org/sonar/server/telemetry/TelemetryDaemonTest.java",
+   "server/sonar-webserver-core/src/test/java/org/sonar/server/telemetry/TelemetryDataLoaderImplTest.java"
+  ],
+  "needles": {
+   "sonar-core/src/main/java/org/sonar/core/telemetry/TelemetryExtension.java": [
+    "its module is linked (depends_on) to the module of",
+    "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryDaemon.java"
+   ]
+  },
+  "unreached": [
+   "server/sonar-webserver-api/src/main/java/org/sonar/server/telemetry/LicenseReader.java"
+  ],
+  "ontology_first5": [
+   "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryDataLoaderImpl.java",
+   "server/sonar-server-common/src/main/java/org/sonar/server/telemetry/TelemetryDataJsonWriter.java",
+   "server/sonar-db-dao/src/schema/schema-sq.ddl",
+   "build.gradle",
+   "server/sonar-server-common/src/test/java/org/sonar/server/telemetry/TelemetryDataJsonWriterTest.java"
+  ],
+  "truth": [
+   "server/sonar-server-common/src/main/java/org/sonar/server/telemetry/TelemetryData.java",
+   "server/sonar-server-common/src/main/java/org/sonar/server/telemetry/TelemetryDataJsonWriter.java",
+   "server/sonar-server-common/src/test/java/org/sonar/server/telemetry/TelemetryDataJsonWriterTest.java",
+   "server/sonar-webserver-api/src/main/java/org/sonar/server/telemetry/LicenseReader.java",
+   "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryDaemon.java",
+   "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryDataLoaderImpl.java",
+   "server/sonar-webserver-core/src/test/java/org/sonar/server/telemetry/TelemetryDaemonTest.java",
+   "server/sonar-webserver-core/src/test/java/org/sonar/server/telemetry/TelemetryDataLoaderImplTest.java",
+   "sonar-core/src/main/java/org/sonar/core/telemetry/TelemetryExtension.java"
+  ],
+  "text": "Telemetry Improvements\nWHY We observe some inconsistencies in telemetry data. In order to clean up the data, we need to improve the payload in order to better understand what is happening. WHAT Make adjustments to the telemetry payload to further distinguish messages from each other. Current problems: It seems that the telemetry ping is sent again after a SonarQube upgrade, or a database upgrade  => this could not be reproduced Multiple telemetry pings are sent on the same day, when we expect only one a day HOW Investigate whether we should do a bug fix to not send a 2nd message after an SQ upgrade or downgrade Information about the validity of the license (to help understand if the ping might come from a restored backup on another database: the license would be invalid in this case) Timestamp of the local machine (to help understand what’s happening on SQ side when multiple pings are sent every day) Send a sequence (stored in the database) starting at 1, and increasing with every ping sent. This sequence is never reset. This will hopefully help us understand when the ping is from “the past” (A backup was restored), or if several instances are running with the same server id.",
+  "top10": [
+   "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryDataLoaderImpl.java",
+   "server/sonar-server-common/src/main/java/org/sonar/server/telemetry/TelemetryDataJsonWriter.java",
+   "server/sonar-db-dao/src/schema/schema-sq.ddl",
+   "build.gradle",
+   "server/sonar-server-common/src/test/java/org/sonar/server/telemetry/TelemetryDataJsonWriterTest.java",
+   "server/sonar-server-common/src/main/java/org/sonar/server/telemetry/TelemetryData.java",
+   "server/sonar-ce-task-projectanalysis/src/main/java/org/sonar/ce/task/projectanalysis/container/ProjectAnalysisTaskContainerPopulator.java",
+   "sonar-application/src/main/java/org/sonar/application/App.java",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/purge/PurgeMapper.java",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/purge/PurgeCommands.java",
+   "server/sonar-db-dao/src/main/resources/org/sonar/db/purge/PurgeMapper.xml",
+   "server/sonar-ce-task-projectanalysis/src/main/java/org/sonar/ce/task/projectanalysis/issue/IssueLifecycle.java",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+   "server/sonar-webserver-core/src/test/java/org/sonar/server/telemetry/TelemetryDataLoaderImplTest.java",
+   "server/sonar-webserver-pushapi/src/test/java/org/sonar/server/pushapi/sonarlint/SonarLintClientsRegistryTest.java",
+   "server/sonar-db-dao/src/test/java/org/sonar/db/purge/PurgeCommandsTest.java",
+   "server/sonar-web/src/main/js/types/alm-settings.d.ts",
+   "server/sonar-ce-task-projectanalysis/src/main/java/org/sonar/ce/task/projectanalysis/issue/TrackerRawInputFactory.java",
+   "sonar-application/src/main/assembly/conf/sonar.properties",
+   "server/sonar-ce-task-projectanalysis/src/test/java/org/sonar/ce/task/projectanalysis/issue/IssueLifecycleTest.java",
+   "pom.xml",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/purge/PurgeDao.java",
+   "server/sonar-webserver-pushapi/src/main/java/org/sonar/server/pushapi/sonarlint/SonarLintClientsRegistry.java",
+   "server/sonar-ce-task-projectanalysis/src/main/java/org/sonar/ce/task/projectanalysis/issue/IssueTrackingDelegator.java",
+   "server/sonar-db-dao/src/main/resources/org/sonar/db/measure/LiveMeasureMapper.xml",
+   "server/sonar-web/src/main/js/types/types.ts",
+   "server/sonar-web/src/main/js/apps/settings/components/pullRequestDecoration/__tests__/PRDecorationTabs-test.tsx",
+   "server/sonar-db-dao/src/test/java/org/sonar/db/purge/PurgeDaoTest.java",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/measure/LiveMeasureMapper.java",
+   "server/sonar-ce-task-projectanalysis/src/test/java/org/sonar/ce/task/projectanalysis/issue/IntegrateIssuesVisitorTest.java"
+  ],
+  "entries_seen": [
+   "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryDataLoaderImpl.java"
+  ],
+  "chain": {
+   "server/sonar-webserver-core/src/test/java/org/sonar/server/telemetry/TelemetryDaemonTest.java": "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryDataLoaderImpl.java",
+   "server/sonar-webserver-core/src/test/java/org/sonar/server/telemetry/TelemetryDataLoaderImplTest.java": "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryDataLoaderImpl.java"
+  },
+  "hub": 22,
+  "g2": {
+   "server/sonar-webserver-core/src/test/java/org/sonar/server/telemetry/TelemetryDaemonTest.java": 39.7,
+   "server/sonar-webserver-core/src/test/java/org/sonar/server/telemetry/TelemetryDataLoaderImplTest.java": 200.1
+  }
+ },
+ {
+  "set": "test",
+  "name": "SONAR-8777",
+  "files": 9,
+  "modules": [
+   "server",
+   "sonar-plugin-api"
+  ],
+  "direct": [
+   "sonar-plugin-api/src/main/java/org/sonar/api/server/ws/WebService.java",
+   "sonar-plugin-api/src/test/java/org/sonar/api/server/ws/WebServiceTest.java"
+  ],
+  "needles": {
+   "server/sonar-server/src/main/java/org/sonar/server/ws/ws/ListAction.java": [
+    "changes together with",
+    "sonar-plugin-api/src/test/java/org/sonar/api/server/ws/WebServiceTest.java"
+   ]
+  },
+  "unreached": [
+   "server/sonar-server/src/main/java/org/sonar/server/project/ws/CreateAction.java",
+   "server/sonar-server/src/main/java/org/sonar/server/project/ws/IndexAction.java",
+   "server/sonar-server/src/main/resources/org/sonar/server/ws/ws/list-example.json",
+   "server/sonar-server/src/test/java/org/sonar/server/ws/ws/WebServicesWsTest.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/server/ws/Change.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/server/ws/Changelog.java"
+  ],
+  "ontology_first5": [
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+   "sonar-ws/src/main/protobuf/ws-issues.proto",
+   "server/sonar-ce-task-projectanalysis/src/main/java/org/sonar/ce/task/projectanalysis/container/ProjectAnalysisTaskContainerPopulator.java",
+   "server/sonar-web/src/main/js/apps/securityHotspots/components/HotspotActionsForm.tsx",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/rule/ws/RuleMapper.java"
+  ],
+  "truth": [
+   "server/sonar-server/src/main/java/org/sonar/server/project/ws/CreateAction.java",
+   "server/sonar-server/src/main/java/org/sonar/server/project/ws/IndexAction.java",
+   "server/sonar-server/src/main/java/org/sonar/server/ws/ws/ListAction.java",
+   "server/sonar-server/src/main/resources/org/sonar/server/ws/ws/list-example.json",
+   "server/sonar-server/src/test/java/org/sonar/server/ws/ws/WebServicesWsTest.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/server/ws/Change.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/server/ws/Changelog.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/server/ws/WebService.java",
+   "sonar-plugin-api/src/test/java/org/sonar/api/server/ws/WebServiceTest.java"
+  ],
+  "text": "Correctly display changelog of web service past updates\nWhen the response of a web service is updated, for the moment we add a line in the description of the action but it's not readable and not enough visible. A changelog feature should be introduced to understand past changes that happen in the web service.",
+  "top10": [
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+   "sonar-ws/src/main/protobuf/ws-issues.proto",
+   "server/sonar-ce-task-projectanalysis/src/main/java/org/sonar/ce/task/projectanalysis/container/ProjectAnalysisTaskContainerPopulator.java",
+   "server/sonar-web/src/main/js/apps/securityHotspots/components/HotspotActionsForm.tsx",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/rule/ws/RuleMapper.java",
+   "server/sonar-server/src/main/java/org/sonar/server/plugins/ws/PluginWSCommons.java",
+   "server/sonar-db-dao/src/schema/schema-sq.ddl",
+   "server/sonar-server/src/main/java/org/sonar/server/platform/ServerComponents.java",
+   "build.gradle",
+   "sonar-core/src/main/java/org/sonar/core/issue/DefaultIssue.java",
+   "server/sonar-web/src/main/js/types/types.ts",
+   "sonar-ws/src/main/protobuf/ws-commons.proto",
+   "server/sonar-db-dao/src/test/java/org/sonar/db/issue/IssueDaoTest.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/issue/ws/SearchAction.java",
+   "sonar-ws/src/main/protobuf/ws-qualityprofiles.proto",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/issue/IssueDao.java",
+   "sonar-ws/src/main/protobuf/ws-components.proto",
+   "server/sonar-webserver-webapi/src/test/java/org/sonar/server/rule/ws/SearchActionTest.java",
+   "server/sonar-webserver-webapi/src/test/java/org/sonar/server/rule/ws/ShowActionTest.java",
+   "sonar-ws/src/main/protobuf/ws-rules.proto",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/rule/ws/SearchAction.java",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/issue/IssueMapper.java",
+   "sonar-ws/src/main/protobuf/ws-hotspots.proto",
+   "sonar-plugin-api/src/main/java/org/sonar/api/server/ws/WebService.java",
+   "server/sonar-web/src/main/js/apps/securityHotspots/components/HotspotViewer.tsx",
+   "server/sonar-webserver-core/src/test/java/org/sonar/server/rule/RegisterRulesTest.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/issue/ws/DoTransitionAction.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/rule/ws/ShowAction.java",
+   "sonar-ws/src/main/protobuf/ws-ce.proto",
+   "server/sonar-web/src/main/js/apps/securityHotspots/components/HotspotActionsFormRenderer.tsx"
+  ],
+  "entries_seen": [
+   "sonar-plugin-api/src/main/java/org/sonar/api/server/ws/WebService.java"
+  ],
+  "chain": {
+   "server/sonar-server/src/main/java/org/sonar/server/ws/ws/ListAction.java": "sonar-plugin-api/src/main/java/org/sonar/api/server/ws/WebService.java",
+   "sonar-plugin-api/src/test/java/org/sonar/api/server/ws/WebServiceTest.java": "sonar-plugin-api/src/main/java/org/sonar/api/server/ws/WebService.java"
+  },
+  "hub": 22,
+  "g2": {
+   "server/sonar-server/src/main/java/org/sonar/server/ws/ws/ListAction.java": 37.4,
+   "sonar-plugin-api/src/test/java/org/sonar/api/server/ws/WebServiceTest.java": 89.3
+  }
+ },
+ {
+  "set": "test",
+  "name": "SONAR-9443",
+  "files": 14,
+  "modules": [
+   "server",
+   "sonar-core",
+   "tests"
+  ],
+  "direct": [
+   "server/sonar-ce/src/test/java/org/sonar/ce/container/ComputeEngineContainerImplTest.java",
+   "server/sonar-server/src/main/java/org/sonar/server/platform/platformlevel/PlatformLevelStartup.java",
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/BuiltInQualityProfilesNotificationDispatcher.java",
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/RegisterQualityProfiles.java",
+   "server/sonar-server/src/test/java/org/sonar/server/qualityprofile/RegisterQualityProfilesNotificationTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/qualityprofile/RegisterQualityProfilesTest.java",
+   "sonar-core/src/main/java/org/sonar/core/config/CorePropertyDefinitions.java",
+   "sonar-core/src/test/java/org/sonar/core/config/CorePropertyDefinitionsTest.java",
+   "tests/src/test/java/org/sonarqube/tests/qualityProfile/BuiltInQualityProfilesNotificationTest.java"
+  ],
+  "needles": {
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/BuiltInQualityProfilesNotification.java": [
+    "its module is linked (depends_on) to the module of",
+    "sonar-core/src/test/java/org/sonar/core/config/CorePropertyDefinitionsTest.java"
+   ],
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/BuiltInQualityProfilesNotificationTemplate.java": [
+    "its module is linked (depends_on) to the module of",
+    "sonar-core/src/test/java/org/sonar/core/config/CorePropertyDefinitionsTest.java"
+   ],
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/BuiltInQualityProfilesUpdateListener.java": [
+    "its module is linked (depends_on) to the module of",
+    "sonar-core/src/test/java/org/sonar/core/config/CorePropertyDefinitionsTest.java"
+   ],
+   "server/sonar-server/src/test/java/org/sonar/server/qualityprofile/BuiltInQualityProfilesNotificationTest.java": [
+    "its module is linked (depends_on) to the module of",
+    "sonar-core/src/test/java/org/sonar/core/config/CorePropertyDefinitionsTest.java"
+   ],
+   "server/sonar-server/src/test/java/org/sonar/server/qualityprofile/BuiltInQualityProfilesUpdateListenerTest.java": [
+    "its module is linked (depends_on) to the module of",
+    "sonar-core/src/test/java/org/sonar/core/config/CorePropertyDefinitionsTest.java"
+   ]
+  },
+  "unreached": [],
+  "ontology_first5": [
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/qualityprofile/QualityProfileWsParameters.java",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/setting/SettingsWsParameters.java",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/rule/RuleDao.java",
+   "server/sonar-db-dao/src/test/java/org/sonar/db/qualityprofile/QualityProfileDaoTest.java",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/setting/SettingsService.java"
+  ],
+  "truth": [
+   "server/sonar-ce/src/test/java/org/sonar/ce/container/ComputeEngineContainerImplTest.java",
+   "server/sonar-server/src/main/java/org/sonar/server/platform/platformlevel/PlatformLevelStartup.java",
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/BuiltInQualityProfilesNotification.java",
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/BuiltInQualityProfilesNotificationDispatcher.java",
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/BuiltInQualityProfilesNotificationTemplate.java",
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/BuiltInQualityProfilesUpdateListener.java",
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/RegisterQualityProfiles.java",
+   "server/sonar-server/src/test/java/org/sonar/server/qualityprofile/BuiltInQualityProfilesNotificationTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/qualityprofile/BuiltInQualityProfilesUpdateListenerTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/qualityprofile/RegisterQualityProfilesNotificationTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/qualityprofile/RegisterQualityProfilesTest.java",
+   "sonar-core/src/main/java/org/sonar/core/config/CorePropertyDefinitions.java",
+   "sonar-core/src/test/java/org/sonar/core/config/CorePropertyDefinitionsTest.java",
+   "tests/src/test/java/org/sonarqube/tests/qualityProfile/BuiltInQualityProfilesNotificationTest.java"
+  ],
+  "text": "Allow disabling email notification on built-in quality profiles modifications\nWith SONAR-9442, quality profile administrators will receive an email notification each time a built-in quality profile is updated. A global setting must be added in order to disable this notification. Default value is to receive the notification. Definition of the setting :  Key : sonar.builtInQualityProfiles.disableNotificationOnUpdate Description : Avoid sending email notification on each update of built-in quality profiles to quality profile administrators Type : boolean Default value : false",
+  "top10": [
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/qualityprofile/QualityProfileWsParameters.java",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/setting/SettingsWsParameters.java",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/rule/RuleDao.java",
+   "server/sonar-db-dao/src/test/java/org/sonar/db/qualityprofile/QualityProfileDaoTest.java",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/setting/SettingsService.java",
+   "sonar-ws/src/test/java/org/sonarqube/ws/client/setting/SettingsServiceTest.java",
+   "server/sonar-db-dao/src/main/resources/org/sonar/db/qualityprofile/QualityProfileMapper.xml",
+   "sonar-ws/src/test/java/org/sonarqube/ws/client/qualityprofile/QualityProfilesServiceTest.java",
+   "server/sonar-db-dao/src/test/java/org/sonar/db/qualityprofile/ActiveRuleDaoTest.java",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/qualityprofile/QualityProfileDao.java",
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/ws/SearchAction.java",
+   "server/sonar-webserver-core/src/test/java/org/sonar/server/rule/RegisterRulesTest.java",
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/RuleActivator.java",
+   "sonar-ws/src/main/protobuf/ws-qualityprofiles.proto",
+   "server/sonar-server/src/test/java/org/sonar/server/qualityprofile/ws/SearchActionTest.java",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/qualityprofile/QualityProfileMapper.java",
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/RegisterQualityProfiles.java",
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/BuiltInQProfileUpdateImpl.java",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/qualityprofile/QualityProfilesService.java",
+   "server/sonar-process/src/main/java/org/sonar/process/ProcessProperties.java",
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/QProfileFactory.java",
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/QProfileBackuperImpl.java",
+   "server/sonar-db-dao/src/main/resources/org/sonar/db/qualityprofile/ActiveRuleMapper.xml",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/qualityprofile/ActiveRuleDao.java",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/qualityprofile/ActiveRuleMapper.java",
+   "server/sonar-db-dao/src/test/java/org/sonar/db/qualityprofile/DefaultQProfileDaoTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/qualityprofile/RegisterQualityProfilesTest.java",
+   "server/sonar-webserver-auth/src/main/java/org/sonar/server/qualityprofile/BuiltInQProfileInsertImpl.java",
+   "server/sonar-server-common/src/main/java/org/sonar/server/notification/email/EmailNotificationChannel.java",
+   "server/sonar-web/src/main/js/apps/settings/components/pullRequestDecoration/PRDecorationTabs.tsx"
+  ],
+  "entries_seen": [
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/RegisterQualityProfiles.java",
+   "server/sonar-server/src/test/java/org/sonar/server/qualityprofile/RegisterQualityProfilesTest.java"
+  ],
+  "chain": {
+   "server/sonar-server/src/test/java/org/sonar/server/qualityprofile/RegisterQualityProfilesTest.java": "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/RegisterQualityProfiles.java",
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/RegisterQualityProfiles.java": "server/sonar-server/src/test/java/org/sonar/server/qualityprofile/RegisterQualityProfilesTest.java"
+  },
+  "hub": 22,
+  "g2": {
+   "server/sonar-server/src/test/java/org/sonar/server/qualityprofile/RegisterQualityProfilesTest.java": 72.0,
+   "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/RegisterQualityProfiles.java": 72.0
+  }
+ },
+ {
+  "set": "dev",
+  "name": "SONAR-14213",
+  "files": 4,
+  "modules": [
+   "server",
+   "sonar-ws"
+  ],
+  "direct": [
+   "server/sonar-alm-client/src/main/java/org/sonar/alm/client/gitlab/GitlabHttpClient.java",
+   "server/sonar-alm-client/src/test/java/org/sonar/alm/client/gitlab/GitlabHttpClientTest.java",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/OkHttpClientBuilder.java"
+  ],
+  "needles": {
+   "sonar-ws/src/test/java/org/sonarqube/ws/client/OkHttpClientBuilderTest.java": [
+    "changes together with",
+    "sonar-ws/src/main/java/org/sonarqube/ws/client/OkHttpClientBuilder.java"
+   ]
+  },
+  "unreached": [],
+  "ontology_first5": [
+   "server/sonar-auth-gitlab/src/main/java/org/sonar/auth/gitlab/GitLabSettings.java",
+   "server/sonar-auth-gitlab/src/test/java/org/sonar/auth/gitlab/GitLabSettingsTest.java",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+   "server/sonar-web/src/main/js/apps/settings/components/authentication/GitLabAuthenticationTab.tsx",
+   "server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx"
+  ],
+  "truth": [
+   "server/sonar-alm-client/src/main/java/org/sonar/alm/client/gitlab/GitlabHttpClient.java",
+   "server/sonar-alm-client/src/test/java/org/sonar/alm/client/gitlab/GitlabHttpClientTest.java",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/OkHttpClientBuilder.java",
+   "sonar-ws/src/test/java/org/sonarqube/ws/client/OkHttpClientBuilderTest.java"
+  ],
+  "text": "Do not follow redirects when interacting with GitLab API\nWe should also never follow redirects, as this can pose a security risk. We expect users to always provide the final URL. We expect the validation in the admin UI to fail if it detects a redirect. For example, if you provide  https://www.gitlab.com/api/v4 , the validation currently passes. But, GitLab responds with a 308 Permanent Redirect, because the actual URL is  https://gitlab.com/api/v4 . The validation should detect this, and fail.",
+  "top10": [
+   "server/sonar-auth-gitlab/src/main/java/org/sonar/auth/gitlab/GitLabSettings.java",
+   "server/sonar-auth-gitlab/src/test/java/org/sonar/auth/gitlab/GitLabSettingsTest.java",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+   "server/sonar-web/src/main/js/apps/settings/components/authentication/GitLabAuthenticationTab.tsx",
+   "server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx",
+   "server/sonar-auth-github/src/main/java/org/sonar/auth/github/GitHubSettings.java",
+   "server/sonar-web/src/main/js/apps/settings/components/authentication/AutoProvisionningConsent.tsx",
+   "server/sonar-web/src/main/js/apps/settings/components/authentication/GitHubMappingModal.tsx",
+   "server/sonar-alm-client/src/test/java/org/sonar/alm/client/gitlab/GitlabApplicationClientTest.java",
+   "server/sonar-auth-gitlab/src/main/java/org/sonar/auth/gitlab/GitLabIdentityProvider.java",
+   "server/sonar-web/src/main/js/types/alm-settings.ts",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/almsettings/AlmSettingsService.java",
+   "server/sonar-web/src/main/js/apps/create/project/GitlabProjectCreate.tsx",
+   "server/sonar-auth-gitlab/src/main/java/org/sonar/auth/gitlab/GsonGroup.java",
+   "server/sonar-auth-gitlab/src/test/java/org/sonar/auth/gitlab/GsonGroupTest.java",
+   "server/sonar-auth-gitlab/src/test/java/org/sonar/auth/gitlab/GitLabIdentityProviderTest.java",
+   "server/sonar-web/src/main/js/apps/settings/components/authentication/GitHubAuthenticationTab.tsx",
+   "server/sonar-web/src/main/js/apps/create/project/__tests__/GitlabProjectCreateRenderer-test.tsx",
+   "server/sonar-web/src/main/js/apps/create/project/GitlabProjectCreateRenderer.tsx",
+   "server/sonar-web/src/main/js/types/provisioning.ts",
+   "server/sonar-web/src/main/js/apps/settings/components/authentication/__tests__/Authentication-Gitlab-it.tsx",
+   "server/sonar-alm-client/src/main/java/org/sonar/alm/client/gitlab/GitlabHttpClient.java",
+   "server/sonar-web/src/main/js/components/tutorials/gitlabci/commands/PipeCommand.tsx",
+   "server/sonar-alm-client/src/main/java/org/sonar/alm/client/gitlab/GitlabApplicationClient.java",
+   "server/sonar-web/src/main/js/apps/settings/components/authentication/DevopsRolesMappingModal.tsx",
+   "server/sonar-web/src/main/js/components/tutorials/gitlabci/commands/__tests__/__snapshots__/PipeCommand-test.tsx.snap",
+   "server/sonar-web/src/main/js/apps/settings/components/authentication/__tests__/Authentication-Github-it.tsx",
+   "server/sonar-web/src/main/js/apps/settings/components/authentication/GithubAuthenticationTab.tsx",
+   "server/sonar-web/src/main/js/apps/create/project/__tests__/GitlabProjectCreate-test.tsx",
+   "server/sonar-web/src/main/js/apps/settings/components/authentication/Authentication.tsx"
+  ],
+  "entries_seen": [
+   "server/sonar-alm-client/src/main/java/org/sonar/alm/client/gitlab/GitlabHttpClient.java"
+  ],
+  "chain": {
+   "server/sonar-alm-client/src/test/java/org/sonar/alm/client/gitlab/GitlabHttpClientTest.java": "server/sonar-alm-client/src/main/java/org/sonar/alm/client/gitlab/GitlabHttpClient.java"
+  },
+  "hub": 22,
+  "g2": {
+   "server/sonar-alm-client/src/test/java/org/sonar/alm/client/gitlab/GitlabHttpClientTest.java": 73.5
+  }
+ },
+ {
+  "set": "test",
+  "name": "SONAR-9813",
+  "files": 14,
+  "modules": [
+   "server",
+   "sonar-core"
+  ],
+  "direct": [
+   "server/sonar-server/src/main/java/org/sonar/server/project/ws/UpdateVisibilityAction.java",
+   "server/sonar-server/src/test/java/org/sonar/server/project/ws/UpdateVisibilityActionTest.java",
+   "server/sonar-web/src/main/js/apps/permissions/project/components/App.js",
+   "server/sonar-web/src/main/js/apps/projects/components/ProjectCardLeak.tsx",
+   "server/sonar-web/src/main/js/apps/projects/components/ProjectCardOverall.tsx",
+   "server/sonar-web/src/main/js/apps/projectsManagement/ProjectRow.tsx",
+   "server/sonar-web/src/main/js/apps/projectsManagement/__tests__/__snapshots__/ProjectRow-test.tsx.snap",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+  ],
+  "needles": {
+   "server/sonar-db-dao/src/test/java/org/sonar/db/component/ComponentDbTester.java": [
+    "its module is linked (depends_on) to the module of",
+    "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+   ],
+   "server/sonar-web/src/main/js/app/components/nav/component/ComponentNavBreadcrumbs.js": [
+    "its module is linked (depends_on) to the module of",
+    "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+   ],
+   "server/sonar-web/src/main/js/apps/permissions/project/components/PublicProjectDisclaimer.js": [
+    "its module is linked (depends_on) to the module of",
+    "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+   ],
+   "server/sonar-web/src/main/js/components/common/PrivateBadge.tsx": [
+    "its module is linked (depends_on) to the module of",
+    "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+   ],
+   "server/sonar-web/src/main/js/components/common/__tests__/PrivateBadge-test.tsx": [
+    "its module is linked (depends_on) to the module of",
+    "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+   ],
+   "server/sonar-web/src/main/js/components/common/__tests__/__snapshots__/PrivateBadge-test.tsx.snap": [
+    "its module is linked (depends_on) to the module of",
+    "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+   ]
+  },
+  "unreached": [],
+  "ontology_first5": [
+   "server/sonar-db-dao/src/test/java/org/sonar/db/portfolio/PortfolioDaoTest.java",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/views/ViewsService.java",
+   "server/sonar-db-dao/src/main/resources/org/sonar/db/portfolio/PortfolioMapper.xml",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/portfolio/PortfolioDao.java",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/portfolio/PortfolioMapper.java"
+  ],
+  "truth": [
+   "server/sonar-db-dao/src/test/java/org/sonar/db/component/ComponentDbTester.java",
+   "server/sonar-server/src/main/java/org/sonar/server/project/ws/UpdateVisibilityAction.java",
+   "server/sonar-server/src/test/java/org/sonar/server/project/ws/UpdateVisibilityActionTest.java",
+   "server/sonar-web/src/main/js/app/components/nav/component/ComponentNavBreadcrumbs.js",
+   "server/sonar-web/src/main/js/apps/permissions/project/components/App.js",
+   "server/sonar-web/src/main/js/apps/permissions/project/components/PublicProjectDisclaimer.js",
+   "server/sonar-web/src/main/js/apps/projects/components/ProjectCardLeak.tsx",
+   "server/sonar-web/src/main/js/apps/projects/components/ProjectCardOverall.tsx",
+   "server/sonar-web/src/main/js/apps/projectsManagement/ProjectRow.tsx",
+   "server/sonar-web/src/main/js/apps/projectsManagement/__tests__/__snapshots__/ProjectRow-test.tsx.snap",
+   "server/sonar-web/src/main/js/components/common/PrivateBadge.tsx",
+   "server/sonar-web/src/main/js/components/common/__tests__/PrivateBadge-test.tsx",
+   "server/sonar-web/src/main/js/components/common/__tests__/__snapshots__/PrivateBadge-test.tsx.snap",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+  ],
+  "text": "Ability to set Portfolio/Application public/private\nWS api/projects/update_visibility allows portfolios and applications",
+  "top10": [
+   "server/sonar-db-dao/src/test/java/org/sonar/db/portfolio/PortfolioDaoTest.java",
+   "sonar-ws/src/main/java/org/sonarqube/ws/client/views/ViewsService.java",
+   "server/sonar-db-dao/src/main/resources/org/sonar/db/portfolio/PortfolioMapper.xml",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/portfolio/PortfolioDao.java",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/portfolio/PortfolioMapper.java",
+   "server/sonar-db-dao/src/testFixtures/java/org/sonar/db/component/ComponentDbTester.java",
+   "server/sonar-db-dao/src/testFixtures/java/org/sonar/db/component/ComponentTesting.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/component/ComponentUpdater.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/measure/ws/ComponentTreeAction.java",
+   "server/sonar-server/src/test/java/org/sonar/server/project/ws/UpdateVisibilityActionTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/project/ws/CreateActionTest.java",
+   "server/sonar-db-dao/src/test/java/org/sonar/db/component/ComponentDaoTest.java",
+   "server/sonar-db-dao/src/main/resources/org/sonar/db/purge/PurgeMapper.xml",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/portfolio/PortfolioDto.java",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/component/ComponentDao.java",
+   "server/sonar-web/src/main/js/apps/projects-admin/main.js",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/purge/PurgeMapper.java",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/purge/PurgeDao.java",
+   "server/sonar-webserver-auth/src/testFixtures/java/org/sonar/server/tester/UserSessionRule.java",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/purge/PurgeCommands.java",
+   "server/sonar-server/src/main/java/org/sonar/server/project/ws/UpdateVisibilityAction.java",
+   "server/sonar-web/src/main/js/apps/projects-admin/projects.js",
+   "server/sonar-server/src/test/java/org/sonar/server/project/ws/SearchActionTest.java",
+   "server/sonar-db-core/src/main/java/org/sonar/db/version/SqTables.java",
+   "server/sonar-webserver-webapi/src/test/java/org/sonar/server/component/ComponentUpdaterTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/project/ws/ProjectsWsModuleTest.java",
+   "server/sonar-db-dao/src/main/resources/org/sonar/db/component/ComponentMapper.xml",
+   "server/sonar-web/src/main/js/apps/permissions/project/components/App.js",
+   "server/sonar-db-dao/src/main/java/org/sonar/db/MyBatis.java"
+  ],
+  "entries_seen": [
+   "server/sonar-server/src/test/java/org/sonar/server/project/ws/UpdateVisibilityActionTest.java"
+  ],
+  "chain": {
+   "server/sonar-server/src/main/java/org/sonar/server/project/ws/UpdateVisibilityAction.java": "server/sonar-server/src/test/java/org/sonar/server/project/ws/UpdateVisibilityActionTest.java"
+  },
+  "hub": 22,
+  "g2": {
+   "server/sonar-server/src/main/java/org/sonar/server/project/ws/UpdateVisibilityAction.java": 53.7
+  }
+ },
+ {
+  "set": "test",
+  "name": "SONAR-7467",
+  "files": 14,
+  "modules": [
+   "server",
+   "sonar-core",
+   "sonar-plugin-api",
+   "sonar-scanner-engine"
+  ],
+  "direct": [
+   "server/sonar-server/src/main/java/org/sonar/server/issue/InternalRubyIssueService.java",
+   "server/sonar-server/src/main/java/org/sonar/server/platform/platformlevel/PlatformLevel4.java",
+   "server/sonar-server/src/test/java/org/sonar/server/computation/issue/IssueLifecycleTest.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/issue/Issue.java"
+  ],
+  "needles": {
+   "sonar-core/src/main/java/org/sonar/core/issue/DefaultIssue.java": [
+    "its module is linked (depends_on) to the module of",
+    "server/sonar-server/src/main/java/org/sonar/server/platform/platformlevel/PlatformLevel4.java"
+   ],
+   "sonar-core/src/test/java/org/sonar/core/issue/DefaultIssueTest.java": [
+    "its module is linked (depends_on) to the module of",
+    "server/sonar-server/src/main/java/org/sonar/server/platform/platformlevel/PlatformLevel4.java"
+   ],
+   "sonar-scanner-engine/src/test/java/org/sonar/batch/issue/DeprecatedIssueAdapterForFilterTest.java": [
+    "its module is linked (depends_on) to the module of",
+    "server/sonar-server/src/main/java/org/sonar/server/platform/platformlevel/PlatformLevel4.java"
+   ],
+   "sonar-scanner-engine/src/test/java/org/sonar/batch/issue/TrackedIssueAdapterTest.java": [
+    "its module is linked (depends_on) to the module of",
+    "server/sonar-server/src/main/java/org/sonar/server/platform/platformlevel/PlatformLevel4.java"
+   ]
+  },
+  "unreached": [
+   "server/sonar-server/src/main/java/org/sonar/server/computation/issue/IssueLifecycle.java",
+   "server/sonar-server/src/main/java/org/sonar/server/issue/IssueUpdater.java",
+   "server/sonar-server/src/test/java/org/sonar/server/computation/issue/IssueAssignerTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/computation/issue/TrackerRawInputFactoryTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/computation/issue/UpdateConflictResolverTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/issue/IssueUpdaterTest.java"
+  ],
+  "ontology_first5": [
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+   "build.gradle",
+   "sonar-core/src/main/resources/org/sonar/core/issue/db/IssueMapper.xml",
+   "sonar-server/src/main/webapp/WEB-INF/app/views/action_plans/index.html.erb",
+   "sonar-server/src/main/webapp/WEB-INF/app/views/action_plans/_new.html.erb"
+  ],
+  "truth": [
+   "server/sonar-server/src/main/java/org/sonar/server/computation/issue/IssueLifecycle.java",
+   "server/sonar-server/src/main/java/org/sonar/server/issue/InternalRubyIssueService.java",
+   "server/sonar-server/src/main/java/org/sonar/server/issue/IssueUpdater.java",
+   "server/sonar-server/src/main/java/org/sonar/server/platform/platformlevel/PlatformLevel4.java",
+   "server/sonar-server/src/test/java/org/sonar/server/computation/issue/IssueAssignerTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/computation/issue/IssueLifecycleTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/computation/issue/TrackerRawInputFactoryTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/computation/issue/UpdateConflictResolverTest.java",
+   "server/sonar-server/src/test/java/org/sonar/server/issue/IssueUpdaterTest.java",
+   "sonar-core/src/main/java/org/sonar/core/issue/DefaultIssue.java",
+   "sonar-core/src/test/java/org/sonar/core/issue/DefaultIssueTest.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/issue/Issue.java",
+   "sonar-scanner-engine/src/test/java/org/sonar/batch/issue/DeprecatedIssueAdapterForFilterTest.java",
+   "sonar-scanner-engine/src/test/java/org/sonar/batch/issue/TrackedIssueAdapterTest.java"
+  ],
+  "text": "Deprecated Issue.actionPlan API\nNone",
+  "top10": [
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+   "build.gradle",
+   "sonar-core/src/main/resources/org/sonar/core/issue/db/IssueMapper.xml",
+   "sonar-server/src/main/webapp/WEB-INF/app/views/action_plans/index.html.erb",
+   "sonar-server/src/main/webapp/WEB-INF/app/views/action_plans/_new.html.erb",
+   "server/sonar-server/src/main/java/org/sonar/server/issue/ws/SearchAction.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/issue/Issue.java",
+   "sonar-server/src/main/java/org/sonar/server/issue/InternalRubyIssueService.java",
+   "sonar-core/src/main/java/org/sonar/core/issue/db/IssueDto.java",
+   "sonar-core/src/main/java/org/sonar/core/issue/db/IssueMapper.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/measures/CoreMetrics.java",
+   "sonar-plugin-api/src/main/java/org/sonar/api/CoreProperties.java",
+   "plugins/sonar-core-plugin/src/main/resources/org/sonar/l10n/core.properties",
+   "pom.xml",
+   "server/sonar-server/src/test/java/org/sonar/server/issue/ws/SearchActionMediumTest.java",
+   "server/sonar-server/src/main/java/org/sonar/server/platform/platformlevel/PlatformLevel4.java",
+   "server/sonar-webserver/src/main/java/org/sonar/server/platform/platformlevel/PlatformLevel4.java",
+   "server/sonar-webserver-webapi/src/main/java/org/sonar/server/issue/ws/SearchAction.java",
+   "server/sonar-webserver-es/src/main/java/org/sonar/server/issue/index/IssueIndex.java",
+   "plugins/sonar-core-plugin/src/main/java/org/sonar/plugins/core/CorePlugin.java",
+   "sonar-server/src/test/java/org/sonar/server/issue/InternalRubyIssueServiceTest.java",
+   "plugins/sonar-core-plugin/src/main/resources/org/sonar/plugins/core/widgets/issues/action_plans.html.erb",
+   "sonar-scanner-engine/src/main/java/org/sonar/scanner/scan/ProjectScanContainer.java",
+   "plugins/sonar-l10n-en-plugin/src/main/resources/org/sonar/l10n/core.properties",
+   "sonar-core/src/main/java/org/sonar/core/persistence/DatabaseVersion.java",
+   "server/sonar-server/src/main/java/org/sonar/server/platform/ServerComponents.java",
+   "server/sonar-ce/src/test/java/org/sonar/ce/container/ComputeEngineContainerImplTest.java",
+   "server/sonar-ce/src/main/java/org/sonar/ce/container/ComputeEngineContainerImpl.java",
+   "sonar-server/src/main/webapp/stylesheets/style.css",
+   "sonar-core/src/main/java/org/sonar/core/issue/DefaultIssue.java"
+  ],
+  "entries_seen": [
+   "sonar-core/src/main/java/org/sonar/core/issue/DefaultIssue.java"
+  ],
+  "chain": {
+   "sonar-core/src/test/java/org/sonar/core/issue/DefaultIssueTest.java": "sonar-core/src/main/java/org/sonar/core/issue/DefaultIssue.java"
+  },
+  "hub": 22,
+  "g2": {
+   "sonar-core/src/test/java/org/sonar/core/issue/DefaultIssueTest.java": 77.1
+  }
+ }
+]

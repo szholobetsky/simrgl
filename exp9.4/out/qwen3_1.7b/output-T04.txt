@@ -1,0 +1,18 @@
+The most relevant files for removing the "Commit Statuses" permission requirement are:
+
+1. **Database Migration Files**  
+   - `DbVersion89.java`: Handles versioning changes for GitHub endpoint settings.  
+   - `DropGithubEndpointOnProjectLevelSetting.java`: Script to drop the GitHub endpoint setting (removes legacy references).  
+
+2. **Permission Template Registration**  
+   - `RegisterPermissionTemplates.java`: Manages default project-level permissions, including removal of "Commit Statuses."  
+   - `RegisterPermissionTemplatesTest.java`: Tests the logic for updating permission templates.  
+
+3. **Validation & Warning Logic**  
+   - `GitHubSynchronisationWarning.tsx`: Displays warnings about GitHub sync configurations; needs updates to avoid showing "Commit Statuses" errors.  
+
+4. **Documentation & Configuration**  
+   - `core.properties` (in Sonar-Core): Contains documentation entries for GitHub-related settings.  
+   - `build.gradle`: Tracks usage patterns for GitHub integration (e.g., "sonar," "github").  
+
+These files directly address the removal of the "Commit Statuses" permission, its migration, and associated UI/validate logic.

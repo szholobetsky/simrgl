@@ -1,0 +1,35 @@
+{
+ "model": "gemma4:e2b",
+ "group": "A",
+ "task": "T09",
+ "answer": [],
+ "ranked": [],
+ "protocol_errors": 0,
+ "repeats": 0,
+ "dropped_turns_max": 0,
+ "prompt_tokens": 766,
+ "output_tokens": 14,
+ "prompt_tokens_max": 397,
+ "seconds": 5.0,
+ "finished": true,
+ "turns": 2,
+ "rank_called": false,
+ "log": [
+  {
+   "turn": 1,
+   "reply": "ACTION: find Sonar-Version -f",
+   "action": "find Sonar-Version -f",
+   "result": "filenames (0):",
+   "prompt_tokens": 369,
+   "dropped": 0
+  },
+  {
+   "turn": 2,
+   "reply": "ACTION: done",
+   "action": "done",
+   "result": "done",
+   "prompt_tokens": 397,
+   "dropped": 0
+  }
+ ]
+}

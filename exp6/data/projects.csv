@@ -1,0 +1,4 @@
+name,repo_path,db_path
+sonar,/path/to/repo/sonar,/path/to/db/sonar.db
+kafka,/path/to/repo/kafka,/path/to/db/kafka.db
+spark,/path/to/repo/spark,/path/to/db/spark.db

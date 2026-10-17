@@ -1,0 +1,62 @@
+{
+ "split": {
+  "seconds": 14.4,
+  "held": 30,
+  "empty_text": 0,
+  "code": 0
+ },
+ "simargl_files": {
+  "adopted": "C:\\Projects\\DAnotation\\Ummon\\STA-2\\sqlfluff\\.simargl\\sqlfluff-simargl-code",
+  "seconds": null,
+  "code": 0,
+  "note": "built by the user, copied"
+ },
+ "gamayun_files": {
+  "adopted": "C:\\Projects\\DAnotation\\Ummon\\STA-2\\sqlfluff\\.gamayun\\sqlfluff-code",
+  "seconds": 126.4,
+  "code": 0,
+  "note": "built by the user, copied"
+ },
+ "svitovyd": {
+  "adopted": "C:\\Projects\\DAnotation\\Ummon\\STA-2\\sqlfluff\\.svitovyd",
+  "seconds": null,
+  "code": 0,
+  "note": "built by the user, copied"
+ },
+ "keywords": {
+  "adopted": "C:\\Projects\\DAnotation\\Ummon\\STA-2\\sqlfluff\\.svitovyd",
+  "seconds": null,
+  "code": 0,
+  "note": "built by the user, copied"
+ },
+ "gamayun_db": {
+  "seconds": 12.1,
+  "code": 0,
+  "cmd": [
+   "gamayun",
+   "index",
+   "--db",
+   "C:\\Projects\\simrgl\\exp13\\out\\sqlfluff\\past.db",
+   "--repo",
+   "C:\\Projects\\DAnotation\\Ummon\\STA-2\\sqlfluff",
+   "--project",
+   "exp13-sqlfluff-db",
+   "--root",
+   "C:\\Projects\\simrgl\\exp13\\out\\sqlfluff"
+  ]
+ },
+ "simargl_units": {
+  "seconds": 939.0,
+  "code": 0,
+  "cmd": [
+   "simargl",
+   "index",
+   "units",
+   "C:\\Projects\\simrgl\\exp13\\out\\sqlfluff\\past.db",
+   "--project",
+   "units",
+   "--store-dir",
+   "C:\\Projects\\simrgl\\exp13\\out\\sqlfluff\\.simargl"
+  ]
+ }
+}

@@ -1,0 +1,9 @@
+The most relevant files to remove the Sonar-Version HTTP header are:
+
+1. **`sonar-plugin-api/src/main/java/org/sonar/api/SonarQubeVersion.java`**  
+   - Contains the definition of the Sonar-Version header.
+
+2. **`sonar-core/src/main/resources/org/sonar/l10n/core.properties`**  
+   - Contains the header in the header section.
+
+These files are directly associated with the Sonar-Version header's definition and usage. Removing the header from these files will eliminate its presence in the project.

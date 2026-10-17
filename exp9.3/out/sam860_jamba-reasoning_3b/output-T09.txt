@@ -1,0 +1,7 @@
+<response>
+server/sonar-web/src/main/js/api/components.js
+server/sonar-web/src/main/js/apps/code/utils.js
+server/sonar-web/src/main/js/apps/projects-admin/__tests__/projects-test.js
+server/sonar-web/src/main/js/apps/projects-admin/create-view.js
+server/sonar-web/src/main/js/apps/projects-admin/main.js
+</response>

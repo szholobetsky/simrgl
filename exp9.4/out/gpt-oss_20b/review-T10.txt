@@ -1,0 +1,5 @@
+server/sonar-web/src/main/js/apps/create/project/GitHubProjectCreateRenderer.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/GitHubProjectCreateRenderer-test.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/GitHubProjectCreateRenderer-test.tsx.snap
+server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubBinding.java
+server/sonar-alm-client/src/test/java/org/sonar/alm/client/github/GithubApplicationClientImplTest.java

@@ -1,0 +1,62 @@
+{
+  "D1": [
+    "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/ws/ChangelogAction.java",
+    "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/ws/ChangelogLoader.java",
+    "server/sonar-db-dao/src/main/java/org/sonar/db/qualityprofile/QProfileChangeDao.java",
+    "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/ws/QProfileWsModule.java",
+    "it/it-tests/src/test/java/it/qualityProfile/QualityProfilesPageTest.java",
+    "it/it-tests/src/test/resources/qualityProfile/QualityProfilesPageTest/should_display_changelog.html",
+    "sonar-ws/src/main/protobuf/ws-qualityprofiles.proto",
+    "server/sonar-server/src/test/java/org/sonar/server/qualityprofile/ws/ChangelogActionTest.java",
+    "server/sonar-server/src/main/java/org/sonar/server/qualityprofile/QProfileFactory.java",
+    "server/sonar-db-dao/src/main/java/org/sonar/db/qualityprofile/QProfileChangeDto.java"
+  ],
+  "D2": [
+    "server/sonar-server/src/main/java/org/sonar/server/issue/ws/TagsAction.java",
+    "server/sonar-server/src/main/java/org/sonar/server/issue/index/IssueIndex.java",
+    "server/sonar-server/src/test/java/org/sonar/server/issue/ws/TagsActionTest.java",
+    "server/sonar-server/src/main/java/org/sonar/server/issue/ws/IssueWsModule.java",
+    "sonar-ws/src/main/protobuf/ws-issues.proto",
+    "it/it-tests/src/test/java/it/issue/IssueActionTest.java",
+    "server/sonar-db-dao/src/main/java/org/sonar/db/issue/IssueDao.java",
+    "server/sonar-server/src/main/java/org/sonar/server/issue/index/IssueQueryFactory.java",
+    "server/sonar-server/src/test/java/org/sonar/server/issue/ws/ComponentTagsActionTest.java",
+    "it/it-tests/src/test/resources/api/issues/tags-example.json"
+  ],
+  "D3": [
+    "server/sonar-web/src/main/js/apps/projects/components/PageHeader.js",
+    "server/sonar-web/src/main/js/apps/projects/components/ViewSelect.js",
+    "server/sonar-web/src/main/js/apps/projects/components/OptionPanel.js",
+    "server/sonar-web/src/main/js/apps/projects/components/GraphOptions.js",
+    "server/sonar-web/src/main/js/apps/projects/store/actions.js",
+    "server/sonar-web/src/main/js/apps/projects/store/reducer.js",
+    "server/sonar-web/src/main/js/apps/projects/components/__tests__/PageHeader-test.js",
+    "server/sonar-web/src/main/js/apps/projects/components/__tests__/OptionPanel-test.js",
+    "server/sonar-web/src/main/css/projects.css",
+    "it/it-tests/src/test/java/it/projectSearch/ProjectsPageTest.java"
+  ],
+  "D4": [
+    "server/sonar-server-common/src/main/java/org/sonar/server/telemetry/TelemetryData.java",
+    "server/sonar-server-common/src/main/java/org/sonar/server/telemetry/TelemetryDataJsonWriter.java",
+    "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryDataLoaderImpl.java",
+    "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryClient.java",
+    "server/sonar-webserver-core/src/main/java/org/sonar/server/telemetry/TelemetryDaemon.java",
+    "server/sonar-db-dao/src/main/java/org/sonar/db/user/UserTelemetryDto.java",
+    "server/sonar-server-common/src/test/java/org/sonar/server/telemetry/TelemetryDataJsonWriterTest.java",
+    "server/sonar-webserver-core/src/test/java/org/sonar/server/telemetry/TelemetryDataLoaderImplTest.java",
+    "server/sonar-db-migration/src/main/java/org/sonar/server/platform/db/migration/version/v75/AddTelemetrySequence.java",
+    "server/sonar-process/src/main/java/org/sonar/process/ProcessProperties.java"
+  ],
+  "D5": [
+    "pom.xml",
+    "plugins/sonar-xoo-plugin/pom.xml",
+    "plugins/sonar-cobertura-plugin/pom.xml",
+    "plugins/sonar-java-plugin/pom.xml",
+    "sonar-maven-plugin/pom.xml",
+    "sonar-core/pom.xml",
+    "sonar-plugin-api/pom.xml",
+    "sonar-testing-harness/pom.xml",
+    "it/it-tests/src/test/java/it/plugins/PluginsWsTest.java",
+    "server/sonar-server/src/main/java/org/sonar/server/plugins/PluginManager.java"
+  ]
+}

@@ -1,0 +1,179 @@
+{
+ "n_dev": 199,
+ "n_test": 200,
+ "alone": {
+  "simargl": {
+   "test": {
+    "AP": 0.1456,
+    "RR": 0.2881,
+    "P@1": 0.23,
+    "R@10": 0.1997,
+    "hit@10": 0.58
+   },
+   "dev": {
+    "AP": 0.1396,
+    "RR": 0.283,
+    "P@1": 0.2261,
+    "R@10": 0.178,
+    "hit@10": 0.5427
+   }
+  },
+  "gamayun": {
+   "test": {
+    "AP": 0.1288,
+    "RR": 0.2868,
+    "P@1": 0.215,
+    "R@10": 0.1743,
+    "hit@10": 0.62
+   },
+   "dev": {
+    "AP": 0.1801,
+    "RR": 0.3772,
+    "P@1": 0.3015,
+    "R@10": 0.241,
+    "hit@10": 0.7186
+   }
+  },
+  "svitovyd": {
+   "test": {
+    "AP": 0.0088,
+    "RR": 0.0191,
+    "P@1": 0.015,
+    "R@10": 0.0099,
+    "hit@10": 0.03
+   },
+   "dev": {
+    "AP": 0.0019,
+    "RR": 0.0109,
+    "P@1": 0.0101,
+    "R@10": 0.0021,
+    "hit@10": 0.0151
+   }
+  },
+  "simargl_freq": {
+   "test": {
+    "AP": 0.1532,
+    "RR": 0.3331,
+    "P@1": 0.255,
+    "R@10": 0.2088,
+    "hit@10": 0.615
+   },
+   "dev": {
+    "AP": 0.1403,
+    "RR": 0.3236,
+    "P@1": 0.2563,
+    "R@10": 0.1839,
+    "hit@10": 0.5628
+   }
+  }
+ },
+ "modules": {
+  "simargl": {
+   "AP": 0.7149,
+   "RR": 0.8001,
+   "P@1": 0.695,
+   "R@10": 0.8508,
+   "hit@10": 0.945
+  },
+  "gamayun": {
+   "AP": 0.6592,
+   "RR": 0.7198,
+   "P@1": 0.57,
+   "R@10": 0.9099,
+   "hit@10": 0.97
+  },
+  "svitovyd": {
+   "AP": 0.1244,
+   "RR": 0.1525,
+   "P@1": 0.145,
+   "R@10": 0.1288,
+   "hit@10": 0.16
+  },
+  "gamayun (its own module ranking)": {
+   "AP": 0.759,
+   "RR": 0.8068,
+   "P@1": 0.705,
+   "R@10": 0.9611,
+   "hit@10": 1.0
+  }
+ },
+ "reach": {
+  "simargl": 0.1127,
+  "gamayun": 0.1077,
+  "svitovyd": 0.0046,
+  "truth files present in today's code (svitovyd map)": 0.199,
+  "svitovyd: tasks with an identifier the code defines": 0.195
+ },
+ "jaccard@10": {
+  "simargl ∩ gamayun": 0.0668,
+  "simargl ∩ svitovyd": 0.0008,
+  "gamayun ∩ svitovyd": 0.0005
+ },
+ "union_recall@10": {
+  "simargl": 0.1997,
+  "gamayun": 0.1743,
+  "svitovyd": 0.0099,
+  "simargl + gamayun": 0.264,
+  "simargl + svitovyd": 0.2021,
+  "gamayun + svitovyd": 0.1839,
+  "simargl + gamayun + svitovyd": 0.2661
+ },
+ "right_files_found_only_by": {
+  "simargl": 103,
+  "gamayun": 80,
+  "svitovyd": 7
+ },
+ "right_files_found_by_all_three": 0,
+ "fusion": {
+  "RRF, equal weights (k=60)": {
+   "AP": 0.1681,
+   "RR": 0.3566,
+   "P@1": 0.28,
+   "R@10": 0.2207,
+   "hit@10": 0.755
+  },
+  "RRF, weights tuned on dev {'simargl': 1.5, 'gamayun': 2, 'svitovyd': 0.5} k=10": {
+   "AP": 0.1627,
+   "RR": 0.3535,
+   "P@1": 0.275,
+   "R@10": 0.2122,
+   "hit@10": 0.755
+  },
+  "RRF simargl + gamayun (k=60)": {
+   "AP": 0.1617,
+   "RR": 0.3447,
+   "P@1": 0.27,
+   "R@10": 0.2129,
+   "hit@10": 0.755
+  }
+ },
+ "fusion_dev_best": {
+  "weights": {
+   "simargl": 1.5,
+   "gamayun": 2,
+   "svitovyd": 0.5
+  },
+  "k": 10,
+  "dev_MAP": 0.2045
+ },
+ "structure": {
+  "widened": {
+   "AP": 0.1608,
+   "RR": 0.3529,
+   "P@1": 0.275,
+   "R@10": 0.2122,
+   "hit@10": 0.705
+  },
+  "fused": {
+   "AP": 0.1627,
+   "RR": 0.3535,
+   "P@1": 0.275,
+   "R@10": 0.2122,
+   "hit@10": 0.755
+  },
+  "dev_choice": {
+   "neighbours_of_top": 5,
+   "weight": 0.1
+  }
+ }
+}

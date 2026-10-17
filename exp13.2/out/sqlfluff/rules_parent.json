@@ -1,0 +1,1402 @@
+[
+{
+"anchor": "src/sqlfluff/dialects/dialect_snowflake.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.367,
+"tasks": 148
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_snowflake.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.367,
+"tasks": 148
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_tsql.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.388,
+"tasks": 141
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_tsql.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.388,
+"tasks": 141
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_postgres.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.362,
+"tasks": 119
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_postgres.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.362,
+"tasks": 119
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_ansi.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.266,
+"tasks": 118
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_ansi.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.266,
+"tasks": 118
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_ansi.py",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.214,
+"tasks": 95
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_snowflake_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.615,
+"tasks": 80
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_snowflake_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.615,
+"tasks": 80
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_bigquery.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.29,
+"tasks": 71
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_bigquery.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.29,
+"tasks": 71
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_mysql.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.388,
+"tasks": 69
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_mysql.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.388,
+"tasks": 69
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_oracle.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.504,
+"tasks": 66
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_oracle.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.504,
+"tasks": 66
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_redshift.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.496,
+"tasks": 62
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_redshift.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.496,
+"tasks": 62
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_tsql_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.632,
+"tasks": 60
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_tsql_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.632,
+"tasks": 60
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_sparksql.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.38,
+"tasks": 57
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_sparksql.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.38,
+"tasks": 57
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_clickhouse.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.667,
+"tasks": 56
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_clickhouse.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.667,
+"tasks": 56
+},
+{
+"anchor": "CHANGELOG.md",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.182,
+"tasks": 53
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_ansi.py",
+"folder": "test/fixtures/parser",
+"ext": ".yml",
+"conf": 0.108,
+"tasks": 48
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_spark3.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.788,
+"tasks": 41
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_spark3.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.788,
+"tasks": 41
+},
+{
+"anchor": "CHANGELOG.md",
+"folder": "test/fixtures/parser",
+"ext": ".yml",
+"conf": 0.137,
+"tasks": 40
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_bigquery.py",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.147,
+"tasks": 36
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_databricks.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.508,
+"tasks": 32
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_databricks.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.508,
+"tasks": 32
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_sqlite.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.585,
+"tasks": 31
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_sqlite.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.585,
+"tasks": 31
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_duckdb.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.564,
+"tasks": 31
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_duckdb.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.564,
+"tasks": 31
+},
+{
+"anchor": "src/sqlfluff/core/default_config.cfg",
+"folder": "test/fixtures/rules",
+"ext": ".yml",
+"conf": 0.196,
+"tasks": 30
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_bigquery_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.763,
+"tasks": 29
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_bigquery_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.763,
+"tasks": 29
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_hive.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.453,
+"tasks": 29
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_hive.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.453,
+"tasks": 29
+},
+{
+"anchor": "test/core/templaters/jinja_test.py",
+"folder": "test/fixtures/templater",
+"ext": ".sql",
+"conf": 0.302,
+"tasks": 26
+},
+{
+"anchor": "src/sqlfluff/core/dialects/dialect_ansi.py",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.472,
+"tasks": 25
+},
+{
+"anchor": "src/sqlfluff/core/dialects/__init__.py",
+"folder": "src/sqlfluff",
+"ext": ".py",
+"conf": 0.615,
+"tasks": 24
+},
+{
+"anchor": "test/core/templaters/jinja_test.py",
+"folder": "test/fixtures/templater",
+"ext": ".yml",
+"conf": 0.267,
+"tasks": 23
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_bigquery.py",
+"folder": "test/fixtures/parser",
+"ext": ".yml",
+"conf": 0.094,
+"tasks": 23
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_redshift_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.629,
+"tasks": 22
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_redshift_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.629,
+"tasks": 22
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_trino.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.579,
+"tasks": 22
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_trino.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.579,
+"tasks": 22
+},
+{
+"anchor": "src/sqlfluff/core/dialects/__init__.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.487,
+"tasks": 19
+},
+{
+"anchor": "src/sqlfluff/core/dialects/__init__.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.487,
+"tasks": 19
+},
+{
+"anchor": "src/sqlfluff/core/dialects/dialect_ansi.py",
+"folder": "test/fixtures/parser",
+"ext": ".yml",
+"conf": 0.358,
+"tasks": 19
+},
+{
+"anchor": "src/sqlfluff/core/templaters/jinja.py",
+"folder": "test/fixtures/templater",
+"ext": ".sql",
+"conf": 0.229,
+"tasks": 19
+},
+{
+"anchor": "docs/source/index.rst",
+"folder": "docs",
+"ext": ".rst",
+"conf": 0.474,
+"tasks": 18
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_postgres_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.439,
+"tasks": 18
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_postgres_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.439,
+"tasks": 18
+},
+{
+"anchor": "README.md",
+"folder": "src/sqlfluff",
+"ext": ".py",
+"conf": 0.181,
+"tasks": 17
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_postgres.py",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.052,
+"tasks": 17
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_snowflake.py",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.042,
+"tasks": 17
+},
+{
+"anchor": "docs/source/dialects.rst",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.762,
+"tasks": 16
+},
+{
+"anchor": "docs/source/dialects.rst",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.762,
+"tasks": 16
+},
+{
+"anchor": "docs/source/dialects.rst",
+"folder": "src/sqlfluff",
+"ext": ".py",
+"conf": 0.762,
+"tasks": 16
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_athena.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.457,
+"tasks": 16
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_athena.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.457,
+"tasks": 16
+},
+{
+"anchor": "src/sqlfluff/core/templaters/jinja.py",
+"folder": "test/fixtures/templater",
+"ext": ".yml",
+"conf": 0.193,
+"tasks": 16
+},
+{
+"anchor": "src/sqlfluff/core/default_config.cfg",
+"folder": "src/sqlfluff/rules",
+"ext": ".py",
+"conf": 0.105,
+"tasks": 16
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_clickhouse_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.789,
+"tasks": 15
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_clickhouse_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.789,
+"tasks": 15
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_mariadb.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.6,
+"tasks": 15
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_mariadb.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.6,
+"tasks": 15
+},
+{
+"anchor": "src/sqlfluff/core/dialects/__init__.py",
+"folder": "test/fixtures/dialects",
+"ext": "",
+"conf": 0.385,
+"tasks": 15
+},
+{
+"anchor": "setup.cfg",
+"folder": "src/sqlfluff",
+"ext": ".py",
+"conf": 0.167,
+"tasks": 15
+},
+{
+"anchor": "README.md",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.16,
+"tasks": 15
+},
+{
+"anchor": "README.md",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.16,
+"tasks": 15
+},
+{
+"anchor": "tox.ini",
+"folder": "",
+"ext": ".txt",
+"conf": 0.118,
+"tasks": 15
+},
+{
+"anchor": "src/sqlfluff/core/default_config.cfg",
+"folder": "src/sqlfluff",
+"ext": ".py",
+"conf": 0.098,
+"tasks": 15
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_postgres.py",
+"folder": "test/fixtures/parser",
+"ext": ".yml",
+"conf": 0.046,
+"tasks": 15
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_databricks_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.824,
+"tasks": 14
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_databricks_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.824,
+"tasks": 14
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_sparksql_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.737,
+"tasks": 14
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_sparksql_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.737,
+"tasks": 14
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_teradata.py",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.206,
+"tasks": 14
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_teradata.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.206,
+"tasks": 14
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_teradata.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.206,
+"tasks": 14
+},
+{
+"anchor": "test/core/templaters/jinja_test.py",
+"folder": "test/fixtures/templater",
+"ext": "",
+"conf": 0.163,
+"tasks": 14
+},
+{
+"anchor": "src/sqlfluff/core/default_config.cfg",
+"folder": "test",
+"ext": ".py",
+"conf": 0.085,
+"tasks": 13
+},
+{
+"anchor": "docs/source/dialects.rst",
+"folder": "test/fixtures/dialects",
+"ext": "",
+"conf": 0.571,
+"tasks": 12
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_db2.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.545,
+"tasks": 12
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_db2.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.545,
+"tasks": 12
+},
+{
+"anchor": "test/rules_std_test.py",
+"folder": "test/fixtures",
+"ext": ".sql",
+"conf": 0.324,
+"tasks": 12
+},
+{
+"anchor": "test/core/linter_test.py",
+"folder": "test/fixtures/rules",
+"ext": ".yml",
+"conf": 0.179,
+"tasks": 12
+},
+{
+"anchor": "src/sqlfluff/core/templaters/jinja.py",
+"folder": "test/fixtures/templater",
+"ext": "",
+"conf": 0.145,
+"tasks": 12
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_exasol.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.119,
+"tasks": 12
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_exasol.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.119,
+"tasks": 12
+},
+{
+"anchor": "test/cli/commands_test.py",
+"folder": "test/fixtures/rules",
+"ext": ".yml",
+"conf": 0.087,
+"tasks": 12
+},
+{
+"anchor": "test/cli/commands_test.py",
+"folder": "test/fixtures",
+"ext": ".sql",
+"conf": 0.087,
+"tasks": 12
+},
+{
+"anchor": "src/sqlfluff/cli/commands.py",
+"folder": "src/sqlfluff",
+"ext": ".py",
+"conf": 0.069,
+"tasks": 12
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_mysql.py",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.067,
+"tasks": 12
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_snowflake.py",
+"folder": "test/fixtures/parser",
+"ext": ".yml",
+"conf": 0.03,
+"tasks": 12
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_ansi.py",
+"folder": "test/fixtures",
+"ext": ".sql",
+"conf": 0.027,
+"tasks": 12
+},
+{
+"anchor": "src/sqlfluff/parser/grammar.py",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.289,
+"tasks": 11
+},
+{
+"anchor": "src/sqlfluff/rules/std.py",
+"folder": "test/fixtures",
+"ext": ".sql",
+"conf": 0.212,
+"tasks": 11
+},
+{
+"anchor": "src/sqlfluff/core/rules/config_info.py",
+"folder": "test/fixtures/rules",
+"ext": ".yml",
+"conf": 0.208,
+"tasks": 11
+},
+{
+"anchor": ".github/workflows/ci-tests.yml",
+"folder": "",
+"ext": ".txt",
+"conf": 0.138,
+"tasks": 11
+},
+{
+"anchor": "setup.cfg",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.122,
+"tasks": 11
+},
+{
+"anchor": "setup.cfg",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.122,
+"tasks": 11
+},
+{
+"anchor": "README.md",
+"folder": "test/fixtures/dialects",
+"ext": "",
+"conf": 0.117,
+"tasks": 11
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_exasol.py",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.109,
+"tasks": 11
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_exasol.py",
+"folder": "test/fixtures/parser",
+"ext": ".yml",
+"conf": 0.109,
+"tasks": 11
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_mysql.py",
+"folder": "test/fixtures/parser",
+"ext": ".yml",
+"conf": 0.062,
+"tasks": 11
+},
+{
+"anchor": "setup.cfg",
+"folder": "test/fixtures/dialects",
+"ext": "",
+"conf": 0.111,
+"tasks": 10
+},
+{
+"anchor": "docs/source/configuration.rst",
+"folder": "test/fixtures/templater",
+"ext": ".sql",
+"conf": 0.109,
+"tasks": 10
+},
+{
+"anchor": "docs/source/configuration.rst",
+"folder": "test/fixtures/templater",
+"ext": ".yml",
+"conf": 0.109,
+"tasks": 10
+},
+{
+"anchor": "docs/source/configuration.rst",
+"folder": "test/fixtures/templater",
+"ext": "",
+"conf": 0.109,
+"tasks": 10
+},
+{
+"anchor": "tox.ini",
+"folder": "",
+"ext": ".py",
+"conf": 0.079,
+"tasks": 10
+},
+{
+"anchor": "test/cli/commands_test.py",
+"folder": "test",
+"ext": ".py",
+"conf": 0.072,
+"tasks": 10
+},
+{
+"anchor": "src/sqlfluff/core/parser/segments/base.py",
+"folder": "test",
+"ext": ".py",
+"conf": 0.065,
+"tasks": 10
+},
+{
+"anchor": "src/sqlfluff/core/parser/segments/base.py",
+"folder": "src/sqlfluff/core",
+"ext": ".py",
+"conf": 0.065,
+"tasks": 10
+},
+{
+"anchor": "src/sqlfluff/cli/commands.py",
+"folder": "test",
+"ext": ".py",
+"conf": 0.057,
+"tasks": 10
+},
+{
+"anchor": "src/sqlfluff/cli/commands.py",
+"folder": "test/fixtures",
+"ext": ".sql",
+"conf": 0.057,
+"tasks": 10
+},
+{
+"anchor": "CHANGELOG.md",
+"folder": "test/fixtures",
+"ext": ".sql",
+"conf": 0.034,
+"tasks": 10
+},
+{
+"anchor": "CHANGELOG.md",
+"folder": "src/sqlfluff",
+"ext": ".py",
+"conf": 0.034,
+"tasks": 10
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_tsql.py",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.028,
+"tasks": 10
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_tsql.py",
+"folder": "test/fixtures/parser",
+"ext": ".yml",
+"conf": 0.028,
+"tasks": 10
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_ansi.py",
+"folder": "src/sqlfluff",
+"ext": ".py",
+"conf": 0.023,
+"tasks": 10
+},
+{
+"anchor": "test/dialects_ansi_test.py",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.409,
+"tasks": 9
+},
+{
+"anchor": "test/rules/std_test.py",
+"folder": "test/fixtures/rules",
+"ext": ".yml",
+"conf": 0.31,
+"tasks": 9
+},
+{
+"anchor": "setup.py",
+"folder": "src/sqlfluff",
+"ext": ".py",
+"conf": 0.173,
+"tasks": 9
+},
+{
+"anchor": "src/sqlfluff/core/rules/config_info.py",
+"folder": "src/sqlfluff",
+"ext": ".py",
+"conf": 0.17,
+"tasks": 9
+},
+{
+"anchor": "test/core/linter_test.py",
+"folder": "src/sqlfluff/rules",
+"ext": ".py",
+"conf": 0.134,
+"tasks": 9
+},
+{
+"anchor": "plugins/sqlfluff-templater-dbt/setup.cfg",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.102,
+"tasks": 9
+},
+{
+"anchor": "plugins/sqlfluff-templater-dbt/setup.cfg",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.102,
+"tasks": 9
+},
+{
+"anchor": "plugins/sqlfluff-templater-dbt/setup.cfg",
+"folder": "src/sqlfluff",
+"ext": ".py",
+"conf": 0.102,
+"tasks": 9
+},
+{
+"anchor": "src/sqlfluff/core/rules/base.py",
+"folder": "test/core",
+"ext": ".py",
+"conf": 0.073,
+"tasks": 9
+},
+{
+"anchor": "src/sqlfluff/core/rules/base.py",
+"folder": "test",
+"ext": ".py",
+"conf": 0.073,
+"tasks": 9
+},
+{
+"anchor": "test/cli/commands_test.py",
+"folder": "src/sqlfluff/rules",
+"ext": ".py",
+"conf": 0.065,
+"tasks": 9
+},
+{
+"anchor": "CHANGELOG.md",
+"folder": "test/fixtures/templater",
+"ext": ".sql",
+"conf": 0.031,
+"tasks": 9
+},
+{
+"anchor": "src/sqlfluff/dialects/ansi_keywords.py",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.667,
+"tasks": 8
+},
+{
+"anchor": "test/fixtures/dialects/clickhouse/create_table.yml",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.5,
+"tasks": 8
+},
+{
+"anchor": "test/fixtures/dialects/clickhouse/create_table.yml",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.5,
+"tasks": 8
+},
+{
+"anchor": "test/rules/std_test.py",
+"folder": "src/sqlfluff/rules",
+"ext": ".py",
+"conf": 0.276,
+"tasks": 8
+},
+{
+"anchor": "src/sqlfluff/parser/segments_base.py",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.242,
+"tasks": 8
+},
+{
+"anchor": "test/core/config_test.py",
+"folder": "test/fixtures/rules",
+"ext": ".yml",
+"conf": 0.167,
+"tasks": 8
+},
+{
+"anchor": "test/core/config_test.py",
+"folder": "src/sqlfluff/rules",
+"ext": ".py",
+"conf": 0.167,
+"tasks": 8
+},
+{
+"anchor": "plugins/sqlfluff-templater-dbt/test/templater_test.py",
+"folder": "plugins/sqlfluff-templater-dbt/test/fixtures/dbt/dbt_project/models",
+"ext": ".sql",
+"conf": 0.157,
+"tasks": 8
+},
+{
+"anchor": "src/sqlfluff/linter.py",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.151,
+"tasks": 8
+},
+{
+"anchor": "src/sqlfluff/cli/formatters.py",
+"folder": "src/sqlfluff",
+"ext": ".py",
+"conf": 0.127,
+"tasks": 8
+},
+{
+"anchor": "plugins/sqlfluff-templater-dbt/setup.cfg",
+"folder": "test/fixtures/dialects",
+"ext": "",
+"conf": 0.091,
+"tasks": 8
+},
+{
+"anchor": "pyproject.toml",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.091,
+"tasks": 8
+},
+{
+"anchor": "pyproject.toml",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.091,
+"tasks": 8
+},
+{
+"anchor": "setup.cfg",
+"folder": "test/fixtures/rules",
+"ext": ".yml",
+"conf": 0.089,
+"tasks": 8
+},
+{
+"anchor": "src/sqlfluff/core/linter/linter.py",
+"folder": "test/fixtures",
+"ext": ".sql",
+"conf": 0.073,
+"tasks": 8
+},
+{
+"anchor": "src/sqlfluff/core/linter/linter.py",
+"folder": "test/core",
+"ext": ".py",
+"conf": 0.073,
+"tasks": 8
+},
+{
+"anchor": "test/cli/commands_test.py",
+"folder": "src/sqlfluff",
+"ext": ".py",
+"conf": 0.058,
+"tasks": 8
+},
+{
+"anchor": "src/sqlfluff/core/parser/segments/base.py",
+"folder": "test/core",
+"ext": ".py",
+"conf": 0.052,
+"tasks": 8
+},
+{
+"anchor": "CHANGELOG.md",
+"folder": "test",
+"ext": ".py",
+"conf": 0.027,
+"tasks": 8
+},
+{
+"anchor": "test/fixtures/dialects/tsql/declare_with_following_statements.yml",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.333,
+"tasks": 7
+},
+{
+"anchor": "test/fixtures/dialects/tsql/declare_with_following_statements.yml",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.333,
+"tasks": 7
+},
+{
+"anchor": "test/api/simple_test.py",
+"folder": "test/fixtures/rules",
+"ext": ".yml",
+"conf": 0.179,
+"tasks": 7
+},
+{
+"anchor": "test/api/simple_test.py",
+"folder": "test",
+"ext": ".py",
+"conf": 0.179,
+"tasks": 7
+},
+{
+"anchor": "test/fixtures/dialects/tsql/select.yml",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.167,
+"tasks": 7
+},
+{
+"anchor": "test/fixtures/dialects/tsql/select.yml",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.167,
+"tasks": 7
+},
+{
+"anchor": "plugins/sqlfluff-templater-dbt/test/templater_test.py",
+"folder": "plugins/sqlfluff-templater-dbt/test/fixtures/dbt",
+"ext": ".sql",
+"conf": 0.137,
+"tasks": 7
+},
+{
+"anchor": "test/core/linter_test.py",
+"folder": "test",
+"ext": ".py",
+"conf": 0.104,
+"tasks": 7
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_teradata.py",
+"folder": "test/fixtures/parser",
+"ext": ".yml",
+"conf": 0.103,
+"tasks": 7
+},
+{
+"anchor": "plugins/sqlfluff-templater-dbt/sqlfluff_templater_dbt/templater.py",
+"folder": "plugins/sqlfluff-templater-dbt/test/fixtures/dbt/dbt_project/models",
+"ext": ".sql",
+"conf": 0.095,
+"tasks": 7
+},
+{
+"anchor": "src/sqlfluff/core/parser/grammar/base.py",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.093,
+"tasks": 7
+},
+{
+"anchor": "src/sqlfluff/core/parser/grammar/base.py",
+"folder": "src/sqlfluff/core",
+"ext": ".py",
+"conf": 0.093,
+"tasks": 7
+},
+{
+"anchor": "src/sqlfluff/core/parser/grammar/base.py",
+"folder": "test/core",
+"ext": ".py",
+"conf": 0.093,
+"tasks": 7
+},
+{
+"anchor": "pyproject.toml",
+"folder": "src/sqlfluff",
+"ext": ".py",
+"conf": 0.08,
+"tasks": 7
+},
+{
+"anchor": "setup.cfg",
+"folder": "src/sqlfluff/rules",
+"ext": ".py",
+"conf": 0.078,
+"tasks": 7
+},
+{
+"anchor": "docs/source/gettingstarted.rst",
+"folder": "test/fixtures/rules",
+"ext": ".yml",
+"conf": 0.075,
+"tasks": 7
+},
+{
+"anchor": "src/sqlfluff/core/rules/base.py",
+"folder": "src/sqlfluff/core",
+"ext": ".py",
+"conf": 0.056,
+"tasks": 7
+},
+{
+"anchor": "src/sqlfluff/core/rules/base.py",
+"folder": "test/fixtures/rules",
+"ext": ".yml",
+"conf": 0.056,
+"tasks": 7
+},
+{
+"anchor": "CHANGELOG.md",
+"folder": "",
+"ext": ".py",
+"conf": 0.024,
+"tasks": 7
+},
+{
+"anchor": "CHANGELOG.md",
+"folder": "test/fixtures/templater",
+"ext": "",
+"conf": 0.024,
+"tasks": 7
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_starrocks.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 1.0,
+"tasks": 6
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_starrocks.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 1.0,
+"tasks": 6
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_oracle_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.857,
+"tasks": 6
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_oracle_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.857,
+"tasks": 6
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_db2_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.857,
+"tasks": 6
+},
+{
+"anchor": "src/sqlfluff/dialects/dialect_db2_keywords.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.857,
+"tasks": 6
+},
+{
+"anchor": "test/fixtures/parser/ansi/select_simple_h.yml",
+"folder": "test/fixtures/parser",
+"ext": ".yml",
+"conf": 0.75,
+"tasks": 6
+},
+{
+"anchor": "test/fixtures/parser/snowflake/snowflake_window_function_ignore_nulls.yml",
+"folder": "test/fixtures/parser",
+"ext": ".yml",
+"conf": 0.75,
+"tasks": 6
+},
+{
+"anchor": "test/cli/autocomplete_test.py",
+"folder": "test/fixtures/dialects",
+"ext": "",
+"conf": 0.75,
+"tasks": 6
+},
+{
+"anchor": "test/cli/autocomplete_test.py",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.75,
+"tasks": 6
+},
+{
+"anchor": "test/cli/autocomplete_test.py",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.75,
+"tasks": 6
+},
+{
+"anchor": "test/cli/autocomplete_test.py",
+"folder": "src/sqlfluff",
+"ext": ".py",
+"conf": 0.75,
+"tasks": 6
+},
+{
+"anchor": "test/fixtures/parser/bigquery/select_struct.yml",
+"folder": "test/fixtures/parser",
+"ext": ".yml",
+"conf": 0.667,
+"tasks": 6
+},
+{
+"anchor": "src/sqlfluff/core/dialects/ansi_keywords.py",
+"folder": "test/fixtures/parser",
+"ext": ".sql",
+"conf": 0.6,
+"tasks": 6
+},
+{
+"anchor": "src/sqlfluff/core/dialects/ansi_keywords.py",
+"folder": "test/fixtures/parser",
+"ext": ".yml",
+"conf": 0.6,
+"tasks": 6
+},
+{
+"anchor": "test/fixtures/parser/snowflake/snowflake_pivot.yml",
+"folder": "test/fixtures/parser",
+"ext": ".yml",
+"conf": 0.5,
+"tasks": 6
+},
+{
+"anchor": "test/fixtures/dialects/tsql/function_with_variable.yml",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.5,
+"tasks": 6
+},
+{
+"anchor": "test/fixtures/dialects/tsql/function_with_variable.yml",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.5,
+"tasks": 6
+},
+{
+"anchor": "test/fixtures/dialects/tsql/delete.yml",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.462,
+"tasks": 6
+},
+{
+"anchor": "test/fixtures/dialects/tsql/delete.yml",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.462,
+"tasks": 6
+},
+{
+"anchor": "test/fixtures/dialects/tsql/stored_procedure_begin_end.yml",
+"folder": "test/fixtures/dialects",
+"ext": ".sql",
+"conf": 0.4,
+"tasks": 6
+},
+{
+"anchor": "test/fixtures/dialects/tsql/stored_procedure_begin_end.yml",
+"folder": "test/fixtures/dialects",
+"ext": ".yml",
+"conf": 0.4,
+"tasks": 6
+}
+]

@@ -1,0 +1,131 @@
+{
+ "model": "tev1:4b",
+ "group": "A",
+ "task": "T08",
+ "answer": [],
+ "ranked": [],
+ "protocol_errors": 0,
+ "repeats": 0,
+ "dropped_turns_max": 8,
+ "prompt_tokens": 31693,
+ "output_tokens": 373,
+ "prompt_tokens_max": 3194,
+ "seconds": 1210.6,
+ "finished": false,
+ "turns": 14,
+ "rank_called": false,
+ "log": [
+  {
+   "turn": 1,
+   "reply": "ACTION: find -i \"tomcat\" -f",
+   "action": "find -i \"tomcat\" -f",
+   "result": "filenames (12):\n  server/sonar-webserver-core/src/main/java/org/sonar/server/platform/web/AbortTomcatStartException.java\n  server/sonar-webserver/src/main/java/org/sonar/server/app/EmbeddedTomcat.java\n  server/sonar-webserver/src/main/java/org/sonar/server/app/TomcatAccessLog.java\n  server/sonar-webserver/src/main/java/org/sonar/server/app/TomcatConnectors.java\n  server/sonar-webserver/src/main/java/org/sonar/server/app/TomcatContexts.java\n  server/sonar-webserver/src/main/java/org/sonar/server/app/TomcatErrorHandling.java\n  server/sonar-webserver/src/main/java/org/sonar/server/app/TomcatStartupLogs.java\n  server/sonar-webserver/src/test/java/org/sonar/server/app/EmbeddedTomcatTest.java\n  server/sonar-webserver/src/test/java/org/sonar/server/app/TomcatAccessLogTest.java\n  server/sonar-webserver/src/test/java/org/sonar/server/app/TomcatConnectorsTest.java\n  server/sonar-webserver/src/test/java/org/sonar/server/app/TomcatContextsTest.java\n  server/sonar-webserver/src/test/java/org/sonar/server/app/TomcatErrorHandlingTest.java",
+   "prompt_tokens": 628,
+   "dropped": 0
+  },
+  {
+   "turn": 2,
+   "reply": "ACTION: find -i \"jackson\" -f",
+   "action": "find -i \"jackson\" -f",
+   "result": "filenames (6):\n  sonar-application/src/main/assembly/elasticsearch/lib/jackson-core-2.8.11.jar\n  sonar-application/src/main/assembly/elasticsearch/lib/jackson-dataformat-cbor-2.8.11.jar\n  sonar-application/src/main/assembly/elasticsearch/lib/jackson-dataformat-smile-2.8.11.jar\n  sonar-application/src/main/assembly/elasticsearch/lib/jackson-dataformat-yaml-2.8.11.jar\n  sonar-application/src/main/assembly/elasticsearch/modules/ingest-geoip/jackson-annotations-2.8.11.jar\n  sonar-application/src/main/assembly/elasticsearch/modules/ingest-geoip/jackson-databind-2.8.11.3.jar",
+   "prompt_tokens": 942,
+   "dropped": 0
+  },
+  {
+   "turn": 3,
+   "reply": "ACTION: find -i \"elasticsearch\" -f",
+   "action": "find -i \"elasticsearch\" -f",
+   "result": "filenames (54):\n  sonar-application/src/main/assembly/elasticsearch-patch/bin/elasticsearch\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-certgen\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-certgen.bat\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-certutil\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-certutil.bat\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-cli\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-cli.bat\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-croneval\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-croneval.bat\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-env\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-env.bat\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-keystore\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-keystore.bat\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-migrate\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-migrate.bat\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-plugin\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-plugin.bat\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-saml-metadata\n  sonar-application/src/main/assembly/elasticsearch/bin/elasticsearch-saml-metadata.bat\n  ... 34 more",
+   "prompt_tokens": 1137,
+   "dropped": 0
+  },
+  {
+   "turn": 4,
+   "reply": "ACTION: find -i \"pom\" -f",
+   "action": "find -i \"pom\" -f",
+   "result": "filenames (22):\n  server/sonar-ce/src/test/plugins/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test-plugin/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test2-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-report-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-sqale-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-views-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin-v2/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-extend-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-libs-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-require-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-requirenew-plugin/pom.xml\n  sonar-core/src/test/projects/base-plugin/pom.xml\n  sonar-core/src/test/projects/dependent-plugin/pom.xml\n  sonar-core/src/test/projects/pom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomPM.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomWithSourceEncoding.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenSurefireUtilsTest/MavenPom.xml\n  ... 2 more",
+   "prompt_tokens": 1503,
+   "dropped": 0
+  },
+  {
+   "turn": 5,
+   "reply": "ACTION: find -i \"pom\" -f | grep -i sonar-application",
+   "action": "find -i \"pom\" -f | grep -i sonar-application",
+   "result": "filenames (22):\n  server/sonar-ce/src/test/plugins/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test-plugin/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test2-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-report-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-sqale-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-views-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin-v2/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-extend-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-libs-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-require-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-requirenew-plugin/pom.xml\n  sonar-core/src/test/projects/base-plugin/pom.xml\n  sonar-core/src/test/projects/dependent-plugin/pom.xml\n  sonar-core/src/test/projects/pom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomPM.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomWithSourceEncoding.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenSurefireUtilsTest/MavenPom.xml\n  ... 2 more",
+   "prompt_tokens": 1920,
+   "dropped": 0
+  },
+  {
+   "turn": 6,
+   "reply": "ACTION: find -i \"pom\" -f | grep -i \"application\"",
+   "action": "find -i \"pom\" -f | grep -i \"application\"",
+   "result": "filenames (22):\n  server/sonar-ce/src/test/plugins/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test-plugin/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test2-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-report-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-sqale-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-views-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin-v2/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-extend-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-libs-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-require-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-requirenew-plugin/pom.xml\n  sonar-core/src/test/projects/base-plugin/pom.xml\n  sonar-core/src/test/projects/dependent-plugin/pom.xml\n  sonar-core/src/test/projects/pom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomPM.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomWithSourceEncoding.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenSurefireUtilsTest/MavenPom.xml\n  ... 2 more",
+   "prompt_tokens": 2344,
+   "dropped": 0
+  },
+  {
+   "turn": 7,
+   "reply": "ACTION: find -i \"pom\" -f | grep -E \"sonar-application|sonar-ce\"",
+   "action": "find -i \"pom\" -f | grep -E \"sonar-application|sonar-ce\"",
+   "result": "filenames (22):\n  server/sonar-ce/src/test/plugins/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test-plugin/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test2-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-report-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-sqale-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-views-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin-v2/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-extend-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-libs-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-require-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-requirenew-plugin/pom.xml\n  sonar-core/src/test/projects/base-plugin/pom.xml\n  sonar-core/src/test/projects/dependent-plugin/pom.xml\n  sonar-core/src/test/projects/pom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomPM.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomWithSourceEncoding.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenSurefireUtilsTest/MavenPom.xml\n  ... 2 more",
+   "prompt_tokens": 2768,
+   "dropped": 0
+  },
+  {
+   "turn": 8,
+   "reply": "ACTION: find -i \"pom\" -f | grep -E \"sonar-ce\"",
+   "action": "find -i \"pom\" -f | grep -E \"sonar-ce\"",
+   "result": "filenames (22):\n  server/sonar-ce/src/test/plugins/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test-plugin/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test2-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-report-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-sqale-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-views-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin-v2/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-extend-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-libs-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-require-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-requirenew-plugin/pom.xml\n  sonar-core/src/test/projects/base-plugin/pom.xml\n  sonar-core/src/test/projects/dependent-plugin/pom.xml\n  sonar-core/src/test/projects/pom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomPM.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomWithSourceEncoding.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenSurefireUtilsTest/MavenPom.xml\n  ... 2 more",
+   "prompt_tokens": 2884,
+   "dropped": 1
+  },
+  {
+   "turn": 9,
+   "reply": "ACTION: find -i \"pom\" -f | grep -v test | grep -v resources",
+   "action": "find -i \"pom\" -f | grep -v test | grep -v resources",
+   "result": "filenames (22):\n  server/sonar-ce/src/test/plugins/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test-plugin/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test2-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-report-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-sqale-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-views-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin-v2/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-extend-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-libs-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-require-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-requirenew-plugin/pom.xml\n  sonar-core/src/test/projects/base-plugin/pom.xml\n  sonar-core/src/test/projects/dependent-plugin/pom.xml\n  sonar-core/src/test/projects/pom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomPM.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomWithSourceEncoding.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenSurefireUtilsTest/MavenPom.xml\n  ... 2 more",
+   "prompt_tokens": 2749,
+   "dropped": 3
+  },
+  {
+   "turn": 10,
+   "reply": "ACTION: find -i \"pom\" -f | grep -v test | grep -v resources | grep -v \"fake\"",
+   "action": "find -i \"pom\" -f | grep -v test | grep -v resources | grep -v \"fake\"",
+   "result": "filenames (22):\n  server/sonar-ce/src/test/plugins/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test-plugin/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test2-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-report-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-sqale-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-views-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin-v2/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-extend-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-libs-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-require-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-requirenew-plugin/pom.xml\n  sonar-core/src/test/projects/base-plugin/pom.xml\n  sonar-core/src/test/projects/dependent-plugin/pom.xml\n  sonar-core/src/test/projects/pom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomPM.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomWithSourceEncoding.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenSurefireUtilsTest/MavenPom.xml\n  ... 2 more",
+   "prompt_tokens": 3177,
+   "dropped": 3
+  },
+  {
+   "turn": 11,
+   "reply": "ACTION: find -i \"pom\" -f | grep -v test | grep -v resources | grep -v \"fake\" | grep -v \"sonar-core\"",
+   "action": "find -i \"pom\" -f | grep -v test | grep -v resources | grep -v \"fake\" | grep -v \"sonar-core\"",
+   "result": "filenames (22):\n  server/sonar-ce/src/test/plugins/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test-plugin/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test2-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-report-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-sqale-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-views-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin-v2/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-extend-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-libs-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-require-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-requirenew-plugin/pom.xml\n  sonar-core/src/test/projects/base-plugin/pom.xml\n  sonar-core/src/test/projects/dependent-plugin/pom.xml\n  sonar-core/src/test/projects/pom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomPM.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomWithSourceEncoding.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenSurefireUtilsTest/MavenPom.xml\n  ... 2 more",
+   "prompt_tokens": 3194,
+   "dropped": 4
+  },
+  {
+   "turn": 12,
+   "reply": "ACTION: find -i \"pom\" -f | grep -v test | grep -v resources | grep -v \"fake\" | grep -v \"sonar-core\" | grep -v \"sonar-plugin-api\"",
+   "action": "find -i \"pom\" -f | grep -v test | grep -v resources | grep -v \"fake\" | grep -v \"sonar-core\" | grep -v \"sonar-plugin-api\"",
+   "result": "filenames (22):\n  server/sonar-ce/src/test/plugins/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test-plugin/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test2-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-report-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-sqale-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-views-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin-v2/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-extend-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-libs-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-require-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-requirenew-plugin/pom.xml\n  sonar-core/src/test/projects/base-plugin/pom.xml\n  sonar-core/src/test/projects/dependent-plugin/pom.xml\n  sonar-core/src/test/projects/pom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomPM.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomWithSourceEncoding.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenSurefireUtilsTest/MavenPom.xml\n  ... 2 more",
+   "prompt_tokens": 2789,
+   "dropped": 6
+  },
+  {
+   "turn": 13,
+   "reply": "ACTION: find -i \"pom\" -f | grep -v test | grep -v resources | grep -v \"fake\" | grep -v \"sonar-core\" | grep -v \"sonar-plugin-api\" | grep -v \"server\"",
+   "action": "find -i \"pom\" -f | grep -v test | grep -v resources | grep -v \"fake\" | grep -v \"sonar-core\" | grep -v \"sonar-plugin-api\" | grep -v \"server\"",
+   "result": "filenames (22):\n  server/sonar-ce/src/test/plugins/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test-plugin/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test2-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-report-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-sqale-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-views-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin-v2/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-extend-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-libs-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-require-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-requirenew-plugin/pom.xml\n  sonar-core/src/test/projects/base-plugin/pom.xml\n  sonar-core/src/test/projects/dependent-plugin/pom.xml\n  sonar-core/src/test/projects/pom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomPM.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomWithSourceEncoding.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenSurefireUtilsTest/MavenPom.xml\n  ... 2 more",
+   "prompt_tokens": 2812,
+   "dropped": 7
+  },
+  {
+   "turn": 14,
+   "reply": "ACTION: find -i \"pom\" -f | grep -v test | grep -v resources | grep -v \"fake\" | grep -v \"sonar-core\" | grep -v \"sonar-plugin-api\" | grep -v \"server\" | head -20",
+   "action": "find -i \"pom\" -f | grep -v test | grep -v resources | grep -v \"fake\" | grep -v \"sonar-core\" | grep -v \"sonar-plugin-api\" | grep -v \"server\" | head -20",
+   "result": "filenames (22):\n  server/sonar-ce/src/test/plugins/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test-plugin/pom.xml\n  server/sonar-ce/src/test/plugins/sonar-test2-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-report-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-sqale-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/fake-views-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin-v2/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-base-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-extend-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-libs-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-require-plugin/pom.xml\n  server/sonar-webserver-api/src/test/projects/test-requirenew-plugin/pom.xml\n  sonar-core/src/test/projects/base-plugin/pom.xml\n  sonar-core/src/test/projects/dependent-plugin/pom.xml\n  sonar-core/src/test/projects/pom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPom.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomPM.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenPomWithSourceEncoding.xml\n  sonar-plugin-api/src/test/resources/org/sonar/api/batch/maven/MavenSurefireUtilsTest/MavenPom.xml\n  ... 2 more",
+   "prompt_tokens": 2846,
+   "dropped": 8
+  }
+ ]
+}

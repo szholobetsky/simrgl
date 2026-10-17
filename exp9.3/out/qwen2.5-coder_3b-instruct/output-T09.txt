@@ -1,0 +1,7 @@
+```plaintext
+server/sonar-web/src/main/js/app/theme.js
+server/sonar-web/src/main/js/apps/code/utils.js
+server/sonar-web/src/main/js/apps/projects-admin/__tests__/projects-test.js
+server/sonar-web/src/main/js/apps/projects-admin/create-view.js
+server/sonar-web/src/main/js/apps/projects-admin/main.js
+```

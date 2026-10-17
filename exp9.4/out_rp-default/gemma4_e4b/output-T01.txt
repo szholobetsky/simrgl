@@ -1,0 +1,21 @@
+The documentation fix needs to be applied to the file `sonar-application/src/main/assembly/conf/sonar.properties`.
+
+The change involves updating the comments associated with the `sonar.sso.groupsHeader` property.
+
+**Current Documentation (Lines around 166 in `sonar-application/src/main/assembly/conf/sonar.properties`):**
+```properties
+# If the sonar.sso.groupsHeader is set, the user will belong to those groups if groups exist in SonarQube.
+# If none of the provided groups exists in SonarQube, the user won't belong to any group.
+# Note that the default group will NOT be automatically added when using SSO, it should be provided in the groups list, if needed.
+```
+
+**Required Change:**
+Replace the current documentation block with the following updated text:
+
+```properties
+# If the sonar.sso.groupsHeader is set, the user will belong to those groups if groups exist in SonarQube.
+# If none of the provided groups exists in SonarQube, the user will only belong to the default group.
+# Note that the default group will always be set.
+```
+
+This change corrects the misleading information about the default group's synchronization status when using SSO authentication.

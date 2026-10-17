@@ -1,0 +1,17 @@
+# exp9.3 passive search: the indexes run on the task first and their output lands in the
+# context; then the read-only /ask agent decides which files to open and gives the answer.
+#   cd C:\Projects\Data\wt\sonar\T05
+#   1bcoder --scriptapply C:/Projects/simrgl/exp9.3/passive.txt --param id=T05 --param tag=tev1_4b --param ctx=8192 --model tev1:4b --host http://localhost:11434
+/ctx {{ctx}}
+/param num_ctx {{ctx}}
+/param temperature 0
+/param repeat_penalty 1.2
+/param timeout 900
+/param run_timeout 300
+/read C:/Projects/simrgl/exp9.3/tasks/{{id}}.txt -> task
+/run python C:/Projects/simrgl/exp9.3/idx.py gamayun {{id}}
+/run python C:/Projects/simrgl/exp9.3/idx.py simargl {{id}}
+/ask -t 10 print out list of the most relevant files for fix the task: {{task}}
+/save C:/Projects/simrgl/exp9.3/out/{{tag}}/output-{{id}}.txt
+/ctx save exp9.3-{{tag}}-{{id}}
+/stats save json C:/Projects/simrgl/exp9.3/out/{{tag}}/stats-{{id}}.json

@@ -1,0 +1,6 @@
+sonar-application/src/main/assembly/conf/sonar.properties
+server/sonar-process/src/test/java/org/sonar/process/ProcessPropertiesTest.java
+server/sonar-db-core/src/main/java/org/sonar/db/DatabaseChecker.java
+server/sonar-server/src/test/java/org/sonar/server/app/StartupLogsTest.java
+server/sonar-docs/src/pages/setup/sonar-properties.md
+sonar-plugin-api/src/main/java/org/sonar/api/database/DatabaseProperties.java

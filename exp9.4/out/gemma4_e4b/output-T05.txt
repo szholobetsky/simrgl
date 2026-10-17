@@ -1,0 +1,10 @@
+Based on the provided history from similar tasks (`simargl`), the issue relates specifically to front-end form validation and project creation workflows. The following areas contain the highest concentration of code responsible for input fields, validation rules, and the actual process of creating a project:
+
+1.  **Project Creation Components:** These files handle the user interface flow when setting up a new project.
+    *   `server/sonar-web/src/main/js/apps/create/project/*`: This entire subdirectory likely holds the main pages and component structures for project setup. Key files include `ManualProjectCreate.tsx`, `CreateProjectPage.tsx`, etc.
+2.  **Validation Logic Component:** This reusable component handles general field validation inputs across different parts of the application.
+    *   `server/sonar-web/src/main/components/controls/ValidationInput.tsx`: Changes here would affect how all validated inputs behave during submission attempts.
+3.  **API Interaction / Project Management Service:** If client-side validation fails but doesn't prevent submission (or if incorrect data is sent), this service layer might be involved in handling or validating the final payload before calling an API endpoint.
+    *   `server/sonar-web/src/main/js/api/project-management.ts`: Likely contains logic related to submitting project metadata.
+
+I recommend focusing your investigation on these paths within the codebase structure (`server/sonar-web/src/main/js/...`).

@@ -1,0 +1,112 @@
+{
+ "A1": {
+  "name": "SONAR-10246",
+  "files": [
+   "sonar-application/src/main/assembly/conf/sonar.properties"
+  ],
+  "at_head": [
+   "sonar-application/src/main/assembly/conf/sonar.properties"
+  ]
+ },
+ "A2": {
+  "name": "SONAR-10766",
+  "files": [
+   "server/sonar-server-common/src/main/java/org/sonar/server/log/ServerProcessLogging.java"
+  ],
+  "at_head": [
+   "server/sonar-server-common/src/main/java/org/sonar/server/log/ServerProcessLogging.java"
+  ]
+ },
+ "A3": {
+  "name": "SONAR-12360",
+  "files": [
+   "server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.css",
+   "server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.tsx",
+   "server/sonar-web/src/main/js/apps/create/project/__tests__/ManualProjectCreate-test.tsx",
+   "server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/ManualProjectCreate-test.tsx.snap",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+  ],
+  "at_head": [
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+  ]
+ },
+ "A4": {
+  "name": "SONAR-13564",
+  "files": [
+   "server/sonar-web/src/main/js/apps/projects/components/__tests__/__snapshots__/ProjectsSortingSelect-test.tsx.snap",
+   "server/sonar-web/src/main/js/apps/projects/utils.ts",
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+  ],
+  "at_head": [
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+  ]
+ },
+ "A5": {
+  "name": "SONAR-14212",
+  "files": [
+   "server/sonar-web/src/main/js/app/components/extensions/legacy/__tests__/request-legacy-test.ts",
+   "server/sonar-web/src/main/js/app/components/extensions/legacy/request-legacy.ts",
+   "server/sonar-webserver/src/main/java/org/sonar/server/platform/web/WebServiceFilter.java",
+   "server/sonar-webserver/src/test/java/org/sonar/server/platform/web/WebServiceFilterTest.java"
+  ],
+  "at_head": [
+   "server/sonar-webserver/src/main/java/org/sonar/server/platform/web/WebServiceFilter.java",
+   "server/sonar-webserver/src/test/java/org/sonar/server/platform/web/WebServiceFilterTest.java"
+  ]
+ },
+ "B1": {
+  "name": "SONAR-10558",
+  "files": [
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+  ],
+  "at_head": [
+   "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+  ]
+ },
+ "B2": {
+  "name": "SONAR-12243",
+  "files": [
+   "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java",
+   "server/sonar-alm-client/src/test/java/org/sonar/alm/client/github/GithubApplicationClientImplTest.java"
+  ],
+  "at_head": [
+   "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java",
+   "server/sonar-alm-client/src/test/java/org/sonar/alm/client/github/GithubApplicationClientImplTest.java"
+  ]
+ },
+ "B3": {
+  "name": "SONAR-13097",
+  "files": [
+   "build.gradle",
+   "sonar-application/build.gradle"
+  ],
+  "at_head": [
+   "build.gradle",
+   "sonar-application/build.gradle"
+  ]
+ },
+ "B4": {
+  "name": "SONAR-13905",
+  "files": [
+   "build.gradle",
+   "owasp-suppressions.xml",
+   "owasp-vulnerabilities.xml",
+   "sonar-application/build.gradle"
+  ],
+  "at_head": [
+   "build.gradle",
+   "sonar-application/build.gradle"
+  ]
+ },
+ "B5": {
+  "name": "SONAR-14463",
+  "files": [
+   "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java",
+   "server/sonar-alm-client/src/test/java/org/sonar/alm/client/github/GithubApplicationClientImplTest.java"
+  ],
+  "at_head": [
+   "server/sonar-alm-client/src/main/java/org/sonar/alm/client/github/GithubApplicationClientImpl.java",
+   "server/sonar-alm-client/src/test/java/org/sonar/alm/client/github/GithubApplicationClientImplTest.java"
+  ]
+ }
+}

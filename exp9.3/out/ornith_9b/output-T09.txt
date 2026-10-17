@@ -1,0 +1,34 @@
+Here are the most relevant files and the changes needed to remove the unused `Sonar-Version` HTTP header:
+
+---
+
+## 1. `server/sonar-webserver/src/main/java/org/sonar/server/platform/web/WebServiceFilter.java`
+
+**Line 87** — Remove this line:
+```java
+wsResponse.setHeader("Sonar-Version", runtime.getApiVersion().toString());
+```
+
+This is where the header is added to every web service response. Since the blue/green feature (which used this header) is no longer used, this line should be deleted.
+
+---
+
+## 2. `server/sonar-webserver/src/test/java/org/sonar/server/platform/web/WebServiceFilterTest.java`
+
+**Line 127** — Remove this line:
+```java
+verify(response).setHeader("Sonar-Version", RUNTIME_VERSION);
+```
+
+This is the test assertion that verifies the header is set. It must be removed alongside the production code change, otherwise the test will fail.
+
+---
+
+## Summary
+
+| File | Change |
+|------|--------|
+| `WebServiceFilter.java` | Remove `wsResponse.setHeader("Sonar-Version", ...)` call |
+| `WebServiceFilterTest.java` | Remove `verify(response).setHeader("Sonar-Version", ...)` assertion |
+
+These are the only two files in the project that reference `Sonar-Version`. Removing both lines will cleanly eliminate the header from the web service responses.

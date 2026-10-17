@@ -1,0 +1,131 @@
+{
+ "model": "ornith:9b",
+ "group": "A",
+ "task": "T02",
+ "answer": [],
+ "ranked": [],
+ "protocol_errors": 0,
+ "repeats": 0,
+ "dropped_turns_max": 4,
+ "prompt_tokens": 29732,
+ "output_tokens": 232,
+ "prompt_tokens_max": 3398,
+ "seconds": 1845.2,
+ "finished": false,
+ "turns": 14,
+ "rank_called": false,
+ "log": [
+  {
+   "turn": 1,
+   "reply": "ACTION: gamayun SONAR-10221",
+   "action": "gamayun SONAR-10221",
+   "result": "terms used: sonar\n  build.gradle  (past tasks 504; words: sonar)\n  pom.xml  (past tasks 215; words: sonar)\n  sonar-application/src/main/assembly/conf/sonar.properties  (past tasks 123; words: sonar)\n  sonar-plugin-api/src/main/java/org/sonar/api/CoreProperties.java  (past tasks 139; words: sonar)\n  server/sonar-ce/src/test/java/org/sonar/ce/container/ComputeEngineContainerImplTest.java  (past tasks 152; words: sonar)\n  plugins/sonar-core-plugin/src/main/resources/org/sonar/l10n/core.properties  (past tasks 181; words: sonar)\n  server/sonar-server/src/main/java/org/sonar/server/platform/platformlevel/PlatformLevel4.java  (past tasks 179; words: )\n  plugins/sonar-core-plugin/src/main/java/org/sonar/plugins/core/CorePlugin.java  (past tasks 164; words: sonar)",
+   "prompt_tokens": 391,
+   "dropped": 0
+  },
+  {
+   "turn": 2,
+   "reply": "ACTION: gamayun projects list not analyzed",
+   "action": "gamayun projects list not analyzed",
+   "result": "terms used: analyzed, list, projects\n  sonar-core/src/main/resources/org/sonar/l10n/core.properties  (past tasks 1266; words: list, projects)\n  server/sonar-db-dao/src/main/java/org/sonar/db/MyBatis.java  (past tasks 87; words: analyzed, projects, list)\n  server/sonar-db-dao/src/main/resources/org/sonar/db/purge/PurgeMapper.xml  (past tasks 70; words: analyzed, projects, list)\n  server/sonar-db-dao/src/main/resources/org/sonar/db/component/ComponentMapper.xml  (past tasks 72; words: analyzed, projects, list)\n  server/sonar-db-dao/src/main/java/org/sonar/db/purge/PurgeDao.java  (past tasks 57; words: analyzed, projects, list)\n  server/sonar-db-dao/src/main/java/org/sonar/db/purge/PurgeMapper.java  (past tasks 60; words: analyzed, projects, list)\n  server/sonar-db-dao/src/test/java/org/sonar/db/purge/PurgeDaoTest.java  (past tasks 60; words: analyzed, projects, list)\n  server/sonar-db-dao/src/test/java/org/sonar/db/component/ComponentDaoTest.java  (past tasks 57; words: analyzed, projects, list)",
+   "prompt_tokens": 665,
+   "dropped": 0
+  },
+  {
+   "turn": 3,
+   "reply": "ACTION: gamayun \"Project is not analyzed yet\"",
+   "action": "gamayun \"Project is not analyzed yet\"",
+   "result": "terms used: analyzed, project, yet\n  sonar-core/src/main/resources/org/sonar/l10n/core.properties  (past tasks 1266; words: project)\n  server/sonar-ce-task-projectanalysis/src/main/java/org/sonar/ce/task/projectanalysis/container/ProjectAnalysisTaskContainerPopulator.java  (past tasks 44; words: analyzed, yet, project)\n  server/sonar-db-dao/src/main/resources/org/sonar/db/purge/PurgeMapper.xml  (past tasks 70; words: analyzed, project)\n  server/sonar-db-dao/src/main/java/org/sonar/db/MyBatis.java  (past tasks 87; words: analyzed, project)\n  server/sonar-db-dao/src/main/java/org/sonar/db/purge/PurgeDao.java  (past tasks 57; words: analyzed, project)\n  server/sonar-db-dao/src/main/java/org/sonar/db/purge/PurgeMapper.java  (past tasks 60; words: analyzed, project)\n  server/sonar-db-dao/src/main/resources/org/sonar/db/component/ComponentMapper.xml  (past tasks 72; words: analyzed, project)\n  server/sonar-db-dao/src/test/java/org/sonar/db/purge/PurgeDaoTest.java  (past tasks 60; words: analyzed, project)",
+   "prompt_tokens": 1007,
+   "dropped": 0
+  },
+  {
+   "turn": 4,
+   "reply": "ACTION: read sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+   "action": "read sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+   "result": "sonar-core/src/main/resources/org/sonar/l10n/core.properties  lines 1-40 of 3764\n    1  #------------------------------------------------------------------------------\n    2  #\n    3  # GENERIC WORDS, sorted alphabetically\n    4  #\n    5  #------------------------------------------------------------------------------\n    6  \n    7  action=Action\n    8  actions=Actions\n    9  active=Active\n   10  activate=Activate\n   11  add_verb=Add\n   12  admin=Admin\n   13  apply=Apply\n   14  all=All\n   15  and=And\n   16  anonymous=Anonymous\n   17  any=Any\n   18  ascending=Ascending\n   19  assignee=Assignee\n   20  author=Author\n   21  billion=Billion\n   22  bitbucket=Bitbucket\n   23  back=Back\n   24  backup=Backup\n   25  backup_verb=Back up\n   26  best=Best\n   27  beta=BETA\n   28  blocker=Blocker\n   29  bold=Bold\n   30  branch=Branch\n   31  by_=by\n   32  calendar=Calendar\n   33  cancel=Cancel\n   34  category=Category\n   35  changelog=Changelog\n   36  change_verb=Change\n   37  class=Class\n   38  classes=Classes\n   39  close=Close\n   40  closed=Closed",
+   "prompt_tokens": 1346,
+   "dropped": 0
+  },
+  {
+   "turn": 5,
+   "reply": "ACTION: find \"Project is not analyzed yet\"",
+   "action": "find \"Project is not analyzed yet\"",
+   "result": "filenames (0):\ncontent (1 matches in 1 files):\n  sonar-core/src/main/resources/org/sonar/l10n/core.properties\n      911: projects.not_analyzed.TRK=Project is not analyzed yet.",
+   "prompt_tokens": 1775,
+   "dropped": 0
+  },
+  {
+   "turn": 6,
+   "reply": "ACTION: read sonar-core/src/main/resources/org/sonar/l10n/core.properties 900",
+   "action": "read sonar-core/src/main/resources/org/sonar/l10n/core.properties 900",
+   "result": "sonar-core/src/main/resources/org/sonar/l10n/core.properties  lines 900-939 of 3764\n  900  #\n  901  #------------------------------------------------------------------------------\n  902  \n  903  projects.page=Projects\n  904  projects._projects=projects\n  905  projects.no_projects.empty_instance=There are no visible projects yet.\n  906  projects.no_projects.empty_instance.new_project=Once you analyze some projects, they will show up here.\n  907  projects.no_projects.empty_instance.how_to_add_projects=Here is how you can analyze new projects\n  908  projects.no_favorite_projects=You don't have any favorite projects yet.\n  909  projects.no_favorite_projects.engagement=Discover and mark as favorites projects you are interested in to have a quick access to them.\n  910  projects.explore_projects=Explore Projects\n  911  projects.not_analyzed.TRK=Project is not analyzed yet.\n  912  projects.not_analyzed.APP=None of the Application's projects have been analyzed.\n  913  projects.no_new_code_period.TRK=Project has no new code data yet.\n  914  projects.no_new_code_period.APP=Application has no new code data yet.\n  915  projects.new_code_period_x=New code: last {0}\n  916  projects.configure_analysis=Configure analysis\n  917  projects.last_analysis_on_x=Last analysis: {date}\n  918  projects.search=Search by project name or key\n  919  projects.perspective=Perspective\n  920  projects.skip_to_filters=Skip to project filters\n  921  projects.sort_by=Sort by\n  922  projects.sort_ascending=Result sorted in ascending order\n  923  projects.sort_descending=Result sorted in descending order\n  924  projects.sorting.default=default\n  925  projects.sorting.name=Name\n  926  projects.sorting.analysis_date=Last analysis date\n  927  projects.sorting.reliability=Reliability\n  928  projects.sorting.secur\n... cut (540 more chars)",
+   "prompt_tokens": 1857,
+   "dropped": 0
+  },
+  {
+   "turn": 7,
+   "reply": "ACTION: defines projects.not_analyzed",
+   "action": "defines projects.not_analyzed",
+   "result": "0 definitions whose name contains 'projects.not_analyzed'",
+   "prompt_tokens": 2428,
+   "dropped": 0
+  },
+  {
+   "turn": 8,
+   "reply": "ACTION: find \"projects.not_analyzed\" -f",
+   "action": "find \"projects.not_analyzed\" -f",
+   "result": "filenames (0):",
+   "prompt_tokens": 2465,
+   "dropped": 0
+  },
+  {
+   "turn": 9,
+   "reply": "ACTION: find \"not_analyzed\" -f",
+   "action": "find \"not_analyzed\" -f",
+   "result": "filenames (0):",
+   "prompt_tokens": 2500,
+   "dropped": 0
+  },
+  {
+   "turn": 10,
+   "reply": "ACTION: find \"not_analyzed\"",
+   "action": "find \"not_analyzed\"",
+   "result": "filenames (0):\ncontent (7 matches in 5 files):\n  server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx\n      211: : translate('projects.not_analyzed', qualifier)}\n  server/sonar-web/src/main/js/apps/projects/components/project-card/__tests__/__snapshots__/ProjectCard-test.tsx.snap\n      279: projects.not_analyzed.TRK\n      443: projects.not_analyzed.TRK\n  server/sonar-webserver-core/src/test/java/org/sonar/server/issue/index/AsyncIssueIndexingImplTest.java\n      240: public void trigger_with_lot_of_not_analyzed_project_should_not_raise_exception() {\n  server/sonar-webserver-webapi/src/test/java/org/sonar/server/qualitygate/ws/ProjectStatusActionTest.java\n      289: public void return_undefined_status_if_project_is_not_analyzed() {\n  sonar-core/src/main/resources/org/sonar/l10n/core.properties\n      911: projects.not_analyzed.TRK=Project is not analyzed yet.\n      912: projects.not_analyzed.APP=None of the Application's projects have been analyzed.",
+   "prompt_tokens": 2535,
+   "dropped": 0
+  },
+  {
+   "turn": 11,
+   "reply": "ACTION: read server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx 200",
+   "action": "read server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx 200",
+   "result": "server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx  lines 200-239 of 242\n  200          componentQualifier={qualifier}\n  201          isNewCode={isNewCode}\n  202          newCodeStartingDate={leakPeriodDate}\n  203        />\n  204      );\n  205    } else {\n  206      return (\n  207        <div className=\"spacer-top spacer-bottom\">\n  208          <span className=\"note\">\n  209            {isNewCode && analysisDate\n  210              ? translate('projects.no_new_code_period', qualifier)\n  211              : translate('projects.not_analyzed', qualifier)}\n  212          </span>\n  213          {qualifier !== ComponentQualifier.Application && !analysisDate && isLoggedIn(currentUser) && (\n  214            <Link className=\"button spacer-left\" to={getProjectUrl(key)}>\n  215              {translate('projects.configure_analysis')}\n  216            </Link>\n  217          )}\n  218        </div>\n  219      );\n  220    }\n  221  }\n  222  \n  223  export default function ProjectCard(props: Props) {\n  224    const {\n  225      height,\n  226      type,\n  227      project: { needIssueSync, key }\n  228    } = props;\n  229    const isNewCode = type === 'leak';\n  230  \n  231    return (\n  232      <div\n  233        className={classNames('display-flex-column boxed-group it_project_card', {\n  234          'project-card-disabled': needIssueSync\n  235        })}\n  236        data-key={key}\n  237        style={{ height }}>\n  238        {renderFirstLine(props)}\n  239        {renderSecondLine(props, isNewCode)}",
+   "prompt_tokens": 2828,
+   "dropped": 0
+  },
+  {
+   "turn": 12,
+   "reply": "ACTION: read server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx 1",
+   "action": "read server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx 1",
+   "result": "server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx  lines 1-40 of 242\n    1  /*\n    2   * SonarQube\n    3   * Copyright (C) 2009-2020 SonarSource SA\n    4   * mailto:info AT sonarsource DOT com\n    5   *\n    6   * This program is free software; you can redistribute it and/or\n    7   * modify it under the terms of the GNU Lesser General Public\n    8   * License as published by the Free Software Foundation; either\n    9   * version 3 of the License, or (at your option) any later version.\n   10   *\n   11   * This program is distributed in the hope that it will be useful,\n   12   * but WITHOUT ANY WARRANTY; without even the implied warranty of\n   13   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n   14   * Lesser General Public License for more details.\n   15   *\n   16   * You should have received a copy of the GNU Lesser General Public License\n   17   * along with this program; if not, write to the Free Software Foundation,\n   18   * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.\n   19   */\n   20  import * as classNames from 'classnames';\n   21  import * as React from 'react';\n   22  import { FormattedMessage } from 'react-intl';\n   23  import { Link } from 'react-router';\n   24  import Tooltip from 'sonar-ui-common/components/controls/Tooltip';\n   25  import QualifierIcon from 'sonar-ui-common/components/icons/QualifierIcon';\n   26  import DateFromNow from 'sonar-ui-common/components/intl/DateFromNow';\n   27  import DateTimeFormatter from 'sonar-ui-common/components/intl/DateTimeFormatter';\n   28  import SizeRating from 'sonar-ui-common/components/ui/SizeRating';\n   29  import { translate, translateWithParameters } from 'sonar-ui-common/helpers/l10n';\n   30  import PrivacyBadgeContainer from '../..\n... cut (685 more chars)",
+   "prompt_tokens": 3398,
+   "dropped": 0
+  },
+  {
+   "turn": 13,
+   "reply": "ACTION: read server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx 30",
+   "action": "read server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx 30",
+   "result": "server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx  lines 30-69 of 242\n   30  import PrivacyBadgeContainer from '../../../../components/common/PrivacyBadgeContainer';\n   31  import Favorite from '../../../../components/controls/Favorite';\n   32  import Measure from '../../../../components/measure/Measure';\n   33  import TagsList from '../../../../components/tags/TagsList';\n   34  import { getProjectUrl } from '../../../../helpers/urls';\n   35  import { isLoggedIn } from '../../../../helpers/users';\n   36  import { ComponentQualifier } from '../../../../types/component';\n   37  import { MetricKey } from '../../../../types/metrics';\n   38  import { Project } from '../../types';\n   39  import './ProjectCard.css';\n   40  import ProjectCardLanguagesContainer from './ProjectCardLanguagesContainer';\n   41  import ProjectCardMeasure from './ProjectCardMeasure';\n   42  import ProjectCardMeasures from './ProjectCardMeasures';\n   43  import ProjectCardQualityGate from './ProjectCardQualityGate';\n   44  \n   45  interface Props {\n   46    currentUser: T.CurrentUser;\n   47    handleFavorite: (component: string, isFavorite: boolean) => void;\n   48    height: number;\n   49    project: Project;\n   50    type?: string;\n   51  }\n   52  \n   53  function renderFirstLine(props: Props) {\n   54    const {\n   55      project: {\n   56        analysisDate,\n   57        tags,\n   58        qualifier,\n   59        isFavorite,\n   60        key,\n   61        name,\n   62        measures,\n   63        needIssueSync,\n   64        visibility\n   65      }\n   66    } = props;\n   67  \n   68    return (\n   69      <div className=\"display-flex-center\">",
+   "prompt_tokens": 3380,
+   "dropped": 2
+  },
+  {
+   "turn": 14,
+   "reply": "ACTION: read server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx 68",
+   "action": "read server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx 68",
+   "result": "server/sonar-web/src/main/js/apps/projects/components/project-card/ProjectCard.tsx  lines 68-107 of 242\n   68    return (\n   69      <div className=\"display-flex-center\">\n   70        <div className=\"project-card-main big-padded padded-bottom display-flex-center\">\n   71          {isFavorite !== undefined && (\n   72            <Favorite\n   73              className=\"spacer-right\"\n   74              component={key}\n   75              favorite={isFavorite}\n   76              handleFavorite={props.handleFavorite}\n   77              qualifier={qualifier}\n   78            />\n   79          )}\n   80          {qualifier === ComponentQualifier.Application && (\n   81            <Tooltip\n   82              placement=\"top\"\n   83              overlay={\n   84                <span>\n   85                  {translate('qualifier.APP')}\n   86                  {measures.projects && (\n   87                    <span>\n   88                      {' ‒ '}\n   89                      {translateWithParameters('x_projects_', measures.projects)}\n   90                    </span>\n   91                  )}\n   92                </span>\n   93              }>\n   94              <span className=\"spacer-right\">\n   95                <QualifierIcon qualifier={qualifier} />\n   96              </span>\n   97            </Tooltip>\n   98          )}\n   99          <h2 className=\"project-card-name text-ellipsis\" title={name}>\n  100            {needIssueSync ? name : <Link to={getProjectUrl(key)}>{name}</Link>}\n  101          </h2>\n  102  \n  103          {analysisDate && (\n  104            <>\n  105              <ProjectCardQualityGate status={measures[MetricKey.alert_status]} />\n  106              <span className=\"flex-grow\" />\n  107              <DateTimeFormatter date={analysisDate}>",
+   "prompt_tokens": 3157,
+   "dropped": 4
+  }
+ ]
+}

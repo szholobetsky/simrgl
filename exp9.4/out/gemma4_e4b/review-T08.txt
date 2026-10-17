@@ -1,0 +1,16 @@
+build.gradle
+pom.xml
+sonar-application/build.gradle
+sonar-application/pom.xml
+[Any other component-specific module's]build.gradle
+[Any other component-specific module's]pom.xml
+EmbeddedTomcatTest.java
+org.sonar.server.app/*TomcatConnectors.java*
+sonarqube-core/src/main/resources/META-INF/*.properties
+sonar-api/dependencies/**/*.groovy
+sonar-testing-ldap/build.gradle
+sonar-server/pom.xml
+sonar-application/assembly.xml
+gradle.properties
+sonar-application/bundled_plugins.gradle
+settings.gradle

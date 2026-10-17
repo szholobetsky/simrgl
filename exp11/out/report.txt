@@ -1,0 +1,188 @@
+20 tasks, 19 without mass changes, 16 with a file that still exists
+
+task         truth reach |   simargl   gamayun  svitovyd     fused | agreed  title
+CODEFIX-75       7     1 |     0/-       1/1       0/-       1/6   | ·       
+SONAR-23098     63    17 |     1/1       2/4       0/-       1/1   | +       Import project dependencies
+SONAR-23133     16    14 |     2/1       3/4       0/-       3/1   | ++      3rd party backend dependencies update
+SONAR-23188     66     8 |     5/1       3/1       0/-       3/1   | +       Allow an admin to toggle between modes
+SONAR-23191     22     7 |     3/1       1/3       0/-       1/1   | ·+      Quality profiles can be toggled between modes
+SONAR-23205     95     9 |     1/8       1/2       0/-       1/5   | ·       Migrate build system to vite
+SONAR-23206   2203     1 |     1/5       3/1       0/-       3/3   | ··      Move design-system inside sonar-web
+SONAR-23232      3     0 |     0/-       0/-       0/-       0/-   | ·       Measures page shows change in calculation message for every pull reque
+SONAR-23250     88    61 |     4/3       4/1       0/-       5/4   |         Quality profiles support customization of impact severities
+SONAR-23259     23    23 |     1/4       0/-       0/-       1/9   | ··      Quality Profile Changelog should reflect changes on severity of softwa
+SONAR-23325     10    10 |     0/-       4/2       0/-       1/4   |         Webapi Changelog should reflect new impact severities (INFO, BLOCKER)
+SONAR-23425      2     2 |     0/-       0/-       0/-       0/-   |         Scanning alerts must work in both STANDARD and MQR mode
+SONAR-23427    224   217 |     2/2       2/5       0/-       2/2   |         Stop relying on Qualifiers, Scopes and ResourceType from the plugin AP
+SONAR-23430      3     3 |     1/4       0/-       0/-       0/-   |         Improve api/system/liveness action to not pollute the logs
+SONAR-23431      2     2 |     0/-       0/-       0/-       0/-   |         Adjust maximum page size parameter when retrieving GitLab repositories
+SONAR-23460      1     1 |     1/1       1/2       0/-       1/1   | +··      Update SonarSecurity to version 10.8.0.33361
+SONAR-23461      2     2 |     2/4       2/3       1/2       2/2   | ·+·+    Openshift and Helm autoscaling Telemetry v1 doesn't work
+SONAR-23466      6     6 |     0/-       0/-       0/-       0/-   |         Rules indexing is not happening consistently
+SONAR-23469      5     0 |     0/-       0/-       0/-       0/-   | ·       [FE] Support Pagination of Dependencies
+SONAR-23475      3     0 |     0/-       0/-       0/-       0/-   | ·       Fix webapp dev server proxy to serve l10n files
+
+cell = hits in top 10 / rank of the first hit; agreed = files named by >= 2 tools (+ right, · wrong)
+
+  simargl   hit@10 0.69  P@10 0.14  R@10 (of reachable) 0.28  MRR 0.42
+  gamayun   hit@10 0.69  P@10 0.15  R@10 (of reachable) 0.32  MRR 0.37
+  svitovyd  hit@10 0.06  P@10 0.04  R@10 (of reachable) 0.03  MRR 0.03
+  fused     hit@10 0.75  P@10 0.14  R@10 (of reachable) 0.31  MRR 0.44
+
+precision of a file by who named it (top 10s, tasks without mass changes):
+  S+G+V    1/2    = 0.50
+  S+G      7/18   = 0.39
+  G       16/170  = 0.09
+  S       15/170  = 0.09
+  V        0/16   = 0.00
+  named by 3: 1/2 = 0.50
+  named by 2: 7/18 = 0.39
+  named by 1: 31/356 = 0.09
+
+the fused top-1, by how many tools name it:
+  3 tools: right in 0/1 tasks
+  2 tools: right in 5/11 tasks
+  1 tools: right in 0/6 tasks
+  0 tools: right in 0/1 tasks
+
+fused top 5 per task (tool ranks; + right):
+
+CODEFIX-75    (svitovyd identifiers: —)
+     S6 G8          server/sonar-db-migration/src/main/java/org/sonar/server/platform/db/migration/version/DatabaseVersion.java
+     S9 G21         sonar-db/src/main/resources/org/sonar/db/version/rows-h2.sql
+     S7 G48         sonar-db/src/main/java/org/sonar/db/version/MigrationStepModule.java
+     S10 G43        sonar-db/src/main/resources/org/sonar/db/version/schema-h2.ddl
+     S1             server/sonar-ce-task-projectanalysis/src/test/java/org/sonar/ce/task/projectanalysis/measure/MeasureToMeasureDtoTest.java
+
+SONAR-23098  Import project dependencies  (svitovyd identifiers: SonarQube)
+   + S1 G4          sonar-core/src/main/resources/org/sonar/l10n/core.properties
+     V1             server/sonar-db-migration/src/it/java/org/sonar/server/platform/db/migration/sql/DbPrimaryKeyConstraintFinderIT.java
+     G1             server/sonar-web/src/main/js/types/alm-settings.d.ts
+     G2             server/sonar-db-dao/src/main/java/org/sonar/db/issue/IssueDto.java
+     V2             sonar-application/src/main/assembly/bin/linux-x86-64/sonar.sh
+
+SONAR-23133  3rd party backend dependencies update  (svitovyd identifiers: SonarQube)
+   + S1 G4          build.gradle
+   + S4 G6          sonar-application/build.gradle
+     S14 G2         server/sonar-main/build.gradle
+   + S15 G5         gradle.properties
+     V1             server/sonar-db-migration/src/it/java/org/sonar/server/platform/db/migration/sql/DbPrimaryKeyConstraintFinderIT.java
+
+SONAR-23188  Allow an admin to toggle between modes  (svitovyd identifiers: —)
+   + S1 G1          sonar-core/src/main/resources/org/sonar/l10n/core.properties
+     S20 G7         server/sonar-web/src/main/js/api/mocks/IssuesServiceMock.ts
+     S3 G28         server/sonar-web/src/main/js/components/SourceViewer/__tests__/SourceViewer-it.tsx
+     S22 G13        server/sonar-web/src/main/js/apps/coding-rules/__tests__/CodingRules-it.ts
+     G2             server/sonar-server-common/src/main/java/org/sonar/server/log/ServerProcessLogging.java
+
+SONAR-23191  Quality profiles can be toggled between modes  (svitovyd identifiers: —)
+   + S1 G3          sonar-core/src/main/resources/org/sonar/l10n/core.properties
+     S2 G4          server/sonar-web/src/main/js/apps/coding-rules/__tests__/CodingRules-it.ts
+     S5 G16         server/sonar-web/src/main/js/apps/coding-rules/components/ActivationFormModal.tsx
+     S6 G24         server/sonar-web/src/main/js/apps/coding-rules/components/RuleDetailsProfiles.tsx
+     S27 G13        server/sonar-web/design-system/src/components/Pill.tsx
+
+SONAR-23205  Migrate build system to vite  (svitovyd identifiers: —)
+     S2 G1          build.gradle
+     S5 G46         server/sonar-server/src/main/java/org/sonar/server/platform/ServerComponents.java
+     S22 G30        server/sonar-db-migration/src/main/java/org/sonar/server/platform/db/migration/version/DatabaseVersion.java
+     S1             server/sonar-ce-task-projectanalysis/src/main/java/org/sonar/ce/task/projectanalysis/container/ProjectAnalysisTaskContainerPopulator.java
+   + G2             sonar-core/src/main/resources/org/sonar/l10n/core.properties
+
+SONAR-23206  Move design-system inside sonar-web  (svitovyd identifiers: —)
+     S1 G2          sonar-core/src/main/resources/org/sonar/l10n/core.properties
+     S4 G10         server/sonar-db-dao/src/schema/schema-sq.ddl
+   + G1             server/sonar-web/src/main/js/api/mocks/QualityProfilesServiceMock.ts
+     S2             build.gradle
+   + G3             server/sonar-web/src/main/js/api/mocks/IssuesServiceMock.ts
+
+SONAR-23232  Measures page shows change in calculation message for every pull reque  (svitovyd identifiers: —)
+     S1 G1          sonar-core/src/main/resources/org/sonar/l10n/core.properties
+     S2 G40         server/sonar-web/src/main/js/apps/component-measures/utils.ts
+     S42 G36        server/sonar-web/src/main/js/apps/component-measures/components/MeasureContent.tsx
+     G2             server/sonar-db-dao/src/main/java/org/sonar/db/purge/PurgeMapper.java
+     G3             server/sonar-db-dao/src/main/java/org/sonar/db/purge/PurgeDao.java
+
+SONAR-23250  Quality profiles support customization of impact severities  (svitovyd identifiers: softwareQuality)
+     S20 G45        plugins/sonar-xoo-plugin/src/main/java/org/sonar/xoo/rule/XooRulesDefinition.java
+     S39 G34        server/sonar-server-common/src/it/java/org/sonar/server/rule/index/RuleIndexIT.java
+     V1             server/sonar-webserver-webapi-v2/src/main/java/org/sonar/server/v2/api/rule/resource/Impact.java
+   + G1             server/sonar-webserver-webapi/src/main/java/org/sonar/server/rule/ws/RuleMapper.java
+     S1             sonar-core/src/main/resources/org/sonar/l10n/core.properties
+
+SONAR-23259  Quality Profile Changelog should reflect changes on severity of softwa  (svitovyd identifiers: —)
+     S1 G4          sonar-core/src/main/resources/org/sonar/l10n/core.properties
+     S5 G10         server/sonar-web/src/main/js/apps/coding-rules/__tests__/CodingRules-it.ts
+     S8 G47         server/sonar-web/src/main/js/apps/coding-rules/utils-tests.tsx
+     G1             server/sonar-db-dao/src/main/resources/org/sonar/db/issue/IssueMapper.xml
+     G2             server/sonar-db-dao/src/main/java/org/sonar/db/issue/IssueDao.java
+
+SONAR-23325  Webapi Changelog should reflect new impact severities (INFO, BLOCKER)  (svitovyd identifiers: —)
+     G1             server/sonar-webserver-webapi/src/main/java/org/sonar/server/issue/ws/SearchResponseFormat.java
+     S1             sonar-core/src/main/resources/org/sonar/l10n/core.properties
+     S2             server/sonar-web/src/main/js/helpers/handlebars/changelog.js
+   + G2             server/sonar-webserver-webapi/src/main/java/org/sonar/server/issue/ws/SearchAction.java
+     G3             server/sonar-db-dao/src/main/resources/org/sonar/db/issue/IssueMapper.xml
+
+SONAR-23425  Scanning alerts must work in both STANDARD and MQR mode  (svitovyd identifiers: —)
+     S1             plugins/sonar-core-plugin/src/main/java/org/sonar/plugins/core/sensors/GenerateAlertEvents.java
+     G1             server/sonar-db-dao/src/main/resources/org/sonar/db/issue/IssueMapper.xml
+     S2             plugins/sonar-core-plugin/src/main/resources/org/sonar/l10n/core.properties
+     G2             server/sonar-db-dao/src/main/java/org/sonar/db/issue/IssueDto.java
+     S3             plugins/sonar-core-plugin/src/test/java/org/sonar/plugins/core/sensors/GenerateAlertEventsTest.java
+
+SONAR-23427  Stop relying on Qualifiers, Scopes and ResourceType from the plugin AP  (svitovyd identifiers: —)
+     S4 G11         server/sonar-server/src/test/java/org/sonar/server/component/ws/SearchActionTest.java
+   + S2 G20         server/sonar-webserver-webapi/src/main/java/org/sonar/server/component/ws/TreeAction.java
+     S28 G4         sonar-application/build.gradle
+     S1 G35         server/sonar-server/src/main/java/org/sonar/server/component/ws/SearchAction.java
+     S49 G1         sonar-scanner-engine/build.gradle
+
+SONAR-23430  Improve api/system/liveness action to not pollute the logs  (svitovyd identifiers: SonarQube)
+     S28 G5         server/sonar-webserver-core/src/main/java/org/sonar/server/app/WebServerProcessLogging.java
+     S26 G8         server/sonar-process/src/main/java/org/sonar/process/logging/LogbackHelper.java
+     S27 G10        server/sonar-process/src/test/java/org/sonar/process/logging/LogbackHelperTest.java
+     S31 G31        server/sonar-webserver-core/src/test/java/org/sonar/server/app/WebServerProcessLoggingTest.java
+     V1             server/sonar-db-migration/src/it/java/org/sonar/server/platform/db/migration/sql/DbPrimaryKeyConstraintFinderIT.java
+
+SONAR-23431  Adjust maximum page size parameter when retrieving GitLab repositories  (svitovyd identifiers: —)
+     S1 G18         sonar-core/src/main/resources/org/sonar/l10n/core.properties
+     S8 G15         server/sonar-web/src/main/js/apps/create/project/PersonalAccessTokenForm.tsx
+     S2 G26         server/sonar-web/src/main/js/apps/create/project/GitlabProjectSelectionForm.tsx
+     S3 G25         server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/GitlabProjectSelectionForm-test.tsx.snap
+     S9 G24         server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/PersonalAccessTokenForm-test.tsx.snap
+
+SONAR-23460   Update SonarSecurity to version 10.8.0.33361  (svitovyd identifiers: —)
+   + S1 G2          build.gradle
+     S2 G4          pom.xml
+     S3 G5          sonar-application/pom.xml
+     S12 G32        server/sonar-ce/src/main/java/org/sonar/ce/container/ComputeEngineContainerImpl.java
+     G1             sonar-application/build.gradle
+
+SONAR-23461  Openshift and Helm autoscaling Telemetry v1 doesn't work  (svitovyd identifiers: SonarQube, TelemetryData, CloudUsage, TelemetryDataJsonWriter)
+     S3 G4 V1       server/sonar-telemetry/src/main/java/org/sonar/telemetry/legacy/TelemetryData.java
+   + S5 G3 V2       server/sonar-telemetry/src/main/java/org/sonar/telemetry/legacy/TelemetryDataJsonWriter.java
+   + S4 G5          server/sonar-telemetry/src/test/java/org/sonar/telemetry/legacy/TelemetryDataJsonWriterTest.java
+     S6 G7          server/sonar-telemetry/src/main/java/org/sonar/telemetry/legacy/TelemetryDataLoaderImpl.java
+     S7 G11         server/sonar-webserver-core/src/test/java/org/sonar/server/telemetry/TelemetryDataLoaderImplTest.java
+
+SONAR-23466  Rules indexing is not happening consistently  (svitovyd identifiers: SonarQube)
+     S12 G6         server/sonar-db-dao/src/main/java/org/sonar/db/rule/RuleDao.java
+     S15 G36        server/sonar-db-dao/src/main/java/org/sonar/db/rule/RuleMapper.java
+     S25 G24        server/sonar-webserver-webapi/src/main/java/org/sonar/server/rule/ws/RuleMapper.java
+     S38 G16        server/sonar-db-dao/src/main/java/org/sonar/db/rule/RuleDto.java
+     S27 G40        server/sonar-webserver-webapi/src/main/java/org/sonar/server/rule/ws/SearchAction.java
+
+SONAR-23469  [FE] Support Pagination of Dependencies  (svitovyd identifiers: —)
+     S1 G1          build.gradle
+     S49 G34        sonar-server/src/main/webapp/WEB-INF/app/views/layouts/_layout.html.erb
+     S2             server/sonar-web/src/main/js/apps/groups/components/EditMembersModal.tsx
+     G2             sonar-core/src/main/resources/org/sonar/l10n/core.properties
+     G3             pom.xml
+
+SONAR-23475  Fix webapp dev server proxy to serve l10n files  (svitovyd identifiers: —)
+     S1 G1          sonar-core/src/main/resources/org/sonar/l10n/core.properties
+     S3 G22         server/sonar-web/package.json
+     S37 G26        server/sonar-web/yarn.lock
+     S38 G33        .cirrus.yml
+     G2             build.gradle

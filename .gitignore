@@ -8,7 +8,32 @@ nul
 # Experiment results and logs
 *.log
 
+# Generated ontologies (~190 MB; rebuild with exp7/build_onto.py)
+exp7/out/
+
 # Virtual environments
 venv*/
 env*/
 .aider*
+
+# exp8.1 code ontology (~220 MB; rebuild: see exp8.1/README.md)
+exp8.1/out/code_triples.txt
+
+# Experiment inputs copied from other projects (re-export: mokosh / a checkout)
+exp14.1/data/
+
+# Indexes, databases and ontologies the experiment scripts rebuild
+exp*/out/**/.simargl/
+exp*/out/**/.gamayun/
+exp*/out/**/.svitovyd/
+exp*/out/**/*.db
+exp*/out/**/triples.txt
+exp12/out/*.npy
+exp10/out/snap_map.txt
+exp11/out/**/tree.txt
+
+# Backup copies of outputs
+exp*/out_backup_*/
+
+# 1bcoder working folder of this repo (notes, glossaries, config)
+/.1bcoder/

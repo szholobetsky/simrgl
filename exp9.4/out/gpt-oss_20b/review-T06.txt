@@ -1,0 +1,9 @@
+build.gradle
+pom.xml
+sonar-application/build.gradle
+sonar-application/pom.xml
+sonar-application/assembly.xml
+sonar-application/bundled_plugins.gradle
+settings.gradle
+.cirrus.yml
+server/sonar-docs/src/pages/instance-administration/plugin-version-matrix.md

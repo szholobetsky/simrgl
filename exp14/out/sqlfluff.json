@@ -1,0 +1,402 @@
+{
+ "square": {
+  "depth1": {
+   "whole": {
+    "tasks": 3727,
+    "novelty": 0.5658,
+    "structurality": 0.9262,
+    "zone": "evolution",
+    "evolution": 0.5319,
+    "maintenance": 0.3944,
+    "disruption": 0.0339,
+    "stagnation": 0.0398
+   },
+   "units": 6,
+   "zones": {
+    "stagnation": 2,
+    "disruption": 3,
+    "evolution": 1
+   },
+   "rows": [
+    {
+     "unit": "(root)",
+     "tasks": 3602,
+     "novelty": 0.5657,
+     "structurality": 0.9195,
+     "zone": "evolution",
+     "evolution": 0.5276,
+     "maintenance": 0.3918,
+     "disruption": 0.0381,
+     "stagnation": 0.0424
+    },
+    {
+     "unit": "docs",
+     "tasks": 262,
+     "novelty": 0.4813,
+     "structurality": 0.1084,
+     "zone": "stagnation",
+     "evolution": 0.0759,
+     "maintenance": 0.0325,
+     "disruption": 0.4053,
+     "stagnation": 0.4862
+    },
+    {
+     "unit": "plugins",
+     "tasks": 225,
+     "novelty": 0.3831,
+     "structurality": 0.1485,
+     "zone": "stagnation",
+     "evolution": 0.0797,
+     "maintenance": 0.0688,
+     "disruption": 0.3034,
+     "stagnation": 0.5481
+    },
+    {
+     "unit": ".github",
+     "tasks": 112,
+     "novelty": 0.616,
+     "structurality": 0.2965,
+     "zone": "disruption",
+     "evolution": 0.1652,
+     "maintenance": 0.1313,
+     "disruption": 0.4508,
+     "stagnation": 0.2526
+    },
+    {
+     "unit": "sqlfluffrs",
+     "tasks": 95,
+     "novelty": 0.5189,
+     "structurality": 0.4298,
+     "zone": "disruption",
+     "evolution": 0.1812,
+     "maintenance": 0.2486,
+     "disruption": 0.3377,
+     "stagnation": 0.2325
+    },
+    {
+     "unit": "docsv",
+     "tasks": 33,
+     "novelty": 0.7415,
+     "structurality": 0.3489,
+     "zone": "disruption",
+     "evolution": 0.3012,
+     "maintenance": 0.0477,
+     "disruption": 0.4404,
+     "stagnation": 0.2107
+    }
+   ]
+  },
+  "depth2": {
+   "whole": {
+    "tasks": 3727,
+    "novelty": 0.5658,
+    "structurality": 0.9184,
+    "zone": "evolution",
+    "evolution": 0.5265,
+    "maintenance": 0.3919,
+    "disruption": 0.0393,
+    "stagnation": 0.0423
+   },
+   "units": 8,
+   "zones": {
+    "stagnation": 3,
+    "disruption": 4,
+    "evolution": 1
+   },
+   "rows": [
+    {
+     "unit": "(root)",
+     "tasks": 3602,
+     "novelty": 0.5657,
+     "structurality": 0.9195,
+     "zone": "evolution",
+     "evolution": 0.5276,
+     "maintenance": 0.3918,
+     "disruption": 0.0381,
+     "stagnation": 0.0424
+    },
+    {
+     "unit": "docs",
+     "tasks": 262,
+     "novelty": 0.4813,
+     "structurality": 0.1084,
+     "zone": "stagnation",
+     "evolution": 0.0759,
+     "maintenance": 0.0325,
+     "disruption": 0.4053,
+     "stagnation": 0.4862
+    },
+    {
+     "unit": "plugins/sqlfluff-templater-dbt",
+     "tasks": 214,
+     "novelty": 0.3536,
+     "structurality": 0.1498,
+     "zone": "stagnation",
+     "evolution": 0.0776,
+     "maintenance": 0.0723,
+     "disruption": 0.276,
+     "stagnation": 0.5741
+    },
+    {
+     "unit": ".github/workflows",
+     "tasks": 100,
+     "novelty": 0.5893,
+     "structurality": 0.2325,
+     "zone": "disruption",
+     "evolution": 0.115,
+     "maintenance": 0.1175,
+     "disruption": 0.4743,
+     "stagnation": 0.2931
+    },
+    {
+     "unit": "sqlfluffrs/sqlfluffrs_parser",
+     "tasks": 56,
+     "novelty": 0.5186,
+     "structurality": 0.3339,
+     "zone": "disruption",
+     "evolution": 0.1041,
+     "maintenance": 0.2298,
+     "disruption": 0.4145,
+     "stagnation": 0.2516
+    },
+    {
+     "unit": "sqlfluffrs",
+     "tasks": 50,
+     "novelty": 0.4962,
+     "structurality": 0.0707,
+     "zone": "stagnation",
+     "evolution": 0.0185,
+     "maintenance": 0.0522,
+     "disruption": 0.4777,
+     "stagnation": 0.4516
+    },
+    {
+     "unit": "sqlfluffrs/sqlfluffrs_types",
+     "tasks": 21,
+     "novelty": 0.6175,
+     "structurality": 0.1862,
+     "zone": "disruption",
+     "evolution": 0.0716,
+     "maintenance": 0.1147,
+     "disruption": 0.546,
+     "stagnation": 0.2678
+    },
+    {
+     "unit": ".github",
+     "tasks": 20,
+     "novelty": 0.7314,
+     "structurality": 0.0,
+     "zone": "disruption",
+     "evolution": 0.0,
+     "maintenance": 0.0,
+     "disruption": 0.7314,
+     "stagnation": 0.2686
+    }
+   ]
+  }
+ },
+ "growth": {
+  "growth_inside": 0.3375,
+  "growth_across": 0.0112,
+  "evolution": 0.1907,
+  "disruption": 0.0282,
+  "maintenance": 0.3903,
+  "stagnation": 0.0423,
+  "tasks": 3727,
+  "novelty_as_now": 0.5676,
+  "growth": 0.3487,
+  "novelty_existing_files": 0.3361,
+  "tasks_adding_files": 1608
+ },
+ "words": {
+  "tasks_with_text": 4344,
+  "task_terms_df5": 3556,
+  "class_concepts": 621,
+  "classes": 1333,
+  "tasks_to_code": 0.652,
+  "tasks_to_classes": 0.334,
+  "code_to_tasks": 0.9291,
+  "not_in_code": [
+   "side",
+   "brief",
+   "effects",
+   "checklist",
+   "yml",
+   "included",
+   "confirm",
+   "git",
+   "necessary",
+   "completed",
+   "demonstrate",
+   "may",
+   "hub",
+   "appropriate",
+   "relevant",
+   "created",
+   "tox",
+   "followup",
+   "enhancements",
+   "autofix",
+   "adding",
+   "notes",
+   "feature",
+   "give",
+   "meaningful"
+  ],
+  "unused_concepts_biggest": [
+   [
+    "fold",
+    3
+   ],
+   [
+    "bteq",
+    3
+   ],
+   [
+    "msck",
+    2
+   ],
+   [
+    "sink",
+    2
+   ],
+   [
+    "kafka",
+    2
+   ],
+   [
+    "deallocate",
+    2
+   ],
+   [
+    "physical",
+    2
+   ],
+   [
+    "widget",
+    2
+   ],
+   [
+    "inst",
+    1
+   ],
+   [
+    "walkable",
+    1
+   ],
+   [
+    "delayed",
+    1
+   ],
+   [
+    "ghost",
+    1
+   ],
+   [
+    "recorder",
+    1
+   ],
+   [
+    "sized",
+    1
+   ],
+   [
+    "splittable",
+    1
+   ],
+   [
+    "replication",
+    1
+   ],
+   [
+    "unfreeze",
+    1
+   ],
+   [
+    "fbv",
+    1
+   ],
+   [
+    "kerberos",
+    1
+   ],
+   [
+    "ldap",
+    1
+   ],
+   [
+    "recompress",
+    1
+   ],
+   [
+    "preload",
+    1
+   ],
+   [
+    "impersonate",
+    1
+   ],
+   [
+    "analize",
+    1
+   ],
+   [
+    "skewed",
+    1
+   ]
+  ],
+  "spread_median_units": 2,
+  "spread_one_unit": 0.3344,
+  "spread_5plus_units": 0.1135,
+  "most_spread": [
+   [
+    "parse",
+    9
+   ],
+   [
+    "block",
+    9
+   ],
+   [
+    "dialect",
+    8
+   ],
+   [
+    "segment",
+    8
+   ],
+   [
+    "path",
+    8
+   ],
+   [
+    "table",
+    7
+   ],
+   [
+    "comment",
+    7
+   ],
+   [
+    "handle",
+    7
+   ],
+   [
+    "fixture",
+    6
+   ],
+   [
+    "query",
+    6
+   ],
+   [
+    "start",
+    6
+   ],
+   [
+    "class",
+    6
+   ]
+  ]
+ }
+}

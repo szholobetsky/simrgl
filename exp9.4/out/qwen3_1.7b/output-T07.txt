@@ -1,0 +1,24 @@
+The most relevant files to address the requirement of adding sort functionality for Project security review ratings are:
+
+1. **`server/sonar-web/src/main/js/apps/securityHotspots/SecurityHotspotsApp.tsx`**  
+   - Handles rendering of the Security Hotspots page, including the Projects tab.
+
+2. **`server/sonar-web/src/main/js/apps/securityHotspots/SecurityHotspotsAppRenderer.tsx`**  
+   - Manages the UI components for displaying project reviews and sorting options.
+
+3. **`server/sonar-web/src/main/js/apps/code/components/ComponentsHeader.tsx`**  
+   - Contains the header logic for the Projects page, which likely includes sorting controls.
+
+4. **`server/sonar-web/src/main/js/apps/code/css/code.css`**  
+   - Styles the Projects page, potentially involving sorting indicators or layout adjustments.
+
+5. **`server/sonar-web/src/main/js/apps/code/components/Component.tsx` & `ComponentMeasure.tsx`**  
+   - Core components managing project data and metrics, crucial for updating review ratings.
+
+6. **`server/sonar-web/src/main/js/apps/code/__tests__/__snapshots__/ComponentsHeader-test.tsx.snap`**  
+   - Test cases verifying the correctness of the ComponentsHeader component's sorting functionality.
+
+7. **`server/sonar-webserver-webapi/src/main/java/org/sonar/web/api/SearchAction.java`**  
+   - Backend logic for searching projects; may need updates to include sort parameters (e.g., `security_review_rating`).  
+
+These files are directly involved in the Projects page’s UI and data handling, making them critical for implementing the required sorting feature.

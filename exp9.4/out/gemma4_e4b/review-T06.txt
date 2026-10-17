@@ -1,0 +1,6 @@
+build.gradle
+sonar-application/build.gradle
+settings.gradle
+sonar-application/bundled_plugins.gradle
+gradle.properties
+sonar-testing-harness/build.gradle

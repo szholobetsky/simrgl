@@ -1,0 +1,67 @@
+{
+ "model": "gemma4:e2b",
+ "group": "A",
+ "task": "T10",
+ "answer": [],
+ "ranked": [],
+ "protocol_errors": 0,
+ "repeats": 0,
+ "dropped_turns_max": 0,
+ "prompt_tokens": 7680,
+ "output_tokens": 80,
+ "prompt_tokens_max": 2184,
+ "seconds": 123.0,
+ "finished": true,
+ "turns": 6,
+ "rank_called": false,
+ "log": [
+  {
+   "turn": 1,
+   "reply": "ACTION: find . -c\n",
+   "action": "find . -c",
+   "result": "find needs a word, e.g.  find LoginForm -f   or   find \"password reset\" -c",
+   "prompt_tokens": 372,
+   "dropped": 0
+  },
+  {
+   "turn": 2,
+   "reply": "ACTION: find search query -c",
+   "action": "find search query -c",
+   "result": "content (17 matches in 13 files):\n  server/sonar-db-dao/src/main/java/org/sonar/db/permission/PermissionQuery.java\n      165: checkArgument(searchQuery == null || searchQuery.length() >= SEARCH_QUERY_MIN_LENGTH, \"Search query should contains at least %s characters\", SEARCH_QUERY_MIN_LE\n  server/sonar-db-dao/src/test/java/org/sonar/db/permission/PermissionQueryTest.java\n       72: expectedException.expectMessage(\"Search query should contains at least 3 characters\");\n  server/sonar-server-common/src/main/java/org/sonar/server/es/textsearch/ComponentTextSearchQueryFactory.java\n      124: * The text search query\n  server/sonar-server-common/src/main/java/org/sonar/server/rule/index/RuleIndex.java\n      179: * Return all rule uuids matching the search query, without pagination nor facets\n  server/sonar-web/src/main/js/apps/background-tasks/__tests__/BackgroundTasks-test.tsx\n       52: searchInput.prop<Function>('onChange')('some search query');\n       53: expect(searchSpy).toBeCalledWith({ query: 'some search query' });\n  server/sonar-web/src/main/js/apps/create/project/__tests__/GitHubProjectCreateRenderer-test.tsx\n       93: const value = 'search query';\n  server/sonar-web/src/main/js/apps/projects/components/ProjectsList.tsx\n       50: return isFavorite ? <EmptyFavoriteSearch query={query} /> : <EmptySearch />;\n  server/sonar-web/src/main/js/apps/users/UsersApp.tsx\n      122: <Search query={query} updateQuery={this.updateQuery} />\n  server/sonar-webserver-webapi/src/main/java/org/sonar/server/almintegration/ws/azure/SearchAzureReposAction.java\n      100: .setDescription(\"Search query filter\");\n  server/sonar-webserver-webapi/src/main/java/org/sonar/server/component/ws/SuggestionsAction.java\n      124: .setDescription(\"Search query: can contain several search tokens separa\n... cut (615 more chars)",
+   "prompt_tokens": 417,
+   "dropped": 0
+  },
+  {
+   "turn": 3,
+   "reply": "ACTION: read server/sonar-web/src/main/js/apps/users/UsersApp.tsx\n",
+   "action": "read server/sonar-web/src/main/js/apps/users/UsersApp.tsx",
+   "result": "server/sonar-web/src/main/js/apps/users/UsersApp.tsx  lines 1-40 of 143\n    1  /*\n    2   * SonarQube\n    3   * Copyright (C) 2009-2021 SonarSource SA\n    4   * mailto:info AT sonarsource DOT com\n    5   *\n    6   * This program is free software; you can redistribute it and/or\n    7   * modify it under the terms of the GNU Lesser General Public\n    8   * License as published by the Free Software Foundation; either\n    9   * version 3 of the License, or (at your option) any later version.\n   10   *\n   11   * This program is distributed in the hope that it will be useful,\n   12   * but WITHOUT ANY WARRANTY; without even the implied warranty of\n   13   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n   14   * Lesser General Public License for more details.\n   15   *\n   16   * You should have received a copy of the GNU Lesser General Public License\n   17   * along with this program; if not, write to the Free Software Foundation,\n   18   * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.\n   19   */\n   20  import * as React from 'react';\n   21  import { Helmet } from 'react-helmet-async';\n   22  import ListFooter from 'sonar-ui-common/components/controls/ListFooter';\n   23  import { translate } from 'sonar-ui-common/helpers/l10n';\n   24  import { getIdentityProviders, searchUsers } from '../../api/users';\n   25  import Suggestions from '../../app/components/embed-docs-modal/Suggestions';\n   26  import { withCurrentUser } from '../../components/hoc/withCurrentUser';\n   27  import { Location, Router, withRouter } from '../../components/hoc/withRouter';\n   28  import Header from './Header';\n   29  import Search from './Search';\n   30  import UsersList from './UsersList';\n   31  import { parseQuery, Query, serializeQuery } from './utils';\n  \n... cut (268 more chars)",
+   "prompt_tokens": 983,
+   "dropped": 0
+  },
+  {
+   "turn": 4,
+   "reply": "ACTION: read server/sonar-web/src/main/js/apps/projects/components/ProjectsList.tsx",
+   "action": "read server/sonar-web/src/main/js/apps/projects/components/ProjectsList.tsx",
+   "result": "server/sonar-web/src/main/js/apps/projects/components/ProjectsList.tsx  lines 1-40 of 112\n    1  /*\n    2   * SonarQube\n    3   * Copyright (C) 2009-2021 SonarSource SA\n    4   * mailto:info AT sonarsource DOT com\n    5   *\n    6   * This program is free software; you can redistribute it and/or\n    7   * modify it under the terms of the GNU Lesser General Public\n    8   * License as published by the Free Software Foundation; either\n    9   * version 3 of the License, or (at your option) any later version.\n   10   *\n   11   * This program is distributed in the hope that it will be useful,\n   12   * but WITHOUT ANY WARRANTY; without even the implied warranty of\n   13   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n   14   * Lesser General Public License for more details.\n   15   *\n   16   * You should have received a copy of the GNU Lesser General Public License\n   17   * along with this program; if not, write to the Free Software Foundation,\n   18   * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.\n   19   */\n   20  import * as React from 'react';\n   21  import { AutoSizer } from 'react-virtualized/dist/commonjs/AutoSizer';\n   22  import { List, ListRowProps } from 'react-virtualized/dist/commonjs/List';\n   23  import { WindowScroller } from 'react-virtualized/dist/commonjs/WindowScroller';\n   24  import { translate } from 'sonar-ui-common/helpers/l10n';\n   25  import EmptySearch from '../../../components/common/EmptySearch';\n   26  import { Query } from '../query';\n   27  import { Project } from '../types';\n   28  import EmptyFavoriteSearch from './EmptyFavoriteSearch';\n   29  import EmptyInstance from './EmptyInstance';\n   30  import NoFavoriteProjects from './NoFavoriteProjects';\n   31  import ProjectCard from './project-card/\n... cut (303 more chars)",
+   "prompt_tokens": 1567,
+   "dropped": 0
+  },
+  {
+   "turn": 5,
+   "reply": "ACTION: find fork:true -f",
+   "action": "find fork:true -f",
+   "result": "filenames (0):",
+   "prompt_tokens": 2157,
+   "dropped": 0
+  },
+  {
+   "turn": 6,
+   "reply": "ACTION: done",
+   "action": "done",
+   "result": "done",
+   "prompt_tokens": 2184,
+   "dropped": 0
+  }
+ ]
+}

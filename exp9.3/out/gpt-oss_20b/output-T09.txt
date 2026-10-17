@@ -1,0 +1,20 @@
+**Most relevant source‑code locations for removing the “Sonar-Version” HTTP header**
+
+| # | File (relative path) | Why it matters |
+|---|----------------------|---------------|
+| 1 | `server/sonar-webserver/src/main/java/org/sonar/server/platform/web/WebServiceFilter.java` | **Sets** the header on every web‑service response (`wsResponse.setHeader("Sonar-Version", …)`). This is the core place that must be changed (or removed) to stop sending the header. |
+| 2 | `server/sonar-web/src/main/js/app/components/extensions/legacy/request-legacy.ts` | **Reads** the header from responses in legacy code (`response.headers.get('Sonar-Version')`). If you keep this file for backward compatibility, it should be updated or removed; otherwise delete the read logic. |
+| 3 | `server/sonar-web/src/main/js/app/components/extensions/legacy/__tests__/request-legacy-test.ts` | Unit tests that assert a value is returned from the header (`mockResponse({ 'Sonar-Version': … })`). These will need to be updated or removed once the read logic disappears. |
+| 4 | `server/sonar-webserver/src/test/java/org/sonar/server/platform/web/WebServiceFilterTest.java` | Test that verifies the header is set on responses (`verify(response).setHeader("Sonar-Version", …)`). Must be adjusted to reflect the new behaviour (either removed or changed to assert no header). |
+| 5 | `plugins/sonar-xoo-plugin/build.gradle` *(optional)* | The build script references `"Sonar-Version": project.version`. This is not an HTTP header but a Gradle property; it can stay unchanged, though you may want to clean up any documentation that still mentions the header. |
+| 6 | Documentation files (`server/sonar-docs/...`, `developing-plugin.md`) | Not required for runtime removal, but update or delete references so developers don’t expect the header to exist. |
+
+**Action plan**
+
+1. **Remove / comment out** the line that sets `"Sonar-Version"` in *WebServiceFilter.java*.
+2. If you keep legacy client code:
+   - Remove the `response.headers.get('Sonar-Version')` call or guard it behind a feature flag.
+3. Update or delete all unit tests that rely on this header (files 3 & 4).
+4. Clean up any remaining documentation references to “Sonar‑Version” HTTP header.
+
+These files are the minimal set you need to touch for fully removing the unused Sonar-Version HTTP header from the application.

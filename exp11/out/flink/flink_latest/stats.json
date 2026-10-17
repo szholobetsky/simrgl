@@ -1,0 +1,31 @@
+{
+  "train_tasks": 16963,
+  "held_out": 10,
+  "dev": false,
+  "terms": 9232,
+  "files": 51115,
+  "dirs": 8995,
+  "modules": 83,
+  "predicates": {
+    "train_tasks": 1,
+    "task_count": 51198,
+    "part_of": 60110,
+    "characterizes": 133580,
+    "anchor_of": 270,
+    "names": 31074,
+    "not_in": 688,
+    "co_changes_with": 23491,
+    "narrower_than": 20265,
+    "depends_on": 196
+  },
+  "params": {
+    "db": "C:\\Projects\\Data\\flink.db",
+    "repo": "C:\\Projects\\Data\\flink",
+    "out": "C:\\Projects\\simrgl\\exp11\\out\\flink\\flink_latest",
+    "min_df": 5,
+    "max_df": 0.3,
+    "max_files": 30,
+    "dev": false
+  },
+  "seconds": 30.3
+}

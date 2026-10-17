@@ -1,0 +1,21 @@
+project,target,ranking,hit@1,hit@10,hit@50,hit@100,recall@1,recall@10,recall@50,recall@100,ap@100,tasks
+sqlfluff,touched,simargl_units,0.036,0.286,0.464,0.607,0.004,0.039,0.071,0.105,0.02,28
+sqlfluff,touched,simargl_files,0.071,0.214,0.393,0.464,0.005,0.027,0.058,0.093,0.015,28
+sqlfluff,touched,gamayun_db,0.0,0.071,0.25,0.357,0.0,0.006,0.045,0.068,0.005,28
+sqlfluff,touched,gamayun_files,0.0,0.107,0.286,0.393,0.0,0.015,0.061,0.076,0.011,28
+sqlfluff,touched,svitovyd,0.036,0.143,0.286,0.464,0.018,0.042,0.076,0.104,0.041,28
+sqlfluff,touched,flat,0.036,0.214,0.357,0.5,0.002,0.043,0.091,0.112,0.019,28
+sqlfluff,touched,history,0.321,0.714,0.893,0.964,0.024,0.199,0.407,0.501,0.143,28
+sqlfluff,touched,ids_flat,0.071,0.286,0.607,0.643,0.021,0.045,0.122,0.187,0.041,28
+sqlfluff,new_refs,simargl_units,0.0,0.174,0.348,0.435,0.0,0.036,0.08,0.099,0.016,23
+sqlfluff,new_refs,simargl_files,0.0,0.087,0.217,0.348,0.0,0.014,0.035,0.071,0.006,23
+sqlfluff,new_refs,gamayun_db,0.0,0.043,0.13,0.217,0.0,0.014,0.047,0.055,0.01,23
+sqlfluff,new_refs,gamayun_files,0.0,0.043,0.217,0.304,0.0,0.014,0.053,0.067,0.01,23
+sqlfluff,new_refs,svitovyd,0.0,0.043,0.174,0.435,0.0,0.004,0.012,0.068,0.003,23
+sqlfluff,new_refs,flat,0.0,0.043,0.217,0.348,0.0,0.011,0.049,0.076,0.006,23
+sqlfluff,new_refs,history,0.174,0.348,0.783,0.826,0.015,0.118,0.3,0.33,0.089,23
+sqlfluff,new_refs,ids_flat,0.0,0.043,0.435,0.435,0.0,0.011,0.091,0.115,0.009,23
+sqlfluff,new_links,flat files x ids_flat,0.0,0.0,0.0,0.158,0.0,0.0,0.0,0.044,0.001,19
+sqlfluff,new_links,flat files x history,0.0,0.0,0.0,0.105,0.0,0.0,0.0,0.022,0.0,19
+sqlfluff,new_links,oracle files x ids_flat,0.0,0.0,0.211,0.316,0.0,0.0,0.057,0.086,0.004,19
+sqlfluff,new_links,oracle files x history,0.053,0.158,0.316,0.526,0.004,0.032,0.079,0.167,0.014,19

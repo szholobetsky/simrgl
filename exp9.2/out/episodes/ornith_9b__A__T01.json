@@ -1,0 +1,95 @@
+{
+ "model": "ornith:9b",
+ "group": "A",
+ "task": "T01",
+ "answer": [
+  "sonar-application/src/main/assembly/conf/sonar.properties"
+ ],
+ "ranked": [
+  "sonar-application/src/main/assembly/conf/sonar.properties"
+ ],
+ "protocol_errors": 0,
+ "repeats": 0,
+ "dropped_turns_max": 0,
+ "prompt_tokens": 18458,
+ "output_tokens": 125,
+ "prompt_tokens_max": 3318,
+ "seconds": 1149.5,
+ "finished": true,
+ "turns": 9,
+ "rank_called": false,
+ "log": [
+  {
+   "turn": 1,
+   "reply": "ACTION: find sonar.properties -f",
+   "action": "find sonar.properties -f",
+   "result": "filenames (2):\n  server/sonar-process/src/test/resources/org/sonar/process/PropsTest/sonar.properties\n  sonar-application/src/main/assembly/conf/sonar.properties",
+   "prompt_tokens": 606,
+   "dropped": 0
+  },
+  {
+   "turn": 2,
+   "reply": "ACTION: read sonar-application/src/main/assembly/conf/sonar.properties",
+   "action": "read sonar-application/src/main/assembly/conf/sonar.properties",
+   "result": "sonar-application/src/main/assembly/conf/sonar.properties  lines 1-40 of 360\n    1  # Property values can:\n    2  # - reference an environment variable, for example sonar.jdbc.url= ${env:SONAR_JDBC_URL}\n    3  # - be encrypted. See https://redirect.sonarsource.com/doc/settings-encryption.html\n    4  \n    5  #--------------------------------------------------------------------------------------------------\n    6  # DATABASE\n    7  #\n    8  # IMPORTANT:\n    9  # - The embedded H2 database is used by default. It is recommended for tests but not for\n   10  #   production use. Supported databases are MySQL, Oracle, PostgreSQL and Microsoft SQLServer.\n   11  # - Changes to database connection URL (sonar.jdbc.url) can affect SonarSource licensed products.\n   12  \n   13  # User credentials.\n   14  # Permissions to create tables, indices and triggers must be granted to JDBC user.\n   15  # The schema must be created first.\n   16  #sonar.jdbc.username=\n   17  #sonar.jdbc.password=\n   18  \n   19  #----- Embedded Database (default)\n   20  # H2 embedded database server listening port, defaults to 9092\n   21  #sonar.embeddedDatabase.port=9092\n   22  \n   23  #----- MySQL 5.6 or greater\n   24  # Only InnoDB storage engine is supported (not myISAM).\n   25  # Only the bundled driver is supported. It can not be changed.\n   26  #sonar.jdbc.url=jdbc:mysql://localhost:3306/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance&useSSL=false\n   27  \n   28  \n   29  #----- Oracle 11g/12c\n   30  # The Oracle JDBC driver must be copied into the directory extensions/jdbc-driver/oracle/.\n   31  # Only the thin client is supported, and only the versions 11.2.x or 12.2.x must be used. See\n   32  # https://jira.sonarsource.com/browse/SONAR-9758 for more deta\n... cut (399 more chars)",
+   "prompt_tokens": 674,
+   "dropped": 0
+  },
+  {
+   "turn": 3,
+   "reply": "ACTION: read sonar-application/src/main/assembly/conf/sonar.properties 300",
+   "action": "read sonar-application/src/main/assembly/conf/sonar.properties 300",
+   "result": "sonar-application/src/main/assembly/conf/sonar.properties  lines 300-339 of 360\n  300  #sonar.log.level.es=INFO\n  301  \n  302  # Path to log files. Can be absolute or relative to installation directory.\n  303  # Default is <installation home>/logs\n  304  #sonar.path.logs=logs\n  305  \n  306  # Rolling policy of log files\n  307  #    - based on time if value starts with \"time:\", for example by day (\"time:yyyy-MM-dd\")\n  308  #      or by month (\"time:yyyy-MM\")\n  309  #    - based on size if value starts with \"size:\", for example \"size:10MB\"\n  310  #    - disabled if value is \"none\".  That needs logs to be managed by an external system like logrotate.\n  311  #sonar.log.rollingPolicy=time:yyyy-MM-dd\n  312  \n  313  # Maximum number of files to keep if a rolling policy is enabled.\n  314  #    - maximum value is 20 on size rolling policy\n  315  #    - unlimited on time rolling policy. Set to zero to disable old file purging.\n  316  #sonar.log.maxFiles=7\n  317  \n  318  # Access log is the list of all the HTTP requests received by server. If enabled, it is stored\n  319  # in the file {sonar.path.logs}/access.log. This file follows the same rolling policy as other log file\n  320  # (see sonar.log.rollingPolicy and sonar.log.maxFiles).\n  321  #sonar.web.accessLogs.enable=true\n  322  \n  323  # Format of access log. It is ignored if sonar.web.accessLogs.enable=false. Possible values are:\n  324  #    - \"common\" is the Common Log Format, shortcut to: %h %l %u %user %date \"%r\" %s %b\n  325  #    - \"combined\" is another format widely recognized, shortcut to: %h %l %u [%t] \"%r\" %s %b \"%i{Referer}\" \"%i{User-Agent}\"\n  326  #    - else a custom pattern. See http://logback.qos.ch/manual/layouts.html#AccessPatternLayout.\n  327  # The login of authenticated user is not implemented with \"%u\" but \n... cut (939 more chars)",
+   "prompt_tokens": 1267,
+   "dropped": 0
+  },
+  {
+   "turn": 4,
+   "reply": "ACTION: read sonar-application/src/main/assembly/conf/sonar.properties 339",
+   "action": "read sonar-application/src/main/assembly/conf/sonar.properties 339",
+   "result": "sonar-application/src/main/assembly/conf/sonar.properties  lines 339-360 of 360\n  339  # Delay in seconds between processing of notification queue. Default is 60 seconds.\n  340  #sonar.notifications.delay=60\n  341  \n  342  # Paths to persistent data files (embedded database and search index) and temporary files.\n  343  # Can be absolute or relative to installation directory.\n  344  # Defaults are respectively <installation home>/data and <installation home>/temp\n  345  #sonar.path.data=data\n  346  #sonar.path.temp=temp\n  347  \n  348  # Telemetry - Share anonymous SonarQube statistics\n  349  # By sharing anonymous SonarQube statistics, you help us understand how SonarQube is used so we can improve the product to work even better for you.\n  350  # We don't collect source code or IP addresses. And we don't share the data with anyone else.\n  351  # To see an example of the data shared: login as a global administrator, call the WS api/system/info and check the Statistics field.\n  352  #sonar.telemetry.enable=true\n  353  \n  354  \n  355  #--------------------------------------------------------------------------------------------------\n  356  # DEVELOPMENT - only for developers\n  357  # The following properties MUST NOT be used in production environments.\n  358  \n  359  # Elasticsearch HTTP connector\n  360  #sonar.search.httpPort=-1",
+   "prompt_tokens": 1929,
+   "dropped": 0
+  },
+  {
+   "turn": 5,
+   "reply": "ACTION: find \"groupsHeader\" -f",
+   "action": "find \"groupsHeader\" -f",
+   "result": "filenames (0):",
+   "prompt_tokens": 2358,
+   "dropped": 0
+  },
+  {
+   "turn": 6,
+   "reply": "ACTION: find \"groupsHeader\" -c",
+   "action": "find \"groupsHeader\" -c",
+   "result": "content (6 matches in 4 files):\n  server/sonar-server/src/main/java/org/sonar/server/authentication/SsoAuthenticator.java\n       68: private static final String GROUPS_HEADER_PARAM = \"sonar.web.sso.groupsHeader\";\n  server/sonar-server/src/test/java/org/sonar/server/authentication/SsoAuthenticatorTest.java\n      290: settings.setProperty(\"sonar.web.sso.groupsHeader\", \"head-groups\");\n      306: settings.setProperty(\"sonar.web.sso.groupsHeader\", \"Groups\");\n  sonar-application/src/main/assembly/conf/sonar.properties\n      166: # If the sonar.sso.groupsHeader is set, the user will belong to those groups if groups exist in SonarQube.\n      169: #sonar.web.sso.groupsHeader=X-Forwarded-Groups\n  tests/src/test/java/org/sonarqube/tests/user/SsoAuthenticationTest.java\n       63: .setServerProperty(\"sonar.web.sso.groupsHeader\", GROUPS_HEADER)",
+   "prompt_tokens": 2391,
+   "dropped": 0
+  },
+  {
+   "turn": 7,
+   "reply": "ACTION: read sonar-application/src/main/assembly/conf/sonar.properties 155",
+   "action": "read sonar-application/src/main/assembly/conf/sonar.properties 155",
+   "result": "sonar-application/src/main/assembly/conf/sonar.properties  lines 155-194 of 360\n  155  # Name of the header to get the user login.\n  156  # Only alphanumeric, '.' and '@' characters are allowed\n  157  #sonar.web.sso.loginHeader=X-Forwarded-Login\n  158  \n  159  # Name of the header to get the user name\n  160  #sonar.web.sso.nameHeader=X-Forwarded-Name\n  161  \n  162  # Name of the header to get the user email (optional)\n  163  #sonar.web.sso.emailHeader=X-Forwarded-Email\n  164  \n  165  # Name of the header to get the list of user groups, separated by comma (optional).\n  166  # If the sonar.sso.groupsHeader is set, the user will belong to those groups if groups exist in SonarQube.\n  167  # If none of the provided groups exists in SonarQube, the user won't belong to any group.\n  168  # Note that the default group will NOT be automatically added when using SSO, it should be provided in the groups list, if needed.\n  169  #sonar.web.sso.groupsHeader=X-Forwarded-Groups\n  170  \n  171  # Interval used to know when to refresh name, email and groups.\n  172  # During this interval, if for instance the name of the user is changed in the header, it will only be updated after X minutes.\n  173  #sonar.web.sso.refreshIntervalInMinutes=5\n  174  \n  175  \n  176  #--------------------------------------------------------------------------------------------------\n  177  # COMPUTE ENGINE\n  178  # The Compute Engine is responsible for processing background tasks.\n  179  # Compute Engine is executed in a dedicated Java process. Default heap size is 512Mb.\n  180  # Use the following property to customize JVM options.\n  181  #    Recommendations:\n  182  #\n  183  #    The HotSpot Server VM is recommended. The property -server should be added if server mode\n  184  #    is not enabled by default on yo\n... cut (468 more chars)",
+   "prompt_tokens": 2650,
+   "dropped": 0
+  },
+  {
+   "turn": 8,
+   "reply": "ACTION: keep sonar-application/src/main/assembly/conf/sonar.properties",
+   "action": "keep sonar-application/src/main/assembly/conf/sonar.properties",
+   "result": "kept. answer list: 1 file(s)",
+   "prompt_tokens": 3265,
+   "dropped": 0
+  },
+  {
+   "turn": 9,
+   "reply": "ACTION: done",
+   "action": "done",
+   "result": "done",
+   "prompt_tokens": 3318,
+   "dropped": 0
+  }
+ ]
+}

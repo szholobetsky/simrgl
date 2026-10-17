@@ -1,0 +1,114 @@
+ACTION: /map find Logback -d 1  
+ACTION: /read sonar-core/src/main/java/org/sonar/core/config\Logback.java  
+ACTION: /map trace deps Logback -d 2  
+ACTION: /tree sonar-core  
+ACTION: /ls sonar-core/src/main/java/org/sonar/core/config/  
+ACTION: /read sonar-core/src/main/java/org/sonar/core/config	Logback.java  
+
+[tool result: /map find Logback -d 1]  
+sonar-core\src\main\java\org\sonar\core\config\Logback.java  
+sonar-core\src\main\java\org\sonar\core\config\LogbackTest.java
+
+[map] 2 match(es)  
+[map] {{map_files}} set — 2 file(s)  
+[map] injected into context  
+
+[tool result: /read sonar-core/src/main/java/org/sonar/core/config	Logback.java]  
+[file: sonar-core/src/main/java/org/sonar/core/config	Logback.java (104 lines)]  
+```
+/**
+ * Logback configuration for SonarQube.
+ */
+public class Logback {
+  /**
+   * Get the logger instance for FOP.
+   *
+   * @return Logger instance
+   */
+  public static Logger get(String name) {
+    return Loggers.get(name);
+  }
+
+  /**
+   * Set the logging level for a specific category.
+   *
+   * @param name     Category name
+   * @param level    Logging level (e.g., INFO, ERROR)
+   */
+  public static void setLevel(String name, Level level) {
+    Loggers.setLevel(name, level);
+  }
+}
+```
+
+[tool result: /map trace deps Logback -d 2]  
+deps: Logback(ln:15)  
+sonar-core\src\main\java\org\sonar\core\config\Logback.java  
+→ expr:sonar  scripts\generate_batch_reports.sh  
+→ expr:will  server\sonar-ce-task-projectanalysis\src\main\java\org\sonar\ce\task\projectanalysis\component\DepthTraversalTypeAwareCrawler.java  
+→ expr:should  server\sonar-ce-task-projectanalysis\src\main\java\org\sonar\ce\task\projectanalysis\issue\AdHocRuleCreator.java  
+→ import,call:Level  server\sonar-ce-task-projectanalysis\src\main\java\org\sonar\ce\task\projectanalysis\measure\Measure.java  
+→ expr:used  server\sonar-ce-task-projectanalysis\src\main\java\org\sonar\ce\task\projectanalysis\step\PersistComponentsStep.java  
+→ expr:that  server\sonar-ce-task-projectanalysis\src\test\java\org\sonar\ce\task\projectanalysis\component\CallRecord.java  
+→ expr:extends  server\sonar-db-migration\src\main\java\org\sonar\server\platform\db\migration\def\BigIntegerColumnDef.java  
+→ expr:version  server\sonar-db-migration\src\main\java\org\sonar\server\platform\db\migration\history\MigrationHistoryTableImpl.java  
+→ expr:without  server\sonar-process\src\main\java\org\sonar\process\Jmx.java  
+→ expr:License  server\sonar-server\src\main\java\org\sonar\server\telemetry\LicenseReader.java  
+→ expr:SonarQube  server\sonar-web\public\WEB-INF\web.xml  
+→ call:error  server\sonar-web\src\main\js\apps\quality-gates\components\ConditionModal.tsx  
+→ expr:Logback  sonar-core\src\main\java\org\sonar\core\config\Logback.java  
+→ call:valueOf  sonar-plugin-api\src\main\java\org\sonar\api\rules\RuleType.java  
+→ import,call,expr:Logger  sonar-plugin-api\src\main\java\org\sonar\api\utils\log\Logger.java  
+
+[tool result: /tree sonar-core]  
+[36msonar-core/[0m  
+[2m├── [0m[36msrc/[0m  
+│   [2m├── [0m[36mmain/[0m  
+│   │   [2m└── [0m[36mjava/[0m  
+│   │       [2m│   └── [0m[36morg/[0m  
+│   │       │     [2m├── [0m[36msonar/[0m  
+│   │       │     │   [2m└── [0m[36mconfig/[0m  
+│   │       │     └── [2m├── [0m[36mMETA-INF/[0m  
+│   │       │     ├── [2m├── [0m[36morg/[0m  
+│   │       │     │   [2m└── [0m[36msonar/[0m  
+│   │       │     └── [2m├── [0m[36mapi/[0m  
+│   │       │     ├── [2m├── [0m[36mresources/[0m  
+│   │       │     │   [2m└── [0m[36mlogback-test.xml[0m  
+│   │       └── [2m├── [0m[36mscripts/[0m  
+│   │           [2m├── [0m[36mecho.bat[0m  
+│   │           [2m├── [0m[36mecho.sh[0m  
+│   │           [2m├── [0m[36mforever.bat[0m  
+│   │           [2m├── [0m[36mforever.sh[0m  
+│   │           [2m├── [0m[36moutput.bat[0m  
+│   │           [2m└── [0m[36moutput.sh[0m  
+
+[tool result: /ls sonar-core/src/main/java/org/sonar/core/config/]  
+sonar-core\src\main\java\org\sonar\core\config\Logback.java  
+sonar-core\src\main\java\org\sonar\core\config\LogbackTest.java
+
+[tool result: /read sonar-core/src/main/java/org/sonar/core/config	Logback.java]  
+
+Now, to implement the solution:
+
+1. **Identify FOP Logger**: The `Logback` class in `sonar-core` contains a method `get(String name)` that returns a logger instance.
+
+2. **Modify Logging Level**:
+   - Set the logging level for `"org.apache.fop"` to `ERROR`.
+   - This will suppress all INFO-level logs from FOP, as requested.
+
+3. **Verify Configuration**: Ensure the change is applied and test the PDF generation process to confirm logs are no longer displayed.
+
+Final Answer:  
+To prevent FOP INFO logs from appearing when generating PDFs in SonarQube:
+
+1. In `sonar-core/src/main/java/org/sonar/core/config\Logback.java`, modify:
+   ```java
+   public static void setLevel(String name, Level level) {
+     Loggers.setLevel(name, level);
+   }
+   ```
+   Set the level for `"org.apache.fop"` to `ERROR`.
+
+2. Restart SonarQube services to apply changes.
+
+This ensures FOP logs are not displayed in the system's logging output.

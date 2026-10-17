@@ -1,0 +1,12 @@
+build.gradle  
+sonar-application/build.gradle  
+pom.xml  
+sonar-application/pom.xml  
+sonar-application/assembly.xml  
+.cirrus.yml  
+sonar-application/bundled_plugins.gradle  
+settings.gradle  
+
+gradle.properties  
+sonar-scanner-engine/build.gradle  
+server/sonar-docs/build.gradle

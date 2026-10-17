@@ -1,0 +1,131 @@
+{
+ "model": "gemma4:e2b",
+ "group": "A",
+ "task": "T02",
+ "answer": [],
+ "ranked": [],
+ "protocol_errors": 0,
+ "repeats": 0,
+ "dropped_turns_max": 2,
+ "prompt_tokens": 36464,
+ "output_tokens": 221,
+ "prompt_tokens_max": 3509,
+ "seconds": 702.9,
+ "finished": false,
+ "turns": 14,
+ "rank_called": false,
+ "log": [
+  {
+   "turn": 1,
+   "reply": "ACTION: find projects -f",
+   "action": "find projects -f",
+   "result": "filenames (114):\n  plugins/sonar-xoo-plugin/src/main/java/org/sonar/xoo/global/GlobalProjectSensor.java\n  server/sonar-ce-task-projectanalysis/src/main/java/org/sonar/ce/task/projectanalysis/step/ValidateProjectStep.java\n  server/sonar-ce-task-projectanalysis/src/test/java/org/sonar/ce/task/projectanalysis/step/ValidateProjectStepTest.java\n  server/sonar-db-migration/src/main/java/org/sonar/server/platform/db/migration/version/v82/CreateProjectsTable.java\n  server/sonar-db-migration/src/main/java/org/sonar/server/platform/db/migration/version/v82/PopulateProjectsTable.java\n  server/sonar-db-migration/src/main/java/org/sonar/server/platform/db/migration/version/v82/RenameProjectsTableToComponents.java\n  server/sonar-db-migration/src/test/java/org/sonar/server/platform/db/migration/version/v82/CreateProjectsTableTest.java\n  server/sonar-db-migration/src/test/java/org/sonar/server/platform/db/migration/version/v82/PopulateProjectsTableTest.java\n  server/sonar-db-migration/src/test/java/org/sonar/server/platform/db/migration/version/v82/RenameProjectsTableToComponentsTest.java\n  server/sonar-server-common/src/main/java/org/sonar/server/issue/index/ProjectStatistics.java\n  server/sonar-web/src/main/js/apps/about/components/AboutProjects.tsx\n  server/sonar-web/src/main/js/apps/account/notifications/Projects.tsx\n  server/sonar-web/src/main/js/apps/account/notifications/__tests__/Projects-test.tsx\n  server/sonar-web/src/main/js/apps/account/notifications/__tests__/__snapshots__/Projects-test.tsx.snap\n  server/sonar-web/src/main/js/apps/account/projects/Projects.tsx\n  server/sonar-web/src/main/js/apps/account/projects/ProjectsContainer.tsx\n  server/sonar-web/src/main/js/apps/account/projects/__tests__/Projects-test.tsx\n  server/sonar-web/src/main/js/apps/create/project/GitlabPro\n... cut (248 more chars)",
+   "prompt_tokens": 388,
+   "dropped": 0
+  },
+  {
+   "turn": 2,
+   "reply": "ACTION: read server/sonar-web/src/main/js/apps/account/projects/Projects.tsx\n",
+   "action": "read server/sonar-web/src/main/js/apps/account/projects/Projects.tsx",
+   "result": "server/sonar-web/src/main/js/apps/account/projects/Projects.tsx  lines 1-40 of 63\n    1  /*\n    2   * SonarQube\n    3   * Copyright (C) 2009-2020 SonarSource SA\n    4   * mailto:info AT sonarsource DOT com\n    5   *\n    6   * This program is free software; you can redistribute it and/or\n    7   * modify it under the terms of the GNU Lesser General Public\n    8   * License as published by the Free Software Foundation; either\n    9   * version 3 of the License, or (at your option) any later version.\n   10   *\n   11   * This program is distributed in the hope that it will be useful,\n   12   * but WITHOUT ANY WARRANTY; without even the implied warranty of\n   13   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n   14   * Lesser General Public License for more details.\n   15   *\n   16   * You should have received a copy of the GNU Lesser General Public License\n   17   * along with this program; if not, write to the Free Software Foundation,\n   18   * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.\n   19   */\n   20  import * as React from 'react';\n   21  import ListFooter from 'sonar-ui-common/components/controls/ListFooter';\n   22  import { translate } from 'sonar-ui-common/helpers/l10n';\n   23  import ProjectCard from './ProjectCard';\n   24  \n   25  interface Props {\n   26    loading: boolean;\n   27    loadMore: () => void;\n   28    projects: T.MyProject[];\n   29    total?: number;\n   30  }\n   31  \n   32  export default function Projects(props: Props) {\n   33    const { projects } = props;\n   34  \n   35    return (\n   36      <div id=\"account-projects\">\n   37        {projects.length === 0 ? (\n   38          <div className=\"js-no-results\">{translate('my_account.projects.no_results')}</div>\n   39        ) : (\n   40          <p>{translate\n... cut (40 more chars)",
+   "prompt_tokens": 1007,
+   "dropped": 0
+  },
+  {
+   "turn": 3,
+   "reply": "ACTION: find Projects.tsx -f",
+   "action": "find Projects.tsx -f",
+   "result": "filenames (9):\n  server/sonar-web/src/main/js/apps/about/components/AboutProjects.tsx\n  server/sonar-web/src/main/js/apps/account/notifications/Projects.tsx\n  server/sonar-web/src/main/js/apps/account/projects/Projects.tsx\n  server/sonar-web/src/main/js/apps/portfolio/components/WorstProjects.tsx\n  server/sonar-web/src/main/js/apps/projects/components/AllProjects.tsx\n  server/sonar-web/src/main/js/apps/projects/components/NoFavoriteProjects.tsx\n  server/sonar-web/src/main/js/apps/projectsManagement/Projects.tsx\n  server/sonar-web/src/main/js/apps/quality-gates/components/Projects.tsx\n  server/sonar-web/src/main/js/apps/quality-profiles/details/ProfileProjects.tsx",
+   "prompt_tokens": 1627,
+   "dropped": 0
+  },
+  {
+   "turn": 4,
+   "reply": "ACTION: read server/sonar-web/src/main/js/apps/account/projects/Projects.tsx",
+   "action": "read server/sonar-web/src/main/js/apps/account/projects/Projects.tsx",
+   "result": "server/sonar-web/src/main/js/apps/account/projects/Projects.tsx  lines 1-40 of 63\n    1  /*\n    2   * SonarQube\n    3   * Copyright (C) 2009-2020 SonarSource SA\n    4   * mailto:info AT sonarsource DOT com\n    5   *\n    6   * This program is free software; you can redistribute it and/or\n    7   * modify it under the terms of the GNU Lesser General Public\n    8   * License as published by the Free Software Foundation; either\n    9   * version 3 of the License, or (at your option) any later version.\n   10   *\n   11   * This program is distributed in the hope that it will be useful,\n   12   * but WITHOUT ANY WARRANTY; without even the implied warranty of\n   13   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n   14   * Lesser General Public License for more details.\n   15   *\n   16   * You should have received a copy of the GNU Lesser General Public License\n   17   * along with this program; if not, write to the Free Software Foundation,\n   18   * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.\n   19   */\n   20  import * as React from 'react';\n   21  import ListFooter from 'sonar-ui-common/components/controls/ListFooter';\n   22  import { translate } from 'sonar-ui-common/helpers/l10n';\n   23  import ProjectCard from './ProjectCard';\n   24  \n   25  interface Props {\n   26    loading: boolean;\n   27    loadMore: () => void;\n   28    projects: T.MyProject[];\n   29    total?: number;\n   30  }\n   31  \n   32  export default function Projects(props: Props) {\n   33    const { projects } = props;\n   34  \n   35    return (\n   36      <div id=\"account-projects\">\n   37        {projects.length === 0 ? (\n   38          <div className=\"js-no-results\">{translate('my_account.projects.no_results')}</div>\n   39        ) : (\n   40          <p>{translate\n... cut (40 more chars)",
+   "prompt_tokens": 1870,
+   "dropped": 0
+  },
+  {
+   "turn": 5,
+   "reply": "ACTION: find translate -f",
+   "action": "find translate -f",
+   "result": "filenames (0):",
+   "prompt_tokens": 2490,
+   "dropped": 0
+  },
+  {
+   "turn": 6,
+   "reply": "ACTION: read server/sonar-web/src/main/js/apps/account/projects/Projects.tsx",
+   "action": "read server/sonar-web/src/main/js/apps/account/projects/Projects.tsx",
+   "result": "server/sonar-web/src/main/js/apps/account/projects/Projects.tsx  lines 1-40 of 63\n    1  /*\n    2   * SonarQube\n    3   * Copyright (C) 2009-2020 SonarSource SA\n    4   * mailto:info AT sonarsource DOT com\n    5   *\n    6   * This program is free software; you can redistribute it and/or\n    7   * modify it under the terms of the GNU Lesser General Public\n    8   * License as published by the Free Software Foundation; either\n    9   * version 3 of the License, or (at your option) any later version.\n   10   *\n   11   * This program is distributed in the hope that it will be useful,\n   12   * but WITHOUT ANY WARRANTY; without even the implied warranty of\n   13   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n   14   * Lesser General Public License for more details.\n   15   *\n   16   * You should have received a copy of the GNU Lesser General Public License\n   17   * along with this program; if not, write to the Free Software Foundation,\n   18   * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.\n   19   */\n   20  import * as React from 'react';\n   21  import ListFooter from 'sonar-ui-common/components/controls/ListFooter';\n   22  import { translate } from 'sonar-ui-common/helpers/l10n';\n   23  import ProjectCard from './ProjectCard';\n   24  \n   25  interface Props {\n   26    loading: boolean;\n   27    loadMore: () => void;\n   28    projects: T.MyProject[];\n   29    total?: number;\n   30  }\n   31  \n   32  export default function Projects(props: Props) {\n   33    const { projects } = props;\n   34  \n   35    return (\n   36      <div id=\"account-projects\">\n   37        {projects.length === 0 ? (\n   38          <div className=\"js-no-results\">{translate('my_account.projects.no_results')}</div>\n   39        ) : (\n   40          <p>{translate\n... cut (40 more chars)",
+   "prompt_tokens": 2515,
+   "dropped": 0
+  },
+  {
+   "turn": 7,
+   "reply": "ACTION: find my_account.projects.no_results -f",
+   "action": "find my_account.projects.no_results -f",
+   "result": "filenames (0):",
+   "prompt_tokens": 3135,
+   "dropped": 0
+  },
+  {
+   "turn": 8,
+   "reply": "ACTION: read sonar-ui-common/helpers/l10n.ts",
+   "action": "read sonar-ui-common/helpers/l10n.ts",
+   "result": "no such file in T02: sonar-ui-common/helpers/l10n.ts",
+   "prompt_tokens": 3168,
+   "dropped": 0
+  },
+  {
+   "turn": 9,
+   "reply": "ACTION: find Projects.tsx -f",
+   "action": "find Projects.tsx -f",
+   "result": "filenames (9):\n  server/sonar-web/src/main/js/apps/about/components/AboutProjects.tsx\n  server/sonar-web/src/main/js/apps/account/notifications/Projects.tsx\n  server/sonar-web/src/main/js/apps/account/projects/Projects.tsx\n  server/sonar-web/src/main/js/apps/portfolio/components/WorstProjects.tsx\n  server/sonar-web/src/main/js/apps/projects/components/AllProjects.tsx\n  server/sonar-web/src/main/js/apps/projects/components/NoFavoriteProjects.tsx\n  server/sonar-web/src/main/js/apps/projectsManagement/Projects.tsx\n  server/sonar-web/src/main/js/apps/quality-gates/components/Projects.tsx\n  server/sonar-web/src/main/js/apps/quality-profiles/details/ProfileProjects.tsx",
+   "prompt_tokens": 3222,
+   "dropped": 0
+  },
+  {
+   "turn": 10,
+   "reply": "ACTION: read server/sonar-web/src/main/js/apps/account/notifications/Projects.tsx",
+   "action": "read server/sonar-web/src/main/js/apps/account/notifications/Projects.tsx",
+   "result": "server/sonar-web/src/main/js/apps/account/notifications/Projects.tsx  lines 1-40 of 170\n    1  /*\n    2   * SonarQube\n    3   * Copyright (C) 2009-2020 SonarSource SA\n    4   * mailto:info AT sonarsource DOT com\n    5   *\n    6   * This program is free software; you can redistribute it and/or\n    7   * modify it under the terms of the GNU Lesser General Public\n    8   * License as published by the Free Software Foundation; either\n    9   * version 3 of the License, or (at your option) any later version.\n   10   *\n   11   * This program is distributed in the hope that it will be useful,\n   12   * but WITHOUT ANY WARRANTY; without even the implied warranty of\n   13   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n   14   * Lesser General Public License for more details.\n   15   *\n   16   * You should have received a copy of the GNU Lesser General Public License\n   17   * along with this program; if not, write to the Free Software Foundation,\n   18   * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.\n   19   */\n   20  import { groupBy, sortBy, uniqBy } from 'lodash';\n   21  import * as React from 'react';\n   22  import { Button } from 'sonar-ui-common/components/controls/buttons';\n   23  import SearchBox from 'sonar-ui-common/components/controls/SearchBox';\n   24  import { translate } from 'sonar-ui-common/helpers/l10n';\n   25  import ProjectModal from './ProjectModal';\n   26  import ProjectNotifications from './ProjectNotifications';\n   27  \n   28  export interface Props {\n   29    addNotification: (n: T.Notification) => void;\n   30    channels: string[];\n   31    notifications: T.Notification[];\n   32    removeNotification: (n: T.Notification) => void;\n   33    types: string[];\n   34  }\n   35  \n   36  const THRESHOLD_COLLAPSED = 3;\n... cut (107 more chars)",
+   "prompt_tokens": 3466,
+   "dropped": 0
+  },
+  {
+   "turn": 11,
+   "reply": "ACTION: find my_account.projects.no_results -f",
+   "action": "find my_account.projects.no_results -f",
+   "result": "filenames (0):",
+   "prompt_tokens": 3451,
+   "dropped": 1
+  },
+  {
+   "turn": 12,
+   "reply": "ACTION: find translate -f",
+   "action": "find translate -f",
+   "result": "filenames (0):",
+   "prompt_tokens": 3484,
+   "dropped": 1
+  },
+  {
+   "turn": 13,
+   "reply": "ACTION: find Projects.tsx -f",
+   "action": "find Projects.tsx -f",
+   "result": "filenames (9):\n  server/sonar-web/src/main/js/apps/about/components/AboutProjects.tsx\n  server/sonar-web/src/main/js/apps/account/notifications/Projects.tsx\n  server/sonar-web/src/main/js/apps/account/projects/Projects.tsx\n  server/sonar-web/src/main/js/apps/portfolio/components/WorstProjects.tsx\n  server/sonar-web/src/main/js/apps/projects/components/AllProjects.tsx\n  server/sonar-web/src/main/js/apps/projects/components/NoFavoriteProjects.tsx\n  server/sonar-web/src/main/js/apps/projectsManagement/Projects.tsx\n  server/sonar-web/src/main/js/apps/quality-gates/components/Projects.tsx\n  server/sonar-web/src/main/js/apps/quality-profiles/details/ProfileProjects.tsx",
+   "prompt_tokens": 3509,
+   "dropped": 1
+  },
+  {
+   "turn": 14,
+   "reply": "ACTION: read server/sonar-web/src/main/js/apps/projectsManagement/Projects.tsx",
+   "action": "read server/sonar-web/src/main/js/apps/projectsManagement/Projects.tsx",
+   "result": "server/sonar-web/src/main/js/apps/projectsManagement/Projects.tsx  lines 1-40 of 77\n    1  /*\n    2   * SonarQube\n    3   * Copyright (C) 2009-2020 SonarSource SA\n    4   * mailto:info AT sonarsource DOT com\n    5   *\n    6   * This program is free software; you can redistribute it and/or\n    7   * modify it under the terms of the GNU Lesser General Public\n    8   * License as published by the Free Software Foundation; either\n    9   * version 3 of the License, or (at your option) any later version.\n   10   *\n   11   * This program is distributed in the hope that it will be useful,\n   12   * but WITHOUT ANY WARRANTY; without even the implied warranty of\n   13   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n   14   * Lesser General Public License for more details.\n   15   *\n   16   * You should have received a copy of the GNU Lesser General Public License\n   17   * along with this program; if not, write to the Free Software Foundation,\n   18   * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.\n   19   */\n   20  import * as classNames from 'classnames';\n   21  import * as React from 'react';\n   22  import { translate } from 'sonar-ui-common/helpers/l10n';\n   23  import { Project } from '../../api/components';\n   24  import ProjectRow from './ProjectRow';\n   25  \n   26  interface Props {\n   27    currentUser: Pick<T.LoggedInUser, 'login'>;\n   28    onProjectDeselected: (project: string) => void;\n   29    onProjectSelected: (project: string) => void;\n   30    organization: T.Organization;\n   31    projects: Project[];\n   32    ready?: boolean;\n   33    selection: string[];\n   34  }\n   35  \n   36  export default class Projects extends React.PureComponent<Props> {\n   37    onProjectCheck = (project: Project, checked: boolean) => {\n   3\n... cut (97 more chars)",
+   "prompt_tokens": 3132,
+   "dropped": 2
+  }
+ ]
+}

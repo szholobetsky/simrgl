@@ -1,0 +1,765 @@
+{
+ "agents": {
+  "gemma3:1b A": {
+   "tasks": 10,
+   "hit@10": 0.0,
+   "recall@10": 0.0,
+   "MAP_found": 0.0,
+   "MAP_ranked": 0.0,
+   "MAP_ranked_easy": 0.0,
+   "MAP_ranked_hard": 0.0,
+   "degenerate": NaN,
+   "finished": 0.7,
+   "protocol_errors": 0.0,
+   "repeats": 3.5,
+   "turns": 6.6,
+   "prompt_tokens_max": 1838,
+   "seconds": 67.85,
+   "per_task": {
+    "T01": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T02": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T03": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T04": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T05": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T06": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T07": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T08": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T09": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T10": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    }
+   }
+  },
+  "gemma3:1b B": {
+   "tasks": 10,
+   "hit@10": 0.1,
+   "recall@10": 0.1,
+   "MAP_found": 0.1,
+   "MAP_ranked": 0.1,
+   "MAP_ranked_easy": 0.16666666666666666,
+   "MAP_ranked_hard": 0.0,
+   "degenerate": NaN,
+   "finished": 0.8,
+   "protocol_errors": 0.0,
+   "repeats": 0.5,
+   "turns": 5.4,
+   "prompt_tokens_max": 2544,
+   "seconds": 39.230000000000004,
+   "per_task": {
+    "T01": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T02": {
+     "found": 1.0,
+     "ranked": 1.0,
+     "recall": 1.0
+    },
+    "T03": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T04": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T05": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T06": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T07": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T08": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T09": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T10": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    }
+   }
+  },
+  "gemma3:4b-it-q4_K_M A": {
+   "tasks": 10,
+   "hit@10": 0.2,
+   "recall@10": 0.05,
+   "MAP_found": 0.03,
+   "MAP_ranked": 0.05,
+   "MAP_ranked_easy": 0.041666666666666664,
+   "MAP_ranked_hard": 0.0625,
+   "degenerate": 0.5,
+   "finished": 0.8,
+   "protocol_errors": 0.0,
+   "repeats": 0.1,
+   "turns": 10.2,
+   "prompt_tokens_max": 3230,
+   "seconds": 280.01,
+   "per_task": {
+    "T01": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T02": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T03": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T04": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T05": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T06": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T07": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T08": {
+     "found": 0.05,
+     "ranked": 0.25,
+     "recall": 0.25
+    },
+    "T09": {
+     "found": 0.25,
+     "ranked": 0.25,
+     "recall": 0.25
+    },
+    "T10": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    }
+   }
+  },
+  "gemma3:4b-it-q4_K_M B": {
+   "tasks": 10,
+   "hit@10": 0.2,
+   "recall@10": 0.08333333333333333,
+   "MAP_found": 0.06666666666666667,
+   "MAP_ranked": 0.06666666666666667,
+   "MAP_ranked_easy": 0.08333333333333333,
+   "MAP_ranked_hard": 0.041666666666666664,
+   "degenerate": 0.3333333333333333,
+   "finished": 0.9,
+   "protocol_errors": 0.0,
+   "repeats": 0.2,
+   "turns": 7.6,
+   "prompt_tokens_max": 2586,
+   "seconds": 232.94,
+   "per_task": {
+    "T01": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T02": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T03": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T04": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T05": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T06": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T07": {
+     "found": 0.167,
+     "ranked": 0.167,
+     "recall": 0.33
+    },
+    "T08": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T09": {
+     "found": 0.5,
+     "ranked": 0.5,
+     "recall": 0.5
+    },
+    "T10": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    }
+   }
+  },
+  "gemma4:e2b A": {
+   "tasks": 10,
+   "hit@10": 0.0,
+   "recall@10": 0.0,
+   "MAP_found": 0.0,
+   "MAP_ranked": 0.0,
+   "MAP_ranked_easy": 0.0,
+   "MAP_ranked_hard": 0.0,
+   "degenerate": NaN,
+   "finished": 0.8,
+   "protocol_errors": 0.0,
+   "repeats": 0.3,
+   "turns": 8.3,
+   "prompt_tokens_max": 3509,
+   "seconds": 222.23000000000002,
+   "per_task": {
+    "T01": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T02": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T03": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T04": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T05": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T06": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T07": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T08": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T09": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T10": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    }
+   }
+  },
+  "gemma4:e2b B": {
+   "tasks": 10,
+   "hit@10": 0.0,
+   "recall@10": 0.0,
+   "MAP_found": 0.0,
+   "MAP_ranked": 0.0,
+   "MAP_ranked_easy": 0.0,
+   "MAP_ranked_hard": 0.0,
+   "degenerate": NaN,
+   "finished": 0.2,
+   "protocol_errors": 0.0,
+   "repeats": 3.5,
+   "turns": 13.5,
+   "prompt_tokens_max": 3567,
+   "seconds": 297.12,
+   "per_task": {
+    "T01": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T02": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T03": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T04": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T05": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T06": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T07": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T08": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T09": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T10": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    }
+   }
+  },
+  "ornith:9b A": {
+   "tasks": 2,
+   "hit@10": 0.5,
+   "recall@10": 0.5,
+   "MAP_found": 0.5,
+   "MAP_ranked": 0.5,
+   "MAP_ranked_easy": 0.5,
+   "MAP_ranked_hard": NaN,
+   "degenerate": NaN,
+   "finished": 0.5,
+   "protocol_errors": 0.0,
+   "repeats": 0.0,
+   "turns": 11.5,
+   "prompt_tokens_max": 3398,
+   "seconds": 1497.35,
+   "per_task": {
+    "T01": {
+     "found": 1.0,
+     "ranked": 1.0,
+     "recall": 1.0
+    },
+    "T02": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    }
+   }
+  },
+  "ornith:9b B": {
+   "tasks": 1,
+   "hit@10": 0.0,
+   "recall@10": 0.0,
+   "MAP_found": 0.0,
+   "MAP_ranked": 0.0,
+   "MAP_ranked_easy": 0.0,
+   "MAP_ranked_hard": NaN,
+   "degenerate": NaN,
+   "finished": 0.0,
+   "protocol_errors": 7.0,
+   "repeats": 0.0,
+   "turns": 14.0,
+   "prompt_tokens_max": 3291,
+   "seconds": 2343.3,
+   "per_task": {
+    "T01": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    }
+   }
+  },
+  "qwen3:4b-instruct-2507-q4_K_M A": {
+   "tasks": 10,
+   "hit@10": 0.6,
+   "recall@10": 0.32,
+   "MAP_found": 0.2975,
+   "MAP_ranked": 0.29500000000000004,
+   "MAP_ranked_easy": 0.375,
+   "MAP_ranked_hard": 0.175,
+   "degenerate": 0.75,
+   "finished": 0.9,
+   "protocol_errors": 0.0,
+   "repeats": 0.0,
+   "turns": 9.4,
+   "prompt_tokens_max": 3048,
+   "seconds": 341.24,
+   "per_task": {
+    "T01": {
+     "found": 1.0,
+     "ranked": 1.0,
+     "recall": 1.0
+    },
+    "T02": {
+     "found": 1.0,
+     "ranked": 1.0,
+     "recall": 1.0
+    },
+    "T03": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T04": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T05": {
+     "found": 0.1,
+     "ranked": 0.2,
+     "recall": 0.2
+    },
+    "T06": {
+     "found": 0.5,
+     "ranked": 0.25,
+     "recall": 0.5
+    },
+    "T07": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T08": {
+     "found": 0.125,
+     "ranked": 0.25,
+     "recall": 0.25
+    },
+    "T09": {
+     "found": 0.25,
+     "ranked": 0.25,
+     "recall": 0.25
+    },
+    "T10": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    }
+   }
+  },
+  "qwen3:4b-instruct-2507-q4_K_M B": {
+   "tasks": 10,
+   "hit@10": 0.6,
+   "recall@10": 0.4,
+   "MAP_found": 0.4,
+   "MAP_ranked": 0.4,
+   "MAP_ranked_easy": 0.5416666666666666,
+   "MAP_ranked_hard": 0.1875,
+   "degenerate": NaN,
+   "finished": 1.0,
+   "protocol_errors": 0.0,
+   "repeats": 0.0,
+   "turns": 8.3,
+   "prompt_tokens_max": 2865,
+   "seconds": 218.03000000000003,
+   "per_task": {
+    "T01": {
+     "found": 1.0,
+     "ranked": 1.0,
+     "recall": 1.0
+    },
+    "T02": {
+     "found": 1.0,
+     "ranked": 1.0,
+     "recall": 1.0
+    },
+    "T03": {
+     "found": 1.0,
+     "ranked": 1.0,
+     "recall": 1.0
+    },
+    "T04": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T05": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T06": {
+     "found": 0.5,
+     "ranked": 0.5,
+     "recall": 0.5
+    },
+    "T07": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T08": {
+     "found": 0.25,
+     "ranked": 0.25,
+     "recall": 0.25
+    },
+    "T09": {
+     "found": 0.25,
+     "ranked": 0.25,
+     "recall": 0.25
+    },
+    "T10": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    }
+   }
+  },
+  "tev1:4b A": {
+   "tasks": 10,
+   "hit@10": 0.3,
+   "recall@10": 0.3,
+   "MAP_found": 0.3,
+   "MAP_ranked": 0.29500000000000004,
+   "MAP_ranked_easy": 0.4916666666666667,
+   "MAP_ranked_hard": 0.0,
+   "degenerate": 1.0,
+   "finished": 0.3,
+   "protocol_errors": 0.0,
+   "repeats": 3.3,
+   "turns": 12.6,
+   "prompt_tokens_max": 3616,
+   "seconds": 992.1200000000001,
+   "per_task": {
+    "T01": {
+     "found": 1.0,
+     "ranked": 1.0,
+     "recall": 1.0
+    },
+    "T02": {
+     "found": 1.0,
+     "ranked": 1.0,
+     "recall": 1.0
+    },
+    "T03": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T04": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T05": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T06": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T07": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T08": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T09": {
+     "found": 1.0,
+     "ranked": 0.95,
+     "recall": 1.0
+    },
+    "T10": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    }
+   }
+  },
+  "tev1:4b B": {
+   "tasks": 10,
+   "hit@10": 0.2,
+   "recall@10": 0.2,
+   "MAP_found": 0.2,
+   "MAP_ranked": 0.2,
+   "MAP_ranked_easy": 0.3333333333333333,
+   "MAP_ranked_hard": 0.0,
+   "degenerate": 0.0,
+   "finished": 0.2,
+   "protocol_errors": 0.0,
+   "repeats": 4.4,
+   "turns": 13.0,
+   "prompt_tokens_max": 3418,
+   "seconds": 805.1800000000001,
+   "per_task": {
+    "T01": {
+     "found": 1.0,
+     "ranked": 1.0,
+     "recall": 1.0
+    },
+    "T02": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T03": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T04": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T05": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T06": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T07": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T08": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    },
+    "T09": {
+     "found": 1.0,
+     "ranked": 1.0,
+     "recall": 1.0
+    },
+    "T10": {
+     "found": 0.0,
+     "ranked": 0.0,
+     "recall": 0.0
+    }
+   }
+  }
+ },
+ "reference": {
+  "gamayun alone": {
+   "hit@10": 0.7,
+   "recall@10": 0.5033333333333333,
+   "MAP": 0.3561111111111111,
+   "MAP_easy": 0.26851851851851855,
+   "MAP_hard": 0.4875
+  },
+  "simargl alone": {
+   "hit@10": 0.6,
+   "recall@10": 0.34833333333333333,
+   "MAP": 0.17162037037037037,
+   "MAP_easy": 0.04722222222222222,
+   "MAP_hard": 0.35821759259259256
+  },
+  "Haiku A (exp9.1)": {
+   "hit@10": 0.9,
+   "recall@10": 0.8099999999999999,
+   "MAP": 0.7966666666666666,
+   "MAP_easy": 1.0,
+   "MAP_hard": 0.4916666666666667
+  },
+  "Haiku B (exp9.1)": {
+   "hit@10": 1.0,
+   "recall@10": 0.8566666666666667,
+   "MAP": 0.7658333333333334,
+   "MAP_easy": 1.0,
+   "MAP_hard": 0.4145833333333333
+  }
+ }
+}

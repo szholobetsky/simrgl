@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-10-04T11:00:59",
+  "session_seconds": 549,
+  "model": "phi3.5:latest",
+  "host": "http://localhost:11434",
+  "requests": 1,
+  "tokens_gen": 542,
+  "tokens_prompt": 0,
+  "tokens_cached": 0,
+  "files_read": 6,
+  "run_calls": 2,
+  "ctx_clear": 0,
+  "ctx_compact": 0,
+  "mcp_calls": 0,
+  "by_model": {
+    "phi3.5:latest": {
+      "requests": 1,
+      "tokens_gen": 542,
+      "tokens_prompt": 0,
+      "tokens_cached": 0
+    }
+  },
+  "by_host": {
+    "http://localhost:11434": {
+      "requests": 1,
+      "tokens_gen": 542,
+      "tokens_prompt": 0,
+      "tokens_cached": 0
+    }
+  }
+}

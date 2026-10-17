@@ -1,0 +1,3 @@
+```
+[run: python C:/Projects/simrgl/exp9.3/idx.py simargl T09  (exit code 0)]
+```

@@ -1,0 +1,6 @@
+server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.tsx
+server/sonar-web/src/main/js/components/common/ProjectKeyInput.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/ManualProjectCreate-test.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/ManualProjectCreate-test.tsx.snap
+server/sonar-web/src/main/js/components/common/__tests__/__snapshots__/ProjectKeyInput-test.tsx.snap
+server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx

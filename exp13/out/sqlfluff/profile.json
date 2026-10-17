@@ -1,0 +1,13 @@
+{
+ "tasks": 4316,
+ "commit_rows": 51929,
+ "history_files": 9180,
+ "years": 7.9,
+ "files_per_task_mean": 7.59,
+ "files_per_task_median": 3.0,
+ "task_words_median": 168.0,
+ "tree_files": 6058,
+ "top_ext": ".sql 2668, .yml 2562, .py 475, (none) 104",
+ "hubs": 59,
+ "names_code": 0.996
+}

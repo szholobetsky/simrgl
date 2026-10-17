@@ -215,6 +215,7 @@ Detail: `symmetry/EMBEDDING.md §1`.
 | `symmetry/EMBEDDING.md` | Calibration invariance, rotation matrices, IRR, aggregation |
 | `symmetry/RETRIEVAL.md` | SYMMETRY@K for retrieval, hypothesis generation, tautology criterion |
 | `symmetry/PASSPORT.md` | Object Passport, YES/NO classification, map.txt integration |
+| `symmetry/JEV.md` | Passport as a jev rubric; symmetric questionnaire (same questions of the task and of the code); jev in the cascade, domain hint, aligned pairs for rotation matrices |
 
 **Related existing documents:**
 - `INDEX.md §6b` — SDR, OCS (ΔASYMMETRY operationalizes SDR)

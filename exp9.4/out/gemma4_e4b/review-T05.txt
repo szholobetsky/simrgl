@@ -1,0 +1,12 @@
+```text
+server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.tsx
+server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx
+server/sonar-web/src/main/js/apps/create/project/components/NewCodeDefinitionSelection.tsx
+server/sonar-web/src/main/javascript/services/project-management.service.ts # Assuming a service layer exists for API calls
+server/sonar-web/src/main/js/api/project-management.ts
+server/sonar-web/src/main/components/controls/ValidationInput.tsx
+server/sonar-web/src/main/components/controls/__tests__/ValidationInput-test.tsx
+server/sonar-web/src/main/components/controls/__snapshots__/ValidationInput-test.snapshot.snap
+server/sonar-web/src/main/js/apps/create/project/__tests__/ManualProjectCreate-test.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/ManualProjectCreate-test.snapshot.snap
+```

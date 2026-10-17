@@ -1,0 +1,11 @@
+server\sonar-webserver\src\main\java\org\sonar\server\platform\web\WebServiceFilter.java
+server\sonar-webserver\src\test\java\org\sonar\server\platform\web\WebServiceFilterTest.java
+server\sonar-web\src\main\js\AppComponentsExtensionsLegacyRequestLegacy.ts
+server\sonar-web\src\main\js\AppComponentsExtensionsLegacy__Tests_RequestLegacyTest.ts
+plugins\sonar-xoo-plugin\build.gradle
+server\sonar-docs\src\pages\extend\developing‑plugin.md
+sonar-ws\build.gradle
+sonar-markdown\build.gradle
+sonar-scanner-protocol\build.gradle
+sonar-testing-harness\build.gradle
+sonar-core\build.gradle

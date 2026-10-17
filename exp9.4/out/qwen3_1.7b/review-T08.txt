@@ -1,0 +1,4 @@
+build.gradle  
+sonar-application/pom.xml  
+sonar-server/pom.xml  
+sonar-application/assembly.xml

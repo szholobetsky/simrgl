@@ -1,0 +1,7 @@
+```plaintext
+server/sonar-web/src/main/js/api/project-management.ts
+server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/Manual-it.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/ManualProjectCreate-test.tsx
+server/sonar-web/src/main/js/apps/create/project/components/NewCodeDefinitionSelection.tsx
+```

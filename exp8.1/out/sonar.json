@@ -1,0 +1,174 @@
+{
+  "code_ontology": {
+    "snapshot": "ef1d41c (last commit of sonar.db, 2024-10-25)",
+    "units": 75622,
+    "files": 10474
+  },
+  "history_params": {
+    "lam": 0.25,
+    "beta": 1,
+    "beta2": 0.5,
+    "mu": 0,
+    "gamma": 0
+  },
+  "dev_map_by_w": {
+    "0": 0.0959,
+    "0.05": 0.0933,
+    "0.1": 0.0887,
+    "0.25": 0.071,
+    "0.5": 0.043,
+    "1": 0.0259,
+    "2": 0.0223
+  },
+  "w": 0,
+  "dev_map_by_rrf": {
+    "1/0": 0.0959,
+    "1/0.25": 0.0835,
+    "1/0.5": 0.067,
+    "1/1": 0.0421,
+    "0.5/1": 0.0279,
+    "0/1": 0.0204
+  },
+  "rrf": [
+    1,
+    0
+  ],
+  "dev_map_identifier_gated": {
+    "0": 0.0959,
+    "0.05": 0.0967,
+    "0.1": 0.0987,
+    "0.25": 0.1006,
+    "0.5": 0.1004,
+    "1": 0.1001,
+    "2": 0.1
+  },
+  "w_identifier_gated": 0.25,
+  "test": {
+    "all": {
+      "history only (exp7 gamayun)": {
+        "AP": 0.1161,
+        "RR": 0.2773,
+        "P@1": 0.215,
+        "R@10": 0.1743,
+        "hit@10": 0.44,
+        "tasks": 200
+      },
+      "code only": {
+        "AP": 0.0244,
+        "RR": 0.0608,
+        "P@1": 0.035,
+        "R@10": 0.0458,
+        "hit@10": 0.11,
+        "tasks": 200
+      },
+      "history + 0 x code (w from dev)": {
+        "AP": 0.1161,
+        "RR": 0.2773,
+        "P@1": 0.215,
+        "R@10": 0.1743,
+        "hit@10": 0.44,
+        "tasks": 200
+      },
+      "RRF 1/0 (from dev)": {
+        "AP": 0.1161,
+        "RR": 0.2773,
+        "P@1": 0.215,
+        "R@10": 0.1743,
+        "hit@10": 0.44,
+        "tasks": 200
+      },
+      "history + 0.25 x code if the task names an identifier (w from dev)": {
+        "AP": 0.1163,
+        "RR": 0.2788,
+        "P@1": 0.22,
+        "R@10": 0.174,
+        "hit@10": 0.435,
+        "tasks": 200
+      }
+    },
+    "a right file in the snapshot": {
+      "history only (exp7 gamayun)": {
+        "AP": 0.1982,
+        "RR": 0.4422,
+        "P@1": 0.3918,
+        "R@10": 0.2448,
+        "hit@10": 0.5773,
+        "tasks": 97
+      },
+      "code only": {
+        "AP": 0.0504,
+        "RR": 0.1253,
+        "P@1": 0.0722,
+        "R@10": 0.0945,
+        "hit@10": 0.2268,
+        "tasks": 97
+      },
+      "history + 0 x code (w from dev)": {
+        "AP": 0.1982,
+        "RR": 0.4422,
+        "P@1": 0.3918,
+        "R@10": 0.2448,
+        "hit@10": 0.5773,
+        "tasks": 97
+      },
+      "RRF 1/0 (from dev)": {
+        "AP": 0.1982,
+        "RR": 0.4422,
+        "P@1": 0.3918,
+        "R@10": 0.2448,
+        "hit@10": 0.5773,
+        "tasks": 97
+      },
+      "history + 0.25 x code if the task names an identifier (w from dev)": {
+        "AP": 0.2,
+        "RR": 0.4566,
+        "P@1": 0.4021,
+        "R@10": 0.2516,
+        "hit@10": 0.6082,
+        "tasks": 97
+      }
+    },
+    "names an identifier": {
+      "history only (exp7 gamayun)": {
+        "AP": 0.0595,
+        "RR": 0.141,
+        "P@1": 0.0833,
+        "R@10": 0.0964,
+        "hit@10": 0.2778,
+        "tasks": 36
+      },
+      "code only": {
+        "AP": 0.0552,
+        "RR": 0.1296,
+        "P@1": 0.0556,
+        "R@10": 0.0739,
+        "hit@10": 0.2222,
+        "tasks": 36
+      },
+      "history + 0 x code (w from dev)": {
+        "AP": 0.0595,
+        "RR": 0.141,
+        "P@1": 0.0833,
+        "R@10": 0.0964,
+        "hit@10": 0.2778,
+        "tasks": 36
+      },
+      "RRF 1/0 (from dev)": {
+        "AP": 0.0595,
+        "RR": 0.141,
+        "P@1": 0.0833,
+        "R@10": 0.0964,
+        "hit@10": 0.2778,
+        "tasks": 36
+      },
+      "history + 0.25 x code if the task names an identifier (w from dev)": {
+        "AP": 0.0606,
+        "RR": 0.1493,
+        "P@1": 0.1111,
+        "R@10": 0.0947,
+        "hit@10": 0.25,
+        "tasks": 36
+      }
+    }
+  }
+}

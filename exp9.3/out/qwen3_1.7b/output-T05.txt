@@ -1,0 +1,51 @@
+The most relevant files for fixing the project creation form validation issue are:
+
+1. **`server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.tsx`**  
+   - Contains the logic for the project creation form.  
+   - Focus on the form submission handler and validation logic for project creation.
+
+2. **`server/sonar-web/src/main/js/apps/create/project/__tests__/ManualProjectCreate-test.tsx`**  
+   - Tests the validation behavior.  
+   - Highlights cases where validation fails (e.g., invalid characters, missing fields).
+
+3. **`server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/ManualProjectCreate-test.tsx.snap`**  
+   - Snapshot of test failures.  
+   - Shows validation errors when invalid formats are used.
+
+4. **`server/sonar-web/src/main/js/apps/create/project/components/NewCodeDefinitionSelection.tsx`**  
+   - Likely part of the form UI.  
+   - May involve selecting code definitions, which could be affected by validation rules.
+
+---
+
+**Action Plan:**
+
+1. **Identify Validation Logic**  
+   - Locate the form submission handler in `ManualProjectCreate.tsx`.  
+   - Check for validation rules (e.g., format checks, required fields).
+
+2. **Check Format Constraints**  
+   - Ensure validation checks for formats explicitly mentioned in the task (e.g., `creation`, `project`, `description`).  
+   - Add conditions to reject submissions with invalid formats.
+
+3. **Test Validation Behavior**  
+   - Run tests in `ManualProjectCreate-test.tsx` to verify:  
+     - Validation fails for invalid characters (e.g., `@`, `#`).  
+     - Validation prevents submission when required fields are missing.  
+     - Correct formats are accepted (e.g., `creation`, `project`, `description`).
+
+4. **Fix Form Submission**  
+   - Modify the form submission handler to:  
+     - Reject submissions with invalid formats.  
+     - Allow valid formats (e.g., `creation`, `project`, `description`).  
+     - Display error messages for invalid inputs.
+
+5. **Validate Changes**  
+   - Run tests again to confirm fixes.  
+   - Ensure no unintended acceptance of invalid formats.
+
+---
+
+**Relevant Files to Fix:**
+- `server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.tsx`  
+- `server/sonar-web/src/main/js/apps/create/project/__tests__/ManualProjectCreate-test.tsx`

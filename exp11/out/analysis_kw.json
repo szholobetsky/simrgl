@@ -1,0 +1,1834 @@
+{
+ "summary": {
+  "simargl": {
+   "hit@10": 0.688,
+   "P@10": 0.144,
+   "R@10": 0.281,
+   "MRR": 0.419
+  },
+  "gamayun": {
+   "hit@10": 0.688,
+   "P@10": 0.15,
+   "R@10": 0.321,
+   "MRR": 0.367
+  },
+  "svitovyd_kw": {
+   "hit@10": 0.5,
+   "P@10": 0.086,
+   "R@10": 0.192,
+   "MRR": 0.208
+  },
+  "fused": {
+   "hit@10": 0.875,
+   "P@10": 0.119,
+   "R@10": 0.326,
+   "MRR": 0.53
+  }
+ },
+ "rows": [
+  {
+   "task": "CODEFIX-75",
+   "title": "",
+   "truth": 7,
+   "reachable": 1,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 1,
+    "first": 1
+   },
+   "svitovyd_kw": {
+    "n": 0,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 1,
+    "first": 6
+   },
+   "agreed": [
+    {
+     "file": "server/sonar-db-migration/src/main/java/org/sonar/server/platform/db/migration/version/DatabaseVersion.java",
+     "tools": "SG",
+     "ok": false
+    }
+   ],
+   "top5": [
+    {
+     "file": "server/sonar-db-migration/src/main/java/org/sonar/server/platform/db/migration/version/DatabaseVersion.java",
+     "ranks": {
+      "S": 6,
+      "G": 8
+     },
+     "ok": false
+    },
+    {
+     "file": "sonar-db/src/main/resources/org/sonar/db/version/rows-h2.sql",
+     "ranks": {
+      "S": 9,
+      "G": 21
+     },
+     "ok": false
+    },
+    {
+     "file": "sonar-db/src/main/java/org/sonar/db/version/MigrationStepModule.java",
+     "ranks": {
+      "S": 7,
+      "G": 48
+     },
+     "ok": false
+    },
+    {
+     "file": "sonar-db/src/main/resources/org/sonar/db/version/schema-h2.ddl",
+     "ranks": {
+      "S": 10,
+      "G": 43
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-ce-task-projectanalysis/src/test/java/org/sonar/ce/task/projectanalysis/measure/MeasureToMeasureDtoTest.java",
+     "ranks": {
+      "S": 1
+     },
+     "ok": false
+    }
+   ],
+   "idents": []
+  },
+  {
+   "task": "SONAR-23098",
+   "title": "Import project dependencies",
+   "truth": 63,
+   "reachable": 17,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 1,
+    "first": 1
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 2,
+    "first": 4
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 1,
+    "first": 1
+   },
+   "agreed": [
+    {
+     "file": "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+     "tools": "SG",
+     "ok": true
+    }
+   ],
+   "top5": [
+    {
+     "file": "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+     "ranks": {
+      "S": 1,
+      "G": 4
+     },
+     "ok": true
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/issue/IssueMapper.xml",
+     "ranks": {
+      "G": 35,
+      "V": 28
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-migration/src/main/java/org/sonar/server/platform/db/migration/version/v00/CreateInitialSchema.java",
+     "ranks": {
+      "V": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-web/src/main/js/types/alm-settings.d.ts",
+     "ranks": {
+      "G": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/java/org/sonar/db/issue/IssueDto.java",
+     "ranks": {
+      "G": 2
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "partial",
+    "graphs",
+    "filtering",
+    "exact",
+    "enterprise",
+    "overall",
+    "allows",
+    "Developers"
+   ]
+  },
+  {
+   "task": "SONAR-23133",
+   "title": "3rd party backend dependencies update",
+   "truth": 16,
+   "reachable": 14,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 2,
+    "first": 1
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 3,
+    "first": 4
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 3,
+    "first": 1
+   },
+   "agreed": [
+    {
+     "file": "build.gradle",
+     "tools": "SG",
+     "ok": true
+    },
+    {
+     "file": "sonar-application/build.gradle",
+     "tools": "SG",
+     "ok": true
+    }
+   ],
+   "top5": [
+    {
+     "file": "build.gradle",
+     "ranks": {
+      "S": 1,
+      "G": 4
+     },
+     "ok": true
+    },
+    {
+     "file": "sonar-application/build.gradle",
+     "ranks": {
+      "S": 4,
+      "G": 6
+     },
+     "ok": true
+    },
+    {
+     "file": "server/sonar-main/build.gradle",
+     "ranks": {
+      "S": 14,
+      "G": 2
+     },
+     "ok": false
+    },
+    {
+     "file": "gradle.properties",
+     "ranks": {
+      "S": 15,
+      "G": 5
+     },
+     "ok": true
+    },
+    {
+     "file": "server/sonar-server-common/src/main/java/org/sonar/server/log/ServerProcessLogging.java",
+     "ranks": {
+      "G": 44,
+      "V": 39
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "newer",
+    "patch",
+    "postgresql",
+    "ElasticSearch",
+    "party",
+    "spring",
+    "microsoft",
+    "commons"
+   ]
+  },
+  {
+   "task": "SONAR-23188",
+   "title": "Allow an admin to toggle between modes",
+   "truth": 66,
+   "reachable": 8,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 5,
+    "first": 1
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 3,
+    "first": 1
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 1,
+    "first": 1
+   },
+   "agreed": [
+    {
+     "file": "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+     "tools": "SG",
+     "ok": true
+    }
+   ],
+   "top5": [
+    {
+     "file": "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+     "ranks": {
+      "S": 1,
+      "G": 1
+     },
+     "ok": true
+    },
+    {
+     "file": "server/sonar-web/src/main/js/api/mocks/IssuesServiceMock.ts",
+     "ranks": {
+      "S": 20,
+      "G": 7
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-web/src/main/js/components/SourceViewer/__tests__/SourceViewer-it.tsx",
+     "ranks": {
+      "S": 3,
+      "G": 28
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-web/src/main/js/apps/coding-rules/__tests__/CodingRules-it.ts",
+     "ranks": {
+      "S": 22,
+      "G": 13
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-migration/src/main/java/org/sonar/server/platform/db/migration/version/v00/CreateInitialSchema.java",
+     "ranks": {
+      "V": 1
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "modes",
+    "Ensure",
+    "multi",
+    "boolean",
+    "between",
+    "category",
+    "Created",
+    "custom"
+   ]
+  },
+  {
+   "task": "SONAR-23191",
+   "title": "Quality profiles can be toggled between modes",
+   "truth": 22,
+   "reachable": 7,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 3,
+    "first": 1
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 1,
+    "first": 3
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 1,
+    "first": 8
+   },
+   "fused": {
+    "n": 10,
+    "hits": 1,
+    "first": 1
+   },
+   "agreed": [
+    {
+     "file": "server/sonar-web/src/main/js/apps/coding-rules/__tests__/CodingRules-it.ts",
+     "tools": "SG",
+     "ok": false
+    },
+    {
+     "file": "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+     "tools": "SG",
+     "ok": true
+    }
+   ],
+   "top5": [
+    {
+     "file": "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+     "ranks": {
+      "S": 1,
+      "G": 3
+     },
+     "ok": true
+    },
+    {
+     "file": "server/sonar-web/src/main/js/apps/coding-rules/__tests__/CodingRules-it.ts",
+     "ranks": {
+      "S": 2,
+      "G": 4
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-web/src/main/js/apps/coding-rules/components/ActivationFormModal.tsx",
+     "ranks": {
+      "S": 5,
+      "G": 16
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-web/src/main/js/apps/coding-rules/components/RuleDetailsProfiles.tsx",
+     "ranks": {
+      "S": 6,
+      "G": 24
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/qualityprofile/QualityProfileMapper.xml",
+     "ranks": {
+      "G": 14,
+      "V": 24
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "modes",
+    "tables",
+    "Ensure",
+    "compare",
+    "require",
+    "between",
+    "related",
+    "changelog"
+   ]
+  },
+  {
+   "task": "SONAR-23205",
+   "title": "Migrate build system to vite",
+   "truth": 95,
+   "reachable": 9,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 1,
+    "first": 8
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 1,
+    "first": 2
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 1,
+    "first": 7
+   },
+   "agreed": [
+    {
+     "file": "build.gradle",
+     "tools": "SG",
+     "ok": false
+    }
+   ],
+   "top5": [
+    {
+     "file": "build.gradle",
+     "ranks": {
+      "S": 2,
+      "G": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-server/src/main/java/org/sonar/server/platform/ServerComponents.java",
+     "ranks": {
+      "S": 5,
+      "G": 46
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-migration/src/main/java/org/sonar/server/platform/db/migration/version/DatabaseVersion.java",
+     "ranks": {
+      "S": 22,
+      "G": 30
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-ce-task-projectanalysis/src/main/java/org/sonar/ce/task/projectanalysis/container/ProjectAnalysisTaskContainerPopulator.java",
+     "ranks": {
+      "S": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/issue/IssueMapper.xml",
+     "ranks": {
+      "V": 1
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "enterprise",
+    "extensions",
+    "Migrate",
+    "built",
+    "build",
+    "system",
+    "migration",
+    "change"
+   ]
+  },
+  {
+   "task": "SONAR-23206",
+   "title": "Move design-system inside sonar-web",
+   "truth": 2203,
+   "reachable": 1,
+   "mass": true,
+   "simargl": {
+    "n": 10,
+    "hits": 1,
+    "first": 5
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 3,
+    "first": 1
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 2,
+    "first": 5
+   },
+   "agreed": [
+    {
+     "file": "server/sonar-db-dao/src/schema/schema-sq.ddl",
+     "tools": "SG",
+     "ok": false
+    },
+    {
+     "file": "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+     "tools": "SG",
+     "ok": false
+    }
+   ],
+   "top5": [
+    {
+     "file": "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+     "ranks": {
+      "S": 1,
+      "G": 2
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/schema/schema-sq.ddl",
+     "ranks": {
+      "S": 4,
+      "G": 10
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/issue/IssueMapper.xml",
+     "ranks": {
+      "G": 43,
+      "V": 2
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-migration/src/main/java/org/sonar/server/platform/db/migration/version/v00/CreateInitialSchema.java",
+     "ranks": {
+      "V": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-web/src/main/js/api/mocks/QualityProfilesServiceMock.ts",
+     "ranks": {
+      "G": 1
+     },
+     "ok": true
+    }
+   ],
+   "idents": [
+    "endpoints",
+    "ticket",
+    "external",
+    "Changes",
+    "parameters",
+    "information",
+    "system",
+    "level"
+   ]
+  },
+  {
+   "task": "SONAR-23232",
+   "title": "Measures page shows change in calculation message for every pull reque",
+   "truth": 3,
+   "reachable": 0,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "agreed": [
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/purge/PurgeMapper.xml",
+     "tools": "GV",
+     "ok": false
+    },
+    {
+     "file": "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+     "tools": "SG",
+     "ok": false
+    }
+   ],
+   "top5": [
+    {
+     "file": "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+     "ranks": {
+      "S": 1,
+      "G": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/purge/PurgeMapper.xml",
+     "ranks": {
+      "G": 4,
+      "V": 2
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/issue/IssueMapper.xml",
+     "ranks": {
+      "G": 31,
+      "V": 5
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-web/src/main/js/apps/component-measures/utils.ts",
+     "ranks": {
+      "S": 2,
+      "G": 40
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-web/src/main/js/apps/component-measures/components/MeasureContent.tsx",
+     "ranks": {
+      "S": 42,
+      "G": 36
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "calculation",
+    "every",
+    "already",
+    "message",
+    "Measures",
+    "change"
+   ]
+  },
+  {
+   "task": "SONAR-23250",
+   "title": "Quality profiles support customization of impact severities",
+   "truth": 88,
+   "reachable": 61,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 4,
+    "first": 3
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 4,
+    "first": 1
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 1,
+    "first": 4
+   },
+   "fused": {
+    "n": 10,
+    "hits": 1,
+    "first": 9
+   },
+   "agreed": [
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/issue/IssueMapper.xml",
+     "tools": "GV",
+     "ok": false
+    }
+   ],
+   "top5": [
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/issue/IssueMapper.xml",
+     "ranks": {
+      "G": 9,
+      "V": 3
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-ce-task-projectanalysis/src/test/java/org/sonar/ce/task/projectanalysis/qualitymodel/NewReliabilityAndSecurityRatingMeasuresVisitorTest.java",
+     "ranks": {
+      "S": 33,
+      "V": 18
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-ce-task-projectanalysis/src/test/java/org/sonar/ce/task/projectanalysis/qualitymodel/ReliabilityAndSecurityRatingMeasuresVisitorTest.java",
+     "ranks": {
+      "S": 35,
+      "V": 19
+     },
+     "ok": false
+    },
+    {
+     "file": "plugins/sonar-xoo-plugin/src/main/java/org/sonar/xoo/rule/XooRulesDefinition.java",
+     "ranks": {
+      "S": 20,
+      "G": 45
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-server-common/src/it/java/org/sonar/server/rule/index/RuleIndexIT.java",
+     "ranks": {
+      "S": 39,
+      "G": 34
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "MEDIUM",
+    "BLOCKER",
+    "qualityprofiles",
+    "endpoints",
+    "softwareQuality",
+    "compare",
+    "reliability",
+    "MAINTAINABILITY"
+   ]
+  },
+  {
+   "task": "SONAR-23259",
+   "title": "Quality Profile Changelog should reflect changes on severity of softwa",
+   "truth": 23,
+   "reachable": 23,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 1,
+    "first": 4
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 1,
+    "first": 5
+   },
+   "fused": {
+    "n": 10,
+    "hits": 1,
+    "first": 4
+   },
+   "agreed": [
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/issue/IssueMapper.xml",
+     "tools": "GV",
+     "ok": false
+    },
+    {
+     "file": "server/sonar-web/src/main/js/apps/coding-rules/__tests__/CodingRules-it.ts",
+     "tools": "SG",
+     "ok": false
+    },
+    {
+     "file": "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+     "tools": "SG",
+     "ok": false
+    }
+   ],
+   "top5": [
+    {
+     "file": "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+     "ranks": {
+      "S": 1,
+      "G": 4
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/issue/IssueMapper.xml",
+     "ranks": {
+      "G": 1,
+      "V": 9
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-web/src/main/js/apps/coding-rules/__tests__/CodingRules-it.ts",
+     "ranks": {
+      "S": 5,
+      "G": 10
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-webserver-pushapi/src/main/java/org/sonar/server/pushapi/qualityprofile/QualityProfileChangeEventServiceImpl.java",
+     "ranks": {
+      "G": 46,
+      "V": 5
+     },
+     "ok": true
+    },
+    {
+     "file": "server/sonar-web/src/main/js/apps/coding-rules/utils-tests.tsx",
+     "ranks": {
+      "S": 8,
+      "G": 47
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "qualities",
+    "entry",
+    "Maintainability",
+    "software",
+    "needs",
+    "Changelog",
+    "Standard",
+    "severity"
+   ]
+  },
+  {
+   "task": "SONAR-23325",
+   "title": "Webapi Changelog should reflect new impact severities (INFO, BLOCKER)",
+   "truth": 10,
+   "reachable": 10,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 4,
+    "first": 2
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 1,
+    "first": 8
+   },
+   "fused": {
+    "n": 10,
+    "hits": 2,
+    "first": 3
+   },
+   "agreed": [
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/issue/IssueMapper.xml",
+     "tools": "GV",
+     "ok": false
+    }
+   ],
+   "top5": [
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/issue/IssueMapper.xml",
+     "ranks": {
+      "G": 3,
+      "V": 4
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-webserver-webapi/src/main/java/org/sonar/server/issue/ws/ChangelogAction.java",
+     "ranks": {
+      "G": 19,
+      "V": 16
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-webserver-webapi/src/main/java/org/sonar/server/qualityprofile/ws/ChangelogAction.java",
+     "ranks": {
+      "G": 32,
+      "V": 17
+     },
+     "ok": true
+    },
+    {
+     "file": "server/sonar-webserver-webapi/src/main/java/org/sonar/server/issue/ws/SearchResponseFormat.java",
+     "ranks": {
+      "G": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+     "ranks": {
+      "S": 1
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "export_findings",
+    "BLOCKER",
+    "qualityprofiles",
+    "endpoints",
+    "compare",
+    "Changelog",
+    "impact",
+    "rules"
+   ]
+  },
+  {
+   "task": "SONAR-23425",
+   "title": "Scanning alerts must work in both STANDARD and MQR mode",
+   "truth": 2,
+   "reachable": 2,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "agreed": [],
+   "top5": [
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/issue/IssueMapper.xml",
+     "ranks": {
+      "G": 1,
+      "V": 13
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-ce-task-projectanalysis/src/main/java/org/sonar/ce/task/projectanalysis/pushevent/TaintVulnerabilityRaised.java",
+     "ranks": {
+      "G": 19,
+      "V": 34
+     },
+     "ok": false
+    },
+    {
+     "file": "plugins/sonar-core-plugin/src/main/java/org/sonar/plugins/core/sensors/GenerateAlertEvents.java",
+     "ranks": {
+      "S": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-migration/src/main/java/org/sonar/server/platform/db/migration/version/v00/CreateInitialSchema.java",
+     "ranks": {
+      "V": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "plugins/sonar-core-plugin/src/main/resources/org/sonar/l10n/core.properties",
+     "ranks": {
+      "S": 2
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "alerts",
+    "Scanning",
+    "modes",
+    "Software",
+    "VULNERABILITY",
+    "STANDARD",
+    "selected",
+    "based"
+   ]
+  },
+  {
+   "task": "SONAR-23427",
+   "title": "Stop relying on Qualifiers, Scopes and ResourceType from the plugin AP",
+   "truth": 224,
+   "reachable": 217,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 2,
+    "first": 2
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 2,
+    "first": 5
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 3,
+    "first": 2
+   },
+   "fused": {
+    "n": 10,
+    "hits": 2,
+    "first": 1
+   },
+   "agreed": [
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/component/ComponentMapper.xml",
+     "tools": "GV",
+     "ok": false
+    },
+    {
+     "file": "server/sonar-webserver-ws/src/main/java/org/sonar/server/ws/WsParameterBuilder.java",
+     "tools": "SV",
+     "ok": true
+    }
+   ],
+   "top5": [
+    {
+     "file": "server/sonar-webserver-ws/src/main/java/org/sonar/server/ws/WsParameterBuilder.java",
+     "ranks": {
+      "S": 3,
+      "V": 7
+     },
+     "ok": true
+    },
+    {
+     "file": "server/sonar-server/src/test/java/org/sonar/server/component/ws/SearchActionTest.java",
+     "ranks": {
+      "S": 4,
+      "G": 11
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/component/ComponentMapper.xml",
+     "ranks": {
+      "G": 10,
+      "V": 6
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-webserver-webapi/src/main/java/org/sonar/server/component/ws/TreeAction.java",
+     "ranks": {
+      "S": 2,
+      "G": 20
+     },
+     "ok": true
+    },
+    {
+     "file": "sonar-application/build.gradle",
+     "ranks": {
+      "S": 28,
+      "G": 4
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "Scopes",
+    "Qualifiers",
+    "relying",
+    "dependencies",
+    "qualifier",
+    "resources",
+    "scope",
+    "ResourceType"
+   ]
+  },
+  {
+   "task": "SONAR-23430",
+   "title": "Improve api/system/liveness action to not pollute the logs",
+   "truth": 3,
+   "reachable": 3,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 1,
+    "first": 4
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 1,
+    "first": 7
+   },
+   "agreed": [
+    {
+     "file": "server/sonar-webserver-common/src/main/java/org/sonar/server/common/platform/LivenessChecker.java",
+     "tools": "SV",
+     "ok": false
+    },
+    {
+     "file": "server/sonar-webserver-common/src/main/java/org/sonar/server/common/platform/LivenessCheckerImpl.java",
+     "tools": "SV",
+     "ok": false
+    },
+    {
+     "file": "server/sonar-webserver-common/src/main/java/org/sonar/server/common/platform/SafeModeLivenessCheckerImpl.java",
+     "tools": "SV",
+     "ok": false
+    }
+   ],
+   "top5": [
+    {
+     "file": "server/sonar-webserver-core/src/main/java/org/sonar/server/app/WebServerProcessLogging.java",
+     "ranks": {
+      "S": 28,
+      "G": 5,
+      "V": 46
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-webserver-core/src/test/java/org/sonar/server/app/WebServerProcessLoggingTest.java",
+     "ranks": {
+      "S": 31,
+      "G": 31,
+      "V": 47
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-webserver-common/src/main/java/org/sonar/server/common/platform/LivenessChecker.java",
+     "ranks": {
+      "S": 5,
+      "V": 6
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-webserver-common/src/main/java/org/sonar/server/common/platform/LivenessCheckerImpl.java",
+     "ranks": {
+      "S": 6,
+      "V": 7
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-webserver-webapi/src/main/java/org/sonar/server/platform/ws/LivenessAction.java",
+     "ranks": {
+      "S": 3,
+      "V": 13
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "alive",
+    "throw",
+    "liveness",
+    "starting",
+    "calls",
+    "being",
+    "Logging",
+    "endpoint"
+   ]
+  },
+  {
+   "task": "SONAR-23431",
+   "title": "Adjust maximum page size parameter when retrieving GitLab repositories",
+   "truth": 2,
+   "reachable": 2,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 2,
+    "first": 1
+   },
+   "fused": {
+    "n": 10,
+    "hits": 1,
+    "first": 3
+   },
+   "agreed": [],
+   "top5": [
+    {
+     "file": "sonar-ws/src/main/java/org/sonarqube/ws/client/almintegrations/AlmIntegrationsService.java",
+     "ranks": {
+      "G": 1,
+      "V": 13
+     },
+     "ok": false
+    },
+    {
+     "file": "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+     "ranks": {
+      "S": 1,
+      "G": 18
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-webserver-webapi/src/main/java/org/sonar/server/almintegration/ws/gitlab/SearchGitlabReposAction.java",
+     "ranks": {
+      "S": 21,
+      "V": 2
+     },
+     "ok": true
+    },
+    {
+     "file": "server/sonar-web/src/main/js/apps/create/project/PersonalAccessTokenForm.tsx",
+     "ranks": {
+      "S": 8,
+      "G": 15
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-web/src/main/js/apps/create/project/GitlabProjectSelectionForm.tsx",
+     "ranks": {
+      "S": 2,
+      "G": 26
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "search_gitlab_repos",
+    "states",
+    "alm_integrations",
+    "repositories",
+    "endpoint",
+    "contains",
+    "documentation",
+    "parameter"
+   ]
+  },
+  {
+   "task": "SONAR-23460",
+   "title": " Update SonarSecurity to version 10.8.0.33361",
+   "truth": 1,
+   "reachable": 1,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 1,
+    "first": 1
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 1,
+    "first": 2
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 1,
+    "first": 1
+   },
+   "agreed": [
+    {
+     "file": "build.gradle",
+     "tools": "SG",
+     "ok": true
+    },
+    {
+     "file": "pom.xml",
+     "tools": "SG",
+     "ok": false
+    },
+    {
+     "file": "sonar-application/pom.xml",
+     "tools": "SG",
+     "ok": false
+    }
+   ],
+   "top5": [
+    {
+     "file": "build.gradle",
+     "ranks": {
+      "S": 1,
+      "G": 2
+     },
+     "ok": true
+    },
+    {
+     "file": "pom.xml",
+     "ranks": {
+      "S": 2,
+      "G": 4
+     },
+     "ok": false
+    },
+    {
+     "file": "sonar-application/pom.xml",
+     "ranks": {
+      "S": 3,
+      "G": 5
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-ce/src/main/java/org/sonar/ce/container/ComputeEngineContainerImpl.java",
+     "ranks": {
+      "S": 12,
+      "G": 32
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/issue/IssueMapper.xml",
+     "ranks": {
+      "G": 25,
+      "V": 23
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "Update",
+    "version"
+   ]
+  },
+  {
+   "task": "SONAR-23461",
+   "title": "Openshift and Helm autoscaling Telemetry v1 doesn't work",
+   "truth": 2,
+   "reachable": 2,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 2,
+    "first": 4
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 2,
+    "first": 3
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 2,
+    "first": 1
+   },
+   "fused": {
+    "n": 10,
+    "hits": 2,
+    "first": 1
+   },
+   "agreed": [
+    {
+     "file": "server/sonar-telemetry/src/main/java/org/sonar/telemetry/legacy/TelemetryData.java",
+     "tools": "SGV",
+     "ok": false
+    },
+    {
+     "file": "server/sonar-telemetry/src/main/java/org/sonar/telemetry/legacy/TelemetryDataJsonWriter.java",
+     "tools": "SGV",
+     "ok": true
+    },
+    {
+     "file": "server/sonar-telemetry/src/test/java/org/sonar/telemetry/legacy/TelemetryDataJsonWriterTest.java",
+     "tools": "SGV",
+     "ok": true
+    },
+    {
+     "file": "server/sonar-telemetry/src/main/java/org/sonar/telemetry/legacy/CloudUsageDataProvider.java",
+     "tools": "SV",
+     "ok": false
+    },
+    {
+     "file": "server/sonar-telemetry/src/main/java/org/sonar/telemetry/legacy/TelemetryDataLoaderImpl.java",
+     "tools": "SG",
+     "ok": false
+    }
+   ],
+   "top5": [
+    {
+     "file": "server/sonar-telemetry/src/main/java/org/sonar/telemetry/legacy/TelemetryDataJsonWriter.java",
+     "ranks": {
+      "S": 5,
+      "G": 3,
+      "V": 1
+     },
+     "ok": true
+    },
+    {
+     "file": "server/sonar-telemetry/src/main/java/org/sonar/telemetry/legacy/TelemetryData.java",
+     "ranks": {
+      "S": 3,
+      "G": 4,
+      "V": 3
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-telemetry/src/test/java/org/sonar/telemetry/legacy/TelemetryDataJsonWriterTest.java",
+     "ranks": {
+      "S": 4,
+      "G": 5,
+      "V": 2
+     },
+     "ok": true
+    },
+    {
+     "file": "server/sonar-telemetry/src/main/java/org/sonar/telemetry/legacy/CloudUsageDataProvider.java",
+     "ranks": {
+      "S": 2,
+      "V": 5
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-telemetry/src/main/java/org/sonar/telemetry/legacy/TelemetryDataLoaderImpl.java",
+     "ranks": {
+      "S": 6,
+      "G": 7
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "TelemetryDataJsonWriter",
+    "CloudUsage",
+    "legacy",
+    "ticket",
+    "option",
+    "record",
+    "doesn",
+    "Telemetry"
+   ]
+  },
+  {
+   "task": "SONAR-23466",
+   "title": "Rules indexing is not happening consistently",
+   "truth": 6,
+   "reachable": 6,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 2,
+    "first": 8
+   },
+   "fused": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "agreed": [
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/qualityprofile/ActiveRuleMapper.xml",
+     "tools": "SV",
+     "ok": false
+    }
+   ],
+   "top5": [
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/qualityprofile/ActiveRuleMapper.xml",
+     "ranks": {
+      "S": 10,
+      "V": 3
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/issue/IssueMapper.xml",
+     "ranks": {
+      "G": 14,
+      "V": 2
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/java/org/sonar/db/rule/RuleDao.java",
+     "ranks": {
+      "S": 12,
+      "G": 6
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/rule/RuleMapper.xml",
+     "ranks": {
+      "S": 16,
+      "V": 4
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/purge/PurgeMapper.xml",
+     "ranks": {
+      "G": 11,
+      "V": 13
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "RuleRegistrant",
+    "indexes",
+    "registration",
+    "functional",
+    "instances",
+    "starting",
+    "deleted",
+    "constraint"
+   ]
+  },
+  {
+   "task": "SONAR-23469",
+   "title": "[FE] Support Pagination of Dependencies",
+   "truth": 5,
+   "reachable": 0,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "agreed": [
+    {
+     "file": "build.gradle",
+     "tools": "SG",
+     "ok": false
+    }
+   ],
+   "top5": [
+    {
+     "file": "build.gradle",
+     "ranks": {
+      "S": 1,
+      "G": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "sonar-server/src/main/webapp/WEB-INF/app/views/layouts/_layout.html.erb",
+     "ranks": {
+      "S": 49,
+      "G": 34
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/ce/CeActivityMapper.xml",
+     "ranks": {
+      "V": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/common/Common.xml",
+     "ranks": {
+      "V": 2
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-web/src/main/js/apps/groups/components/EditMembersModal.tsx",
+     "ranks": {
+      "S": 2
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "Pagination",
+    "Dependencies",
+    "Support"
+   ]
+  },
+  {
+   "task": "SONAR-23475",
+   "title": "Fix webapp dev server proxy to serve l10n files",
+   "truth": 3,
+   "reachable": 0,
+   "mass": false,
+   "simargl": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "gamayun": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "svitovyd_kw": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "fused": {
+    "n": 10,
+    "hits": 0,
+    "first": null
+   },
+   "agreed": [
+    {
+     "file": "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+     "tools": "SG",
+     "ok": false
+    }
+   ],
+   "top5": [
+    {
+     "file": "sonar-core/src/main/resources/org/sonar/l10n/core.properties",
+     "ranks": {
+      "S": 1,
+      "G": 1
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-web/package.json",
+     "ranks": {
+      "S": 3,
+      "G": 22
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-web/yarn.lock",
+     "ranks": {
+      "S": 37,
+      "G": 26
+     },
+     "ok": false
+    },
+    {
+     "file": ".cirrus.yml",
+     "ranks": {
+      "S": 38,
+      "G": 33
+     },
+     "ok": false
+    },
+    {
+     "file": "server/sonar-db-dao/src/main/resources/org/sonar/db/component/ComponentMapper.xml",
+     "ranks": {
+      "V": 1
+     },
+     "ok": false
+    }
+   ],
+   "idents": [
+    "proxy",
+    "migrate",
+    "build",
+    "files",
+    "changes",
+    "server"
+   ]
+  }
+ ],
+ "combo": {
+  "S": [
+   14,
+   164
+  ],
+  "S+G": [
+   6,
+   17
+  ],
+  "G": [
+   16,
+   165
+  ],
+  "V": [
+   10,
+   166
+  ],
+  "G+V": [
+   0,
+   5
+  ],
+  "S+V": [
+   1,
+   6
+  ],
+  "S+G+V": [
+   2,
+   3
+  ]
+ },
+ "agree": {
+  "1": [
+   40,
+   495
+  ],
+  "2": [
+   7,
+   28
+  ],
+  "3": [
+   2,
+   3
+  ]
+ },
+ "top1_by_agreement": {
+  "2": [
+   6,
+   15
+  ],
+  "1": [
+   0,
+   3
+  ],
+  "3": [
+   1,
+   1
+  ]
+ }
+}

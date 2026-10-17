@@ -1,0 +1,160 @@
+{
+ "files": {
+  "data/docs/docsv/README.md": {
+   "mtime": 1791493429.585,
+   "size": 2007
+  },
+  "data/docs/docsv/index.md": {
+   "mtime": 1791493429.599,
+   "size": 1278
+  },
+  "data/docs/docsv/configuration/defaults.md": {
+   "mtime": 1791493429.585,
+   "size": 1532
+  },
+  "data/docs/docsv/configuration/ignoring.md": {
+   "mtime": 1791493429.587,
+   "size": 2931
+  },
+  "data/docs/docsv/configuration/index.md": {
+   "mtime": 1791493429.587,
+   "size": 9735
+  },
+  "data/docs/docsv/configuration/layout.md": {
+   "mtime": 1791493429.588,
+   "size": 34787
+  },
+  "data/docs/docsv/configuration/rules.md": {
+   "mtime": 1791493429.588,
+   "size": 6086
+  },
+  "data/docs/docsv/configuration/templating/dbt.md": {
+   "mtime": 1791493429.589,
+   "size": 5990
+  },
+  "data/docs/docsv/configuration/templating/generic.md": {
+   "mtime": 1791493429.589,
+   "size": 1271
+  },
+  "data/docs/docsv/configuration/templating/index.md": {
+   "mtime": 1791493429.589,
+   "size": 2238
+  },
+  "data/docs/docsv/configuration/templating/jinja.md": {
+   "mtime": 1791493429.591,
+   "size": 13670
+  },
+  "data/docs/docsv/configuration/templating/placeholder.md": {
+   "mtime": 1791493429.591,
+   "size": 2659
+  },
+  "data/docs/docsv/configuration/templating/python.md": {
+   "mtime": 1791493429.592,
+   "size": 1259
+  },
+  "data/docs/docsv/configuration/templating/variants.md": {
+   "mtime": 1791493429.592,
+   "size": 4215
+  },
+  "data/docs/docsv/development/architecture.md": {
+   "mtime": 1791493429.593,
+   "size": 5569
+  },
+  "data/docs/docsv/development/custom-rules.md": {
+   "mtime": 1791493429.593,
+   "size": 6543
+  },
+  "data/docs/docsv/development/developing-rules.md": {
+   "mtime": 1791493429.593,
+   "size": 4227
+  },
+  "data/docs/docsv/development/dialect.md": {
+   "mtime": 1791493429.594,
+   "size": 44558
+  },
+  "data/docs/docsv/development/documentation.md": {
+   "mtime": 1791493429.594,
+   "size": 4024
+  },
+  "data/docs/docsv/development/git.md": {
+   "mtime": 1791493429.594,
+   "size": 15239
+  },
+  "data/docs/docsv/development/plugins.md": {
+   "mtime": 1791493429.594,
+   "size": 3816
+  },
+  "data/docs/docsv/development/shared-design-integration.md": {
+   "mtime": 1791493429.596,
+   "size": 12262
+  },
+  "data/docs/docsv/development/versioned-docs-hosting.md": {
+   "mtime": 1791493429.596,
+   "size": 3639
+  },
+  "data/docs/docsv/guide/basic-usage.md": {
+   "mtime": 1791493429.597,
+   "size": 6325
+  },
+  "data/docs/docsv/guide/custom-usage.md": {
+   "mtime": 1791493429.597,
+   "size": 1411
+  },
+  "data/docs/docsv/guide/in-the-wild.md": {
+   "mtime": 1791493429.597,
+   "size": 4238
+  },
+  "data/docs/docsv/guide/index.md": {
+   "mtime": 1791493429.598,
+   "size": 1487
+  },
+  "data/docs/docsv/guide/install.md": {
+   "mtime": 1791493429.598,
+   "size": 3288
+  },
+  "data/docs/docsv/guide/vision.md": {
+   "mtime": 1791493429.598,
+   "size": 1211
+  },
+  "data/docs/docsv/guide/why.md": {
+   "mtime": 1791493429.599,
+   "size": 4579
+  },
+  "data/docs/docsv/reference/release-notes.md": {
+   "mtime": 1791493429.609,
+   "size": 17859
+  },
+  "data/docs/docsv/usage/ci-cd.md": {
+   "mtime": 1791493429.616,
+   "size": 2241
+  },
+  "data/docs/docsv/usage/cli.md": {
+   "mtime": 1791493429.616,
+   "size": 1023
+  },
+  "data/docs/docsv/usage/diff-quality.md": {
+   "mtime": 1791493429.617,
+   "size": 3854
+  },
+  "data/docs/docsv/usage/index.md": {
+   "mtime": 1791493429.617,
+   "size": 393
+  },
+  "data/docs/docsv/usage/pre-commit.md": {
+   "mtime": 1791493429.618,
+   "size": 3888
+  },
+  "data/docs/docsv/usage/security.md": {
+   "mtime": 1791493429.618,
+   "size": 3515
+  },
+  "data/docs/docsv/usage/team-rollout.md": {
+   "mtime": 1791493429.618,
+   "size": 5475
+  },
+  "data/docs/docsv/usage/troubleshooting.md": {
+   "mtime": 1791493429.619,
+   "size": 6720
+  }
+ }
+}

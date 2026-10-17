@@ -1,0 +1,10 @@
+Fix documentation about synchronization of default group when using SSO authentication
+In sonar.properties, the documentation of synchronization of groups when using SSO authentication is wrong, as it's written that the default group is not synchronized which is wrong since 6.4 ( https://jira.sonarsource.com/browse/SONAR-9014 ). Current documentation is :  # Name of the header to get the list of user groups, separated by comma (optional).
+# If the sonar.sso.groupsHeader is set, the user will belong to those groups if groups exist in SonarQube.
+# If none of the provided groups exists in SonarQube, the user won't belong to any group.
+# Note that the default group will NOT be automatically added when using SSO, it should be provided in the groups list, if needed.
+#sonar.web.sso.groupsHeader=X-Forwarded-Groups It should become :  # Name of the header to get the list of user groups, separated by comma (optional).
+# If the sonar.sso.groupsHeader is set, the user will belong to those groups if groups exist in SonarQube.
+# If none of the provided groups exists in SonarQube, the user will only belong to the default group.
+# Note that the default group will always be set.
+#sonar.web.sso.groupsHeader=X-Forwarded-Groups

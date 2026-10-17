@@ -1,0 +1,8 @@
+﻿model,task,seconds,exit,host
+qwen3:1.7b,T05,252.1,0,localhost
+gemma4:e4b,T05,271.1,0,panteon.local
+qwen2.5-coder:3b-instruct,T05,77.1,0,localhost
+qwen2.5-coder:7b-instruct,T05,179,0,localhost
+gpt-oss:20b,T05,519,0,panteon.local
+sam860/jamba-reasoning:3b,T05,466.3,0,localhost
+qwen3.6:35b-a3b,T05,495.5,0,panteon.local

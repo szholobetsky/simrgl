@@ -1,0 +1,5 @@
+server/sonar-ws/src/main/java/org/sonarqube/ws/client/almsettings/AlmSettingsService.java
+server/sonar-core/src/main/resources/org/sonar/l10n/core.properties
+server/sonar-web/src/main/js/apps/settings/components/pullRequestDecorationBinding/AlmSpecificForm.tsx
+server/sonar-web/src/main/js/apps/settings/components/pullRequestDecorationBinding/__tests__/__snapshots__/AlmSpecificForm-test.tsx.snap
+server/sonar-web/src/main/js/apps/settings/components/pullRequestDecorationBinding/PRDecorationBinding.tsx

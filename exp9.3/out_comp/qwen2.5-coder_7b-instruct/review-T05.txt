@@ -1,0 +1,14 @@
+```
+server/sonar-web/src/main/js/api/project-management.ts
+server/sonar-web/src/main/js/apps/create/project/CreateProjectPage.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/Manual-it.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/ManualProjectCreate-test.tsx
+server/sonar-web/src/main/js/apps/create/project/components/NewCodeDefinitionSelection.tsx
+server/sonar-web/src/main/js/components/controls/ValidationInput.tsx
+server/sonar-web/src/main/js/components/controls/__tests__/__snapshots__/ValidationInput-test.tsx.snap
+server/sonar-web/src/main/js/apps/create/project/ManualProjectCreate.tsx
+server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/ManualProjectCreate-test.tsx.snap
+server/sonar-web/src/main/js/apps/create/project/__tests__/__snapshots__/CreateProjectPage-test.tsx.snap
+server/sonar-web/src/main/js/apps/create/project/GitlabProjectCreateRenderer.tsx
+server/sonar-web/src/main/js/apps/create/project/constants.ts
+```

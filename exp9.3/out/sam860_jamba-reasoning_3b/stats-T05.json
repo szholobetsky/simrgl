@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-10-04T13:16:17",
+  "session_seconds": 4570,
+  "model": "sam860/jamba-reasoning:3b",
+  "host": "http://localhost:11434",
+  "requests": 1,
+  "tokens_gen": 22646,
+  "tokens_prompt": 1958,
+  "tokens_cached": 0,
+  "files_read": 1,
+  "run_calls": 2,
+  "ctx_clear": 0,
+  "ctx_compact": 0,
+  "mcp_calls": 0,
+  "speed_pp": {
+    "min": 18.2,
+    "avg": 18.2,
+    "max": 18.2,
+    "samples": 1
+  },
+  "speed_tg": {
+    "min": 5.1,
+    "avg": 5.1,
+    "max": 5.1,
+    "samples": 1
+  },
+  "by_model": {
+    "sam860/jamba-reasoning:3b": {
+      "requests": 1,
+      "tokens_gen": 22646,
+      "tokens_prompt": 1958,
+      "tokens_cached": 0,
+      "speed_pp": {
+        "min": 18.2,
+        "avg": 18.2,
+        "max": 18.2,
+        "samples": 1
+      },
+      "speed_tg": {
+        "min": 5.1,
+        "avg": 5.1,
+        "max": 5.1,
+        "samples": 1
+      }
+    }
+  },
+  "by_host": {
+    "http://localhost:11434": {
+      "requests": 1,
+      "tokens_gen": 22646,
+      "tokens_prompt": 0,
+      "tokens_cached": 0,
+      "speed_pp": {
+        "min": 18.2,
+        "avg": 18.2,
+        "max": 18.2,
+        "samples": 1
+      },
+      "speed_tg": {
+        "min": 5.1,
+        "avg": 5.1,
+        "max": 5.1,
+        "samples": 1
+      }
+    }
+  }
+}

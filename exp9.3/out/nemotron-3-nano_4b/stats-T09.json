@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-10-04T13:25:16",
+  "session_seconds": 534,
+  "model": "nemotron-3-nano:4b",
+  "host": "http://localhost:11434",
+  "requests": 4,
+  "tokens_gen": 527,
+  "tokens_prompt": 10968,
+  "tokens_cached": 0,
+  "files_read": 3,
+  "run_calls": 2,
+  "ctx_clear": 0,
+  "ctx_compact": 0,
+  "mcp_calls": 0,
+  "speed_pp": {
+    "min": 17.1,
+    "avg": 64.9,
+    "max": 104.7,
+    "samples": 4
+  },
+  "speed_tg": {
+    "min": 4.6,
+    "avg": 5.0,
+    "max": 5.5,
+    "samples": 4
+  },
+  "by_model": {
+    "nemotron-3-nano:4b": {
+      "requests": 4,
+      "tokens_gen": 527,
+      "tokens_prompt": 10968,
+      "tokens_cached": 0,
+      "speed_pp": {
+        "min": 17.1,
+        "avg": 64.9,
+        "max": 104.7,
+        "samples": 4
+      },
+      "speed_tg": {
+        "min": 4.6,
+        "avg": 5.0,
+        "max": 5.5,
+        "samples": 4
+      }
+    }
+  },
+  "by_host": {
+    "http://localhost:11434": {
+      "requests": 4,
+      "tokens_gen": 527,
+      "tokens_prompt": 0,
+      "tokens_cached": 0,
+      "speed_pp": {
+        "min": 17.1,
+        "avg": 64.9,
+        "max": 104.7,
+        "samples": 4
+      },
+      "speed_tg": {
+        "min": 4.6,
+        "avg": 5.0,
+        "max": 5.5,
+        "samples": 4
+      }
+    }
+  }
+}

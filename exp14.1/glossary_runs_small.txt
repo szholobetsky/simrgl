@@ -1,0 +1,5 @@
+# exp14.1 — the "phone pair": the docs glossary again with the smallest models, split like the big pair:
+# gemma3:1b on panteon lists the terms, tev1:0.8b on this machine judges them (two hosts: a pipeline),
+# to compare with sqlfluff-docs (gemma3:4b + tev1:4b):
+#   1bcoder --scriptapply "C:\Projects\simrgl\exp14.1\glossary_runs_small.txt" --host http://panteon.local:11434 --model gemma3:1b
+/flow glossary index data/docs --project sqlfluff-docs-small --terms-only --jev-model tev1:0.8b --jev-host localhost:11434
